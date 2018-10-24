@@ -86,12 +86,12 @@ class ProjectsModelExhibitor extends AdminModel {
         $table = $db->quoteName("#__prj_exp_bank");
         $arr = array(
             $db->quoteName('exbID') => $db->quote($id),
-            $db->quoteName('inn') => $db->quote($data['inn']),
-            $db->quoteName('kpp') => $db->quote($data['kpp']),
-            $db->quoteName('rs') => $db->quote($data['rs']),
-            $db->quoteName('ks') => $db->quote($data['ks']),
-            $db->quoteName('bank') => $db->quote($db->escape($data['bank'])),
-            $db->quoteName('bik') => $db->quote($data['bik'])
+            $db->quoteName('inn') => (!empty($data['inn'])) ? $db->quote($data['inn']) : 'NULL',
+            $db->quoteName('kpp') => (!empty($data['kpp'])) ? $db->quote($data['kpp']) : 'NULL',
+            $db->quoteName('rs') => (!empty($data['rs'])) ? $db->quote($data['rs']) : 'NULL',
+            $db->quoteName('ks') => (!empty($data['ks'])) ? $db->quote($data['ks']) : 'NULL',
+            $db->quoteName('bank') => (!empty($data['bank'])) ? $db->quote($db->escape($data['bank'])) : 'NULL',
+            $db->quoteName('bik') => (!empty($data['bik'])) ? $db->quote($data['bik']) : 'NULL',
         );
         $columns = array();
         $values = array();
