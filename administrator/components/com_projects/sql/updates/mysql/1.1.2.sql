@@ -78,7 +78,7 @@ ALTER TABLE `#__prj_exp_bank` ADD UNIQUE(`exbID`);
 
 ALTER TABLE `#__prj_exp_bank`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
 
+ALTER TABLE `#__prj_exp_bank` ADD FOREIGN KEY (`exbID`) REFERENCES `#__prj_exp`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 COMMIT;
