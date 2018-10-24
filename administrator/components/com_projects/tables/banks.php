@@ -2,19 +2,34 @@
 use Joomla\CMS\Table\Table;
 defined('_JEXEC') or die;
 
-class TableProjectsExponents extends Table
+/*
+ * Таблица банковских данных об экспоненте
+ */
+
+class TableProjectsBanks extends Table
 {
     var $id = null;
-    var $regID = null;
-    var $curatorID = null;
-    var $title_ru_full = null;
-    var $title_ru_short = null;
-    var $title_en = null;
-    var $state = null;
+    var $exbID = null;
+    var $inn = null;
+    var $kpp = null;
+    var $rs = null;
+    var $ks = null;
+    var $bank = null;
+    var $bik = null;
 
     public function __construct(JDatabaseDriver $db)
     {
-        parent::__construct('#__prj_exp', 'id', $db);
+        parent::__construct('#__prj_exp_bank', 'id', $db);
+    }
+
+    public function bind($src, $ignore = array())
+    {
+        return parent::bind($src, $ignore);
+    }
+    public function save($src, $orderingFilter = '', $ignore = '')
+    {
+        //exit(var_dump($src));
+        return parent::save($src, $orderingFilter, $ignore);
     }
 
     public function store($updateNulls = true)
@@ -63,4 +78,5 @@ class TableProjectsExponents extends Table
 
         return true;
     }
+
 }
