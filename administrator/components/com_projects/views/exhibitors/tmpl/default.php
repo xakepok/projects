@@ -8,7 +8,7 @@ JHtml::_('searchtools.form');
     <?php echo $this->sidebar; ?>
 </div>
 <div id="j-main-container" class="span10 j-toggle-main">
-    <form action="<?php echo JRoute::_('index.php?option=com_projects&amp;view=exhibitor'); ?>" method="post" name="adminForm" id="adminForm">
+    <form action="<?php echo JRoute::_('index.php?option=com_projects&amp;view=exhibitors'); ?>" method="post" name="adminForm" id="adminForm">
         <div class="js-stools clearfix">
             <?php echo $this->loadTemplate('filter');?>
         </div>

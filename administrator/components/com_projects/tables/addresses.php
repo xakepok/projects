@@ -3,23 +3,29 @@ use Joomla\CMS\Table\Table;
 defined('_JEXEC') or die;
 
 /*
- * Таблица банковских данных об экспоненте
+ * Таблица контактных данных об экспоненте
  */
 
-class TableProjectsBanks extends Table
+class TableProjectsAddressess extends Table
 {
     var $id = null;
     var $exbID = null;
-    var $inn = null;
-    var $kpp = null;
-    var $rs = null;
-    var $ks = null;
-    var $bank = null;
-    var $bik = null;
+    var $addr_legal_ru = null;
+    var $addr_legal_en = null;
+    var $addr_fact = null;
+    var $phone_1 = null;
+    var $phone_2 = null;
+    var $fax = null;
+    var $email = null;
+    var $site = null;
+    var $director_name = null;
+    var $director_post = null;
+    var $contact_person = null;
+    var $contact_data = null;
 
     public function __construct(JDatabaseDriver $db)
     {
-        parent::__construct('#__prj_exp_bank', 'id', $db);
+        parent::__construct('#__prj_exp_contacts', 'id', $db);
     }
 
     public function load($keys = null, $reset = true)

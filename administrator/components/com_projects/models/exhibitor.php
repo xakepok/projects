@@ -9,6 +9,20 @@ class ProjectsModelExhibitor extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    public function getItem($pk = null)
+    {
+        $item = parent::getItem($pk);
+        $table = $this->getTable('Banks', 'TableProjects');
+        $table->load(array('exbID' => $item->id));
+        $item->inn = $table->inn;
+        $item->kpp = $table->kpp;
+        $item->rs = $table->rs;
+        $item->ks = $table->ks;
+        $item->bank = $table->bank;
+        $item->bik = $table->bik;
+        return $item;
+    }
+
     public function getForm($data = array(), $loadData = true)
     {
         $form = $this->loadForm(
@@ -70,14 +84,34 @@ class ProjectsModelExhibitor extends AdminModel {
 
     public function save($data)
     {
-        $res = parent::save($data);
-        $db =& $this->getDbo();
-        $id = (JFactory::getApplication()->input->getInt('id')) ?? $db->insertid();
-        $this->saveBank($data, $id);
-        return $res;
+        $base = array(
+            'id' => $data['id'],
+            'regID' => $data['regID'],
+            'curatorID' => $data['curatorID'],
+            'title_ru_full' => $data['title_ru_full'],
+            'title_ru_short' => $data['title_ru_short'],
+            'title_en' => $data['title_en'],
+            'state' => $data['state'],
+        );
+        $res = parent::save($base);
+        $id = (JFactory::getApplication()->input->getInt('id', 0) == 0) ? $this->getTable()->getDbo()->insertid() : JFactory::getApplication()->input->getInt('id');
+        $table = $this->getTable('Banks', 'TableProjects');
+        $table->load(array('exbID' => $id));
+        if ($table->id == null) $data['exbID'] = $id; else $data['id'] = $table->id;
+        unset($data['regID'], $data['curatorID'], $data['title_ru_full'], $data['title_ru_short'], $data['title_en'], $data['state'], $data['tags'], $data['id']);
+        $model = AdminModel::getInstance('Bank', 'ProjectsModel');
+        $table->bind($data);
+        $model->prepareTable($table);
+        $table->save($data);
+
+        //$this->saveBank($data, $id);
+        return $table->save($data);
     }
 
-    /*Сохраняем банковские реквизиты*/
+    /*
+     * Сохраняем банковские реквизиты
+     * МЕТОД НЕ ИСПОЛЬЗУЕТСЯ. НУЖДАЕТСЯ В УДАЛЕНИИ.
+     * */
     private function saveBank($data, int $id = 0)
     {
         $data['exbID'] = $id;

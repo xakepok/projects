@@ -19,7 +19,7 @@ class TableProjectsExponents extends Table
 
     public function store($updateNulls = true)
     {
-        return parent::store(true);
+        parent::store(true);
     }
 
     public function publish($pks = null, $state = 1, $userId = 0)

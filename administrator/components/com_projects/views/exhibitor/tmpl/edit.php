@@ -2,6 +2,7 @@
 defined('_JEXEC') or die;
 JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.keepalive');
 JHtml::_('formbehavior.chosen', 'select');
 ?>
 <script type="text/javascript">
@@ -15,38 +16,30 @@ JHtml::_('formbehavior.chosen', 'select');
       method="post" name="adminForm" id="adminForm" xmlns="http://www.w3.org/1999/html" class="form-validate">
     <div class="row-fluid">
         <div class="span12 form-horizontal">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#general" data-toggle="tab"><?php echo JText::_('COM_PROJECTS_BLANK_EXHIBITOR');?></a></li>
-                <li class=""><a href="#bank" data-toggle="tab"><?php echo JText::_('COM_PROJECTS_BLANK_EXHIBITOR_BANK');?></a></li>
-            </ul>
+            <?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
             <div class="tab-content">
-                <div class="tab-pane active" id="general">
-                    <fieldset class="adminform">
-                        <div class="control-group form-inline">
-                            <?php foreach ($this->form->getFieldset('names') as $field) : ?>
-                                <div class="control-label"><?php echo $field->label; ?></div>
-                                <div class="controls">
-                                    <?php echo $field->input; ?>
-                                </div>
-                                <br>
-                            <?php endforeach; ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::_('COM_PROJECTS_BLANK_EXHIBITOR')); ?>
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <?php echo $this->loadTemplate('general');?>
                         </div>
-                    </fieldset>
-                </div>
-                <div class="tab-pane" id="bank">
-                    <fieldset class="adminform">
-                        <div class="control-group form-inline">
-                            <?php foreach ($this->form->getFieldset('bank') as $field) : ?>
-                                <div class="control-label"><?php echo $field->label; ?></div>
-                                <div class="controls">
-                                    <?php echo $field->input; ?>
-                                </div>
-                                <br>
-                            <?php endforeach; ?>
+                        <div class="span6">
+                            <?php echo $this->loadTemplate('bank');?>
                         </div>
-                    </fieldset>
+                    </div>
+                <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'contact', JText::_('COM_PROJECTS_BLANK_EXHIBITOR_CONTACTS')); ?>
+                <div class="row-fluid">
+                    <div class="span6">
+                        <?php echo $this->loadTemplate('addresses');?>
+                    </div>
+                    <div class="span6">
+                        <?php echo $this->loadTemplate('contacts');?>
+                    </div>
                 </div>
+                <?php echo JHtml::_('bootstrap.endTab'); ?>
             </div>
+            <?php echo JHtml::_('bootstrap.endTabSet'); ?>
         </div>
         <div>
             <input type="hidden" name="task" value="" />
