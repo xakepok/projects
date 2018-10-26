@@ -20,6 +20,20 @@ class ProjectsModelExhibitor extends AdminModel {
         $item->ks = $table->ks;
         $item->bank = $table->bank;
         $item->bik = $table->bik;
+        $table = $this->getTable('Addresses', 'TableProjects');
+        $table->load(array('exbID' => $item->id));
+        $item->addr_legal_ru = $table->addr_legal_ru;
+        $item->addr_legal_en = $table->addr_legal_en;
+        $item->addr_fact = $table->addr_fact;
+        $item->phone_1 = $table->phone_1;
+        $item->phone_2 = $table->phone_2;
+        $item->fax = $table->fax;
+        $item->email = $table->email;
+        $item->site = $table->site;
+        $item->director_name = $table->director_name;
+        $item->director_post = $table->director_post;
+        $item->contact_person = $table->contact_person;
+        $item->contact_data = $table->contact_data;
         return $item;
     }
 
@@ -81,37 +95,93 @@ class ProjectsModelExhibitor extends AdminModel {
         return 'administrator/components/' . $this->option . '/models/forms/exhibitor.js';
     }
 
-
     public function save($data)
     {
-        $base = array(
-            'id' => $data['id'],
-            'regID' => $data['regID'],
-            'curatorID' => $data['curatorID'],
-            'title_ru_full' => $data['title_ru_full'],
-            'title_ru_short' => $data['title_ru_short'],
-            'title_en' => $data['title_en'],
-            'state' => $data['state'],
+        $fields = array(
+            'general' => array(
+                'id' => $data['id'],
+                'regID' => $data['regID'],
+                'curatorID' => $data['curatorID'],
+                'title_ru_full' => $data['title_ru_full'],
+                'title_ru_short' => $data['title_ru_short'],
+                'title_en' => $data['title_en'],
+                'state' => $data['state'],
+            ),
+            'bank' => array(
+                'inn' => $data['inn'],
+                'kpp' => $data['kpp'],
+                'rs' => $data['rs'],
+                'ks' => $data['ks'],
+                'bank' => $data['bank'],
+                'bik' => $data['bik'],
+            ),
+            'contact' => array(
+                'addr_legal_ru' => $data['addr_legal_ru'],
+                'addr_legal_en' => $data['addr_legal_en'],
+                'addr_fact' => $data['addr_fact'],
+                'phone_1' => $data['phone_1'],
+                'phone_2' => $data['phone_2'],
+                'fax' => $data['fax'],
+                'email' => $data['email'],
+                'site' => $data['site'],
+                'director_name' => $data['director_name'],
+                'director_post' => $data['director_post'],
+                'contact_person' => $data['contact_person'],
+                'contact_data' => $data['contact_data'],
+            )
         );
-        $res = parent::save($base);
+        $s1 = parent::save($fields['general']);
+
         $id = (JFactory::getApplication()->input->getInt('id', 0) == 0) ? $this->getTable()->getDbo()->insertid() : JFactory::getApplication()->input->getInt('id');
-        $table = $this->getTable('Banks', 'TableProjects');
-        $table->load(array('exbID' => $id));
-        if ($table->id == null) $data['exbID'] = $id; else $data['id'] = $table->id;
-        unset($data['regID'], $data['curatorID'], $data['title_ru_full'], $data['title_ru_short'], $data['title_en'], $data['state'], $data['tags'], $data['id']);
-        $model = AdminModel::getInstance('Bank', 'ProjectsModel');
+        $adv1 = $this->getFieldName('Banks', $id);
+        $adv2 = $this->getFieldName('Addresses', $id);
+        $fields['bank'][$adv1['field']] = $adv1['value'];
+        $fields['contact'][$adv2['field']] = $adv2['value'];
+        if ($id !== 0)
+        {
+            $fields['bank']['exbID'] = $id;
+            $fields['contact']['exbID'] = $id;
+        }
+
+        $s2 = $this->saveData('Bank', $fields['bank']);
+        $s3 = $this->saveData('Address', $fields['contact']);
+        return $s1 && $s2 && $s3;
+    }
+
+    /*Сохраняем запись в дочернюю таблицу*/
+    private function saveData(string $modelName, array $data): bool
+    {
+        $model = AdminModel::getInstance($modelName, 'ProjectsModel');
+        $table = $model->getTable();
         $table->bind($data);
         $model->prepareTable($table);
-        $table->save($data);
+        return $model->save($data);
+    }
 
-        //$this->saveBank($data, $id);
-        return $table->save($data);
+    /*Определяем вставляем запись в дочерней таблице или обновляем имеюющуюся*/
+    private function getFieldName(string $tblName, int $id): array
+    {
+        $result = array();
+        $table = $this->getTable($tblName, 'TableProjects');
+        $table->load(array('exbID' => $id));
+        if ($table->id == null)
+        {
+            $result['field'] = 'exbID';
+            $result['value'] = $id;
+        }
+        else
+        {
+            $result['field'] = 'id';
+            $result['value'] = $table->id;
+        }
+        return $result;
     }
 
     /*
      * Сохраняем банковские реквизиты
      * МЕТОД НЕ ИСПОЛЬЗУЕТСЯ. НУЖДАЕТСЯ В УДАЛЕНИИ.
      * */
+    /*
     private function saveBank($data, int $id = 0)
     {
         $data['exbID'] = $id;
@@ -143,6 +213,5 @@ class ProjectsModelExhibitor extends AdminModel {
         unset($arr[$db->quoteName('exbID')]);
         $query .= "ON DUPLICATE KEY UPDATE {$set}";
         return $db->setQuery($query)->execute();
-    }
-
+    }*/
 }

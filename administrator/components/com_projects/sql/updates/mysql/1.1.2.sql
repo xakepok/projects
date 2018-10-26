@@ -61,8 +61,24 @@ COMMENT 'Наименование банка',
   CHANGE `bik` `bik` INT(11) NOT NULL
 COMMENT 'БИК';
 
-ALTER TABLE `#__prj_exp_bank` ADD UNIQUE(`exbID`);
+CREATE TABLE `#__prj_exp_contacts` (
+  `id` int(11) NOT NULL,
+  `exbID` int(11) NOT NULL COMMENT 'ID экспоната',
+  `addr_legal_ru` text COMMENT 'Юридический адрес по-русски',
+  `addr_legal_en` text COMMENT 'Юридический адрес по-английски',
+  `addr_fact` text COMMENT 'Фактический адрес',
+  `phone_1` text COMMENT 'Телефон 1',
+  `phone_2` text COMMENT 'Телефон 2',
+  `fax` text COMMENT 'Fax',
+  `email` text COMMENT 'Email',
+  `site` text COMMENT 'Веб-сайт',
+  `director_name` text COMMENT 'Руководитель',
+  `director_post` text COMMENT 'Должность руководителя',
+  `contact_person` text COMMENT 'Контактное лицо',
+  `contact_data` text COMMENT 'Контактные данные'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Контакты экспонентов';
 
+ALTER TABLE `#__prj_exp_bank` ADD UNIQUE(`exbID`);
 
 ALTER TABLE `#__prj_exp`
   ADD PRIMARY KEY (`id`),
@@ -80,5 +96,16 @@ ALTER TABLE `#__prj_exp_bank`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `#__prj_exp_bank` ADD FOREIGN KEY (`exbID`) REFERENCES `#__prj_exp`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE `#__prj_exp_contacts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `exbID` (`exbID`);
+
+ALTER TABLE `#__prj_exp_contacts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+ALTER TABLE `#__prj_exp_contacts`
+  ADD CONSTRAINT `#__prj_exp_contacts_ibfk_1` FOREIGN KEY (`exbID`) REFERENCES `#__prj_exp` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
 
 COMMIT;

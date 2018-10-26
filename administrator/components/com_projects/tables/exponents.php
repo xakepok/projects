@@ -14,12 +14,12 @@ class TableProjectsExponents extends Table
 
     public function __construct(JDatabaseDriver $db)
     {
-        parent::__construct('#__prj_exp', 'id', $db);
+        return parent::__construct('#__prj_exp', 'id', $db);
     }
 
     public function store($updateNulls = true)
     {
-        parent::store(true);
+        return parent::store(true);
     }
 
     public function publish($pks = null, $state = 1, $userId = 0)

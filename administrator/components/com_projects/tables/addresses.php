@@ -6,7 +6,7 @@ defined('_JEXEC') or die;
  * Таблица контактных данных об экспоненте
  */
 
-class TableProjectsAddressess extends Table
+class TableProjectsAddresses extends Table
 {
     var $id = null;
     var $exbID = null;
