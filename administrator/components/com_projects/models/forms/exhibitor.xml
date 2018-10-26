@@ -69,7 +69,7 @@
                 type="number"
                 label="COM_PROJECTS_HEAD_EXP_BANK_INN"
                 description="COM_PROJECTS_HEAD_EXP_BANK_INN_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_BANK_INN_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_BANK_INN_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
@@ -78,7 +78,7 @@
                 type="number"
                 label="COM_PROJECTS_HEAD_EXP_BANK_KPP"
                 description="COM_PROJECTS_HEAD_EXP_BANK_KPP_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_BANK_KPP_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_BANK_KPP_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
@@ -87,7 +87,7 @@
                 type="number"
                 label="COM_PROJECTS_HEAD_EXP_BANK_RS"
                 description="COM_PROJECTS_HEAD_EXP_BANK_RS_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_BANK_RS_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_BANK_RS_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
@@ -96,7 +96,7 @@
                 type="number"
                 label="COM_PROJECTS_HEAD_EXP_BANK_KS"
                 description="COM_PROJECTS_HEAD_EXP_BANK_KS_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_BANK_KS_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_BANK_KS_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
@@ -114,7 +114,7 @@
                 type="number"
                 label="COM_PROJECTS_HEAD_EXP_BANK_BIK"
                 description="COM_PROJECTS_HEAD_EXP_BANK_BIK_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_BANK_BIK_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_BANK_BIK_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
