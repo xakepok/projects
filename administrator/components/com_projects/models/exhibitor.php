@@ -83,7 +83,14 @@ class ProjectsModelExhibitor extends AdminModel
         return $s1 && $s2 && $s3;
     }
 
-    /*Сохраняем запись в дочернюю таблицу*/
+    /**
+     * Сохраняем запись в дочернюю таблицу.
+     * @param   string  $modelName  Краткое название модели.
+     * @param   array   $data   Массив с добавляемыми данными.
+     * @return  boolean True on success, False on error.
+     * @since   1.1.2
+     * @throws
+     */
     private function saveData(string $modelName, array $data): bool
     {
         $model = AdminModel::getInstance($modelName, 'ProjectsModel');
@@ -95,15 +102,10 @@ class ProjectsModelExhibitor extends AdminModel
     /**
      * Добавляет в массив добавляемых элементов поле с id записи, если нужно обновить её в дочерней таблице,
      * А также поле с ID экспонента
-     *
-     * @param   $data - массив с добавляемыми данными
-     *
-     * @return array
-     *
-     * @since 1.1.3
-     *
+     * @param   array   $data   Массив с добавляемыми данными
+     * @return  array
+     * @since   1.1.3
      * @throws
-     *
      */
     private function addId(array $data): array
     {
@@ -115,7 +117,12 @@ class ProjectsModelExhibitor extends AdminModel
         return $data;
     }
 
-    /*Получаем ИД записи в таблице*/
+    /**
+     * Получает ИД записи в таблице
+     * @return  integer
+     * @since   1.1.2
+     * @throws
+     */
     private function getId(): int
     {
         return (JFactory::getApplication()->input->getInt('id', 0) == 0) ? $this->getTable()->getDbo()->insertid() : JFactory::getApplication()->input->getInt('id', 0);
