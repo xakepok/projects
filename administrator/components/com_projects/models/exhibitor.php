@@ -125,7 +125,9 @@ class ProjectsModelExhibitor extends AdminModel
      */
     private function getId(): int
     {
-        return (JFactory::getApplication()->input->getInt('id', 0) == 0) ? $this->getTable()->getDbo()->insertid() : JFactory::getApplication()->input->getInt('id', 0);
+        $tmp = JFactory::getApplication()->input->getInt('id', 0);
+        $insertID = $this->getTable()->getDbo()->insertid();
+        return ($tmp == 0) ? $insertID : $tmp;
     }
 
 }
