@@ -13,6 +13,11 @@ class ProjectsModelAddress extends AdminModel {
 
     }
 
+    public function getItem($pk = null)
+    {
+        return parent::getItem($pk);
+    }
+
     protected function loadFormData()
     {
 

@@ -11,34 +11,13 @@ class ProjectsModelExhibitor extends AdminModel
         return JTable::getInstance($name, $prefix, $options);
     }
 
-
-
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
-        $table = $this->getTable('Banks', 'TableProjects');
-        $table->load(array('exbID' => $item->id));
-        $item->inn = $table->inn;
-        $item->kpp = $table->kpp;
-        $item->rs = $table->rs;
-        $item->ks = $table->ks;
-        $item->bank = $table->bank;
-        $item->bik = $table->bik;
-        $table = $this->getTable('Addresses', 'TableProjects');
-        $table->load(array('exbID' => $item->id));
-        $item->addr_legal_ru = $table->addr_legal_ru;
-        $item->addr_legal_en = $table->addr_legal_en;
-        $item->addr_fact = $table->addr_fact;
-        $item->phone_1 = $table->phone_1;
-        $item->phone_2 = $table->phone_2;
-        $item->fax = $table->fax;
-        $item->email = $table->email;
-        $item->site = $table->site;
-        $item->director_name = $table->director_name;
-        $item->director_post = $table->director_post;
-        $item->contact_person = $table->contact_person;
-        $item->contact_data = $table->contact_data;
-        return $item;
+        $bank = AdminModel::getInstance('Bank', 'ProjectsModel')->getItem(array('exbID' => $item->id));
+        $address = AdminModel::getInstance('Address', 'ProjectsModel')->getItem(array('exbID' => $item->id));
+        unset($item->_errors, $bank->exbID, $bank->id, $bank->_errors, $address->exbID, $address->id, $address->_errors);
+        return (object) array_merge((array) $item, (array) $bank, (array) $address);
     }
 
     public function getForm($data = array(), $loadData = true)

@@ -8,6 +8,11 @@ class ProjectsModelBank extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    public function getItem($pk = null)
+    {
+        return parent::getItem($pk);
+    }
+
     public function getForm($data = array(), $loadData = true)
     {
 
