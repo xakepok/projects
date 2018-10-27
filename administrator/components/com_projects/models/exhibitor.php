@@ -14,8 +14,9 @@ class ProjectsModelExhibitor extends AdminModel
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
-        $bank = AdminModel::getInstance('Bank', 'ProjectsModel')->getItem(array('exbID' => $item->id));
-        $address = AdminModel::getInstance('Address', 'ProjectsModel')->getItem(array('exbID' => $item->id));
+        $where = array('exbID' => $item->id);
+        $bank = AdminModel::getInstance('Bank', 'ProjectsModel')->getItem($where);
+        $address = AdminModel::getInstance('Address', 'ProjectsModel')->getItem($where);
         unset($item->_errors, $bank->exbID, $bank->id, $bank->_errors, $address->exbID, $address->id, $address->_errors);
         return (object) array_merge((array) $item, (array) $bank, (array) $address);
     }
