@@ -37,7 +37,7 @@ class TableProjectsAddresses extends Table
     {
         foreach ($src as $field => $value)
         {
-            $this->$field = $value;
+            if (isset($this->$field)) $this->$field = $value;
         }
         return parent::bind($src, $ignore);
     }

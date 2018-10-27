@@ -22,6 +22,15 @@ class TableProjectsExponents extends Table
         return parent::store(true);
     }
 
+    public function bind($src, $ignore = array())
+    {
+        foreach ($src as $field => $value)
+        {
+            if (isset($this->$field)) $this->$field = $value;
+        }
+        return parent::bind($src, $ignore);
+    }
+
     public function publish($pks = null, $state = 1, $userId = 0)
     {
         $k = $this->_tbl_key;

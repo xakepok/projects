@@ -11,6 +11,8 @@ class ProjectsModelExhibitor extends AdminModel
         return JTable::getInstance($name, $prefix, $options);
     }
 
+
+
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
@@ -93,8 +95,7 @@ class ProjectsModelExhibitor extends AdminModel
 
     public function save($data)
     {
-        $fields = $this->filterFields($this->getTable(), $data);
-        $s1 = parent::save($fields);
+        $s1 = parent::save($data);
 
         $data = $this->addId($data);
 
@@ -107,23 +108,24 @@ class ProjectsModelExhibitor extends AdminModel
     private function saveData(string $modelName, array $data): bool
     {
         $model = AdminModel::getInstance($modelName, 'ProjectsModel');
-        $table = $model->getTable();
-        $data = $this->filterFields($table, $data);
-        $table->bind($data);
+        $table = $model->getTable()->bind($data);
         $model->prepareTable($table);
         return $model->save($data);
     }
 
-    /*Отсиеваем ненужные поля перед привязкой к таблице*/
-    private function filterFields(object $table, array $data): array
-    {
-        foreach ($data as $field => $value) {
-            if (!property_exists($table, $field)) unset($data[$field]);
-        }
-        return $data;
-    }
-
-    /*Добавляем поле с id записи, если нужно обновить её в дочерней таблице, а не добавить*/
+    /**
+     * Добавляет в массив добавляемых элементов поле с id записи, если нужно обновить её в дочерней таблице,
+     * А также поле с ID экспонента
+     *
+     * @param   $data - массив с добавляемыми данными
+     *
+     * @return array
+     *
+     * @since 1.1.3
+     *
+     * @throws
+     *
+     */
     private function addId(array $data): array
     {
         $id = $this->getId();
