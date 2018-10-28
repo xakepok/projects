@@ -18,7 +18,7 @@ class ProjectsModelExhibitor extends AdminModel
         $bank = AdminModel::getInstance('Bank', 'ProjectsModel')->getItem($where);
         $address = AdminModel::getInstance('Address', 'ProjectsModel')->getItem($where);
         unset($item->_errors, $bank->exbID, $bank->id, $bank->_errors, $address->exbID, $address->id, $address->_errors);
-        return (object) array_merge((array) $item, (array) $bank, (array) $address);
+        return (object)array_merge((array)$item, (array)$bank, (array)$address);
     }
 
     public function getForm($data = array(), $loadData = true)
@@ -81,13 +81,93 @@ class ProjectsModelExhibitor extends AdminModel
 
         $s2 = $this->saveData('Bank', $data);
         $s3 = $this->saveData('Address', $data);
-        return $s1 && $s2 && $s3;
+        $s4 = $this->saveActivities();
+        return $s1 && $s2 && $s3 && $s4;
     }
 
     /**
-     * Сохраняем запись в дочернюю таблицу.
-     * @param   string  $modelName  Краткое название модели.
-     * @param   array   $data   Массив с добавляемыми данными.
+     * Получает массив видов деятельности для текущего экспонента.
+     * @return  array   Массив
+     * @since   1.1.3
+     * @throws
+     */
+    public function getActivities(): array
+    {
+        $exbID = $this->getId();
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select('*')
+            ->from($db->quoteName('#__prj_exp_act'))
+            ->where($db->quoteName('exbID') . " = " . $db->quote($exbID));
+        $activities = $db->setQuery($query)->loadAssocList();
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select('*')
+            ->from("`#__prj_activities`")
+            ->order($db->quoteName('title'));
+        $list = $db->setQuery($query)->loadAssocList();
+
+        $result = array();
+        foreach ($list as $item) {
+            $arr = array();
+            $arr['id'] = $item['id'];
+            $arr['title'] = $item['title'];
+            $arr['checked'] = false;
+            if ($exbID > 0) {
+                foreach ($activities as $activity) {
+                    if ($activity['exbID'] == $exbID && $activity['actID'] == $item['id']) {
+                        $arr['checked'] = true;
+                        break;
+                    }
+                }
+            }
+            $result[] = $arr;
+        }
+        return $result;
+    }
+
+    /**
+     * Сохраняет запись в дочернюю таблицу видов деятельности.
+     * @return  boolean True on success, False on error.
+     * @since   1.1.3
+     * @throws
+     */
+    private function saveActivities(): bool
+    {
+        $exbID = $this->getId();
+        $post = $_POST['jform']['act'];
+        if (empty($post)) return true;
+        $model = AdminModel::getInstance('Act', 'ProjectsModel');
+        $table = $model->getTable();
+        foreach ($post as $act => $value) {
+            $pks = array('exbID' => $exbID, 'actID' => $act);
+            $row = $model->getItem($pks);
+            if ($row->id != null)
+            {
+                if ($value == '')
+                {
+                    $model->delete($row->id);
+                }
+            }
+            else {
+                if ($value == '1') {
+                    $arr['exbID'] = $exbID;
+                    $arr['actID'] = $act;
+                    $arr['id'] = null;
+                    $table->bind($arr);
+                    $model->save($arr);
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Сохраняем запись в дочернюю таблицу (кроме видов деятельности).
+     * @param   string $modelName Краткое название модели.
+     * @param   array $data Массив с добавляемыми данными.
      * @return  boolean True on success, False on error.
      * @since   1.1.2
      * @throws
@@ -103,7 +183,7 @@ class ProjectsModelExhibitor extends AdminModel
     /**
      * Добавляет в массив добавляемых элементов поле с id записи, если нужно обновить её в дочерней таблице,
      * А также поле с ID экспонента
-     * @param   array   $data   Массив с добавляемыми данными
+     * @param   array $data Массив с добавляемыми данными
      * @return  array
      * @since   1.1.3
      * @throws

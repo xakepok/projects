@@ -13,6 +13,13 @@ class ProjectsModelAct extends AdminModel {
         return parent::getItem($pk);
     }
 
+    public function delete(&$pks)
+    {
+        $row = $this->getItem($pks);
+        if ($row->id == null) return true;
+        return parent::delete($pks);
+    }
+
     public function getForm($data = array(), $loadData = true)
     {
 

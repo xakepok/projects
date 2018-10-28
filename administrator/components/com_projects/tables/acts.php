@@ -16,7 +16,7 @@ class TableProjectsActs extends Table
 
     public function __construct(JDatabaseDriver $db)
     {
-        parent::__construct('#__prj_exp_acts', 'id', $db);
+        parent::__construct('#__prj_exp_act', 'id', $db);
     }
 
     public function load($keys = null, $reset = true)

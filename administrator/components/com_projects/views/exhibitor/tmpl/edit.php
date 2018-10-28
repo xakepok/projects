@@ -38,6 +38,16 @@ JHtml::_('formbehavior.chosen', 'select');
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'activities', JText::_('COM_PROJECTS_BLANK_EXHIBITOR_ACTIVITIES')); ?>
+                <div class="row-fluid">
+                    <div class="span6">
+                        <?php echo $this->loadTemplate('acts');?>
+                    </div>
+                    <div class="span6">
+
+                    </div>
+                </div>
+                <?php echo JHtml::_('bootstrap.endTab'); ?>
             </div>
             <?php echo JHtml::_('bootstrap.endTabSet'); ?>
         </div>
