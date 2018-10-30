@@ -19,7 +19,7 @@ class ProjectsViewExhibitor extends HtmlView {
 
     protected function addToolbar() {
         JFactory::getApplication()->input->set('hidemainmenu', true);
-        $title = $this->item->title ?? JText::_('COM_PROJECTS_TITLE_NEW_EXHIBITOR');
+        $title = $this->item->title ?? JText::sprintf('COM_PROJECTS_TITLE_NEW_EXHIBITOR');
 
         JToolbarHelper::title($title, '');
 	    JToolBarHelper::apply('exhibitor.apply', 'JTOOLBAR_APPLY');

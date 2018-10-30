@@ -18,7 +18,7 @@ class ProjectsViewProject extends HtmlView {
 
     protected function addToolbar() {
         JFactory::getApplication()->input->set('hidemainmenu', true);
-        $title = $this->item->title ?? JText::_('COM_PROJECTS_TITLE_NEW_PROJECT');
+        $title = $this->item->title ?? JText::sprintf('COM_PROJECTS_TITLE_NEW_PROJECT');
 
         JToolbarHelper::title($title, '');
 	    JToolBarHelper::apply('project.apply', 'JTOOLBAR_APPLY');

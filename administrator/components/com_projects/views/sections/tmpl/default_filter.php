@@ -4,9 +4,9 @@
         <div class="btn-wrapper input-append">
             <input type="text" autocomplete="off" name="filter_search" id="filter_search"
                    value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-                   title aria-label="<?php echo JText::sprintf('COM_PROJECTS_FILTER_ACTIVITY'); ?>"
-                   data-original-title="<?php echo JText::sprintf('COM_PROJECTS_FILTER_ACTIVITY'); ?>"
-                   placeholder="<?php echo JText::sprintf('COM_PROJECTS_FILTER_ACTIVITY'); ?>"
+                   title aria-label="<?php echo JText::sprintf('COM_PROJECTS_FILTER_SECTION'); ?>"
+                   data-original-title="<?php echo JText::sprintf('COM_PROJECTS_FILTER_SECTION'); ?>"
+                   placeholder="<?php echo JText::sprintf('COM_PROJECTS_FILTER_SECTION'); ?>"
             >
             <button type="submit" class="btn hasTooltip">
                 <?php echo JText::sprintf('JSEARCH_FILTER_SUBMIT'); ?>
@@ -14,6 +14,7 @@
             </button>
         </div>
         <div class="js-stools-field-filter">
+            <?php echo ProjectsHtmlFilters::price($this->state->get('filter.price')); ?>
             <?php echo ProjectsHtmlFilters::state($this->state->get('filter.state')); ?>
         </div>
         <div class="btn-wrapper">

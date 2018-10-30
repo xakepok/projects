@@ -23,11 +23,11 @@ defined('_JEXEC') or die;
                                <?php if ($field['checked']) echo "selected";?>
                         >
                         <label for="jform_act_<?php echo $field['id']; ?>_1"
-                               class="<?php echo $class['yes'];?>"><?php echo JText::_('JYES'); ?></label>
+                               class="<?php echo $class['yes'];?>"><?php echo JText::sprintf('JYES'); ?></label>
                         <input type="radio" id="jform_act_<?php echo $field['id']; ?>_0"
                                name="jform[act][<?php echo $field['id']; ?>]" value="">
                         <label for="jform_act_<?php echo $field['id']; ?>_0"
-                               class="<?php echo $class['no'];?>"><?php echo JText::_('JNO'); ?></label>
+                               class="<?php echo $class['no'];?>"><?php echo JText::sprintf('JNO'); ?></label>
                     </fieldset>
                 </div>
             </div>

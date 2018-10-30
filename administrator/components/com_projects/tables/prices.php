@@ -35,7 +35,7 @@ class TableProjectsPrices extends Table
             }
             else
             {
-                throw new RuntimeException(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'), 500);
+                throw new RuntimeException(JText::sprintf('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'), 500);
             }
         }
 
@@ -45,7 +45,7 @@ class TableProjectsPrices extends Table
             // Загружаем сообщение.
             if (!$this->load($pk))
             {
-                throw new RuntimeException(JText::_('COM_PROJECTS_ERROR_RECORD_LOAD'), 500);
+                throw new RuntimeException(JText::sprintf('COM_PROJECTS_ERROR_RECORD_LOAD'), 500);
             }
 
             $this->state = $state;
@@ -53,7 +53,7 @@ class TableProjectsPrices extends Table
             // Сохраняем сообщение.
             if (!$this->store())
             {
-                throw new RuntimeException(JText::_('COM_PROJECTS_TABLE_ERROR_RECORD_STORE'), 500);
+                throw new RuntimeException(JText::sprintf('COM_PROJECTS_TABLE_ERROR_RECORD_STORE'), 500);
             }
         }
 

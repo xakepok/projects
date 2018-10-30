@@ -18,7 +18,7 @@ JHtml::_('formbehavior.chosen', 'select');
         <div class="span12 form-horizontal">
             <?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
             <div class="tab-content">
-                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::_('COM_PROJECTS_BLANK_EXHIBITOR')); ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR')); ?>
                     <div class="row-fluid">
                         <div class="span6">
                             <?php echo $this->loadTemplate('general');?>
@@ -28,7 +28,7 @@ JHtml::_('formbehavior.chosen', 'select');
                         </div>
                     </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
-                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'contact', JText::_('COM_PROJECTS_BLANK_EXHIBITOR_CONTACTS')); ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'contact', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_CONTACTS')); ?>
                 <div class="row-fluid">
                     <div class="span6">
                         <?php echo $this->loadTemplate('addresses');?>
@@ -38,7 +38,7 @@ JHtml::_('formbehavior.chosen', 'select');
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
-                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'activities', JText::_('COM_PROJECTS_BLANK_EXHIBITOR_ACTIVITIES')); ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'activities', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_ACTIVITIES')); ?>
                 <div class="row-fluid">
                     <div class="span6">
                         <?php echo $this->loadTemplate('acts');?>

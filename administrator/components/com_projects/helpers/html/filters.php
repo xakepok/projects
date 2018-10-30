@@ -42,6 +42,19 @@ abstract class ProjectsHtmlFilters
         return JHtml::_('select.genericlist', $options, 'filter_activity', $attribs, 'value', 'text', $selected, null, true);
     }
 
+    //Фильтр прайс-листов
+    public static function price($selected)
+    {
+        $options = array();
+
+        $options[] = JHtml::_('select.option', '', 'COM_PROJECTS_FILTER_SELECT_PRICE');
+        $options = array_merge($options, self::priceOptions());
+
+        $attribs = 'class="inputbox" onchange="this.form.submit()"';
+
+        return JHtml::_('select.genericlist', $options, 'filter_price', $attribs, 'value', 'text', $selected, null, true);
+    }
+
     //Список состояний модели
     public static function stateOptions()
     {
@@ -82,6 +95,26 @@ abstract class ProjectsHtmlFilters
         $query
             ->select("`id`, `title`")
             ->from('#__prj_activities')
+            ->order("`title`");
+        $result = $db->setQuery($query)->loadObjectList();
+
+        $options = array();
+
+        foreach ($result as $item)
+        {
+            $options[] = JHtml::_('select.option', $item->id, $item->title);
+        }
+
+        return $options;
+    }
+
+    public static function priceOptions()
+    {
+        $db =& JFactory::getDbo();
+        $query =& $db->getQuery(true);
+        $query
+            ->select("`id`, `title`")
+            ->from('#__prc_prices')
             ->order("`title`");
         $result = $db->setQuery($query)->loadObjectList();
 

@@ -6,17 +6,17 @@ JHtml::_('formbehavior.chosen', 'select');
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function(task) {
-        if (task == 'price.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
+        if (task == 'section.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
             Joomla.submitform(task, document.getElementById('adminForm'));
         }
     }
 </script>
-<form action="<?php echo JRoute::_('index.php?option=com_projects&amp;view=price&amp;layout=edit&amp;id=' . (int)$this->item->id); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_projects&amp;view=section&amp;layout=edit&amp;id=' . (int)$this->item->id); ?>"
       method="post" name="adminForm" id="adminForm" xmlns="http://www.w3.org/1999/html" class="form-validate">
     <div class="row-fluid">
         <div class="span12 form-horizontal">
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#general" data-toggle="tab"><?php echo JText::sprintf('COM_PROJECTS_BLANK_PRICE');?></a></li>
+                <li class="active"><a href="#general" data-toggle="tab"><?php echo JText::sprintf('COM_PROJECTS_BLANK_SECTION');?></a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="general">

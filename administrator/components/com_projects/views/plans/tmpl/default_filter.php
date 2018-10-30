@@ -7,7 +7,7 @@
         <div class="btn-wrapper">
             <button type="button" class="btn hasTooltip js-stools-btn-clear"
                     onclick="document.getElementById('filter_search').value='';this.form.submit();">
-                <?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>
+                <?php echo JText::sprintf('JSEARCH_FILTER_CLEAR'); ?>
             </button>
         </div>
     </div>

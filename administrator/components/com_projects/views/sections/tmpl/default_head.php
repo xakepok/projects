@@ -11,13 +11,10 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JHtml::_('grid.sort', 'JSTATUS', '`state`', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_CITY'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TITLE', '`title`', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TITLE', '`title_ru_short`', $listDirn, $listOrder); ?>
-    </th>
-    <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_MANAGER'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TITLE_PRICE_DESC', '`price`', $listDirn, $listOrder); ?>
     </th>
     <th width="1%">
         <?php echo JHtml::_('grid.sort', 'ID', '`id`', $listDirn, $listOrder); ?>

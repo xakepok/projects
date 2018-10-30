@@ -18,7 +18,7 @@ class ProjectsViewPrice extends HtmlView {
 
     protected function addToolbar() {
         JFactory::getApplication()->input->set('hidemainmenu', true);
-        $title = $this->item->title ?? JText::_('COM_PROJECTS_TITLE_NEW_PRICE');
+        $title = $this->item->title ?? JText::sprintf('COM_PROJECTS_TITLE_NEW_PRICE');
 
         JToolbarHelper::title($title, '');
 	    JToolBarHelper::apply('price.apply', 'JTOOLBAR_APPLY');

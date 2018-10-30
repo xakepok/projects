@@ -2,33 +2,21 @@
 use Joomla\CMS\Table\Table;
 defined('_JEXEC') or die;
 
-class TableProjectsExponents extends Table
+class TableProjectsSections extends Table
 {
     var $id = null;
-    var $regID = null;
-    var $curatorID = null;
-    var $title_ru_full = null;
-    var $title_ru_short = null;
-    var $title_en = null;
+    var $priceID = null;
+    var $title = null;
     var $state = null;
 
     public function __construct(JDatabaseDriver $db)
     {
-        return parent::__construct('#__prj_exp', 'id', $db);
+        parent::__construct('#__prc_sections', 'id', $db);
     }
 
     public function store($updateNulls = true)
     {
         return parent::store(true);
-    }
-
-    public function bind($src, $ignore = array())
-    {
-        foreach ($src as $field => $value)
-        {
-            if (isset($this->$field)) $this->$field = $value;
-        }
-        return parent::bind($src, $ignore);
     }
 
     public function publish($pks = null, $state = 1, $userId = 0)
@@ -72,4 +60,5 @@ class TableProjectsExponents extends Table
 
         return true;
     }
+
 }

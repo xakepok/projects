@@ -16,7 +16,7 @@ JHtml::_('formbehavior.chosen', 'select');
     <div class="row-fluid">
         <div class="span12 form-horizontal">
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#general" data-toggle="tab"><?php echo JText::_('COM_PROJECTS_BLANK_PROJECT');?></a></li>
+                <li class="active"><a href="#general" data-toggle="tab"><?php echo JText::sprintf('COM_PROJECTS_BLANK_PROJECT');?></a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="general">
