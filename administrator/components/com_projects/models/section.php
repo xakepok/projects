@@ -8,6 +8,85 @@ class ProjectsModelSection extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    public function import()
+    {
+        $to = JFactory::getApplication()->input->getInt('to', 0);
+        $from = JFactory::getApplication()->input->getInt('from', 0);
+        if ($from == 0) return false;
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select($db->quoteName('*'))
+            ->from($db->quoteName('#__prc_sections'))
+            ->where("`priceID` = {$from}");
+        $sections = $db->setQuery($query)->loadObjectList();
+        $table = "#__prc_sections";
+        $columns = array('priceID', 'title', 'state');
+        $old = array(); //Массив с привязками старых ID разделов к новым
+        $ids = array(); //Массив со старыми ID разделов
+        foreach ($sections as $section)
+        {
+            $query = $db->getQuery(true);
+            $query
+                ->insert($db->quoteName($table))
+                ->columns($db->quoteName($columns));
+            $arr = array(
+                $db->quote($to),
+                $db->quote($section->title),
+                $db->quote($section->state)
+            );
+            $query
+                ->values(implode(', ', $arr));
+            $db->setQuery($query)->execute();
+            $old[$section->id] = $db->insertid();
+            $ids[] = $section->id;
+        }
+        $ids = implode(', ', $ids);
+        $query = $db->getQuery(true);
+        $query
+            ->select($db->quoteName('*'))
+            ->from($db->quoteName('#__prc_items'))
+            ->where("`sectionID` IN ({$ids})");
+        $items = $db->setQuery($query)->loadObjectList();
+        $query = $db->getQuery(true);
+        $query
+            ->insert($db->quoteName("#__prc_items"))
+            ->columns(
+                $db->quoteName(
+                    array(
+                        'sectionID',
+                        'unit',
+                        'title_ru',
+                        'title_en',
+                        'price_rub',
+                        'price_usd',
+                        'price_eur',
+                        'factor',
+                        'state'
+                    )
+                )
+            );
+        foreach ($items as $item)
+        {
+            $arr = array(
+                $db->quote($old[$item->sectionID]),
+                $db->quote($item->unit),
+                ($item->title_ru != null) ? $db->quote($item->title_ru) : 'NULL',
+                ($item->title_en != null) ? $db->quote($item->title_en) : 'NULL',
+                $db->quote($item->price_rub),
+                $db->quote($item->price_usd),
+                $db->quote($item->price_eur),
+                $db->quote($item->factor),
+                $db->quote($item->state)
+            );
+            $values = implode(', ', $arr);
+            $query
+                ->values($values);
+        }
+        return $db->setQuery($query)->execute();
+    }
+
+
     public function getForm($data = array(), $loadData = true)
     {
         $form = $this->loadForm(

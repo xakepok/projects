@@ -1,13 +1,13 @@
 <?php
 defined('_JEXEC') or die;
+
 use Joomla\CMS\MVC\Model\ListModel;
 
 class ProjectsModelSections extends ListModel
 {
     public function __construct(array $config)
     {
-        if (empty($config['filter_fields']))
-        {
+        if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
                 '`id`', '`id`',
                 '`title`', '`title`',
@@ -30,31 +30,26 @@ class ProjectsModelSections extends ListModel
 
         /* Фильтр */
         $search = $this->getState('filter.search');
-        if (!empty($search))
-        {
+        if (!empty($search)) {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`s`.`title` LIKE ' . $search);
         }
         // Фильтруем по состоянию.
         $published = $this->getState('filter.state');
-        if (is_numeric($published))
-        {
-            $query->where('`s`.`state` = ' . (int) $published);
-        }
-        elseif ($published === '')
-        {
+        if (is_numeric($published)) {
+            $query->where('`s`.`state` = ' . (int)$published);
+        } elseif ($published === '') {
             $query->where('(`s`.`state` = 0 OR `s`.`state` = 1)');
         }
         // Фильтруем по прайсу.
         $price = $this->getState('filter.price');
-        if (is_numeric($price))
-        {
-            $query->where('`s`.`priceID` = ' . (int) $price);
+        if (is_numeric($price)) {
+            $query->where('`s`.`priceID` = ' . (int)$price);
         }
 
 
         /* Сортировка */
-        $orderCol  = $this->state->get('list.ordering', '`s`.`title`');
+        $orderCol = $this->state->get('list.ordering', '`s`.`title`');
         $orderDirn = $this->state->get('list.direction', 'asc');
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 

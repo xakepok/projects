@@ -34,6 +34,14 @@
                 class="input-xlarge"
         />
         <field
+                name="priceID"
+                type="Price"
+                label="COM_PROJECTS_FILTER_PRICE"
+                description="COM_PROJECTS_FILTER_PRICE"
+                default=""
+                class="input-xlarge"
+        />
+        <field
                 name="date_start"
                 type="calendar"
                 label="COM_PROJECTS_HEAD_DATE_START"

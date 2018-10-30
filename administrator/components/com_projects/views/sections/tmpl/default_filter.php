@@ -24,5 +24,19 @@
             </button>
         </div>
     </div>
-    <div class="js-stools-container-list hidden-phone hidden-tablet shown" style=""></div>
+    <div class="js-stools-container-list hidden-phone hidden-tablet shown" style="">
+        <?php
+        if (is_numeric($this->state->get('filter.price')) && empty($this->items)) :
+        ?>
+            <div class="ordering-select hidden-phone">
+                <div class="js-stools-field-list">
+                    <?php echo ProjectsHtmlFilters::priceImport($this->state->get('filter.price')); ?>
+                    <button type="button" class="btn hasTooltip" onclick="imp(<?php echo $this->state->get('filter.price');?>)">
+                        <?php echo JText::sprintf('COM_PROJECTS_ACTION_IMPORT'); ?>
+                        <span class="" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
 </div>

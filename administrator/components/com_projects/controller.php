@@ -20,4 +20,5 @@ defined('_JEXEC') or die;
  */
 class ProjectsController extends BaseController
 {
+
 }

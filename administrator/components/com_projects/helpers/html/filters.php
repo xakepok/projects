@@ -55,6 +55,19 @@ abstract class ProjectsHtmlFilters
         return JHtml::_('select.genericlist', $options, 'filter_price', $attribs, 'value', 'text', $selected, null, true);
     }
 
+    //Фильтр прайс-листов для импорта
+    public static function priceImport($selected)
+    {
+        $options = array();
+
+        $options[] = JHtml::_('select.option', '', 'COM_PROJECTS_FILTER_SELECT_PRICE_IMPORT');
+        $options = array_merge($options, self::priceOptionsImport($selected));
+
+        $attribs = 'class="inputbox" onchange="" id ="valimp"';
+
+        return JHtml::_('select.genericlist', $options, 'filter_price_import', $attribs, 'value', 'text', '', null, true);
+    }
+
     //Фильтр секций прайс-листа
     public static function section($selected)
     {
@@ -129,6 +142,33 @@ abstract class ProjectsHtmlFilters
             ->select("`id`, `title`")
             ->from('#__prc_prices')
             ->order("`title`");
+        $result = $db->setQuery($query)->loadObjectList();
+
+        $options = array();
+
+        foreach ($result as $item)
+        {
+            $options[] = JHtml::_('select.option', $item->id, $item->title);
+        }
+
+        return $options;
+    }
+
+    public static function priceOptionsImport($selected)
+    {
+        $db =& JFactory::getDbo();
+        $query =& $db->getQuery(true);
+        $query
+            ->select("DISTINCT `p`.`id`, `p`.`title`")
+            ->from('`#__prc_items` as `i`')
+            ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
+            ->leftJoin("`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`")
+            ->order("`p`.`title`");
+        if (is_numeric($selected))
+        {
+            $query
+                ->where("`s`.`priceID` != {$selected}");
+        }
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();
