@@ -12,7 +12,7 @@
                 description="COM_PROJECTS_HEAD_TITLE_PRICE_DESC"
                 hint="COM_PROJECTS_HEAD_TITLE_PRICE_DESC"
                 required="true"
-                autocmplete="off"
+                autocomplete="off"
                 class="input-xlarge"
         />
         <field
@@ -22,7 +22,7 @@
                 description="COM_PROJECTS_HEAD_TITLE_SECTION_DESC"
                 hint="COM_PROJECTS_HEAD_TITLE_SECTION_DESC"
                 required="true"
-                autocmplete="off"
+                autocomplete="off"
                 class="input-xlarge"
         />
         <field
