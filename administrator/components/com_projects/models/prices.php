@@ -32,6 +32,16 @@ class ProjectsModelPrices extends ListModel
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`title` LIKE ' . $search);
         }
+        // Фильтруем по состоянию.
+        $published = $this->getState('filter.state');
+        if (is_numeric($published))
+        {
+            $query->where('`state` = ' . (int) $published);
+        }
+        elseif ($published === '')
+        {
+            $query->where('(`state` = 0 OR `state` = 1)');
+        }
 
         /* Сортировка */
         $orderCol  = $this->state->get('list.ordering', '`title`');
