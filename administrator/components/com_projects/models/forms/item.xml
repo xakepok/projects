@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fieldset name="names">
+        <field
+                name="id"
+                type="hidden"
+        />
+        <field
+                name="sectionID"
+                type="Section"
+                label="COM_PROJECTS_FILTER_SECTION"
+                description="COM_PROJECTS_HEAD_TITLE_SECTION_DESC"
+                required="true"
+                class="input-xlarge"
+        />
+        <field
+                name="title_ru"
+                type="text"
+                label="COM_PROJECTS_HEAD_ITEM_TITLE_RU"
+                description="COM_PROJECTS_HEAD_ITEM_TITLE_RU_DESC"
+                hint="COM_PROJECTS_HEAD_ITEM_TITLE_RU_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="title_en"
+                type="text"
+                label="COM_PROJECTS_HEAD_ITEM_TITLE_EN"
+                description="COM_PROJECTS_HEAD_ITEM_TITLE_EN_DESC"
+                hint="COM_PROJECTS_HEAD_ITEM_TITLE_EN_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="price_rub"
+                type="text"
+                label="COM_PROJECTS_HEAD_ITEM_PRICE_RUB"
+                description="COM_PROJECTS_HEAD_ITEM_PRICE_RUB_DESC"
+                hint="COM_PROJECTS_HEAD_ITEM_PRICE_RUB_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="price_usd"
+                type="text"
+                label="COM_PROJECTS_HEAD_ITEM_PRICE_USD"
+                description="COM_PROJECTS_HEAD_ITEM_PRICE_USD_DESC"
+                hint="COM_PROJECTS_HEAD_ITEM_PRICE_USD_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="price_eur"
+                type="text"
+                label="COM_PROJECTS_HEAD_ITEM_PRICE_EUR"
+                description="COM_PROJECTS_HEAD_ITEM_PRICE_EUR_DESC"
+                hint="COM_PROJECTS_HEAD_ITEM_PRICE_EUR_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="factor"
+                type="text"
+                label="COM_PROJECTS_HEAD_ITEM_FACTOR"
+                description="COM_PROJECTS_HEAD_ITEM_FACTOR_DESC"
+                hint="COM_PROJECTS_HEAD_ITEM_FACTOR_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="unit"
+                type="list"
+                label="COM_PROJECTS_HEAD_ITEM_UNIT"
+                description="COM_PROJECTS_HEAD_ITEM_UNIT_DESC"
+                class="inputbox"
+                default="piece"
+        >
+            <option value="piece">COM_PROJECTS_HEAD_ITEM_UNIT_PIECE</option>
+            <option value="sqm">COM_PROJECTS_HEAD_ITEM_UNIT_SQM</option>
+            <option value="kit">COM_PROJECTS_HEAD_ITEM_UNIT_KIT</option>
+            <option value="letter">COM_PROJECTS_HEAD_ITEM_UNIT_LETTER</option>
+        </field>
+        <field
+                name="state"
+                type="list"
+                label="JSTATUS"
+                description="JFIELD_PUBLISHED_DESC"
+                class="inputbox"
+                size="1"
+                default="1"
+        >
+            <option value="1">JPUBLISHED</option>
+            <option value="0">JUNPUBLISHED</option>
+            <option value="2">JARCHIVED</option>
+            <option value="-2">JTRASHED</option>
+        </field>
+    </fieldset>
+</form>
