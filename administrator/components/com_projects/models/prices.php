@@ -22,8 +22,8 @@ class ProjectsModelPrices extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select('*')
-            ->from("`#__prc_prices`");
+            ->select($db->quoteName('*'))
+            ->from($db->quoteName('#__prc_prices'));
 
         /* Фильтр */
         $search = $this->getState('filter.search');
