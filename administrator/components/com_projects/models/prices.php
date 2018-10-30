@@ -47,7 +47,7 @@ class ProjectsModelPrices extends ListModel
         $result = array();
         foreach ($items as $item) {
             $arr['id'] = $item->id;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=price&id={$item->id}");
+            $url = JRoute::_("index.php?option=com_projects&amp;view=price&amp;layout=edit&amp;&id={$item->id}");
             $link = JHtml::link($url, $item->title);
             $arr['title'] = $link;
             $arr['state'] = $item->state;
