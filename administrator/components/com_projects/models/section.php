@@ -1,35 +1,99 @@
 <?php
 defined('_JEXEC') or die;
+
 use Joomla\CMS\MVC\Model\AdminModel;
 
-class ProjectsModelSection extends AdminModel {
+class ProjectsModelSection extends AdminModel
+{
     public function getTable($name = 'Sections', $prefix = 'TableProjects', $options = array())
     {
         return JTable::getInstance($name, $prefix, $options);
     }
 
-    public function import()
+    /**
+     * Выполняет испорт разделов и полей прайс-листа из имеющегося в пустой.
+     * @param int $from ID прайс-листа, откуда копировать секции и пункты.
+     * @param int $to ID прайс-листа, куда копировать секции и пункты.
+     * @return  boolean.
+     * @throws Exception.
+     * @since 1.1.9
+     */
+    public function import(int $from, int $to): bool
     {
-        $to = JFactory::getApplication()->input->getInt('to', 0);
-        $from = JFactory::getApplication()->input->getInt('from', 0);
-        if ($from == 0) return false;
+        $sections = $this->getPriceSections($from);
+        $ids = $this->insertPriceSections($sections, $to);
+        $items = $this->getPriceItems(array_keys($ids));
+        return $this->insertPriceItems($items, $ids);
+    }
+
+    public function getForm($data = array(), $loadData = true)
+    {
+        $form = $this->loadForm(
+            $this->option . '.section', 'section', array('control' => 'jform', 'load_data' => $loadData)
+        );
+        if (empty($form)) {
+            return false;
+        }
+        $id = JFactory::getApplication()->input->get('id', 0);
+        $user = JFactory::getUser();
+        if ($id != 0 && (!$user->authorise('core.edit.state', $this->option . '.section.' . (int)$id))
+            || ($id == 0 && !$user->authorise('core.edit.state', $this->option)))
+            $form->setFieldAttribute('state', 'disabled', 'true');
+
+        return $form;
+    }
+
+    protected function loadFormData()
+    {
+        $data = JFactory::getApplication()->getUserState($this->option . '.edit.section.data', array());
+        if (empty($data)) {
+            $data = $this->getItem();
+        }
+
+        return $data;
+    }
+
+    protected function prepareTable($table)
+    {
+        $nulls = array(); //Поля, которые NULL
+        foreach ($nulls as $field) {
+            if (!strlen($table->$field)) $table->$field = NULL;
+        }
+        parent::prepareTable($table);
+    }
+
+    protected function canEditState($record)
+    {
+        $user = JFactory::getUser();
+
+        if (!empty($record->id)) {
+            return $user->authorise('core.edit.state', $this->option . '.section.' . (int)$record->id);
+        } else {
+            return parent::canEditState($record);
+        }
+    }
+
+    public function getScript()
+    {
+        return 'administrator/components/' . $this->option . '/models/forms/section.js';
+    }
+
+    /**
+     * Выполняет вставку секций в новый прайс-лист.
+     * @param array $sections Массив с объектами секций.
+     * @param int $to ID прайс-листа, куда вставлять секции.
+     * @return array    Массив с привязками старых ID разделов к новым.
+     * @since 1.1.9
+     */
+    private function insertPriceSections(array $sections, int $to): array
+    {
+        $ids = array(); //Массив с привязками старых ID разделов к новым
         $db =& $this->getDbo();
-        $query = $db->getQuery(true);
-        $query
-            ->select('*')
-            ->from('#__prc_sections')
-            ->where("`priceID` = {$from}");
-        $sections = $db->setQuery($query)->loadObjectList();
-        $table = "#__prc_sections";
-        $columns = array('priceID', 'title', 'state');
-        $old = array(); //Массив с привязками старых ID разделов к новым
-        $ids = array(); //Массив со старыми ID разделов
-        foreach ($sections as $section)
-        {
+        foreach ($sections as $section) {
             $query = $db->getQuery(true);
             $query
-                ->insert($table)
-                ->columns($columns);
+                ->insert("#__prc_sections")
+                ->columns(array('priceID', 'title', 'state'));
             $arr = array(
                 $db->quote($to),
                 $db->quote($section->title),
@@ -38,38 +102,29 @@ class ProjectsModelSection extends AdminModel {
             $query
                 ->values(implode(', ', $arr));
             $db->setQuery($query)->execute();
-            $old[$section->id] = $db->insertid();
-            $ids[] = $section->id;
+            $ids[$section->id] = $db->insertid();
         }
-        $ids = implode(', ', $ids);
+        return $ids;
+    }
+
+    /**
+     * Выполняет вставку пунктов в новый прайс-лист.
+     * @param array $items Массив с пунктами секций.
+     * @param array $ids Массив с привязкой ID старых секций и новых.
+     * @return bool.
+     * @since 1.1.9
+     */
+    private function insertPriceItems(array $items, array $ids): bool
+    {
+        $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select('*')
-            ->from('#__prc_items')
-            ->where("`sectionID` IN ({$ids})");
-        $items = $db->setQuery($query)->loadObjectList();
-        $query = $db->getQuery(true);
-        $query
-            ->insert($db->quoteName("#__prc_items"))
-            ->columns(
-                $db->quoteName(
-                    array(
-                        'sectionID',
-                        'unit',
-                        'title_ru',
-                        'title_en',
-                        'price_rub',
-                        'price_usd',
-                        'price_eur',
-                        'factor',
-                        'state'
-                    )
-                )
-            );
-        foreach ($items as $item)
-        {
+            ->insert("#__prc_items")
+            ->columns(array('sectionID', 'unit', 'title_ru', 'title_en', 'price_rub', 'price_usd', 'price_eur', 'factor', 'state'));
+        foreach ($items as $item) {
+            if (empty($item)) continue;
             $arr = array(
-                $db->quote($old[$item->sectionID]),
+                $db->quote($ids[$item->sectionID]),
                 $db->quote($item->unit),
                 ($item->title_ru != null) ? $db->quote($item->title_ru) : 'NULL',
                 ($item->title_en != null) ? $db->quote($item->title_en) : 'NULL',
@@ -80,68 +135,45 @@ class ProjectsModelSection extends AdminModel {
                 $db->quote($item->state)
             );
             $values = implode(', ', $arr);
-            $query
-                ->values($values);
+            $query->values($values);
         }
-        return $db->setQuery($query)->execute();
+        $db->setQuery($query)->execute();
+        return true;
     }
 
-
-    public function getForm($data = array(), $loadData = true)
+    /**
+     * Возвращает список секций указанного прайс-листа.
+     * @param   int $sectionID ID секции прайс-листа.
+     * @return  array    Массив с объектами.
+     * @since 1.1.9
+     */
+    private function getPriceSections(int $sectionID): array
     {
-        $form = $this->loadForm(
-            $this->option.'.section', 'section', array('control' => 'jform', 'load_data' => $loadData)
-        );
-        if (empty($form))
-        {
-            return false;
-        }
-        $id = JFactory::getApplication()->input->get('id', 0);
-        $user = JFactory::getUser();
-        if ($id != 0 && (!$user->authorise('core.edit.state', $this->option . '.section.' . (int) $id))
-            || ($id == 0 && !$user->authorise('core.edit.state', $this->option)))
-            $form->setFieldAttribute('state', 'disabled', 'true');
-
-        return $form;
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select('*')
+            ->from('#__prc_sections')
+            ->where("`priceID` = {$sectionID}");
+        return $db->setQuery($query)->loadObjectList();
     }
 
-    protected function loadFormData()
+    /**
+     * Возвращает список пунктов указанного прайс-листа.
+     * @param array $ids Массив с ID прайс-листов.
+     * @return array    Массив с объектами.
+     * @since 1.1.9
+     */
+    private function getPriceItems(array $ids): array
     {
-        $data = JFactory::getApplication()->getUserState($this->option.'.edit.section.data', array());
-        if (empty($data))
-        {
-            $data = $this->getItem();
-        }
-
-        return $data;
+        $ids = implode(', ', $ids);
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select('*')
+            ->from('#__prc_items')
+            ->where("`sectionID` IN ({$ids})");
+        return $db->setQuery($query)->loadObjectList();
     }
 
-    protected function prepareTable($table)
-    {
-    	$nulls = array(); //Поля, которые NULL
-	    foreach ($nulls as $field)
-	    {
-		    if (!strlen($table->$field)) $table->$field = NULL;
-    	}
-        parent::prepareTable($table);
-    }
-
-    protected function canEditState($record)
-    {
-        $user = JFactory::getUser();
-
-        if (!empty($record->id))
-        {
-            return $user->authorise('core.edit.state', $this->option . '.section.' . (int) $record->id);
-        }
-        else
-        {
-            return parent::canEditState($record);
-        }
-    }
-
-    public function getScript()
-    {
-        return 'administrator/components/' . $this->option . '/models/forms/section.js';
-    }
 }

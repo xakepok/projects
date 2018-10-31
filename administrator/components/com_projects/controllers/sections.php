@@ -11,8 +11,8 @@ class ProjectsControllerSections extends AdminController
 
     public function import()
     {
-        $from = JFactory::getApplication()->input->getInt('from', 0);
-        $to = JFactory::getApplication()->input->getInt('to', 0);
+        $from = $this->input->getInt('from', 0);
+        $to = $this->input->getInt('to', 0);
         if ($from == 0 || $to == 0)
         {
             $message = JText::sprintf('COM_PROJECTS_MESSAGE_IMPORT_ERROR_NOT_ID');
@@ -20,9 +20,9 @@ class ProjectsControllerSections extends AdminController
             jexit();
         }
         $model = $this->getModel();
-        $result = $model->import();
+        $result = $model->import($from, $to);
         $message = JText::sprintf((!$result) ? 'COM_PROJECTS_MESSAGE_IMPORT_ERROR' : 'COM_PROJECTS_MESSAGE_IMPORT_SUCCESS');
-        $url = JRoute::_("index.php?option=com_projects&amp;view=sections&amp;filter_price={$to}");
+        $url = JRoute::_("index.php?option=com_projects&view=sections&filter_price={$to}");
         $this->setRedirect($url, $message)->redirect();
         jexit();
     }
