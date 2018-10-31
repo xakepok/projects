@@ -16,8 +16,8 @@ class ProjectsModelSection extends AdminModel {
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select($db->quoteName('*'))
-            ->from($db->quoteName('#__prc_sections'))
+            ->select('*')
+            ->from('#__prc_sections')
             ->where("`priceID` = {$from}");
         $sections = $db->setQuery($query)->loadObjectList();
         $table = "#__prc_sections";
@@ -28,8 +28,8 @@ class ProjectsModelSection extends AdminModel {
         {
             $query = $db->getQuery(true);
             $query
-                ->insert($db->quoteName($table))
-                ->columns($db->quoteName($columns));
+                ->insert($table)
+                ->columns($columns);
             $arr = array(
                 $db->quote($to),
                 $db->quote($section->title),
@@ -44,8 +44,8 @@ class ProjectsModelSection extends AdminModel {
         $ids = implode(', ', $ids);
         $query = $db->getQuery(true);
         $query
-            ->select($db->quoteName('*'))
-            ->from($db->quoteName('#__prc_items'))
+            ->select('*')
+            ->from('#__prc_items')
             ->where("`sectionID` IN ({$ids})");
         $items = $db->setQuery($query)->loadObjectList();
         $query = $db->getQuery(true);

@@ -22,7 +22,7 @@ class ProjectsModelPrices extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select($db->quoteName('*'))
+            ->select('*')
             ->from($db->quoteName('#__prc_prices'));
 
         /* Фильтр */
