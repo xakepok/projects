@@ -9,6 +9,11 @@ class ProjectsControllerSections extends AdminController
         return parent::getModel($name, $prefix, array('ignore_request' => true));
     }
 
+    /**
+     * Импорт разделов и пунктов прайс-листов в пустой прайс
+     * @return void
+     * @since 1.1.9
+     */
     public function import()
     {
         $from = $this->input->getInt('from', 0);
