@@ -60,7 +60,7 @@ class ProjectsModelExhibitors extends ListModel
         foreach ($items as $item) {
             $arr['id'] = $item->id;
             $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->id}");
-            $link = JHtml::link($url, $this->getTitle($item->title_ru_short, $item->title_ru_full, $item->title_en));
+            $link = JHtml::link($url, ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en));
             $arr['region'] = $item->city;
             $arr['manager'] = $item->manager;
             $arr['title'] = $link;
@@ -86,11 +86,4 @@ class ProjectsModelExhibitors extends ListModel
         $id .= ':' . $this->getState('filter.state');
         return parent::getStoreId($id);
     }
-
-    /*Выводим корректное название экспонента*/
-    private function getTitle($ru_short = null, $ru_full = null, $en = null): string
-    {
-        return $ru_short ?? $ru_full ?? $en;
-    }
-
 }
