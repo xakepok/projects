@@ -39,13 +39,7 @@ class ProjectsModelActs extends ListModel
         return $query;
     }
 
-    /**
-     * Получает массив со списком специальностей
-     * @param bool $raw. False - возвращаем данные для отображения в браузере, True - возвращает просто данные.
-     * @return array|mixed
-     * @since 1.1
-     */
-    public function getItems($raw = false)
+    public function getItems()
     {
         $items = parent::getItems();
         $result = array();
