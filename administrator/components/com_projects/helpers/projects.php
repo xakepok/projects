@@ -9,6 +9,7 @@ class ProjectsHelper
     public function addSubmenu($vName)
     {
         JHtmlSidebar::addEntry(Text::_('COM_PROJECTS'), 'index.php?option=com_projects&amp;view=projects', $vName == 'projects');
+        JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CONTRACTS'), 'index.php?option=com_projects&amp;view=contracts', $vName == 'contracts');
         JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_EXHIBITORS'), 'index.php?option=com_projects&amp;view=exhibitors', $vName == 'exhibitors');
         JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PRICES'), 'index.php?option=com_projects&amp;view=prices', $vName == 'prices');
         JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_SECTIONS'), 'index.php?option=com_projects&amp;view=sections', $vName == 'sections');
@@ -19,9 +20,9 @@ class ProjectsHelper
 
     /**
      * Возвращает название экспонента в зависимости от заполненных данных.
-     * @param string $title_ru_short Короткое название по-русски.
-     * @param string $title_ru_full Полное название по-русски.
-     * @param string $title_en Название по-английски.
+     * @param string|null $title_ru_short Короткое название по-русски.
+     * @param string|null $title_ru_full Полное название по-русски.
+     * @param string|null $title_en Название по-английски.
      * @return string
      * @since 1.1.9
      */
@@ -32,12 +33,13 @@ class ProjectsHelper
 
     /**
      * Возвращает статус участия экспонента в проекте.
-     * @param string $status Значение из таблицы.
+     * @param string|null $status Значение из таблицы.
      * @return string
      * @since 1.1.9
      */
-    public static function getExpStatus(string $status): string
+    public static function getExpStatus($status): string
     {
+        if ($status == null) return JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS_UNDEFINED');
         $status = mb_strtoupper($status);
         return JText::sprintf("COM_PROJECTS_HEAD_CONTRACT_STATUS_{$status}");
     }
