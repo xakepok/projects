@@ -39,7 +39,7 @@ class ProjectsHelper
     public static function getExpStatus(string $status): string
     {
         $status = mb_strtoupper($status);
-        return JText::sprintf("COM_PROJECTS_CONTRACT_STATUS_{$status}");
+        return JText::sprintf("COM_PROJECTS_HEAD_CONTRACT_STATUS_{$status}");
     }
 
     /**
