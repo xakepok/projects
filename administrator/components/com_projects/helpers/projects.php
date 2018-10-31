@@ -25,7 +25,7 @@ class ProjectsHelper
      * @return string
      * @since 1.1.9
      */
-    public static function getExpTitle(string $title_ru_short, string $title_ru_full, string $title_en): string
+    public static function getExpTitle($title_ru_short = null, $title_ru_full = null, $title_en = null): string
     {
         return $title_ru_short ?? $title_ru_full ?? $title_en;
     }
