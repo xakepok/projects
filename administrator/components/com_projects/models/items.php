@@ -20,6 +20,11 @@ class ProjectsModelItems extends ListModel
         parent::__construct($config);
     }
 
+    public static function getInstance($type='Items', $prefix = 'ProjectsModel', $config = array())
+    {
+        return parent::getInstance($type, $prefix, $config);
+    }
+
     protected function _getListQuery()
     {
         $db =& $this->getDbo();

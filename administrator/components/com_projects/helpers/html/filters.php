@@ -1,5 +1,6 @@
 <?php
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Model\ListModel;
 
 abstract class ProjectsHtmlFilters
 {
@@ -142,6 +143,7 @@ abstract class ProjectsHtmlFilters
             ->select("`id`, `title`")
             ->from('#__prc_prices')
             ->order("`title`");
+
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();
@@ -183,12 +185,22 @@ abstract class ProjectsHtmlFilters
 
     public static function sectionOptions()
     {
+        $view = JFactory::getApplication()->input->getString('view');
         $db =& JFactory::getDbo();
         $query =& $db->getQuery(true);
         $query
             ->select("`id`, `title`")
             ->from('#__prc_sections')
             ->order("`title`");
+        if ($view == 'items')
+        {
+            $model = ListModel::getInstance('Items', 'ProjectsModel');
+            $price = $model->getState('filter.price');
+            if (is_numeric($price))
+            {
+                $query->where("`priceID` = {$price}");
+            }
+        }
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();
