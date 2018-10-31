@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fieldset name="names">
+        <field
+                name="id"
+                type="hidden"
+        />
+        <field
+                name="prjID"
+                type="Project"
+                label="COM_PROJECTS_HEAD_CONTRACT_PROJECT"
+                description="COM_PROJECTS_HEAD_CONTRACT_PROJECT_DESC"
+                required="true"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="expID"
+                type="Exhibitor"
+                label="COM_PROJECTS_HEAD_CONTRACT_EXPONENT"
+                description="COM_PROJECTS_HEAD_CONTRACT_EXPONENT_DESC"
+                required="true"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="managerID"
+                type="user"
+                label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
+                description="COM_PROJECTS_HEAD_CONTRACT_MANAGER_DESC"
+                required="true"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="dat"
+                type="calendar"
+                label="COM_PROJECTS_HEAD_CONTRACT_DATE"
+                description="COM_PROJECTS_HEAD_CONTRACT_DATE_DESC"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="currency"
+                type="list"
+                label="COM_PROJECTS_HEAD_CONTRACT_CURRENCY"
+                description="COM_PROJECTS_HEAD_CONTRACT_CURRENCY_DESC"
+                autocomplete="off"
+                class="input-xlarge">
+            <option value="rub">COM_PROJECTS_HEAD_ITEM_PRICE_RUB</option>
+            <option value="usd">COM_PROJECTS_HEAD_ITEM_PRICE_USD</option>
+            <option value="eur">COM_PROJECTS_HEAD_ITEM_PRICE_EUR</option>
+        </field>
+        <field
+                name="reg_count"
+                type="text"
+                label="COM_PROJECTS_HEAD_CONTRACT_REG_CNT"
+                description="COM_PROJECTS_HEAD_CONTRACT_REG_CNT_DESC"
+                hint="1"
+                default="1"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="discount"
+                type="text"
+                label="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT"
+                description="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT_DESC"
+                hint="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT_HINT"
+                default="1.0"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="status"
+                type="list"
+                label="COM_PROJECTS_HEAD_CONTRACT_STATUS"
+                description="COM_PROJECTS_HEAD_CONTRACT_STATUS_DESC"
+                autocomplete="off"
+                default=""
+                class="input-xlarge">
+            <option value="">COM_PROJECTS_HEAD_CONTRACT_STATUS</option>
+            <option value="0">COM_PROJECTS_HEAD_CONTRACT_STATUS_0</option>
+            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STATUS_1</option>
+            <option value="2">COM_PROJECTS_HEAD_CONTRACT_STATUS_2</option>
+            <option value="3">COM_PROJECTS_HEAD_CONTRACT_STATUS_3</option>
+            <option value="4">COM_PROJECTS_HEAD_CONTRACT_STATUS_4</option>
+        </field>
+    </fieldset>
+</form>
