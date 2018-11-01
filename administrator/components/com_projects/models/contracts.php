@@ -40,7 +40,7 @@ class ProjectsModelContracts extends ListModel
         }
 
         /* Сортировка */
-        $orderCol  = $this->state->get('list.ordering', '`id`');
+        $orderCol  = $this->state->get('list.ordering', '`c`.`id`');
         $orderDirn = $this->state->get('list.direction', 'asc');
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
@@ -70,7 +70,7 @@ class ProjectsModelContracts extends ListModel
         $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
         $this->setState('filter.search', $search);
         //$this->setState('filter.state', $published);
-        parent::populateState('`id`', 'asc');
+        parent::populateState('`c`.`id`', 'asc');
     }
 
     protected function getStoreId($id = '')
