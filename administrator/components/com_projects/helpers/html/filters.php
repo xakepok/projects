@@ -17,6 +17,19 @@ abstract class ProjectsHtmlFilters
         return JHtml::_('select.genericlist', $options, 'filter_state', $attribs, 'value', 'text', $selected, null, true);
     }
 
+    //Фильтр статусов договора
+    public static function status($selected)
+    {
+        $options = array();
+
+        $options[] = JHtml::_('select.option', '', 'COM_PROJECTS_FILTER_SELECT_STATUS');
+        $options = array_merge($options, self::statusOptions());
+
+        $attribs = 'class="inputbox" onchange="this.form.submit()"';
+
+        return JHtml::_('select.genericlist', $options, 'filter_status', $attribs, 'value', 'text', $selected, null, true);
+    }
+
     //Фильтр проектов
     public static function project($selected)
     {
@@ -82,6 +95,32 @@ abstract class ProjectsHtmlFilters
         return JHtml::_('select.genericlist', $options, 'filter_section', $attribs, 'value', 'text', $selected, null, true);
     }
 
+    //Фильтр экспонентов
+    public static function exhibitor($selected)
+    {
+        $options = array();
+
+        $options[] = JHtml::_('select.option', '', 'COM_PROJECTS_FILTER_SELECT_EXHIBITOR');
+        $options = array_merge($options, self::exhibitorOptions());
+
+        $attribs = 'class="inputbox" onchange="this.form.submit()"';
+
+        return JHtml::_('select.genericlist', $options, 'filter_exhibitor', $attribs, 'value', 'text', $selected, null, true);
+    }
+
+    //Фильтр менеджеров
+    public static function manager($selected)
+    {
+        $options = array();
+
+        $options[] = JHtml::_('select.option', '', 'COM_PROJECTS_FILTER_SELECT_MANAGER');
+        $options = array_merge($options, self::managerOptions());
+
+        $attribs = 'class="inputbox" onchange="this.form.submit()"';
+
+        return JHtml::_('select.genericlist', $options, 'filter_manager', $attribs, 'value', 'text', $selected, null, true);
+    }
+
     //Список состояний модели
     public static function stateOptions()
     {
@@ -91,6 +130,20 @@ abstract class ProjectsHtmlFilters
         $options[] = JHtml::_('select.option', '2', 'JARCHIVED');
         $options[] = JHtml::_('select.option', '-2', 'JTRASHED');
         $options[] = JHtml::_('select.option', '*', 'JALL');
+
+        return $options;
+    }
+
+    //Список статуса договора
+    public static function statusOptions()
+    {
+        $options = array();
+        $options[] = JHtml::_('select.option', '-1', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_UNDEFINED');
+        $options[] = JHtml::_('select.option', '2', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_2');
+        $options[] = JHtml::_('select.option', '3', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_3');
+        $options[] = JHtml::_('select.option', '4', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_4');
+        $options[] = JHtml::_('select.option', '1', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_1');
+        $options[] = JHtml::_('select.option', '0', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_0');
 
         return $options;
     }
@@ -208,6 +261,49 @@ abstract class ProjectsHtmlFilters
         foreach ($result as $item)
         {
             $options[] = JHtml::_('select.option', $item->id, $item->title);
+        }
+
+        return $options;
+    }
+
+    public static function exhibitorOptions()
+    {
+        $db =& JFactory::getDbo();
+        $query =& $db->getQuery(true);
+        $query
+            ->select("`e`.`id`, `e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`")
+            ->select("`r`.`name` as `region`")
+            ->from('`#__prj_exp` as `e`')
+            ->leftJoin("`#__grph_cities` as `r` ON `r`.`id` = `e`.`regID`");
+        $result = $db->setQuery($query)->loadObjectList();
+
+        $options = array();
+
+        foreach ($result as $item) {
+            $title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+            $name = sprintf("%s (%s)", $title, $item->region);
+            $options[] = JHtml::_('select.option', $item->id, $name);
+        }
+
+        $options = array_merge($options);
+
+        return $options;
+    }
+
+    public static function managerOptions()
+    {
+        $db =& JFactory::getDbo();
+        $query =& $db->getQuery(true);
+        $query
+            ->select("`id`, `name`")
+            ->from("`#__users`")
+            ->order("`name`");
+        $result = $db->setQuery($query)->loadObjectList();
+
+        $options = array();
+
+        foreach ($result as $item) {
+            $options[] = JHtml::_('select.option', $item->id, $item->name);
         }
 
         return $options;

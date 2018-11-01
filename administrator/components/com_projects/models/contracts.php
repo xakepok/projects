@@ -38,6 +38,31 @@ class ProjectsModelContracts extends ListModel
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . 'OR `p`.`title` LIKE ' . $search);
         }
+        // Фильтруем по проекту.
+        $project = $this->getState('filter.project');
+        if (is_numeric($project)) {
+            $query->where('`c`.`prjID` = ' . (int)$project);
+        }
+        // Фильтруем по экспоненту.
+        $exhibitor = $this->getState('filter.exhibitor');
+        if (is_numeric($exhibitor)) {
+            $query->where('`c`.`expID` = ' . (int)$exhibitor);
+        }
+        // Фильтруем по менеджеру.
+        $manager = $this->getState('filter.manager');
+        if (is_numeric($manager)) {
+            $query->where('`c`.`managerID` = ' . (int)$manager);
+        }
+        // Фильтруем по статусу.
+        $status = $this->getState('filter.status');
+        if (is_numeric($status)) {
+            if ($status != -1) {
+                $query->where('`c`.`status` = ' . (int)$status);
+            }
+            else {
+                $query->where('`c`.`status` IS NULL');
+            }
+        }
 
         /* Сортировка */
         $orderCol  = $this->state->get('list.ordering', '`c`.`id`');
@@ -66,6 +91,43 @@ class ProjectsModelContracts extends ListModel
         return $result;
     }
 
+    /* Сортировка по умолчанию */
+    protected function populateState($ordering = null, $direction = null)
+    {
+        $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
+        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');
+        $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor');
+        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
+        $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status');
+        //$published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
+        $this->setState('filter.search', $search);
+        $this->setState('filter.project', $project);
+        $this->setState('filter.exhibitor', $exhibitor);
+        $this->setState('filter.manager', $manager);
+        $this->setState('filter.manager', $status);
+        //$this->setState('filter.state', $published);
+        parent::populateState('`c`.`id`', 'asc');
+    }
+
+    protected function getStoreId($id = '')
+    {
+        $id .= ':' . $this->getState('filter.search');
+        $id .= ':' . $this->getState('filter.project');
+        $id .= ':' . $this->getState('filter.exhibitor');
+        $id .= ':' . $this->getState('filter.manager');
+        $id .= ':' . $this->getState('filter.status');
+        return parent::getStoreId($id);
+    }
+
+    /**
+     * Расчёт стоимости договора
+     * @param int $contractID   ID договора
+     * @param string $currency  Валюта договора
+     * @param float $discount   Скидка для экспонента
+     * @param float $markup     Наценка для экспонента
+     * @return float
+     * @since 1.2.0
+     */
     private function getAmount(int $contractID, string $currency, float $discount, float $markup): float
     {
         $db =& $this->getDbo();
@@ -78,20 +140,4 @@ class ProjectsModelContracts extends ListModel
         return (float) 0 + $db->setQuery($query)->loadResult();
     }
 
-    /* Сортировка по умолчанию */
-    protected function populateState($ordering = null, $direction = null)
-    {
-        $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-        $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
-        $this->setState('filter.search', $search);
-        //$this->setState('filter.state', $published);
-        parent::populateState('`c`.`id`', 'asc');
-    }
-
-    protected function getStoreId($id = '')
-    {
-        $id .= ':' . $this->getState('filter.search');
-        //$id .= ':' . $this->getState('filter.state');
-        return parent::getStoreId($id);
-    }
 }
