@@ -64,6 +64,7 @@
                 label="COM_PROJECTS_HEAD_ITEM_FACTOR"
                 description="COM_PROJECTS_HEAD_ITEM_FACTOR_DESC"
                 hint="COM_PROJECTS_HEAD_ITEM_FACTOR_HINT"
+                default="1.0"
                 autocomplete="off"
                 class="input-xlarge"
         />
