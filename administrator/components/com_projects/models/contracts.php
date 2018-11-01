@@ -21,7 +21,7 @@ class ProjectsModelContracts extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`c`.`id`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`")
+            ->select("`c`.`id`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`, `c`.`currency`, `c`.`discount`, `c`.`markup`")
             ->select("`p`.`title` as `project`")
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`")
             ->select("`u`.`name` as `manager`")
@@ -51,16 +51,31 @@ class ProjectsModelContracts extends ListModel
     {
         $items = parent::getItems();
         $result = array();
+        $ids = array();
         foreach ($items as $item) {
+            $ids[] = $item->id;
             $arr['id'] = $item->id;
             $arr['dat'] = $item->dat;
             $arr['project'] = $item->project;
             $arr['exponent'] = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr['manager'] = $item->manager;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
+            $arr['amount'] = sprintf("%s %s", $this->getAmount($item->id, $item->currency, $item->discount, $item->markup), $item->currency);
             $result[] = $arr;
         }
         return $result;
+    }
+
+    private function getAmount(int $contractID, string $currency, float $discount, float $markup): float
+    {
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("ROUND(SUM(IFNULL(`i`.`price_{$currency}`,0)*`i`.`factor`*`v`.`value`)*{$discount}*{$markup}, 2) as `amount`")
+            ->from("`#__prj_contract_items` as `v`")
+            ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `v`.`itemID`")
+            ->where("`v`.`contractID` = {$contractID}");
+        return (float) 0 + $db->setQuery($query)->loadResult();
     }
 
     /* Сортировка по умолчанию */

@@ -22,6 +22,9 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS'); ?>
     </th>
+    <th>
+        <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_AMOUNT'); ?>
+    </th>
     <th width="1%">
         <?php echo JHtml::_('grid.sort', 'ID', '`id`', $listDirn, $listOrder); ?>
     </th>

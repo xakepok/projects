@@ -52,21 +52,21 @@
             <option value="eur">COM_PROJECTS_HEAD_ITEM_PRICE_EUR</option>
         </field>
         <field
-                name="reg_count"
-                type="text"
-                label="COM_PROJECTS_HEAD_CONTRACT_REG_CNT"
-                description="COM_PROJECTS_HEAD_CONTRACT_REG_CNT_DESC"
-                hint="1"
-                default="1"
-                autocomplete="off"
-                class="input-xlarge"
-        />
-        <field
                 name="discount"
                 type="text"
                 label="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT"
                 description="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT_DESC"
                 hint="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT_HINT"
+                default="1.0"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="markup"
+                type="text"
+                label="COM_PROJECTS_HEAD_CONTRACT_MARKUP"
+                description="COM_PROJECTS_HEAD_CONTRACT_MARKUP_DESC"
+                hint="COM_PROJECTS_HEAD_CONTRACT_MARKUP_HINT"
                 default="1.0"
                 autocomplete="off"
                 class="input-xlarge"
