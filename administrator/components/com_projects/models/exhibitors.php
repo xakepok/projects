@@ -44,6 +44,24 @@ class ProjectsModelExhibitors extends ListModel
         } elseif ($published === '') {
             $query->where('(`e`.`state` = 0 OR `e`.`state` = 1)');
         }
+        // Фильтруем по менеджеру.
+        $manager = $this->getState('filter.manager');
+        if (is_numeric($manager)) {
+            $query->where('`e`.`curatorID` = ' . (int)$manager);
+        }
+        // Фильтруем по видам деятельности.
+        $act = $this->getState('filter.activity');
+        if (is_numeric($act)) {
+            $exponents = ProjectsHelper::getExponentsInActivities($act);
+            if (!empty($exponents)) {
+                $exponents = implode(', ', $exponents);
+                $query->where("`e`.`id` IN ({$exponents})");
+            }
+            else
+            {
+                $query->where("`e`.`id` IN (-1)");
+            }
+        }
 
         /* Сортировка */
         $orderCol = $this->state->get('list.ordering', '`title_ru_short`');
@@ -75,8 +93,12 @@ class ProjectsModelExhibitors extends ListModel
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
+        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager', '', 'string');
+        $activity = $this->getUserStateFromRequest($this->context . '.filter.activity', 'filter_activity', '', 'string');
         $this->setState('filter.search', $search);
         $this->setState('filter.state', $published);
+        $this->setState('filter.state', $manager);
+        $this->setState('filter.state', $activity);
         parent::populateState('`title_ru_short`', 'asc');
     }
 
@@ -84,6 +106,8 @@ class ProjectsModelExhibitors extends ListModel
     {
         $id .= ':' . $this->getState('filter.search');
         $id .= ':' . $this->getState('filter.state');
+        $id .= ':' . $this->getState('filter.manager');
+        $id .= ':' . $this->getState('filter.activity');
         return parent::getStoreId($id);
     }
 }

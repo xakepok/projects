@@ -19,6 +19,30 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает ID экспонентов по указанному виду деятельности
+     * @param int $id ID вида деятальности
+     * @return array
+     * @since 1.2.0
+     */
+    public static function getExponentsInActivities(int $id): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select('`exbID`')
+            ->from("`#__prj_exp_act`")
+            ->where("`actID` = {$id}");
+        $items = $db->setQuery($query)->loadObjectList();
+        $result = array();
+        if (!empty($items)) {
+            foreach ($items as $item) {
+                $result[] = $item->exbID;
+            }
+        }
+        return $result;
+    }
+
+    /**
      * Возвращает название экспонента в зависимости от заполненных данных.
      * @param string|null $title_ru_short Короткое название по-русски.
      * @param string|null $title_ru_full Полное название по-русски.

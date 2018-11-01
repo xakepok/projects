@@ -14,6 +14,8 @@
             </button>
         </div>
         <div class="js-stools-field-filter">
+            <?php echo ProjectsHtmlFilters::manager($this->state->get('filter.manager')); ?>
+            <?php echo ProjectsHtmlFilters::activity($this->state->get('filter.activity')); ?>
             <?php echo ProjectsHtmlFilters::state($this->state->get('filter.state')); ?>
         </div>
         <div class="btn-wrapper">
