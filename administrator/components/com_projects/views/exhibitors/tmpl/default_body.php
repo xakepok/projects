@@ -18,9 +18,6 @@ foreach ($this->items as $i => $item) :
             <?php echo $item['title'];?>
         </td>
         <td>
-            <?php echo $item['manager'];?>
-        </td>
-        <td>
             <?php echo $item['id']; ?>
         </td>
     </tr>

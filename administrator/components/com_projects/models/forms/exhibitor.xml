@@ -14,14 +14,6 @@
                 class="input-xlarge"
         />
         <field
-                name="curatorID"
-                type="user"
-                label="COM_PROJECTS_HEAD_MANAGER"
-                description="COM_PROJECTS_HEAD_MANAGER_DESC"
-                required="true"
-                class="input-xlarge"
-        />
-        <field
                 name="title_ru_short"
                 type="text"
                 label="COM_PROJECTS_HEAD_EXP_TITLE_RU_SHORT"

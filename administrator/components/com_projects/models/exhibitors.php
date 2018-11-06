@@ -26,9 +26,7 @@ class ProjectsModelExhibitors extends ListModel
         $query
             ->select('`e`.`id`, `e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`state`')
             ->select("`r`.`name` as `city`")
-            ->select("`u`.`name` as `manager`")
             ->from("`#__prj_exp` as `e`")
-            ->leftJoin("`#__users` as `u` ON `u`.`id` = `e`.`curatorID`")
             ->leftJoin("`#__grph_cities` as `r` ON `r`.`id` = `e`.`regID`");
 
         /* Фильтр */
@@ -43,11 +41,6 @@ class ProjectsModelExhibitors extends ListModel
             $query->where('`e`.`state` = ' . (int)$published);
         } elseif ($published === '') {
             $query->where('(`e`.`state` = 0 OR `e`.`state` = 1)');
-        }
-        // Фильтруем по менеджеру.
-        $manager = $this->getState('filter.manager');
-        if (is_numeric($manager)) {
-            $query->where('`e`.`curatorID` = ' . (int)$manager);
         }
         // Фильтруем по видам деятельности.
         $act = $this->getState('filter.activity');
@@ -80,7 +73,6 @@ class ProjectsModelExhibitors extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->id}");
             $link = JHtml::link($url, ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en));
             $arr['region'] = $item->city;
-            $arr['manager'] = $item->manager;
             $arr['title'] = $link;
             $arr['state'] = $item->state;
             $result[] = $arr;
@@ -93,11 +85,9 @@ class ProjectsModelExhibitors extends ListModel
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
-        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager', '', 'string');
         $activity = $this->getUserStateFromRequest($this->context . '.filter.activity', 'filter_activity', '', 'string');
         $this->setState('filter.search', $search);
         $this->setState('filter.state', $published);
-        $this->setState('filter.state', $manager);
         $this->setState('filter.state', $activity);
         parent::populateState('`title_ru_short`', 'asc');
     }
@@ -106,7 +96,6 @@ class ProjectsModelExhibitors extends ListModel
     {
         $id .= ':' . $this->getState('filter.search');
         $id .= ':' . $this->getState('filter.state');
-        $id .= ':' . $this->getState('filter.manager');
         $id .= ':' . $this->getState('filter.activity');
         return parent::getStoreId($id);
     }
