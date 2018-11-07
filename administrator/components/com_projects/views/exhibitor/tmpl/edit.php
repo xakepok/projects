@@ -4,6 +4,9 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 JHtml::_('formbehavior.chosen', 'select');
+use Joomla\CMS\HTML\HTMLHelper;
+HTMLHelper::_('script', $this->script);
+HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto', 'relative' => true));
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function(task) {
@@ -20,11 +23,14 @@ JHtml::_('formbehavior.chosen', 'select');
             <div class="tab-content">
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR')); ?>
                     <div class="row-fluid">
-                        <div class="span6">
+                        <div class="span4">
                             <?php echo $this->loadTemplate('general');?>
                         </div>
-                        <div class="span6">
+                        <div class="span4">
                             <?php echo $this->loadTemplate('bank');?>
+                        </div>
+                        <div class="span4">
+                            <?php echo $this->loadTemplate('similar');?>
                         </div>
                     </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
