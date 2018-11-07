@@ -10,5 +10,7 @@
 		<action name="core.edit.state" title="JACTION_EDITSTATE" description="JACTION_EDITSTATE_COMPONENT_DESC" />
 		<action name="core.edit.own" title="JACTION_EDITOWN" description="JACTION_EDITOWN_COMPONENT_DESC" />
 		<action name="core.edit.value" title="JACTION_EDITVALUE" description="JACTION_EDITVALUE_COMPONENT_DESC" />
+		<action name="projects.contract.manager" title="COM_PROJECTS_ACCESS_MANAGER" description="COM_PROJECTS_ACCESS_MANAGER_DESC" />
+		<action name="projects.contract.group" title="COM_PROJECTS_ACCESS_GROUP" description="COM_PROJECTS_ACCESS_GROUP_DESC" />
 	</section>
 </access>
