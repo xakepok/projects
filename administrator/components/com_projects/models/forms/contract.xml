@@ -28,7 +28,14 @@
                 type="user"
                 label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
                 description="COM_PROJECTS_HEAD_CONTRACT_MANAGER_DESC"
-                required="true"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="groupID"
+                type="usergroup"
+                label="COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP"
+                description="COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_DESC"
                 autocomplete="off"
                 class="input-xlarge"
         />
@@ -77,6 +84,7 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_STATUS"
                 description="COM_PROJECTS_HEAD_CONTRACT_STATUS_DESC"
                 autocomplete="off"
+                required="true"
                 default=""
                 class="input-xlarge">
             <option value="">COM_PROJECTS_HEAD_CONTRACT_STATUS</option>

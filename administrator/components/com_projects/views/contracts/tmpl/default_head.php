@@ -20,6 +20,9 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MANAGER'); ?>
     </th>
     <th>
+        <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP'); ?>
+    </th>
+    <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS'); ?>
     </th>
     <th>

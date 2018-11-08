@@ -25,10 +25,12 @@ class ProjectsModelContracts extends ListModel
             ->select("`p`.`title` as `project`")
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`")
             ->select("`u`.`name` as `manager`")
+            ->select("`g`.`title` as `group`")
             ->from("`#__prj_contracts` as `c`")
             ->leftJoin("`#__prj_projects` AS `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `expID`")
             ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`")
+            ->leftJoin("`#__usergroups` as `g` ON `g`.`id` = `c`.`groupID`")
             ->order("`c`.`id`");
 
         /* Фильтр */
@@ -83,7 +85,10 @@ class ProjectsModelContracts extends ListModel
             $arr['dat'] = $item->dat;
             $arr['project'] = $item->project;
             $arr['exponent'] = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
-            $arr['manager'] = $item->manager;
+            $arr['manager']['title'] = $item->manager ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MANAGER_UNDEFINED');
+            $arr['manager']['class'] = (!empty($item->manager)) ? '' : 'no-data';
+            $arr['group']['title'] = $item->group ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_UNDEFINED');
+            $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
             $arr['amount'] = sprintf("%s %s", $this->getAmount($item->id, $item->currency, $item->discount, $item->markup), $item->currency);
             $result[] = $arr;

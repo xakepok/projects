@@ -2,4 +2,13 @@
   display: none;
 }
 
+.no-data {
+  font-style: italic;
+  opacity: 0.6;
+  cursor: default;
+}
+.no-data:hover {
+  opacity: 1;
+}
+
 /*# sourceMappingURL=style.css.map */
