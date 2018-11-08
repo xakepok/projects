@@ -29,6 +29,7 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
                 description="COM_PROJECTS_HEAD_CONTRACT_MANAGER_DESC"
                 autocomplete="off"
+                required="true"
                 class="input-xlarge"
         />
         <field
@@ -37,6 +38,7 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP"
                 description="COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_DESC"
                 autocomplete="off"
+                required="true"
                 class="input-xlarge"
         />
         <field
@@ -93,6 +95,20 @@
             <option value="2">COM_PROJECTS_HEAD_CONTRACT_STATUS_2</option>
             <option value="3">COM_PROJECTS_HEAD_CONTRACT_STATUS_3</option>
             <option value="4">COM_PROJECTS_HEAD_CONTRACT_STATUS_4</option>
+        </field>
+        <field
+                name="state"
+                type="list"
+                label="JSTATUS"
+                description="JFIELD_PUBLISHED_DESC"
+                class="inputbox"
+                size="1"
+                default="1"
+        >
+            <option value="1">JPUBLISHED</option>
+            <option value="0">JUNPUBLISHED</option>
+            <option value="2">JARCHIVED</option>
+            <option value="-2">JTRASHED</option>
         </field>
     </fieldset>
 </form>

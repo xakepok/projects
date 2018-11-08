@@ -11,6 +11,7 @@ class ProjectsModelContracts extends ListModel
             $config['filter_fields'] = array(
                 '`id`', '`id`',
                 '`c`.`dat`',  '`c`.`dat`',
+                '`c`.`state`',  '`c`.`state`',
             );
         }
         parent::__construct($config);
@@ -21,7 +22,7 @@ class ProjectsModelContracts extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`c`.`id`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`, `c`.`currency`, `c`.`discount`, `c`.`markup`")
+            ->select("`c`.`id`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`, `c`.`currency`, `c`.`discount`, `c`.`markup`, `c`.`state`")
             ->select("`p`.`title` as `project`")
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`")
             ->select("`u`.`name` as `manager`")
@@ -91,6 +92,7 @@ class ProjectsModelContracts extends ListModel
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
             $arr['amount'] = sprintf("%s %s", $this->getAmount($item->id, $item->currency, $item->discount, $item->markup), $item->currency);
+            $arr['state'] = $item->state;
             $result[] = $arr;
         }
         return $result;
@@ -104,13 +106,13 @@ class ProjectsModelContracts extends ListModel
         $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor');
         $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
         $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status');
-        //$published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
+        $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
         $this->setState('filter.search', $search);
         $this->setState('filter.project', $project);
         $this->setState('filter.exhibitor', $exhibitor);
         $this->setState('filter.manager', $manager);
         $this->setState('filter.manager', $status);
-        //$this->setState('filter.state', $published);
+        $this->setState('filter.state', $published);
         parent::populateState('`c`.`id`', 'asc');
     }
 
@@ -121,6 +123,7 @@ class ProjectsModelContracts extends ListModel
         $id .= ':' . $this->getState('filter.exhibitor');
         $id .= ':' . $this->getState('filter.manager');
         $id .= ':' . $this->getState('filter.status');
+        $id .= ':' . $this->getState('filter.state');
         return parent::getStoreId($id);
     }
 

@@ -45,13 +45,6 @@ class ProjectsModelContract extends AdminModel {
     public function save($data)
     {
         $s1 = parent::save($data);
-        if (!$s1)
-        {
-            $app = JFactory::getApplication();
-            $app->enqueueMessage(JText::sprintf('COM_PROJECTS_ERROR_DUPLICATE_CONTRACT'), 'error');
-            $app->redirect(JRoute::_('index.php?option=com_projects&view=contract&layout=edit'));
-            jexit();
-        }
         $s2 = $this->savePrice();
         return $s1 && $s2;
     }

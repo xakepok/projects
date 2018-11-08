@@ -41,17 +41,13 @@ class ProjectsViewContracts extends HtmlView
         {
             JToolbarHelper::editList('contract.edit');
         }
-        if (Factory::getUser()->authorise('core.delete', 'com_projects'))
-        {
-            JToolbarHelper::deleteList('', 'contracts.delete');
-        }
         JToolbarHelper::divider();
         if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
         {
-            //JToolbarHelper::publish('contracts.publish', 'JTOOLBAR_PUBLISH', true);
-            //JToolbarHelper::unpublish('contracts.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-            //JToolBarHelper::archiveList('contracts.archive');
-            //JToolBarHelper::trash('contracts.trash');
+            JToolbarHelper::publish('contracts.publish', 'JTOOLBAR_PUBLISH', true);
+            JToolbarHelper::unpublish('contracts.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+            JToolBarHelper::archiveList('contracts.archive');
+            JToolBarHelper::trash('contracts.trash');
         }
 		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
 		{
