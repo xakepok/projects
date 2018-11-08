@@ -8,6 +8,14 @@ class ProjectsModelContract extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    public function getItem($pk = null)
+    {
+        $item = parent::getItem($pk);
+        $item->discount = (int) (100 - $item->discount * 100); //Переводим значение скидки в проценты
+        $item->markup = (int) ($item->markup * 100 - 100); //Переводим значение наценки в проценты
+        return $item;
+    }
+
     public function getForm($data = array(), $loadData = true)
     {
         $form = $this->loadForm(
@@ -44,6 +52,8 @@ class ProjectsModelContract extends AdminModel {
 
     public function save($data)
     {
+        $data['discount'] = (float) (100 - $data['discount']) / 100; //Переводим значение скидки в коэффициент
+        $data['markup'] = (float) (100 + $data['markup']) / 100; //Переводим значение наценки в коэффициент
         $s1 = parent::save($data);
         $s2 = $this->savePrice();
         return $s1 && $s2;
