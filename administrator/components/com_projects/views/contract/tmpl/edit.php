@@ -4,6 +4,8 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 JHtml::_('formbehavior.chosen', 'select');
+use Joomla\CMS\HTML\HTMLHelper;
+HTMLHelper::_('script', $this->script);
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function(task) {

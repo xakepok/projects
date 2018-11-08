@@ -74,34 +74,30 @@
                 class="input-xlarge"
         />
         <field
-                name="markup"
-                type="integer"
-                first="0"
-                last="30"
-                step="5"
-                label="COM_PROJECTS_HEAD_CONTRACT_MARKUP"
-                description="COM_PROJECTS_HEAD_CONTRACT_MARKUP_DESC"
-                default="0"
-                required="true"
-                autocomplete="off"
-                class="input-xlarge"
-        />
-        <field
                 name="status"
                 type="list"
                 label="COM_PROJECTS_HEAD_CONTRACT_STATUS"
                 description="COM_PROJECTS_HEAD_CONTRACT_STATUS_DESC"
                 autocomplete="off"
                 required="true"
+                onchange="setNumber()"
                 default=""
                 class="input-xlarge">
-            <option value="">COM_PROJECTS_HEAD_CONTRACT_STATUS</option>
             <option value="0">COM_PROJECTS_HEAD_CONTRACT_STATUS_0</option>
             <option value="1">COM_PROJECTS_HEAD_CONTRACT_STATUS_1</option>
             <option value="2">COM_PROJECTS_HEAD_CONTRACT_STATUS_2</option>
             <option value="3">COM_PROJECTS_HEAD_CONTRACT_STATUS_3</option>
             <option value="4">COM_PROJECTS_HEAD_CONTRACT_STATUS_4</option>
         </field>
+        <field
+                name="number"
+                type="text"
+                label="COM_PROJECTS_HEAD_CONTRACT_NUMBER"
+                description="COM_PROJECTS_HEAD_CONTRACT_NUMBER_DESC"
+                hint="COM_PROJECTS_HEAD_CONTRACT_NUMBER_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
         <field
                 name="state"
                 type="list"

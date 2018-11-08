@@ -14,6 +14,7 @@ class TableProjectsContracts extends Table
     var $discount = null;
     var $markup = null;
     var $status = null;
+    var $number = null;
     var $state = null;
 
     public function __construct(JDatabaseDriver $db)

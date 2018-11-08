@@ -19,6 +19,39 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает следующий по очереди номер договора
+     * @return int
+     * @since 1.2.2
+     */
+    public static function getContractNumber(): int
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("IFNULL(MAX(`number`)+1,1)")
+            ->from("`#__prj_contracts`")
+            ->where("`number` IS NOT NULL");
+        return $db->setQuery($query)->loadResult();
+    }
+
+    /**
+     * Проверяет возможность использовать указанный номер в договоре
+     * @param   int $number   Номер договора
+     * @return boolean
+     * @since 1.2.2
+     */
+    public static function checkContractNumber(int $number): bool
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("COUNT(`id`)")
+            ->from("`#__prj_contracts`")
+            ->where("`number` = {$number}");
+        return ($db->setQuery($query)->loadResult() != 0) ? false : true;
+    }
+
+    /**
      * Возвращает ID экспонентов по указанному виду деятельности
      * @param int $id ID вида деятальности
      * @return array
