@@ -18,7 +18,7 @@
                 type="filelist"
                 label="COM_PROJECTS_HEAD_FILE"
                 description="COM_PROJECTS_HEAD_FILE_DESC"
-                directory="images"
+                directory="images/plans"
                 class="input-xlarge"
         />
         <field
