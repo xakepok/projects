@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fieldset name="names">
+        <field
+                name="id"
+                type="hidden"
+        />
+        <field
+                name="dat"
+                type="calendar"
+                label="COM_PROJECTS_HEAD_TODO_DATE"
+                description="COM_PROJECTS_HEAD_TODO_DATE_DESC"
+                autocomplete="off"
+                required="true"
+                class="input-xlarge"
+        />
+        <field
+                name="contractID"
+                type="Contract"
+                label="COM_PROJECTS_HEAD_TODO_CONTRACT"
+                description="COM_PROJECTS_HEAD_TODO_CONTRACT_DESC"
+                autocomplete="off"
+                required="true"
+                class="input-xlarge"
+        />
+        <field
+                name="task"
+                type="text"
+                label="COM_PROJECTS_HEAD_TODO_TASK"
+                description="COM_PROJECTS_HEAD_TODO_TASK_DESC"
+                hint="COM_PROJECTS_HEAD_TODO_TASK_HINT"
+                autocomplete="off"
+                required="true"
+                class="input-xlarge"
+        />
+        <field
+                name="result"
+                type="text"
+                label="COM_PROJECTS_HEAD_TODO_RESULT"
+                description="COM_PROJECTS_HEAD_TODO_RESULT_DESC"
+                hint="COM_PROJECTS_HEAD_TODO_RESULT_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="state"
+                type="list"
+                label="COM_PROJECTS_HEAD_TODO_STATE"
+                description="COM_PROJECTS_HEAD_TODO_STATE_DESC"
+                class="inputbox"
+                required="true"
+                size="1"
+                default="0"
+        >
+            <option value="1">COM_PROJECTS_HEAD_TODO_STATE_1</option>
+            <option value="0">COM_PROJECTS_HEAD_TODO_STATE_0</option>
+            <option value="2">COM_PROJECTS_HEAD_TODO_STATE_2</option>
+        </field>
+    </fieldset>
+</form>

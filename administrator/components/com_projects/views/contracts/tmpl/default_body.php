@@ -18,6 +18,9 @@ foreach ($this->items as $i => $item) :
             <?php echo $item['exponent'];?>
         </td>
         <td>
+            <?php echo $item['todo'];?>
+        </td>
+        <td>
             <?php echo $item['dat'];?>
         </td>
         <td>

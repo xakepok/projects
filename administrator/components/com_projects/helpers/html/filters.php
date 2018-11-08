@@ -30,6 +30,19 @@ abstract class ProjectsHtmlFilters
         return JHtml::_('select.genericlist', $options, 'filter_status', $attribs, 'value', 'text', $selected, null, true);
     }
 
+    //Фильтр состояний задачи
+    public static function stateTodo($selected)
+    {
+        $options = array();
+
+        $options[] = JHtml::_('select.option', '', 'COM_PROJECTS_FILTER_SELECT_STATUS_TODO');
+        $options = array_merge($options, self::stateTodoOptions());
+
+        $attribs = 'class="inputbox" onchange="this.form.submit()"';
+
+        return JHtml::_('select.genericlist', $options, 'filter_state', $attribs, 'value', 'text', $selected, null, true);
+    }
+
     //Фильтр проектов
     public static function project($selected)
     {
@@ -121,6 +134,19 @@ abstract class ProjectsHtmlFilters
         return JHtml::_('select.genericlist', $options, 'filter_manager', $attribs, 'value', 'text', $selected, null, true);
     }
 
+    //Фильтр контрактов
+    public static function contract($selected)
+    {
+        $options = array();
+
+        $options[] = JHtml::_('select.option', '', 'COM_PROJECTS_FILTER_SELECT_CONTRACT');
+        $options = array_merge($options, self::contractOptions());
+
+        $attribs = 'class="inputbox" onchange="this.form.submit()"';
+
+        return JHtml::_('select.genericlist', $options, 'filter_contract', $attribs, 'value', 'text', $selected, null, true);
+    }
+
     //Фильтр города
     public static function city($selected)
     {
@@ -148,7 +174,7 @@ abstract class ProjectsHtmlFilters
         return $options;
     }
 
-    //Список статуса договора
+    //Список статуса задачи в планировщике
     public static function statusOptions()
     {
         $options = array();
@@ -158,6 +184,17 @@ abstract class ProjectsHtmlFilters
         $options[] = JHtml::_('select.option', '4', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_4');
         $options[] = JHtml::_('select.option', '1', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_1');
         $options[] = JHtml::_('select.option', '0', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_0');
+
+        return $options;
+    }
+
+    //Список статуса договора
+    public static function stateTodoOptions()
+    {
+        $options = array();
+        $options[] = JHtml::_('select.option', '1', 'COM_PROJECTS_HEAD_TODO_STATE_1');
+        $options[] = JHtml::_('select.option', '0', 'COM_PROJECTS_HEAD_TODO_STATE_0');
+        $options[] = JHtml::_('select.option', '2', 'COM_PROJECTS_HEAD_TODO_STATE_2');
 
         return $options;
     }
@@ -318,6 +355,31 @@ abstract class ProjectsHtmlFilters
 
         foreach ($result as $item) {
             $options[] = JHtml::_('select.option', $item->id, $item->name);
+        }
+
+        return $options;
+    }
+
+    public static function contractOptions()
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`c`.`id`")
+            ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`")
+            ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
+            ->from('`#__prj_contracts` as `c`')
+            ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
+            ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
+            ->order("`c`.`id`");
+        $result = $db->setQuery($query)->loadObjectList();
+
+        $options = array();
+
+        foreach ($result as $item) {
+            $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+            $name = JText::sprintf('COM_PROJECTS_FILTER_CONTRACT_FIELD', $item->id, $item->project, $exp);
+            $options[] = JHtml::_('select.option', $item->id, $name);
         }
 
         return $options;
