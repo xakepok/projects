@@ -11,7 +11,9 @@ function getDebt() {
         })
         .then(function (text) {
             var field = document.querySelector('#jform_amount');
+            var cur = document.querySelector('#currency');
             field.value = text.data[0].debt;
+            cur.innerText = text.data[0].currency;
         })
         .catch(function (error) {
             console.log('Request failed', error);

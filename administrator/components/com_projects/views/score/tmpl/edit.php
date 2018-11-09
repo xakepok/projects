@@ -28,6 +28,9 @@ HTMLHelper::_('script', $this->script);
                                 <div class="control-label"><?php echo $field->label; ?></div>
                                 <div class="controls">
                                     <?php echo $field->input; ?>
+                                    <?php if ($field->name == 'jform[amount]'): ?>
+                                    <span id="currency"></span>
+                                    <?php endif;?>
                                 </div>
                                 <br>
                             <?php endforeach; ?>

@@ -23,6 +23,7 @@ class ProjectsModelScores extends ListModel
         $query
             ->select("`s`.`id`, `s`.`contractID`, DATE_FORMAT(`s`.`dat`,'%d.%m.%Y') as `dat`, `s`.`number`, `s`.`amount`, `s`.`state`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
+            ->select("`c`.`currency`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`")
             ->from("`#__prj_scores` as `s`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
@@ -79,7 +80,7 @@ class ProjectsModelScores extends ListModel
             $arr['number'] = $item->number;
             $arr['exp'] = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr['project'] = $item->project;
-            $arr['amount'] = $item->amount;
+            $arr['amount'] = sprintf("%s %s", $item->amount, $item->currency);
             $arr['state'] = $item->state;
             $arr['state_text'] = ProjectsHelper::getScoreState($item->state);
             $result[] = $arr;
