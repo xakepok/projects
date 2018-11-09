@@ -1,7 +1,8 @@
 <?php
 // Запрет прямого доступа.
 defined('_JEXEC') or die;
+$colspan = ($this->isAdmin) ? '15' : '13';
 ?>
 <tr>
-    <td colspan="12" class="pagination-centered"><?php echo $this->pagination->getListFooter(); ?></td>
+    <td colspan="<?php echo $colspan;?>" class="pagination-centered"><?php echo $this->pagination->getListFooter(); ?></td>
 </tr>

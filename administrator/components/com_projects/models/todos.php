@@ -24,17 +24,20 @@ class ProjectsModelTodos extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`t`.`id`, DATE_FORMAT(`t`.`dat`,'%d.%m.%Y') as `date`, `t`.`task`, `t`.`result`, `t`.`state`")
+            ->select("`t`.`id`, `t`.`task`, `t`.`result`, `t`.`state`")
+            ->select("DATE_FORMAT(`t`.`dat`,'%d.%m.%Y') as `date`")
+            ->select("DATE_FORMAT(`t`.`dat_open`,'%d.%m.%Y %k:%i') as `dat_open`, DATE_FORMAT(`t`.`dat_close`,'%d.%m.%Y %k:%i') as `dat_close`")
             ->select("`c`.`id` as `contract`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
-            ->select("`u1`.`name` as `open`, `u2`.`name` as `close`")
+            ->select("`u1`.`name` as `open`, `u2`.`name` as `close`, `u3`.`name` as `manager`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`")
             ->from("`#__prj_todos` as `t`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `t`.`contractID`")
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
             ->leftJoin("`#__users` as `u1` ON `u1`.`id` = `t`.`userOpen`")
-            ->leftJoin("`#__users` as `u2` ON `u2`.`id` = `t`.`userClose`");
+            ->leftJoin("`#__users` as `u2` ON `u2`.`id` = `t`.`userClose`")
+            ->leftJoin("`#__users` as `u3` ON `u3`.`id` = `t`.`managerID`");
 
         // Фильтруем по состоянию.
         $published = $this->getState('filter.state');
@@ -87,9 +90,12 @@ class ProjectsModelTodos extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;layout=edit&amp;id={$item->id}");
             $link = JHtml::link($url, $item->date);
             $arr['dat'] = $link;
+            $arr['dat_open'] = $item->dat_open;
+            $arr['dat_close'] = $item->dat_close ?? JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_NOT_CLOSE');
             $arr['task'] = $item->task;
             $arr['result'] = $item->result;
             $arr['open'] = $item->open;
+            $arr['manager'] = $item->manager;
             $arr['close'] = $item->close;
             $arr['state'] = $item->state;
             $arr['state_text'] = ProjectsHelper::getTodoState($item->state);

@@ -12,31 +12,42 @@ foreach ($this->items as $i => $item) :
             <?php echo JHtml::_('jgrid.published', $item['state'], $i, 'todos.', $canChange); ?>
         </td>
         <td>
-            <?php echo $item['dat'];?>
+            <?php echo $item['dat']; ?>
         </td>
         <td>
-            <?php echo $item['contract'];?>
+            <?php echo $item['contract']; ?>
         </td>
         <td>
-            <?php echo $item['project'];?>
+            <?php echo $item['project']; ?>
         </td>
         <td>
-            <?php echo $item['exp'];?>
+            <?php echo $item['exp']; ?>
         </td>
         <td>
-            <?php echo $item['task'];?>
+            <?php echo $item['task']; ?>
         </td>
         <td>
-            <?php echo $item['result'];?>
+            <?php echo $item['result']; ?>
+        </td>
+        <?php if ($this->isAdmin): ?>
+            <td>
+                <?php echo $item['open']; ?>
+            </td>
+            <td>
+                <?php echo $item['manager']; ?>
+            </td>
+        <?php endif; ?>
+        <td>
+            <?php echo $item['close']; ?>
         </td>
         <td>
-            <?php echo $item['open'];?>
+            <?php echo $item['dat_open']; ?>
         </td>
         <td>
-            <?php echo $item['close'];?>
+            <?php echo $item['dat_close']; ?>
         </td>
         <td>
-            <?php echo $item['state_text'];?>
+            <?php echo $item['state_text']; ?>
         </td>
         <td>
             <?php echo $item['id']; ?>

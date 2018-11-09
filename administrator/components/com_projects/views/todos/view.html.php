@@ -9,13 +9,14 @@ class ProjectsViewTodos extends HtmlView
 {
 	protected $helper;
 	protected $sidebar = '';
-	public $items, $pagination, $uid, $state, $links;
+	public $items, $pagination, $uid, $state, $links, $isAdmin;
 
 	public function display($tpl = null)
 	{
 	    $this->items = $this->get('Items');
 	    $this->pagination = $this->get('Pagination');
 	    $this->state = $this->get('State');
+	    $this->isAdmin = ProjectsHelper::canDo('projects.exec.edit');
 
 		// Show the toolbar
 		$this->toolbar();

@@ -8,6 +8,15 @@ class ProjectsModelTodo extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    public function getItem($pk = null)
+    {
+        $item = parent::getItem($pk);
+        $isAdmin = ProjectsHelper::canDo('projects.exec.edit');
+        if (!$isAdmin) $item->dat = date("d.m.Y", strtotime($item->dat));
+
+        return $item;
+    }
+
     public function getForm($data = array(), $loadData = true)
     {
         $form = $this->loadForm(
@@ -40,13 +49,17 @@ class ProjectsModelTodo extends AdminModel {
     public function save($data)
     {
         if ($data['id'] == 0) $data['userOpen'] = JFactory::getUser()->id;
-        if ($data['id'] != 0 && $data['state'] == 1) $data['userClose'] = JFactory::getUser()->id;
+        if ($data['id'] != 0 && $data['state'] == 1)
+        {
+            $data['userClose'] = JFactory::getUser()->id;
+            $data['dat_close'] = date("Y-m-d H:i:s");
+        }
         return parent::save($data);
     }
 
     protected function prepareTable($table)
     {
-    	$nulls = array('userClose', 'result'); //Поля, которые NULL
+    	$nulls = array('userClose', 'result', 'dat_close'); //Поля, которые NULL
 	    foreach ($nulls as $field)
 	    {
 		    if (!strlen($table->$field)) $table->$field = NULL;

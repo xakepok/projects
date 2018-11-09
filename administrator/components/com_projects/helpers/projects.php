@@ -141,4 +141,15 @@ class ProjectsHelper
         }
         return $text;
     }
+
+    /**
+     * Возвращает права доступа текущего пользователя
+     * @param string $action требуемое право для проверки доступа
+     * @return bool
+     * @since 1.2.5
+     */
+    public static function canDo(string $action): bool
+    {
+        return JFactory::getUser()->authorise($action, 'com_projects');
+    }
 }

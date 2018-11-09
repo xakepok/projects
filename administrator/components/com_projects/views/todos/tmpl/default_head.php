@@ -28,11 +28,22 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_RESULT'); ?>
     </th>
+    <?php if ($this->isAdmin): ?>
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_OPEN'); ?>
     </th>
     <th>
+        <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_MANAGER'); ?>
+    </th>
+    <?php endif;?>
+    <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_CLOSE'); ?>
+    </th>
+    <th>
+        <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_OPEN'); ?>
+    </th>
+    <th>
+        <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_CLOSE'); ?>
     </th>
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE'); ?>

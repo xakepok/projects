@@ -12,7 +12,10 @@ class TableProjectsTodos extends Table
 {
     var $id = null;
     var $dat = null;
+    var $dat_open = null;
+    var $dat_close = null;
     var $contractID = null;
+    var $managerID = null;
     var $task = null;
     var $result = null;
     var $userOpen = null;

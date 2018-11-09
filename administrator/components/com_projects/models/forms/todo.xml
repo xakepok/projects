@@ -11,7 +11,6 @@
                 label="COM_PROJECTS_HEAD_TODO_DATE"
                 description="COM_PROJECTS_HEAD_TODO_DATE_DESC"
                 autocomplete="off"
-                required="true"
                 class="input-xlarge"
         />
         <field
@@ -20,7 +19,13 @@
                 label="COM_PROJECTS_HEAD_TODO_CONTRACT"
                 description="COM_PROJECTS_HEAD_TODO_CONTRACT_DESC"
                 autocomplete="off"
-                required="true"
+                class="input-xlarge"
+        />
+        <field
+                name="managerID"
+                type="user"
+                label="COM_PROJECTS_HEAD_TODO_MANAGER"
+                description="COM_PROJECTS_HEAD_TODO_MANAGER_DESC"
                 class="input-xlarge"
         />
         <field
@@ -30,7 +35,6 @@
                 description="COM_PROJECTS_HEAD_TODO_TASK_DESC"
                 hint="COM_PROJECTS_HEAD_TODO_TASK_HINT"
                 autocomplete="off"
-                required="true"
                 class="input-xlarge"
         />
         <field
