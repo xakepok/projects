@@ -29,7 +29,6 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
                 description="COM_PROJECTS_HEAD_CONTRACT_MANAGER_DESC"
                 autocomplete="off"
-                required="true"
                 class="input-xlarge"
         />
         <field
@@ -38,7 +37,6 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP"
                 description="COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_DESC"
                 autocomplete="off"
-                required="true"
                 class="input-xlarge"
         />
         <field
