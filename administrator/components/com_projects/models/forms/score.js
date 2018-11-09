@@ -5,7 +5,7 @@ window.onload = function () {
 function getDebt() {
     var field = document.querySelector('#jform_contractID');
     var contract = field.options[field.selectedIndex].value;
-    fetch('http://bgp.ru/administrator/index.php?option=com_projects&view=contracts&format=raw&id=' + contract)
+    fetch('/administrator/index.php?option=com_projects&view=contracts&format=raw&id=' + contract)
         .then(function (response) {
             return response.json();
         })
