@@ -31,8 +31,7 @@ class ProjectsModelContracts extends ListModel
             ->leftJoin("`#__prj_projects` AS `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `expID`")
             ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`")
-            ->leftJoin("`#__usergroups` as `g` ON `g`.`id` = `c`.`groupID`")
-            ->order("`c`.`id`");
+            ->leftJoin("`#__usergroups` as `g` ON `g`.`id` = `c`.`groupID`");
 
         /* Фильтр */
         $search = $this->getState('filter.search');
@@ -66,6 +65,12 @@ class ProjectsModelContracts extends ListModel
                 $query->where('`c`.`status` IS NULL');
             }
         }
+        /* Фильтр по ID проекта (только через GET) */
+        $id = JFactory::getApplication()->input->getInt('id', 0);
+        if ($id != 0)
+        {
+            $query->where("`c`.`id` = {$id}");
+        }
 
         /* Сортировка */
         $orderCol  = $this->state->get('list.ordering', '`c`.`id`');
@@ -94,7 +99,8 @@ class ProjectsModelContracts extends ListModel
             $arr['group']['title'] = $item->group ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_UNDEFINED');
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            $arr['amount'] = sprintf("%s %s", $this->getAmount($item->id, $item->currency, $item->discount, $item->markup), $item->currency);
+            $arr['amount'] = sprintf("%s %s", $this->getAmount($item), $item->currency);
+            $arr['debt'] = sprintf("%s %s", $arr['amount'] - $this->getDebt($item->id), $item->currency);
             $arr['state'] = $item->state;
             $result[] = $arr;
         }
@@ -132,23 +138,37 @@ class ProjectsModelContracts extends ListModel
 
     /**
      * Расчёт стоимости договора
-     * @param int $contractID   ID договора
-     * @param string $currency  Валюта договора
-     * @param float $discount   Скидка для экспонента
-     * @param float $markup     Наценка для экспонента
+     * @param object $item   объект со сделкой
      * @return float
      * @since 1.2.0
      */
-    private function getAmount(int $contractID, string $currency, float $discount, float $markup): float
+    private function getAmount(object $item): float
     {
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("ROUND(SUM(IFNULL(`i`.`price_{$currency}`,0)*`i`.`factor`*`v`.`value`)*{$discount}*{$markup}, 2) as `amount`")
+            ->select("ROUND(SUM(IFNULL(`i`.`price_{$item->currency}`,0)*`i`.`factor`*`v`.`value`)*{$item->discount}*{$item->markup}, 2) as `amount`")
             ->from("`#__prj_contract_items` as `v`")
             ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `v`.`itemID`")
-            ->where("`v`.`contractID` = {$contractID}");
+            ->where("`v`.`contractID` = {$item->id}");
         return (float) 0 + $db->setQuery($query)->loadResult();
+    }
+
+    /**
+     * @param int  $contract_id ID сделки
+     * @return float
+     * @since 1.2.4
+     */
+    private function getDebt(int $contract_id): float
+    {
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("IFNULL(SUM(`amount`),0)")
+            ->from("`#__prj_scores`")
+            ->where("`contractID` = {$contract_id}")
+            ->where("`state` = 1");
+        return (float) $db->setQuery($query)->loadResult();
     }
 
 }
