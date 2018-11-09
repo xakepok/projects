@@ -1,5 +1,4 @@
 'use strict';
-var url = 'http://bgp.ru/administrator/index.php?option=com_projects&view=contracts&format=raw&id=1';
 window.onload = function () {
     getDebt();
 };
