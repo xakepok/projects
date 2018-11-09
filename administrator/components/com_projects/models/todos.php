@@ -10,9 +10,9 @@ class ProjectsModelTodos extends ListModel
         {
             $config['filter_fields'] = array(
                 '`id`', '`id`',
-                '`title`', '`title`',
-                '`date_start`', '`date_start`',
-                '`date_end`', '`date_end`',
+                '`t`.`dat`','`t`.`dat`',
+                '`t`.`dat_open`','`t`.`dat_open`',
+                '`t`.`dat_close`','`t`.`dat_close`',
                 '`state`', '`state`',
             );
         }
@@ -47,7 +47,7 @@ class ProjectsModelTodos extends ListModel
         }
         elseif ($published === '')
         {
-            $query->where('`t`.`state` = 0');
+            $query->where('(`t`.`state` = 0 OR `t`.`state` = 1)');
         }
         // Фильтруем по сделке.
         $contract = $this->getState('filter.contract');

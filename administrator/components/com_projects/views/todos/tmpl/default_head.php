@@ -11,7 +11,7 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JHtml::_('grid.sort', 'JSTATUS', '`state`', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_DATE', '`t`.`dat`', $listDirn, $listOrder); ?>
     </th>
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_CONTRACT'); ?>
@@ -40,10 +40,10 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_CLOSE'); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_OPEN'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_DATE_OPEN', '`t`.`dat_open`', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_CLOSE'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_DATE_CLOSE', '`t`.`dat_close`', $listDirn, $listOrder); ?>
     </th>
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE'); ?>
