@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fieldset name="names">
+        <field
+                name="id"
+                type="hidden"
+        />
+        <field
+                name="contractID"
+                type="Contract"
+                label="COM_PROJECTS_HEAD_TODO_CONTRACT"
+                description="COM_PROJECTS_HEAD_TODO_CONTRACT_DESC"
+                autocomplete="off"
+                required="true"
+                class="input-xlarge"
+        />
+        <field
+                name="dat"
+                type="calendar"
+                label="COM_PROJECTS_HEAD_SCORE_DATE"
+                description="COM_PROJECTS_HEAD_SCORE_DATE_DESC"
+                autocomplete="off"
+                required="true"
+                class="input-xlarge"
+        />
+        <field
+                name="number"
+                type="text"
+                label="COM_PROJECTS_HEAD_SCORE_NUMBER"
+                description="COM_PROJECTS_HEAD_SCORE_NUMBER_DESC"
+                autocomplete="off"
+                required="true"
+                class="input-xlarge"
+        />
+        <field
+                name="amount"
+                type="text"
+                label="COM_PROJECTS_HEAD_SCORE_AMOUNT"
+                description="COM_PROJECTS_HEAD_SCORE_AMOUNT_DESC"
+                hint="COM_PROJECTS_HEAD_SCORE_AMOUNT_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="state"
+                type="list"
+                label="COM_PROJECTS_HEAD_SCORE_STATE"
+                description="COM_PROJECTS_HEAD_SCORE_STATE_DESC"
+                class="inputbox"
+                required="true"
+                size="1"
+                default="0"
+        >
+            <option value="1">COM_PROJECTS_HEAD_SCORE_STATE_1</option>
+            <option value="0">COM_PROJECTS_HEAD_SCORE_STATE_0</option>
+        </field>
+    </fieldset>
+</form>

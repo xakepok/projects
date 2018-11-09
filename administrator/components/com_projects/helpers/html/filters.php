@@ -43,6 +43,19 @@ abstract class ProjectsHtmlFilters
         return JHtml::_('select.genericlist', $options, 'filter_state', $attribs, 'value', 'text', $selected, null, true);
     }
 
+    //Фильтр состояний счёта
+    public static function stateScore($selected)
+    {
+        $options = array();
+
+        $options[] = JHtml::_('select.option', '', 'COM_PROJECTS_FILTER_SELECT_STATUS_SCORE');
+        $options = array_merge($options, self::stateScoreOptions());
+
+        $attribs = 'class="inputbox" onchange="this.form.submit()"';
+
+        return JHtml::_('select.genericlist', $options, 'filter_state', $attribs, 'value', 'text', $selected, null, true);
+    }
+
     //Фильтр проектов
     public static function project($selected)
     {
@@ -195,6 +208,16 @@ abstract class ProjectsHtmlFilters
         $options[] = JHtml::_('select.option', '1', 'COM_PROJECTS_HEAD_TODO_STATE_1');
         $options[] = JHtml::_('select.option', '0', 'COM_PROJECTS_HEAD_TODO_STATE_0');
         $options[] = JHtml::_('select.option', '2', 'COM_PROJECTS_HEAD_TODO_STATE_2');
+
+        return $options;
+    }
+
+    //Список статуса оплаты счёта
+    public static function stateScoreOptions()
+    {
+        $options = array();
+        $options[] = JHtml::_('select.option', '1', 'COM_PROJECTS_HEAD_SCORE_STATE_1');
+        $options[] = JHtml::_('select.option', '0', 'COM_PROJECTS_HEAD_SCORE_STATE_0');
 
         return $options;
     }
