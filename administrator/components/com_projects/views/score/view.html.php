@@ -27,9 +27,6 @@ class ProjectsViewScore extends HtmlView {
     }
 
     protected function setDocument() {
-        JHtml::_('jquery.framework');
         JHtml::_('bootstrap.framework');
-        $document = JFactory::getDocument();
-        $document->addScript(JURI::root() . $this->script);
     }
 }

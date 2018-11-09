@@ -12,6 +12,7 @@
                 description="COM_PROJECTS_HEAD_TODO_CONTRACT_DESC"
                 autocomplete="off"
                 required="true"
+                onchange="getDebt()"
                 class="input-xlarge"
         />
         <field
