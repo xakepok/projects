@@ -85,6 +85,7 @@ class ProjectsModelContracts extends ListModel
         $items = parent::getItems();
         $result = array();
         $ids = array();
+        $format = JFactory::getApplication()->input->getString('format', 'html');
         foreach ($items as $item) {
             $ids[] = $item->id;
             $arr['id'] = $item->id;
@@ -92,15 +93,15 @@ class ProjectsModelContracts extends ListModel
             $arr['project'] = $item->project;
             $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;filter_contract={$item->id}");
             $link = JHtml::link($url, JText::sprintf('COM_PROJECTS_HEAD_TODO_TODOS'));
-            $arr['todo'] = $link;
+            if ($format == 'html') $arr['todo'] = $link;
             $arr['exponent'] = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr['manager']['title'] = $item->manager ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MANAGER_UNDEFINED');
             $arr['manager']['class'] = (!empty($item->manager)) ? '' : 'no-data';
             $arr['group']['title'] = $item->group ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_UNDEFINED');
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            $arr['amount'] = sprintf("%s %s", $this->getAmount($item), $item->currency);
-            $arr['debt'] = sprintf("%s %s", $arr['amount'] - $this->getDebt($item->id), $item->currency);
+            $arr['amount'] = ($format != 'html') ? $this->getAmount($item) : sprintf("%s %s", $this->getAmount($item), $item->currency);
+            $arr['debt'] = ($format != 'html') ? $arr['amount'] - $this->getDebt($item->id) : sprintf("%s %s", $arr['amount'] - $this->getDebt($item->id), $item->currency);
             $arr['state'] = $item->state;
             $result[] = $arr;
         }
