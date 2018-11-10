@@ -6,14 +6,6 @@
                 type="hidden"
         />
         <field
-                name="dat"
-                type="calendar"
-                label="COM_PROJECTS_HEAD_TODO_DATE"
-                description="COM_PROJECTS_HEAD_TODO_DATE_DESC"
-                autocomplete="off"
-                class="input-xlarge"
-        />
-        <field
                 name="contractID"
                 type="Contract"
                 label="COM_PROJECTS_HEAD_TODO_CONTRACT"
@@ -26,6 +18,28 @@
                 type="user"
                 label="COM_PROJECTS_HEAD_TODO_MANAGER"
                 description="COM_PROJECTS_HEAD_TODO_MANAGER_DESC"
+                class="input-xlarge"
+        />
+        <field
+                name="state"
+                type="list"
+                label="COM_PROJECTS_HEAD_TODO_STATE"
+                description="COM_PROJECTS_HEAD_TODO_STATE_DESC"
+                class="inputbox"
+                required="true"
+                size="1"
+                default="0"
+        >
+            <option value="1">COM_PROJECTS_HEAD_TODO_STATE_1</option>
+            <option value="0">COM_PROJECTS_HEAD_TODO_STATE_0</option>
+            <option value="2">COM_PROJECTS_HEAD_TODO_STATE_2</option>
+        </field>
+        <field
+                name="dat"
+                type="calendar"
+                label="COM_PROJECTS_HEAD_TODO_DATE"
+                description="COM_PROJECTS_HEAD_TODO_DATE_DESC"
+                autocomplete="off"
                 class="input-xlarge"
         />
         <field
@@ -46,19 +60,5 @@
                 autocomplete="off"
                 class="input-xlarge"
         />
-        <field
-                name="state"
-                type="list"
-                label="COM_PROJECTS_HEAD_TODO_STATE"
-                description="COM_PROJECTS_HEAD_TODO_STATE_DESC"
-                class="inputbox"
-                required="true"
-                size="1"
-                default="0"
-        >
-            <option value="1">COM_PROJECTS_HEAD_TODO_STATE_1</option>
-            <option value="0">COM_PROJECTS_HEAD_TODO_STATE_0</option>
-            <option value="2">COM_PROJECTS_HEAD_TODO_STATE_2</option>
-        </field>
     </fieldset>
 </form>
