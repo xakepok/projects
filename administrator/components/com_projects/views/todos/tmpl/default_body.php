@@ -4,7 +4,7 @@ defined('_JEXEC') or die;
 foreach ($this->items as $i => $item) :
     $canChange = JFactory::getUser()->authorise('core.edit.state', 'com_projects.todo.' . $item['id']);
     ?>
-    <tr class="row0">
+    <tr class="row0<?php if ($item['expired']) echo ' expired';?>">
         <td class="center">
             <?php echo JHtml::_('grid.id', $i, $item['id']); ?>
         </td>
@@ -36,10 +36,10 @@ foreach ($this->items as $i => $item) :
             <td>
                 <?php echo $item['manager']; ?>
             </td>
-        <?php endif; ?>
         <td>
             <?php echo $item['close']; ?>
         </td>
+        <?php endif; ?>
         <td>
             <?php echo $item['dat_open']; ?>
         </td>

@@ -11,4 +11,8 @@
   opacity: 1;
 }
 
+.expired td {
+  color: #ff0004;
+}
+
 /*# sourceMappingURL=style.css.map */
