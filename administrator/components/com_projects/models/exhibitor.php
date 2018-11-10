@@ -86,6 +86,21 @@ class ProjectsModelExhibitor extends AdminModel
     }
 
     /**
+     * Возвращает историю участия экспонента в проектах
+     * @return array
+     * @since 1.2.6
+     * @throws
+     */
+    public function getHistory(): array
+    {
+        $expID = JFactory::getApplication()->input->getInt('id', 0);
+        if ($expID == 0) return array();
+        $model = AdminModel::getInstance('History', 'ProjectsModel');
+        $history = $model->getExpHistory($expID);
+        return $history;
+    }
+
+    /**
      * Получает массив видов деятельности для текущего экспонента.
      * @return  array   Массив
      * @since   1.1.3

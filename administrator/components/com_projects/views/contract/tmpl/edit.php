@@ -14,7 +14,7 @@ HTMLHelper::_('script', $this->script);
         }
     }
 </script>
-<form action="<?php echo JRoute::_('index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id=' . (int)$this->item->id); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id=' . (int)$this->item->id); ?>"
       method="post" name="adminForm" id="adminForm" xmlns="http://www.w3.org/1999/html" class="form-validate">
     <div class="row-fluid">
         <div class="span12 form-horizontal">

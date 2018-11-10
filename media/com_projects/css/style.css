@@ -15,4 +15,12 @@
   color: #ff0004;
 }
 
+#history {
+  border-collapse: collapse;
+  width: 100%;
+}
+#history tr td {
+  border: 1px solid black;
+}
+
 /*# sourceMappingURL=style.css.map */

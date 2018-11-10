@@ -4,12 +4,14 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 JHtml::_('formbehavior.chosen', 'select');
+
 use Joomla\CMS\HTML\HTMLHelper;
+
 HTMLHelper::_('script', $this->script);
 HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto', 'relative' => true));
 ?>
 <script type="text/javascript">
-    Joomla.submitbutton = function(task) {
+    Joomla.submitbutton = function (task) {
         if (task == 'exhibitor.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
             Joomla.submitform(task, document.getElementById('adminForm'));
         }
@@ -22,43 +24,55 @@ HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto',
             <?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
             <div class="tab-content">
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR')); ?>
-                    <div class="row-fluid">
-                        <div class="span4">
-                            <?php echo $this->loadTemplate('general');?>
-                        </div>
-                        <div class="span4">
-                            <?php echo $this->loadTemplate('bank');?>
-                        </div>
-                        <div class="span4">
-                            <?php echo $this->loadTemplate('similar');?>
-                        </div>
+                <div class="row-fluid">
+                    <div class="span4">
+                        <?php echo $this->loadTemplate('general'); ?>
                     </div>
+                    <div class="span4">
+                        <?php echo $this->loadTemplate('bank'); ?>
+                    </div>
+                    <div class="span4">
+                        <?php echo $this->loadTemplate('similar'); ?>
+                    </div>
+                </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'contact', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_CONTACTS')); ?>
                 <div class="row-fluid">
                     <div class="span6">
-                        <?php echo $this->loadTemplate('addresses');?>
+                        <?php echo $this->loadTemplate('addresses'); ?>
                     </div>
                     <div class="span6">
-                        <?php echo $this->loadTemplate('contacts');?>
+                        <?php echo $this->loadTemplate('contacts'); ?>
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'activities', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_ACTIVITIES')); ?>
                 <div class="row-fluid">
                     <div class="span6">
-                        <?php echo $this->loadTemplate('acts');?>
+                        <?php echo $this->loadTemplate('acts'); ?>
                     </div>
                     <div class="span6">
 
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php if ($this->item->id != 0): ?>
+                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'history', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_HISTORY')); ?>
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <?php echo $this->loadTemplate('history'); ?>
+                        </div>
+                        <div class="span6">
+
+                        </div>
+                    </div>
+                    <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php endif; ?>
             </div>
             <?php echo JHtml::_('bootstrap.endTabSet'); ?>
         </div>
         <div>
-            <input type="hidden" name="task" value="" />
+            <input type="hidden" name="task" value=""/>
             <?php echo JHtml::_('form.token'); ?>
         </div>
     </div>

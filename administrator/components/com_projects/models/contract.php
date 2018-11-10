@@ -54,6 +54,7 @@ class ProjectsModelContract extends AdminModel {
     {
         $data['discount'] = (float) (100 - $data['discount']) / 100; //Переводим значение скидки в коэффициент
         $data['markup'] = (float) (100 + $data['markup']) / 100; //Переводим значение наценки в коэффициент
+        $this->saveHistory($data['id'], $data['status']);
         $s1 = parent::save($data);
         $s2 = $this->savePrice();
         return $s1 && $s2;
@@ -97,6 +98,25 @@ class ProjectsModelContract extends AdminModel {
     public function getScript()
     {
         return 'administrator/components/' . $this->option . '/models/forms/contract.js';
+    }
+
+    /**
+     * Сохраняет действие пользователя в историю
+     * @param int $contractID ID контракта
+     * @param int $status новый статус договора
+     * @since 1.2.6
+     * @throws
+     */
+    private function saveHistory(int $contractID, int $status): void
+    {
+        $managerID = JFactory::getUser()->id;
+        $data = array('dat' => date("Y-m-d H:i:s"), 'contractID' => $contractID, 'managerID' => $managerID, 'status' => $status);
+        $model = AdminModel::getInstance('History','ProjectsModel');
+        $old_status = $model->getLastStatus($contractID);
+        if ($old_status == $status) return;
+        $table = $model->getTable();
+        $table->bind($data);
+        $model->save($data);
     }
 
     /**
