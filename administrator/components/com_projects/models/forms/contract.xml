@@ -81,11 +81,13 @@
                 onchange="setNumber()"
                 default=""
                 class="input-xlarge">
-            <option value="0">COM_PROJECTS_HEAD_CONTRACT_STATUS_0</option>
-            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STATUS_1</option>
             <option value="2">COM_PROJECTS_HEAD_CONTRACT_STATUS_2</option>
             <option value="3">COM_PROJECTS_HEAD_CONTRACT_STATUS_3</option>
             <option value="4">COM_PROJECTS_HEAD_CONTRACT_STATUS_4</option>
+            <option value="5">COM_PROJECTS_HEAD_CONTRACT_STATUS_5</option>
+            <option value="6">COM_PROJECTS_HEAD_CONTRACT_STATUS_6</option>
+            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STATUS_1</option>
+            <option value="0">COM_PROJECTS_HEAD_CONTRACT_STATUS_0</option>
         </field>
         <field
                 name="number"

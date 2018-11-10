@@ -191,10 +191,11 @@ abstract class ProjectsHtmlFilters
     public static function statusOptions()
     {
         $options = array();
-        $options[] = JHtml::_('select.option', '-1', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_UNDEFINED');
         $options[] = JHtml::_('select.option', '2', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_2');
         $options[] = JHtml::_('select.option', '3', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_3');
         $options[] = JHtml::_('select.option', '4', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_4');
+        $options[] = JHtml::_('select.option', '5', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_5');
+        $options[] = JHtml::_('select.option', '6', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_6');
         $options[] = JHtml::_('select.option', '1', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_1');
         $options[] = JHtml::_('select.option', '0', 'COM_PROJECTS_HEAD_CONTRACT_STATUS_0');
 
