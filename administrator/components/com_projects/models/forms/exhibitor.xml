@@ -6,14 +6,6 @@
                 type="hidden"
         />
         <field
-                name="regID"
-                type="Region"
-                label="COM_PROJECTS_HEAD_CITY"
-                description="COM_PROJECTS_HEAD_CITY_DESC"
-                required="true"
-                class="input-xlarge"
-        />
-        <field
                 name="title_ru_short"
                 type="text"
                 label="COM_PROJECTS_HEAD_EXP_TITLE_RU_SHORT"
@@ -38,6 +30,14 @@
                 description="COM_PROJECTS_HEAD_EXP_TITLE_EN_DESC"
                 hint="COM_PROJECTS_HEAD_EXP_TITLE_EN_DESC"
                 autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="regID"
+                type="Region"
+                label="COM_PROJECTS_HEAD_CITY"
+                description="COM_PROJECTS_HEAD_CITY_DESC"
+                required="true"
                 class="input-xlarge"
         />
         <field
