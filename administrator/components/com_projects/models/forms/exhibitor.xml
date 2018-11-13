@@ -6,11 +6,20 @@
                 type="hidden"
         />
         <field
+                name="tip"
+                type="text"
+                label="COM_PROJECTS_HEAD_EXP_TIP"
+                description="COM_PROJECTS_HEAD_EXP_TIP_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_TIP_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
                 name="title_ru_short"
                 type="text"
                 label="COM_PROJECTS_HEAD_EXP_TITLE_RU_SHORT"
                 description="COM_PROJECTS_HEAD_EXP_TITLE_RU_SHORT_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_TITLE_RU_SHORT_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_TITLE_RU_SHORT_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
@@ -19,7 +28,7 @@
                 type="text"
                 label="COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL"
                 description="COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
@@ -28,7 +37,7 @@
                 type="text"
                 label="COM_PROJECTS_HEAD_EXP_TITLE_EN"
                 description="COM_PROJECTS_HEAD_EXP_TITLE_EN_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_TITLE_EN_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_TITLE_EN_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
@@ -117,7 +126,7 @@
                 type="text"
                 label="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_RU"
                 description="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_RU_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_RU_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_RU_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
@@ -126,7 +135,7 @@
                 type="text"
                 label="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_EN"
                 description="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_EN_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_EN_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_EN_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
@@ -135,7 +144,7 @@
                 type="text"
                 label="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT"
                 description="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
