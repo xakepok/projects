@@ -8,6 +8,25 @@ class ProjectsModelItem extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    /**
+     * Возвращает название прайс-листа для показа в заголовке
+     * @return string Название прайс-листа
+     * @since 1.2.6
+     */
+    public function getPriceName(): string
+    {
+        $item = parent::getItem();
+        if ($item->id == null) return '';
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`p`.`title`")
+            ->from("`#__prc_sections` as `s`")
+            ->leftJoin("`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`")
+            ->where("`s`.`id` = {$item->sectionID}");
+        return $db->setQuery($query)->loadResult();
+    }
+
     public function getForm($data = array(), $loadData = true)
     {
         $form = $this->loadForm(
