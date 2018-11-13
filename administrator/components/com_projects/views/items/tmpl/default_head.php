@@ -14,15 +14,6 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_TITLE'); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_RUB'); ?>
-    </th>
-    <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_USD'); ?>
-    </th>
-    <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_EUR'); ?>
-    </th>
-    <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT'); ?>
     </th>
     <th>

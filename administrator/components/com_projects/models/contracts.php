@@ -110,12 +110,12 @@ class ProjectsModelContracts extends ListModel
             $arr['group']['title'] = $item->group ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_UNDEFINED');
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            $amount = $this->getAmount($item);
-            $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", $this->getAmount($item), $item->currency);
-            $arr['debt'] = ($format != 'html') ? $amount - $this->getDebt($item->id) : sprintf("%s %s", $amount - $this->getDebt($item->id), $item->currency);
+            //$amount = $this->getAmount($item);
+            //$arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", $this->getAmount($item), $item->currency);
+            //$arr['debt'] = ($format != 'html') ? $amount - $this->getDebt($item->id) : sprintf("%s %s", $amount - $this->getDebt($item->id), $item->currency);
             $arr['state'] = $item->state;
             $result['items'][] = $arr;
-            $result['amount'][$item->currency] += $amount;
+            //$result['amount'][$item->currency] += $amount;
         }
         return $result;
     }

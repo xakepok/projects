@@ -13,7 +13,10 @@ class TableProjectsCtritems extends Table
     var $id = null;
     var $contractID = null;
     var $itemID = null;
+    var $factor = null;
+    var $factor2 = null;
     var $value = null;
+    var $value2 = null;
 
     public function __construct(JDatabaseDriver $db)
     {

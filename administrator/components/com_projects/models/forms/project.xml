@@ -34,6 +34,17 @@
                 class="input-xlarge"
         />
         <field
+                name="columnID"
+                type="list"
+                label="COM_PROJECTS_FILTER_COLUMN"
+                description="COM_PROJECTS_FILTER_COLUMN_DESC"
+                default="1"
+                class="input-xlarge">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </field>
+        <field
                 name="priceID"
                 type="Price"
                 label="COM_PROJECTS_FILTER_PRICE"

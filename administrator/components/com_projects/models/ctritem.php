@@ -32,7 +32,7 @@ class ProjectsModelctritem extends AdminModel {
 
     protected function prepareTable($table)
     {
-    	$nulls = array(); //Поля, которые NULL
+    	$nulls = array('value2'); //Поля, которые NULL
 
 	    foreach ($nulls as $field)
 	    {

@@ -15,15 +15,6 @@ foreach ($this->items as $i => $item) :
             <?php echo $item['title'];?>
         </td>
         <td>
-            <?php echo $item['price_rub'];?>
-        </td>
-        <td>
-            <?php echo $item['price_usd'];?>
-        </td>
-        <td>
-            <?php echo $item['price_eur'];?>
-        </td>
-        <td>
             <?php echo $item['unit'];?>
         </td>
         <td>
