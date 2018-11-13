@@ -184,6 +184,8 @@ class ProjectsModelContract extends AdminModel {
             $arr['isUnit2'] = $item->isUnit2;
             $arr['value'] = $values[$item->id]['value'];
             $arr['value2'] = $values[$item->id]['value2'];
+            $arr['factor'] = $values[$item->id]['factor'];
+            $arr['factor2'] = $values[$item->id]['factor2'];
             $result[] = $arr;
         }
         return $result;
@@ -202,9 +204,10 @@ class ProjectsModelContract extends AdminModel {
         if (empty($post)) return true;
         $model = AdminModel::getInstance('Ctritem', 'ProjectsModel');
         $table = $model->getTable();
-        foreach ($post[1] as $itemID => $value) {
+        foreach ($post[1]['item'] as $itemID => $value) {
             $pks = array('contractID' => $contractID, 'itemID' => $itemID);
             $row = $model->getItem($pks);
+            $arr = array();
             $arr['contractID'] = $contractID;
             $arr['itemID'] = $itemID;
             $arr['value'] = $value;
@@ -227,12 +230,65 @@ class ProjectsModelContract extends AdminModel {
                 $model->save($arr);
             }
         }
-        foreach ($post[2] as $itemID => $value) {
+        foreach ($post[2]['item'] as $itemID => $value) {
             $pks = array('contractID' => $contractID, 'itemID' => $itemID);
             $row = $model->getItem($pks);
+            $arr = array();
             $arr['contractID'] = $contractID;
             $arr['itemID'] = $itemID;
             $arr['value2'] = $value;
+            if ($row->id != null)
+            {
+                if ($value == '')
+                {
+                    $model->delete($row->id);
+                }
+                else
+                {
+                    $arr['id'] = $row->id;
+                    $table->bind($arr);
+                    $model->save($arr);
+                }
+            }
+            else {
+                $arr['id'] = null;
+                $table->bind($arr);
+                $model->save($arr);
+            }
+        }
+        foreach ($post[1]['factor'] as $itemID => $value) {
+            $pks = array('contractID' => $contractID, 'itemID' => $itemID);
+            $row = $model->getItem($pks);
+            $arr = array();
+            $arr['contractID'] = $contractID;
+            $arr['itemID'] = $itemID;
+            $arr['factor'] = $value;
+            if ($row->id != null)
+            {
+                if ($value == '')
+                {
+                    $model->delete($row->id);
+                }
+                else
+                {
+                    $arr['id'] = $row->id;
+                    $table->bind($arr);
+                    $model->save($arr);
+                }
+            }
+            else {
+                $arr['id'] = null;
+                $table->bind($arr);
+                $model->save($arr);
+            }
+        }
+        foreach ($post[2]['factor'] as $itemID => $value) {
+            $pks = array('contractID' => $contractID, 'itemID' => $itemID);
+            $row = $model->getItem($pks);
+            $arr = array();
+            $arr['contractID'] = $contractID;
+            $arr['itemID'] = $itemID;
+            $arr['factor2'] = $value;
             if ($row->id != null)
             {
                 if ($value == '')

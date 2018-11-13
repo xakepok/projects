@@ -15,7 +15,7 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                 <div class="span8" style="vertical-align: bottom;">
                     <input
                         type="text"
-                        name="jform[price][1][<?php echo $item['id'];?>]"
+                        name="jform[price][1][item][<?php echo $item['id'];?>]"
                         id="price_<?php echo $item['id'];?>"
                         value="<?php echo $item['value'];?>"
                         class="input"
@@ -24,11 +24,21 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                         style="width: 50px;"
                         aria-invalid="false" />&nbsp;
                     <span><?php echo $item['unit'];?></span>
+                    x <input
+                        type="text"
+                        name="jform[price][1][factor][<?php echo $item['id'];?>]"
+                        id="factor_<?php echo $item['id'];?>"
+                        value="<?php echo $item['factor'];?>"
+                        class="input"
+                        placeholder="1.0"
+                        autocomplete="off"
+                        style="width: 50px;"
+                        aria-invalid="false" />&nbsp;
                     <?php if ($item['isUnit2']):?>
                         + <?php echo $item['cost2'];?> x
                         <input
                                 type="text"
-                                name="jform[price][2][<?php echo $item['id'];?>]"
+                                name="jform[price][2][item][<?php echo $item['id'];?>]"
                                 id="price_<?php echo $item['id'];?>_2"
                                 value="<?php echo $item['value2'];?>"
                                 class="input"
@@ -37,6 +47,16 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                                 style="width: 50px;"
                                 aria-invalid="false" />&nbsp;
                         <span><?php echo $item['unit2'];?></span>
+                        x <input
+                                type="text"
+                                name="jform[price][2][factor][<?php echo $item['id'];?>]"
+                                id="factor2_<?php echo $item['id'];?>"
+                                value="<?php echo $item['factor2'];?>"
+                                class="input"
+                                placeholder="1.0"
+                                autocomplete="off"
+                                style="width: 50px;"
+                                aria-invalid="false" />&nbsp;
                     <?php endif; ?>
                 </div>
             </div>
