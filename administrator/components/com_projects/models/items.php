@@ -30,7 +30,7 @@ class ProjectsModelItems extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`i`.`id`, `i`.`title_ru`, `i`.`title_en`, `i`.`unit`, `i`.`state`, `i`.`factor`")
+            ->select("`i`.`id`, `i`.`title_ru`, `i`.`title_en`, `i`.`unit`, `i`.`state`")
             ->select("`i`.`price_rub`, `i`.`price_usd`, `i`.`price_eur`")
             ->select("`p`.`title` as `price`, `s`.`title` as `section`")
             ->from('`#__prc_items` as `i`')
@@ -91,7 +91,6 @@ class ProjectsModelItems extends ListModel
             $arr['price_rub'] = $item->price_rub;
             $arr['price_usd'] = $item->price_usd;
             $arr['price_eur'] = $item->price_eur;
-            $arr['factor'] = $item->factor;
             $arr['state'] = $item->state;
             $result[] = $arr;
         }
