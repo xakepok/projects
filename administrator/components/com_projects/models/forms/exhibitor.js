@@ -6,6 +6,8 @@ window.onload = function () {
     field2.addEventListener('focusout', checkExp, false);
     var field3 = document.getElementById("jform_title_en");
     field3.addEventListener('focusout', checkExp, false);
+    var inn = document.getElementById("jform_inn");
+    inn.addEventListener('focusout', checkExp, false);
 };
 
 function checkExp() {
@@ -13,14 +15,15 @@ function checkExp() {
     var t1 = document.getElementById("jform_title_ru_short").value;
     var t2 = document.getElementById("jform_title_ru_full").value;
     var t3 = document.getElementById("jform_title_en").value;
+    var inn = document.getElementById("jform_inn").value;
     if (t1.length > 0) title = t1;
     if (t2.length > 0) title = t2;
     if (t3.length > 0) title = t3;
     if (title === '') return;
-    var city = document.getElementById("jform_regID");
-    var city_id = city.options[city.selectedIndex].value;
+    var url = '/administrator/index.php?option=com_projects&view=exhibitors&filter_search=' + title + '&format=raw';
+    if (inn !== undefined) url += '&inn=' + inn;
 
-    fetch('/administrator/index.php?option=com_projects&view=exhibitors&filter_search=' + title + '&filter_city=' + city_id + '&format=raw')
+    fetch(url)
         .then(function (response) {
             return response.json();
         })

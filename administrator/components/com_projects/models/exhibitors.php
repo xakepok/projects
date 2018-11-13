@@ -28,6 +28,7 @@ class ProjectsModelExhibitors extends ListModel
             ->select('`e`.`id`, `e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`state`')
             ->select("`r`.`name` as `city`")
             ->from("`#__prj_exp` as `e`")
+            ->leftJoin("`#__prj_exp_bank` as `b` ON `b`.`exbID` = `e`.`id`")
             ->leftJoin("`#__grph_cities` as `r` ON `r`.`id` = `e`.`regID`");
 
         /* Фильтр */
@@ -60,6 +61,12 @@ class ProjectsModelExhibitors extends ListModel
             {
                 $query->where("`e`.`id` IN (-1)");
             }
+        }
+        // Фильтруем по ИНН
+        $inn = JFactory::getApplication()->input->getInt('inn', 0);
+        if ($inn !== 0)
+        {
+            $query->where("`b`.`inn` LIKE {$inn}");
         }
 
         /* Сортировка */
