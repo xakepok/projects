@@ -46,8 +46,8 @@ class ProjectsViewContracts extends HtmlView
         {
             JToolbarHelper::publish('contracts.publish', 'JTOOLBAR_PUBLISH', true);
             JToolbarHelper::unpublish('contracts.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-            JToolBarHelper::archiveList('contracts.archive');
-            JToolBarHelper::trash('contracts.trash');
+            JToolBarHelper::archiveList('contracts.archive', 'COM_PROJECTS_ACTION_CLOSE_CONTRACT');
+            //JToolBarHelper::trash('contracts.trash');
         }
 		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
 		{

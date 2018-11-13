@@ -50,6 +50,18 @@ class ProjectsModelContract extends AdminModel {
         return $items;
     }
 
+    public function publish(&$pks, $value = 1)
+    {
+        if ($value == 2) {
+            foreach ($pks as $pk) {
+                $item = $this->getItem($pk);
+                if ($item->status == '0' || $item->status == '1' || $item->status == '5' || $item->status == '6') parent::publish($pk, $value);
+            }
+            return true;
+        }
+        return parent::publish($pks, $value);
+    }
+
     public function save($data)
     {
         $data['discount'] = (float) (100 - $data['discount']) / 100; //Переводим значение скидки в коэффициент

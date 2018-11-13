@@ -11,6 +11,8 @@ class ProjectsModelContracts extends ListModel
             $config['filter_fields'] = array(
                 '`id`', '`id`',
                 '`c`.`dat`',  '`c`.`dat`',
+                '`project`',  '`project`',
+                '`manager`',  '`manager`',
                 '`c`.`state`',  '`c`.`state`',
             );
         }
@@ -40,6 +42,13 @@ class ProjectsModelContracts extends ListModel
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . 'OR `p`.`title` LIKE ' . $search);
         }
+        // Фильтруем по состоянию.
+        /*$published = $this->getState('filter.state');
+        if (is_numeric($published)) {
+            $query->where('`c.`state` = ' . (int)$published);
+        } elseif ($published === '') {
+            $query->where('(`c`.`state` = 0 OR `c`.`state` = 1)');
+        }*/
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
         if (is_numeric($project)) {
@@ -83,7 +92,7 @@ class ProjectsModelContracts extends ListModel
     public function getItems()
     {
         $items = parent::getItems();
-        $result = array();
+        $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
         $ids = array();
         $format = JFactory::getApplication()->input->getString('format', 'html');
         foreach ($items as $item) {
@@ -101,10 +110,12 @@ class ProjectsModelContracts extends ListModel
             $arr['group']['title'] = $item->group ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_UNDEFINED');
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            $arr['amount'] = ($format != 'html') ? $this->getAmount($item) : sprintf("%s %s", $this->getAmount($item), $item->currency);
+            $amount = $this->getAmount($item);
+            $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", $this->getAmount($item), $item->currency);
             $arr['debt'] = ($format != 'html') ? $arr['amount'] - $this->getDebt($item->id) : sprintf("%s %s", $arr['amount'] - $this->getDebt($item->id), $item->currency);
             $arr['state'] = $item->state;
-            $result[] = $arr;
+            $result['items'][] = $arr;
+            $result['amount'][$item->currency] += $amount;
         }
         return $result;
     }

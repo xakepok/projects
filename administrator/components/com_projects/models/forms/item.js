@@ -1,7 +1,6 @@
 'use strict';
 window.onload = function () {
-    var field = document.querySelector('#jform_price_rub');
-    field.addEventListener('keyup', convert, false);
+
 };
 
 function convert() {

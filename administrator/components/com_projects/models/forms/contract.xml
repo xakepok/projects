@@ -113,7 +113,7 @@
                 description="JFIELD_PUBLISHED_DESC"
                 class="inputbox"
                 size="1"
-                default="1"
+                default="0"
         >
             <option value="1">JPUBLISHED</option>
             <option value="0">JUNPUBLISHED</option>

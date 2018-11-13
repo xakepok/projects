@@ -14,11 +14,11 @@
             </button>
         </div>
         <div class="js-stools-field-filter">
-            <?php //echo ProjectsHtmlFilters::state($this->state->get('filter.state')); ?>
             <?php echo ProjectsHtmlFilters::project($this->state->get('filter.project')); ?>
             <?php echo ProjectsHtmlFilters::exhibitor($this->state->get('filter.exhibitor')); ?>
             <?php echo ProjectsHtmlFilters::manager($this->state->get('filter.manager')); ?>
             <?php echo ProjectsHtmlFilters::status($this->state->get('filter.status')); ?>
+            <?php //echo ProjectsHtmlFilters::state($this->state->get('filter.state')); ?>
         </div>
         <div class="btn-wrapper">
             <button type="button" class="btn hasTooltip js-stools-btn-clear"
