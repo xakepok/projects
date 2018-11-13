@@ -1,4 +1,5 @@
 START TRANSACTION;
+
 CREATE TABLE `#__prj_exp_history` (
   `id` int(11) NOT NULL,
   `dat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Время',
@@ -15,4 +16,6 @@ ALTER TABLE `#__prj_exp_history`
 ALTER TABLE `#__prj_exp_history`
   ADD CONSTRAINT `#__prj_exp_history_ibfk_1` FOREIGN KEY (`contractID`) REFERENCES `#__prj_contracts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `#__prj_exp_history_ibfk_2` FOREIGN KEY (`managerID`) REFERENCES `#__users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `#__prj_exp` ADD `tip` VARCHAR(25) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Форма собственности' AFTER `regID`;
+ALTER TABLE `#__prj_exp` CHANGE `tip` `tip` VARCHAR(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Форма собственности';
 COMMIT;
