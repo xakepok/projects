@@ -18,4 +18,9 @@ ALTER TABLE `#__prj_exp_history`
   ADD CONSTRAINT `#__prj_exp_history_ibfk_2` FOREIGN KEY (`managerID`) REFERENCES `#__users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `#__prj_exp` ADD `tip` VARCHAR(25) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Форма собственности' AFTER `regID`;
 ALTER TABLE `#__prj_exp` CHANGE `tip` `tip` VARCHAR(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Форма собственности';
+ALTER TABLE `#__prj_exp` ADD `checked_out` INT NOT NULL DEFAULT '0' AFTER `title_en`;
+ALTER TABLE `#__prj_exp` ADD `checked_out_time` INT NULL DEFAULT NULL AFTER `checked_out`;
+ALTER TABLE `#__prj_exp` CHANGE `checked_out_time` `checked_out_time` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `stxq0_prj_contracts` ADD `parentID` INT NULL DEFAULT NULL COMMENT 'Родитель для соэкспонентов и демоцентра' AFTER `expID`;
+
 COMMIT;

@@ -10,6 +10,8 @@ class TableProjectsExponents extends Table
     var $title_ru_full = null;
     var $title_ru_short = null;
     var $title_en = null;
+    var $checked_out = null;
+    var $checked_out_time = null;
     var $state = null;
 
     public function __construct(JDatabaseDriver $db)
