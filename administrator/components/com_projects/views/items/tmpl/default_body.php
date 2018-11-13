@@ -27,7 +27,7 @@ foreach ($this->items as $i => $item) :
             <?php echo $item['unit'];?>
         </td>
         <td>
-            <?php echo $item['factor'];?>
+            <?php echo $item['unit_2'];?>
         </td>
         <td>
             <?php echo $item['id']; ?>

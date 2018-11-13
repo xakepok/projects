@@ -34,7 +34,7 @@
         <field
                 name="price_rub"
                 type="text"
-                label="COM_PROJECTS_HEAD_ITEM_PRICE_RUB"
+                label="COM_PROJECTS_HEAD_ITEM_PRICE_RUB_1"
                 description="COM_PROJECTS_HEAD_ITEM_PRICE_RUB_DESC"
                 hint="COM_PROJECTS_HEAD_ITEM_PRICE_RUB_HINT"
                 autocomplete="off"
@@ -43,7 +43,7 @@
         <field
                 name="price_usd"
                 type="text"
-                label="COM_PROJECTS_HEAD_ITEM_PRICE_USD"
+                label="COM_PROJECTS_HEAD_ITEM_PRICE_USD_1"
                 description="COM_PROJECTS_HEAD_ITEM_PRICE_USD_DESC"
                 hint="COM_PROJECTS_HEAD_ITEM_PRICE_USD_HINT"
                 autocomplete="off"
@@ -52,7 +52,7 @@
         <field
                 name="price_eur"
                 type="text"
-                label="COM_PROJECTS_HEAD_ITEM_PRICE_EUR"
+                label="COM_PROJECTS_HEAD_ITEM_PRICE_EUR_1"
                 description="COM_PROJECTS_HEAD_ITEM_PRICE_EUR_DESC"
                 hint="COM_PROJECTS_HEAD_ITEM_PRICE_EUR_HINT"
                 autocomplete="off"
@@ -66,6 +66,31 @@
                 class="inputbox"
                 default="piece"
         >
+            <option value="piece">COM_PROJECTS_HEAD_ITEM_UNIT_PIECE</option>
+            <option value="sqm">COM_PROJECTS_HEAD_ITEM_UNIT_SQM</option>
+            <option value="kit">COM_PROJECTS_HEAD_ITEM_UNIT_KIT</option>
+            <option value="pair">COM_PROJECTS_HEAD_ITEM_UNIT_PAIR</option>
+            <option value="sym">COM_PROJECTS_HEAD_ITEM_UNIT_SYM</option>
+            <option value="pm">COM_PROJECTS_HEAD_ITEM_UNIT_PM</option>
+            <option value="days">COM_PROJECTS_HEAD_ITEM_UNIT_DAYS</option>
+            <option value="hours">COM_PROJECTS_HEAD_ITEM_UNIT_HOURS</option>
+            <option value="nights">COM_PROJECTS_HEAD_ITEM_UNIT_NIGHTS</option>
+            <option value="4h">COM_PROJECTS_HEAD_ITEM_UNIT_4H</option>
+            <option value="1d1sqm">COM_PROJECTS_HEAD_ITEM_UNIT_1D1SQM</option>
+            <option value="1qsm1p">COM_PROJECTS_HEAD_ITEM_UNIT_1SQM1P</option>
+            <option value="1s1qsm">COM_PROJECTS_HEAD_ITEM_UNIT_1S1SQM</option>
+            <option value="view">COM_PROJECTS_HEAD_ITEM_UNIT_VIEW</option>
+            <option value="1pd">COM_PROJECTS_HEAD_ITEM_UNIT_1PD</option>
+        </field>
+        <field
+                name="unit_2"
+                type="list"
+                label="COM_PROJECTS_HEAD_ITEM_UNIT_TWO"
+                description="COM_PROJECTS_HEAD_ITEM_UNIT_TWO_DESC"
+                class="inputbox"
+                default=""
+        >
+            <option value="">COM_PROJECTS_HEAD_ITEM_UNIT_TWO_NOT_USE</option>
             <option value="piece">COM_PROJECTS_HEAD_ITEM_UNIT_PIECE</option>
             <option value="sqm">COM_PROJECTS_HEAD_ITEM_UNIT_SQM</option>
             <option value="kit">COM_PROJECTS_HEAD_ITEM_UNIT_KIT</option>

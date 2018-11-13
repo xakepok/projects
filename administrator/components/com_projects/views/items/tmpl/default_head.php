@@ -26,7 +26,7 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT'); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_FACTOR'); ?>
+        <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_2'); ?>
     </th>
     <th width="1%">
         <?php echo JHtml::_('grid.sort', 'ID', '`id`', $listDirn, $listOrder); ?>
