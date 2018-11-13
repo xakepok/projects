@@ -12,7 +12,6 @@ class TableProjectsItems extends Table
     var $price_rub = null;
     var $price_usd = null;
     var $price_eur = null;
-    var $factor = null;
     var $state = null;
 
     public function __construct(JDatabaseDriver $db)

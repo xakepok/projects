@@ -112,7 +112,7 @@ class ProjectsModelContracts extends ListModel
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
             $amount = $this->getAmount($item);
             $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", $this->getAmount($item), $item->currency);
-            $arr['debt'] = ($format != 'html') ? $arr['amount'] - $this->getDebt($item->id) : sprintf("%s %s", $arr['amount'] - $this->getDebt($item->id), $item->currency);
+            $arr['debt'] = ($format != 'html') ? $amount - $this->getDebt($item->id) : sprintf("%s %s", $amount - $this->getDebt($item->id), $item->currency);
             $arr['state'] = $item->state;
             $result['items'][] = $arr;
             $result['amount'][$item->currency] += $amount;
@@ -160,7 +160,7 @@ class ProjectsModelContracts extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("ROUND(SUM(IFNULL(`i`.`price_{$item->currency}`,0)*`i`.`factor`*`v`.`value`)*{$item->discount}*{$item->markup}, 2) as `amount`")
+            ->select("ROUND(SUM(IFNULL(`i`.`price_{$item->currency}`,0)*`v`.`value`)*{$item->discount}*{$item->markup}, 2) as `amount`")
             ->from("`#__prj_contract_items` as `v`")
             ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `v`.`itemID`")
             ->where("`v`.`contractID` = {$item->id}");

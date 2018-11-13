@@ -23,4 +23,6 @@ ALTER TABLE `#__prj_exp` ADD `checked_out_time` INT NULL DEFAULT NULL AFTER `che
 ALTER TABLE `#__prj_exp` CHANGE `checked_out_time` `checked_out_time` DATETIME NULL DEFAULT NULL;
 ALTER TABLE `#__prj_contracts` ADD `parentID` INT NULL DEFAULT NULL COMMENT 'Родитель для соэкспонентов и демоцентра' AFTER `expID`;
 ALTER TABLE `#__prj_contracts` ADD FOREIGN KEY (`parentID`) REFERENCES `#__prj_exp`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `#_prc_items`
+  DROP `factor`;
 COMMIT;
