@@ -73,11 +73,12 @@ class ProjectsModelContract extends AdminModel {
 
     protected function prepareTable($table)
     {
-    	$nulls = array('status', 'dat', 'groupID', 'managerID', 'number'); //Поля, которые NULL
+    	$nulls = array('status', 'dat', 'groupID', 'managerID', 'number', 'parentID'); //Поля, которые NULL
 	    foreach ($nulls as $field)
 	    {
 		    if (!strlen($table->$field)) $table->$field = NULL;
     	}
+    	if ($table->status != '5' && $table->status != '6') $table->parentID = NULL;
         parent::prepareTable($table);
     }
 

@@ -24,6 +24,14 @@
                 class="input-xlarge"
         />
         <field
+                name="parentID"
+                type="Exhibitor"
+                label="COM_PROJECTS_HEAD_CONTRACT_PARENT"
+                description="COM_PROJECTS_HEAD_CONTRACT_PARENT_DESC"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
                 name="managerID"
                 type="user"
                 label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"

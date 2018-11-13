@@ -21,6 +21,6 @@ ALTER TABLE `#__prj_exp` CHANGE `tip` `tip` VARCHAR(25) CHARACTER SET utf8 COLLA
 ALTER TABLE `#__prj_exp` ADD `checked_out` INT NOT NULL DEFAULT '0' AFTER `title_en`;
 ALTER TABLE `#__prj_exp` ADD `checked_out_time` INT NULL DEFAULT NULL AFTER `checked_out`;
 ALTER TABLE `#__prj_exp` CHANGE `checked_out_time` `checked_out_time` DATETIME NULL DEFAULT NULL;
-ALTER TABLE `stxq0_prj_contracts` ADD `parentID` INT NULL DEFAULT NULL COMMENT 'Родитель для соэкспонентов и демоцентра' AFTER `expID`;
-
+ALTER TABLE `#__prj_contracts` ADD `parentID` INT NULL DEFAULT NULL COMMENT 'Родитель для соэкспонентов и демоцентра' AFTER `expID`;
+ALTER TABLE `#__prj_contracts` ADD FOREIGN KEY (`parentID`) REFERENCES `#__prj_exp`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
