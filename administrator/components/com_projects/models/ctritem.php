@@ -2,7 +2,7 @@
 defined('_JEXEC') or die;
 use Joomla\CMS\MVC\Model\AdminModel;
 
-class ProjectsModelctritem extends AdminModel {
+class ProjectsModelCtritem extends AdminModel {
     public function getTable($name = 'Ctritems', $prefix = 'TableProjects', $options = array())
     {
         return JTable::getInstance($name, $prefix, $options);
@@ -32,7 +32,7 @@ class ProjectsModelctritem extends AdminModel {
 
     protected function prepareTable($table)
     {
-    	$nulls = array('value2'); //Поля, которые NULL
+    	$nulls = array('value2', 'fixed'); //Поля, которые NULL
 
 	    foreach ($nulls as $field)
 	    {

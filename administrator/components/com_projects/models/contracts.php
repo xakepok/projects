@@ -24,7 +24,7 @@ class ProjectsModelContracts extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`c`.`id`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`, `c`.`currency`, `c`.`discount`, `c`.`markup`, `c`.`state`")
+            ->select("`c`.`id`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`, `c`.`currency`, `c`.`discount`, `c`.`markup`, `c`.`amount`, `c`.`state`")
             ->select("`p`.`title` as `project`")
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`")
             ->select("`u`.`name` as `manager`")
@@ -110,12 +110,12 @@ class ProjectsModelContracts extends ListModel
             $arr['group']['title'] = $item->group ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_UNDEFINED');
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            //$amount = $this->getAmount($item);
-            //$arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", $this->getAmount($item), $item->currency);
+            $amount = $item->amount;
+            $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", $amount, $item->currency);
             //$arr['debt'] = ($format != 'html') ? $amount - $this->getDebt($item->id) : sprintf("%s %s", $amount - $this->getDebt($item->id), $item->currency);
             $arr['state'] = $item->state;
             $result['items'][] = $arr;
-            //$result['amount'][$item->currency] += $amount;
+            $result['amount'][$item->currency] += $amount;
         }
         return $result;
     }
