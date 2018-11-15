@@ -13,5 +13,6 @@
 		<action name="projects.manager.edit" title="COM_PROJECTS_ACCESS_MANAGER" description="COM_PROJECTS_ACCESS_MANAGER_DESC" />
 		<action name="projects.group.edit" title="COM_PROJECTS_ACCESS_GROUP" description="COM_PROJECTS_ACCESS_GROUP_DESC" />
 		<action name="projects.exec.edit" title="COM_PROJECTS_ACCESS_EXEC" description="COM_PROJECTS_ACCESS_EXEC_DESC" />
+		<action name="projects.contract.allow" title="COM_PROJECTS_ACCESS_ALLOW_CONTRACT" description="COM_PROJECTS_ACCESS_ALLOW_CONTRACT_DESC" />
 	</section>
 </access>

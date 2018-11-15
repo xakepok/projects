@@ -2,7 +2,7 @@
 // Запрет прямого доступа.
 defined('_JEXEC') or die;
 foreach ($this->items['items'] as $i => $item) :
-    $canChange = JFactory::getUser()->authorise('core.edit.state', 'com_projects.contract.' . $item['id']);
+    $canChange = JFactory::getUser()->authorise('projects.contract.allow', 'com_projects.contract.' . $item['id']);
     ?>
     <tr class="row0">
         <td class="center">

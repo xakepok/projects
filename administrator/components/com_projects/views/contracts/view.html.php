@@ -43,10 +43,12 @@ class ProjectsViewContracts extends HtmlView
         }
         JToolbarHelper::custom('contracts.calculate', '', '', 'COM_PROJECTS_ACTION_CALCULATE_CONTRACT');
         JToolbarHelper::divider();
+        if (Factory::getUser()->authorise('projects.contract.allow', 'com_projects'))
+        {
+            JToolbarHelper::publish('contracts.publish', 'COM_PROJECTS_ACTION_ALLOW_CONTRACT', true);
+        }
         if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
         {
-            JToolbarHelper::publish('contracts.publish', 'JTOOLBAR_PUBLISH', true);
-            JToolbarHelper::unpublish('contracts.unpublish', 'JTOOLBAR_UNPUBLISH', true);
             JToolBarHelper::archiveList('contracts.archive', 'COM_PROJECTS_ACTION_CLOSE_CONTRACT');
             JToolbarHelper::custom('contracts.resetAmount', '', '', 'COM_PROJECTS_ACTION_RESET_CONTRACT');
             //JToolBarHelper::trash('contracts.trash');
