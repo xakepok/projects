@@ -1,13 +1,13 @@
 'use strict';
 window.onload = function () {
     var field1 = document.getElementById("jform_title_ru_short");
-    field1.addEventListener('focusout', checkExp, false);
+    field1.addEventListener('keyup', checkExp, false);
     var field2 = document.getElementById("jform_title_ru_full");
-    field2.addEventListener('focusout', checkExp, false);
+    field2.addEventListener('keyup', checkExp, false);
     var field3 = document.getElementById("jform_title_en");
-    field3.addEventListener('focusout', checkExp, false);
+    field3.addEventListener('keyup', checkExp, false);
     var inn = document.getElementById("jform_inn");
-    inn.addEventListener('focusout', checkExp, false);
+    inn.addEventListener('keyup', checkExp, false);
 };
 
 function checkExp() {
@@ -20,7 +20,7 @@ function checkExp() {
     if (t2.length > 0) title = t2;
     if (t3.length > 0) title = t3;
     if (title === '') return;
-    var url = '/administrator/index.php?option=com_projects&view=exhibitors&filter_search=' + title + '&format=raw';
+    var url = '/administrator/index.php?option=com_projects&view=exhibitors&text=' + title + '&format=raw';
     if (inn !== undefined) url += '&inn=' + inn;
 
     fetch(url)

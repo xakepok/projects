@@ -69,6 +69,13 @@ class ProjectsModelExhibitors extends ListModel
         {
             $query->where("`b`.`inn` LIKE {$inn}");
         }
+        // Фильтруем по названию (для поиска синонимов)
+        $text = JFactory::getApplication()->input->getString('text', '');
+        $text = $db->quote('%' . $db->escape($text, true) . '%', false);
+        if ($text !== '')
+        {
+            $query->where('(`title_ru_full` LIKE ' . $text . ' OR `title_ru_short` LIKE ' . $text . ' OR `title_en` LIKE ' . $text . ')');
+        }
 
         /* Сортировка */
         $orderCol = $this->state->get('list.ordering', '`title_ru_short`');
