@@ -13,6 +13,7 @@ class ProjectsModelExhibitors extends ListModel
                 '`title_ru_short`', '`title_ru_short`',
                 '`title_ru_full`', '`title_ru_full`',
                 '`title_en`', '`title_en`',
+                '`city`', '`city`',
                 '`state`', '`e`.`state`',
             );
         }

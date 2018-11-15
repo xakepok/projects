@@ -12,10 +12,10 @@ foreach ($this->items as $i => $item) :
             <?php echo JHtml::_('jgrid.published', $item['state'], $i, 'exhibitors.', $canChange); ?>
         </td>
         <td>
-            <?php echo $item['region'];?>
+            <?php echo $item['title'];?>
         </td>
         <td>
-            <?php echo $item['title'];?>
+            <?php echo $item['region'];?>
         </td>
         <td>
             <?php echo $item['id']; ?>
