@@ -26,23 +26,28 @@ HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto',
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR')); ?>
                 <div class="row-fluid">
                     <div class="span4">
-                        <?php echo $this->loadTemplate('general'); ?>
+                        <div>
+                            <?php echo $this->loadTemplate('general'); ?>
+                        </div>
+                        <div>
+                            <?php echo $this->loadTemplate('similar'); ?>
+                        </div>
+                    </div>
+                    <div class="span4">
+                        <?php echo $this->loadTemplate('addresses'); ?>
                     </div>
                     <div class="span4">
                         <?php echo $this->loadTemplate('bank'); ?>
-                    </div>
-                    <div class="span4">
-                        <?php echo $this->loadTemplate('similar'); ?>
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'contact', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_CONTACTS')); ?>
                 <div class="row-fluid">
                     <div class="span6">
-                        <?php echo $this->loadTemplate('addresses'); ?>
+                        <?php echo $this->loadTemplate('contacts'); ?>
                     </div>
                     <div class="span6">
-                        <?php echo $this->loadTemplate('contacts'); ?>
+
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
