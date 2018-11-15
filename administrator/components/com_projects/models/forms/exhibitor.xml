@@ -42,14 +42,6 @@
                 class="input-xlarge"
         />
         <field
-                name="regID"
-                type="Region"
-                label="COM_PROJECTS_HEAD_CITY"
-                description="COM_PROJECTS_HEAD_CITY_DESC"
-                required="true"
-                class="input-xlarge"
-        />
-        <field
                 name="state"
                 type="list"
                 label="JSTATUS"
@@ -121,6 +113,14 @@
         />
     </fieldset>
     <fieldset name="addresses">
+        <field
+                name="regID"
+                type="Region"
+                label="COM_PROJECTS_HEAD_CITY"
+                description="COM_PROJECTS_HEAD_CITY_DESC"
+                required="true"
+                class="input-xlarge"
+        />
         <field
                 name="addr_legal_ru"
                 type="text"
