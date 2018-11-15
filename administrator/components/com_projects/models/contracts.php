@@ -13,6 +13,8 @@ class ProjectsModelContracts extends ListModel
                 '`c`.`dat`',  '`c`.`dat`',
                 '`project`',  '`project`',
                 '`manager`',  '`manager`',
+                '`group`',  '`group`',
+                '`e`.`title_ru_short`',  '`e`.`title_ru_short`',
                 '`c`.`state`',  '`c`.`state`',
             );
         }
@@ -32,8 +34,8 @@ class ProjectsModelContracts extends ListModel
             ->from("`#__prj_contracts` as `c`")
             ->leftJoin("`#__prj_projects` AS `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `expID`")
-            ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`")
-            ->leftJoin("`#__usergroups` as `g` ON `g`.`id` = `c`.`groupID`");
+            ->leftJoin("`#__users` as `u` ON `u`.`id` = `p`.`managerID`")
+            ->leftJoin("`#__usergroups` as `g` ON `g`.`id` = `p`.`groupID`");
 
         /* Фильтр */
         $search = $this->getState('filter.search');

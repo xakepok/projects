@@ -32,22 +32,6 @@
                 class="input-xlarge"
         />
         <field
-                name="managerID"
-                type="user"
-                label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
-                description="COM_PROJECTS_HEAD_CONTRACT_MANAGER_DESC"
-                autocomplete="off"
-                class="input-xlarge"
-        />
-        <field
-                name="groupID"
-                type="usergroup"
-                label="COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP"
-                description="COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_DESC"
-                autocomplete="off"
-                class="input-xlarge"
-        />
-        <field
                 name="dat"
                 type="calendar"
                 label="COM_PROJECTS_HEAD_CONTRACT_DATE"

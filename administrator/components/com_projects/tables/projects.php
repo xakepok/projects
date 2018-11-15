@@ -8,6 +8,8 @@ class TableProjectsProjects extends Table
     var $title = null;
     var $title_ru = null;
     var $title_en = null;
+    var $managerID = null;
+    var $groupID = null;
     var $priceID = null;
     var $columnID = null;
     var $date_start = null;

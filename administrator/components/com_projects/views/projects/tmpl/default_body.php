@@ -15,6 +15,18 @@ foreach ($this->items as $i => $item) :
             <?php echo $item['title'];?>
         </td>
         <td>
+            <?php echo $item['manager'];?>
+        </td>
+        <td>
+            <?php echo $item['group'];?>
+        </td>
+        <td>
+            <?php echo $item['price'];?>
+        </td>
+        <td>
+            <?php echo $item['column'];?>
+        </td>
+        <td>
             <?php echo $item['date_start'];?>
         </td>
         <td>
