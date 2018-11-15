@@ -19,7 +19,7 @@ class ProjectsViewContract extends HtmlView {
 
     protected function addToolbar() {
         JFactory::getApplication()->input->set('hidemainmenu', true);
-        $title = JText::sprintf('COM_PROJECTS_BLANK_CONTRACT');
+        $title = ($this->item->id != null) ? $this->get('Title') : JText::sprintf('COM_PROJECTS_TITLE_NEW_CONTRACT');
 
         JToolbarHelper::title($title, '');
 	    JToolBarHelper::apply('contract.apply', 'JTOOLBAR_APPLY');

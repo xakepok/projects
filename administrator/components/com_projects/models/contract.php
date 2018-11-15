@@ -16,6 +16,27 @@ class ProjectsModelContract extends AdminModel {
         return $item;
     }
 
+    /**
+     * Возвращает название экспонента и название проекта, по которому проводится сделка
+     * Используется в Title вьюшки
+     * @return string
+     * @since 1.2.9.5
+     */
+    public function getTitle():string
+    {
+        $item = parent::getItem();
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`c`.`number`, `c`.`status`, `e`.`title_ru_short` as `exponent`, `p`.`title` as `project`")
+            ->from("`#__prj_contracts` as `c`")
+            ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
+            ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
+            ->where("`c`.`id` = {$item->id}");
+        $title = $db->setQuery($query, 0, 1)->loadObject();
+        return ($title->status =='1') ? JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_ACCEPT', $title->number, $title->exponent, $title->project) : JText::sprintf('COM_PROJECTS_TITLE_CONTRACT', $title->exponent, $title->project);
+    }
+
     public function getForm($data = array(), $loadData = true)
     {
         $form = $this->loadForm(
