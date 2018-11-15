@@ -26,7 +26,7 @@ class JFormFieldRegion extends JFormFieldGroupedList
                 if (!isset($options[$p->region])) {
                     $options[$p->region] = array();
                 }
-                $name = sprintf("%s (%s)", $p->city, $p->country);
+                $name = sprintf("%s (%s, %s)", $p->city, $p->region, $p->country);
                 $options[$p->region][] = JHtml::_('select.option', $p->id, $name);
             }
         }
