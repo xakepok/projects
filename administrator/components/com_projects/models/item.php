@@ -8,6 +8,23 @@ class ProjectsModelItem extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    public function getItem($pk = null)
+    {
+        $item = parent::getItem($pk);
+        $item->column_1 = (int) ($item->column_1 * 100 - 100);
+        $item->column_2 = (int) ($item->column_2 * 100 - 100);
+        $item->column_3 = (int) ($item->column_3 * 100 - 100);
+        return $item;
+    }
+
+    public function save($data)
+    {
+        $data['column_1'] = (float) (100 + $data['column_1']) / 100;
+        $data['column_2'] = (float) (100 + $data['column_2']) / 100;
+        $data['column_3'] = (float) (100 + $data['column_3']) / 100;
+        return parent::save($data);
+    }
+
     /**
      * Возвращает название прайс-листа для показа в заголовке
      * @return string Название прайс-листа

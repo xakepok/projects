@@ -10,24 +10,13 @@ class TableProjectsItems extends Table
     var $unit_2 = null;
     var $title_ru = null;
     var $title_en = null;
-    var $price_rub_u1_c1 = null;
-    var $price_usd_u1_c1 = null;
-    var $price_eur_u1_c1 = null;
-    var $price_rub_u2_c1 = null;
-    var $price_usd_u2_c1 = null;
-    var $price_eur_u2_c1 = null;
-    var $price_rub_u1_c2 = null;
-    var $price_usd_u1_c2 = null;
-    var $price_eur_u1_c2 = null;
-    var $price_rub_u2_c2 = null;
-    var $price_usd_u2_c2 = null;
-    var $price_eur_u2_c2 = null;
-    var $price_rub_u1_c3 = null;
-    var $price_usd_u1_c3 = null;
-    var $price_eur_u1_c3 = null;
-    var $price_rub_u2_c3 = null;
-    var $price_usd_u2_c3 = null;
-    var $price_eur_u2_c3 = null;
+    var $price_rub = null;
+    var $price_usd = null;
+    var $price_eur = null;
+    var $column_1 = null;
+    var $column_2 = null;
+    var $column_3 = null;
+    var $is_markup = null;
     var $state = null;
 
     public function __construct(JDatabaseDriver $db)

@@ -247,10 +247,9 @@ class ProjectsModelContract extends AdminModel {
         $result = array();
         $query = $db->getQuery(true);
         $query
-            ->select("`i`.`id`, `i`.`unit`, `unit_2` as `isUnit2`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`")
+            ->select("`i`.`id`, `i`.`unit`, `unit_2` as `isUnit2`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `i`.`is_markup`")
             ->select("IFNULL(`i`.`title_ru`,`i`.`title_en`) as `title`")
-            ->select("`i`.`price_{$currency}_u1_c{$columnID}` as `cost`")
-            ->select("`i`.`price_{$currency}_u2_c{$columnID}` as `cost2`")
+            ->select("`i`.`price_{$currency}`*`i`.`column_{$columnID}` as `cost`")
             ->from("`#__prc_items` as `i`")
             ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
             ->leftJoin("`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`")
@@ -263,15 +262,14 @@ class ProjectsModelContract extends AdminModel {
             $arr['title'] = $item->title;
             $arr['cost'] = sprintf("%s %s", $item->cost, $currency);
             $arr['cost_clean'] = $item->cost;
-            $arr['cost2'] = sprintf("%s %s", $item->cost2, $currency);
-            $arr['cost2_clean'] = $item->cost2;
             $arr['unit'] = ProjectsHelper::getUnit($item->unit);
             $arr['unit2'] = ProjectsHelper::getUnit($item->unit_2);
             $arr['isUnit2'] = $item->isUnit2;
             $arr['value'] = $values[$item->id]['value'];
             $arr['value2'] = $values[$item->id]['value2'];
-            $arr['factor'] = $values[$item->id]['factor'];
-            $arr['factor2'] = $values[$item->id]['factor2'];
+            $arr['is_markup'] = $item->is_markup;
+            $arr['markup'] = (float) ($values[$item->id]['markup'] != null) ? (float) $values[$item->id]['markup'] * 100 - 100 : 0;
+            $arr['factor'] = (int) ($values[$item->id]['factor'] != null) ? 100 - $values[$item->id]['factor'] * 100 : 0;
             $arr['fixed'] = $values[$item->id]['fixed'];
             $result[] = $arr;
         }
@@ -291,109 +289,28 @@ class ProjectsModelContract extends AdminModel {
         if (empty($post)) return true;
         $model = AdminModel::getInstance('Ctritem', 'ProjectsModel');
         $table = $model->getTable();
-        foreach ($post[1]['item'] as $itemID => $value) {
-            $pks = array('contractID' => $contractID, 'itemID' => $itemID);
+        $columnID = ProjectsHelper::getActivePriceColumn($contractID);
+
+        foreach ($post as $itemID => $values) {
+            $pks = array('contractID' => $contractID, 'columnID' => $columnID, 'itemID' => $itemID);
             $row = $model->getItem($pks);
             $arr = array();
+            $arr['id'] = ($row->id != null) ? $row->id : null;
             $arr['contractID'] = $contractID;
             $arr['itemID'] = $itemID;
-            $arr['value'] = $value;
-            if ($row->id != null)
+            $arr['columnID'] = $columnID;
+            foreach ($values as $field => $value)
             {
-                if ($value == '')
-                {
-                    $model->delete($row->id);
-                }
-                else
-                {
-                    $arr['id'] = $row->id;
-                    $table->bind($arr);
-                    $model->save($arr);
-                }
+                if ($field == 'factor' && $value != null) $arr['factor'] = (float) (100 - $value) / 100;
+                if ($field == 'markup' && $value != null) $arr['markup'] = (float) (100 + $value) / 100;
+                if ($field == 'value' && $value != null) $arr['value'] = $value;
+                if ($field == 'value2' && $value != null) $arr['value2'] = $value;
             }
-            else {
-                $arr['id'] = null;
-                $table->bind($arr);
-                $model->save($arr);
-            }
-        }
-        foreach ($post[2]['item'] as $itemID => $value) {
-            $pks = array('contractID' => $contractID, 'itemID' => $itemID);
-            $row = $model->getItem($pks);
-            $arr = array();
-            $arr['contractID'] = $contractID;
-            $arr['itemID'] = $itemID;
-            $arr['value2'] = $value;
-            if ($row->id != null)
-            {
-                if ($value == '')
-                {
-                    $model->delete($row->id);
-                }
-                else
-                {
-                    $arr['id'] = $row->id;
-                    $table->bind($arr);
-                    $model->save($arr);
-                }
-            }
-            else {
-                $arr['id'] = null;
-                $table->bind($arr);
-                $model->save($arr);
-            }
-        }
-        foreach ($post[1]['factor'] as $itemID => $value) {
-            $pks = array('contractID' => $contractID, 'itemID' => $itemID);
-            $row = $model->getItem($pks);
-            $arr = array();
-            $arr['contractID'] = $contractID;
-            $arr['itemID'] = $itemID;
-            $arr['factor'] = $value;
-            if ($row->id != null)
-            {
-                if ($value == '')
-                {
-                    $model->delete($row->id);
-                }
-                else
-                {
-                    $arr['id'] = $row->id;
-                    $table->bind($arr);
-                    $model->save($arr);
-                }
-            }
-            else {
-                $arr['id'] = null;
-                $table->bind($arr);
-                $model->save($arr);
-            }
-        }
-        foreach ($post[2]['factor'] as $itemID => $value) {
-            $pks = array('contractID' => $contractID, 'itemID' => $itemID);
-            $row = $model->getItem($pks);
-            $arr = array();
-            $arr['contractID'] = $contractID;
-            $arr['itemID'] = $itemID;
-            $arr['factor2'] = $value;
-            if ($row->id != null)
-            {
-                if ($value == '')
-                {
-                    $model->delete($row->id);
-                }
-                else
-                {
-                    $arr['id'] = $row->id;
-                    $table->bind($arr);
-                    $model->save($arr);
-                }
-            }
-            else {
-                $arr['id'] = null;
-                $table->bind($arr);
-                $model->save($arr);
-            }
+            if (!isset($arr['markup'])) $arr['markup'] = NULL;
+            if (!isset($arr['value2'])) $arr['value2'] = NULL;
+            $table->bind($arr);
+            $model->save($arr);
+            unset($arr);
         }
         return true;
     }

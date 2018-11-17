@@ -21,6 +21,24 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает активную колонку прайса для указанной сделки
+     * @param int $contractID ID контракта
+     * @return int ID колонки
+     * @since 1.2.9.5
+     */
+    public static function getActivePriceColumn(int $contractID): int
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("IFNULL(`p`.`columnID`,1) as `column`")
+            ->from("`#__prj_contracts` as `c`")
+            ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
+            ->where("`c`.`id` = {$contractID}");
+        return $db->setQuery($query)->loadResult();
+    }
+
+    /**
      * Возвращает текстовый статус счёта
      * @param int $state
      * @return string

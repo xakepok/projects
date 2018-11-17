@@ -21,24 +21,14 @@ HTMLHelper::_('script', $this->script);
             <div class="tab-content">
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::sprintf('COM_PROJECTS_BLANK_ITEM')); ?>
                 <div class="row-fluid">
-                    <div class="span6">
+                    <div class="span4">
                         <?php echo $this->loadTemplate('general'); ?>
                     </div>
-                    <div class="span6">
-
-                    </div>
-                </div>
-                <?php echo JHtml::_('bootstrap.endTab'); ?>
-                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'contact', JText::sprintf('COM_PROJECTS_BLANK_ITEM_COSTS')); ?>
-                <div class="row-fluid">
                     <div class="span4">
-                        <?php echo $this->loadTemplate('column1'); ?>
+                        <?php echo $this->loadTemplate('amounts'); ?>
                     </div>
                     <div class="span4">
-                        <?php echo $this->loadTemplate('column2'); ?>
-                    </div>
-                    <div class="span4">
-                        <?php echo $this->loadTemplate('column3'); ?>
+                        <?php echo $this->loadTemplate('columns'); ?>
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>

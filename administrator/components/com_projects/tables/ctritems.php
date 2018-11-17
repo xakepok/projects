@@ -13,8 +13,9 @@ class TableProjectsCtritems extends Table
     var $id = null;
     var $contractID = null;
     var $itemID = null;
+    var $columnID = null;
     var $factor = null;
-    var $factor2 = null;
+    var $markup = null;
     var $value = null;
     var $value2 = null;
     var $fixed = null;
