@@ -26,7 +26,7 @@ class ProjectsModelContracts extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`c`.`id`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`, `c`.`currency`, `c`.`discount`, `c`.`markup`, `c`.`amount`, `c`.`state`")
+            ->select("`c`.`id`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`, `c`.`currency`, `c`.`amount`, `c`.`state`")
             ->select("`p`.`title` as `project`")
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`")
             ->select("`u`.`name` as `manager`")

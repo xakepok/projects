@@ -51,19 +51,6 @@
             <option value="eur">COM_PROJECTS_HEAD_ITEM_PRICE_EUR</option>
         </field>
         <field
-                name="discount"
-                type="integer"
-                label="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT"
-                description="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT_DESC"
-                step="1"
-                first="0"
-                last="100"
-                default="0"
-                required="true"
-                autocomplete="off"
-                class="input-xlarge"
-        />
-        <field
                 name="status"
                 type="list"
                 label="COM_PROJECTS_HEAD_CONTRACT_STATUS"

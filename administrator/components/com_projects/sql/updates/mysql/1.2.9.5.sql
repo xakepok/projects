@@ -54,4 +54,7 @@ COMMENT 'Есть ли наценка за позиционирование'
   AFTER `column_3`;
 ALTER TABLE `#__prj_contract_items`
   DROP INDEX `contractID_2`;
+ALTER TABLE `#__prj_contracts`
+  DROP `discount`,
+  DROP `markup`;
 COMMIT;

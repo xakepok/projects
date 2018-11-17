@@ -10,8 +10,6 @@ class TableProjectsContracts extends Table
     var $parentID = null;
     var $dat = null;
     var $currency = null;
-    var $discount = null;
-    var $markup = null;
     var $status = null;
     var $number = null;
     var $state = null;
