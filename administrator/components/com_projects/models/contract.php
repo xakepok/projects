@@ -309,8 +309,15 @@ class ProjectsModelContract extends AdminModel {
             if (!isset($arr['markup'])) $arr['markup'] = NULL;
             if (!isset($arr['value2'])) $arr['value2'] = NULL;
             if (!isset($arr['value'])) continue;
-            $table->bind($arr);
-            $model->save($arr);
+
+            if (!$table->bind($arr))
+            {
+                exit(var_dump($arr));
+            }
+            if (!$model->save($arr))
+            {
+                exit(var_dump($model->getErrors()));
+            }
             unset($arr);
         }
         return true;

@@ -27,8 +27,8 @@ class ProjectsModelContracts extends ListModel
         $query = $db->getQuery(true);
         $query
             ->select("`c`.`id`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`, `c`.`currency`, `c`.`amount`, `c`.`state`")
-            ->select("`p`.`title` as `project`")
-            ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`")
+            ->select("`p`.`title` as `project`, `p`.`id` as `projectID`")
+            ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
             ->select("`u`.`name` as `manager`")
             ->select("`g`.`title` as `group`")
             ->from("`#__prj_contracts` as `c`")
@@ -101,14 +101,18 @@ class ProjectsModelContracts extends ListModel
             $ids[] = $item->id;
             $arr['id'] = $item->id;
             $arr['dat'] = $item->dat;
-            $arr['project'] = $item->project;
+            $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}");
+            $arr['project'] = ($format != 'html') ? $item->project : JHtml::link($url, $item->project);
             $arr['currency'] = $item->currency;
             $url = JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->id}");
             if ($format == 'html') $arr['edit_link'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_GO'));
             $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;filter_contract={$item->id}");
             $link = JHtml::link($url, JText::sprintf('COM_PROJECTS_HEAD_TODO_TODOS'));
             if ($format == 'html') $arr['todo'] = $link;
-            $arr['exponent'] = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+            $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->exponentID}");
+            $exponentName = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+            $exponentUrl = JHtml::link($url, $exponentName);
+            $arr['exponent'] = ($format != 'html') ? $exponentName : $exponentUrl;
             $arr['manager']['title'] = $item->manager ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MANAGER_UNDEFINED');
             $arr['manager']['class'] = (!empty($item->manager)) ? '' : 'no-data';
             $arr['group']['title'] = $item->group ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_UNDEFINED');
