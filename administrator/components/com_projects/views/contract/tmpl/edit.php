@@ -37,6 +37,15 @@ HTMLHelper::_('script', $this->script);
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php if ($this->item->id != null): ?>
+                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'todos', JText::sprintf('COM_PROJECTS_BLANK_TODOS')); ?>
+                    <div class="row-fluid">
+                        <div>
+                            <?php echo $this->loadTemplate('todos');?>
+                        </div>
+                    </div>
+                    <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php endif;?>
             </div>
             <?php echo JHtml::_('bootstrap.endTabSet'); ?>
         </div>

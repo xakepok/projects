@@ -11,9 +11,35 @@ class ProjectsModelContract extends AdminModel {
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
-        $item->discount = (int) (100 - $item->discount * 100); //Переводим значение скидки в проценты
-        $item->markup = (int) ($item->markup * 100 - 100); //Переводим значение наценки в проценты
         return $item;
+    }
+
+    /**
+     * Возвращает список заданий из планировщика для указанной сделки
+     * @param int $contractID
+     * @return array
+     * @since 1.2.9.7
+     */
+    public function getTodos(): array
+    {
+        $result = array();
+        $item = parent::getItem();
+        if ($item->id == null) return $result;
+        $todos = ProjectsHelper::getContractTodo($item->id);
+        $return = base64_encode(JUri::base()."index.php?option=com_projects&view=contract&layout=edit&id={$item->id}");
+        foreach ($todos as $todo) {
+            $arr = array();
+            $arr['action'] = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;id={$todo->id}&amp;layout=edit&amp;return={$return}");
+            $arr['id'] = $todo->id;
+            $arr['dat'] = $todo->dat;
+            $arr['task'] = $todo->task;
+            $arr['user'] = $todo->user;
+            $arr['result'] = $todo->result;
+            $arr['state'] = $todo->state;
+            $arr['expired'] = (bool) $todo->expired;
+            $result[] = $arr;
+        }
+        return $result;
     }
 
     /**
@@ -85,8 +111,6 @@ class ProjectsModelContract extends AdminModel {
 
     public function save($data)
     {
-        $data['discount'] = (float) (100 - $data['discount']) / 100; //Переводим значение скидки в коэффициент
-        $data['markup'] = (float) (100 + $data['markup']) / 100; //Переводим значение наценки в коэффициент
         $this->saveHistory($data['id'], $data['status']);
         $s1 = parent::save($data);
         $s2 = $this->savePrice();

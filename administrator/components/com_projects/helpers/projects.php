@@ -77,6 +77,26 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает список заданий из планировщика для указанной сделки
+     * @param int $contractID
+     * @return array
+     * @since 1.2.9.7
+     */
+    public static function getContractTodo(int $contractID): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`t`.`id`, DATE_FORMAT(`t`.`dat`,'%d.%m.%Y') as `dat`, `u`.`name` as `user`, `t`.`task`, `t`.`result`, `t`.`state`")
+            ->select("IF(`t`.`dat`<CURRENT_DATE(),IF(`t`.`state`=0,'1','0'),'0') as `expired`")
+            ->from("`#__prj_todos` as `t`")
+            ->leftJoin("`#__users` as `u` ON `u`.`id` = IF(`t`.`state`!=0,`t`.`userClose`,`t`.`managerID`)")
+            ->where("`t`.`contractID` = {$contractID}")
+            ->order("`t`.`state` asc");
+        return $db->setQuery($query)->loadObjectList();
+    }
+
+    /**
      * Проверяет возможность использовать указанный номер в договоре
      * @param   int $number   Номер договора
      * @return boolean

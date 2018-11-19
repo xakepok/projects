@@ -19,12 +19,34 @@ class ProjectsViewTodo extends HtmlView {
 
     protected function addToolbar() {
         JFactory::getApplication()->input->set('hidemainmenu', true);
-        $title = $this->item->task ?? JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO');
+        $title = $this->setTitle();
 
         JToolbarHelper::title($title, '');
 	    JToolBarHelper::apply('todo.apply', 'JTOOLBAR_APPLY');
         JToolbarHelper::save('todo.save', 'JTOOLBAR_SAVE');
         JToolbarHelper::cancel('todo.cancel', 'JTOOLBAR_CLOSE');
+    }
+
+    protected function setTitle(): string
+    {
+        if ($this->item->id == null)
+        {
+            $session = JFactory::getSession();
+            if ($session->get('contractID') != null)
+            {
+                $contractID = $session->get('contractID');
+                $title = JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO_FOR_CONTRACT', $contractID);
+            }
+            else
+            {
+                $title = JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO');
+            }
+        }
+        else
+        {
+            $title = $this->item->task;
+        }
+        return $title;
     }
 
     protected function setDocument() {

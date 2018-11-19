@@ -39,9 +39,9 @@ class ProjectsModelHistory extends AdminModel {
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("DATE_FORMAT(`h`.`dat`,'%d.%m.%Y %k:%i') as `dat`, `h`.`status`")
+            ->select("DATE_FORMAT(`h`.`dat`,'%d.%m.%Y %k:%i') as `dat`, DATE_FORMAT(`h`.`dat`,'%Y') as `year`, `h`.`status`")
             ->select("`u`.`name` as `manager`")
-            ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`")
+            ->select("`p`.`title` as `project`")
             ->from("`#__prj_exp_history` as `h`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `h`.`contractID`")
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")

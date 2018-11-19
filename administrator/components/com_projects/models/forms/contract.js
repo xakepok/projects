@@ -29,3 +29,17 @@ function unlockParent() {
 function lockParent() {
     jQuery('#jform_parentID').val('').prop('disabled', true).trigger("liszt:updated");
 }
+function closeTask(id) {
+    var result = document.querySelector("input[name='result_" + id + "']").value;
+    fetch('/administrator/index.php?option=com_projects&task=todos.close&id=' + id + '&result=' + result)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (text) {
+            var td = document.querySelector('.resultTodo_' + id);
+            td.innerText = text.data.dat + ": " + text.data.user+ " " + result;
+        })
+        .catch(function (error) {
+            console.log('Request failed', error);
+        });
+}

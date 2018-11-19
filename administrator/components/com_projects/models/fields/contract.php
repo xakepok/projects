@@ -19,6 +19,14 @@ class JFormFieldContract extends JFormFieldList
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
             ->order("`c`.`id`");
+        $session = JFactory::getSession();
+        $view = JFactory::getApplication()->input->getString('view', '');
+        if ($view == 'todo' && $session->get('contractID') != null)
+        {
+            $contractID = $session->get('contractID');
+            $query->where("`c`.`id` = {$contractID}");
+            $session->clear('contractID');
+        }
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();

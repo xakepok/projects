@@ -57,6 +57,23 @@ class ProjectsModelTodo extends AdminModel {
         return parent::save($data);
     }
 
+    /**
+     * Закрывает задачу. Используется для асинхронного запроса из вьюшки со сделкой
+     * @since 1.2.9.6
+     * @return boolean
+     * @throws
+     */
+    public function close()
+    {
+        $data['userClose'] = JFactory::getUser()->id;
+        $data['dat_close'] = date("Y-m-d H:i:s");
+        $data['result'] = JFactory::getDbo()->escape(JFactory::getApplication()->input->getString('result'));
+        $data['id'] = JFactory::getDbo()->escape(JFactory::getApplication()->input->getInt('id', 0));
+        $data['state'] = '1';
+        if ($data['id'] == 0) return false;
+        return parent::save($data);
+    }
+
     protected function prepareTable($table)
     {
     	$nulls = array('userClose', 'result', 'dat_close'); //Поля, которые NULL

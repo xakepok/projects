@@ -4,6 +4,12 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
 $noedit = array('jform[task]','jform[contractID]','jform[dat]');
+$action = JRoute::_('index.php?option=com_projects&amp;view=todo&amp;layout=edit&amp;id=' . (int)$this->item->id);
+$return = JFactory::getApplication()->input->get('return', null);
+if ($return != null)
+{
+    $action .= "&amp;return={$return}";
+}
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function(task) {
@@ -12,7 +18,7 @@ $noedit = array('jform[task]','jform[contractID]','jform[dat]');
         }
     }
 </script>
-<form action="<?php echo JRoute::_('index.php?option=com_projects&amp;view=todo&amp;layout=edit&amp;id=' . (int)$this->item->id); ?>"
+<form action="<?php echo $action; ?>"
       method="post" name="adminForm" id="adminForm" xmlns="http://www.w3.org/1999/html" class="form-validate">
     <div class="row-fluid">
         <div class="span12 form-horizontal">
