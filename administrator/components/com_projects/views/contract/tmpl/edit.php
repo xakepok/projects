@@ -6,6 +6,7 @@ JHtml::_('behavior.keepalive');
 JHtml::_('formbehavior.chosen', 'select');
 use Joomla\CMS\HTML\HTMLHelper;
 HTMLHelper::_('script', $this->script);
+HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto', 'relative' => true));
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function(task) {
@@ -32,8 +33,11 @@ HTMLHelper::_('script', $this->script);
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'price', JText::sprintf('COM_PROJECTS_BLANK_CONTRACT_PRICE')); ?>
                 <div class="row-fluid">
-                    <div>
+                    <div class="span6">
                         <?php echo $this->loadTemplate('price');?>
+                    </div>
+                    <div class="span6 price_summary">
+                        <?php echo $this->loadTemplate('summary');?>
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>

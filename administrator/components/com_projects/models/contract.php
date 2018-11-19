@@ -285,6 +285,7 @@ class ProjectsModelContract extends AdminModel {
             $arr['id'] = $item->id;
             $arr['title'] = $item->title;
             $arr['cost'] = sprintf("%s %s", $item->cost, $currency);
+            $arr['currency'] = $currency;
             $arr['cost_clean'] = $item->cost;
             $arr['unit'] = ProjectsHelper::getUnit($item->unit);
             $arr['unit2'] = ProjectsHelper::getUnit($item->unit_2);
@@ -295,6 +296,12 @@ class ProjectsModelContract extends AdminModel {
             $arr['markup'] = (float) ($values[$item->id]['markup'] != null) ? (float) $values[$item->id]['markup'] * 100 - 100 : 0;
             $arr['factor'] = (int) ($values[$item->id]['factor'] != null) ? 100 - $values[$item->id]['factor'] * 100 : 0;
             $arr['fixed'] = $values[$item->id]['fixed'];
+            $sum = 0;
+            if ($values[$item->id]['value']) $sum += $values[$item->id]['value'] * round($item->cost);
+            if ($values[$item->id]['value2'] != null) $sum = $sum * round($values[$item->id]['value2']);
+            if ($values[$item->id]['factor'] != null) $sum = $sum * $values[$item->id]['factor'];
+            if ($values[$item->id]['markup'] != null) $sum = $sum * $values[$item->id]['markup'];
+            $arr['sum'] = round($sum);
             $result[] = $arr;
         }
         return $result;

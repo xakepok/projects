@@ -118,8 +118,10 @@ class ProjectsModelContracts extends ListModel
             $arr['group']['title'] = $item->group ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_UNDEFINED');
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            $amount = $item->amount;
+            //$amount = $item->amount;
+            $amount = $this->getAmount($item);
             $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", $amount, $item->currency);
+            $arr['amount_only'] = $amount; //Только цена
             //$arr['debt'] = ($format != 'html') ? $amount - $this->getDebt($item->id) : sprintf("%s %s", $amount - $this->getDebt($item->id), $item->currency);
             $arr['state'] = $item->state;
             $result['items'][] = $arr;
@@ -168,7 +170,7 @@ class ProjectsModelContracts extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("ROUND(SUM(IFNULL(`i`.`price_{$item->currency}`,0)*`v`.`value`)*{$item->discount}*{$item->markup}, 2) as `amount`")
+            ->select("ROUND(SUM(`i`.`price_{$item->currency}`*`v`.`value`*(CASE WHEN `v`.`columnID`='1' THEN `i`.`column_1` WHEN `v`.`columnID`='2' THEN `i`.`column_2` WHEN `v`.`columnID`='3' THEN `i`.`column_3` END)*IFNULL(`v`.`markup`,1)*IFNULL(`v`.`factor`,1)*IFNULL(`v`.`value2`,1)), 2) as `amount`")
             ->from("`#__prj_contract_items` as `v`")
             ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `v`.`itemID`")
             ->where("`v`.`contractID` = {$item->id}");

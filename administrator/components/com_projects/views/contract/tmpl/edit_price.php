@@ -46,9 +46,11 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                             name="jform[price][<?php echo $item['id']; ?>][value]"
                             id="price_<?php echo $item['id']; ?>"
                             value="<?php echo $item['value']; ?>"
+                            data-cost="<?php echo $item['cost_clean']; ?>"
                             class="input"
                             placeholder=""
                             autocomplete="off"
+                            onkeyup="getSum(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>');"
                         <?php if ($item['fixed']) echo "disabled "; ?>
                             style="width: 50px;"
                             aria-invalid="false"/>&nbsp;
@@ -64,6 +66,8 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                                 class="input"
                                 placeholder=""
                                 autocomplete="off"
+                                onkeyup="getSum(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>');"
+                                onchange="getSum(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>');"
                             <?php if ($item['fixed']) echo "disabled "; ?>
                                 style="width: 50px;"
                                 aria-invalid="false"/>&nbsp;
@@ -81,6 +85,7 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                             class="input"
                             placeholder="1.0"
                             autocomplete="off"
+                            onkeyup="getSum(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>');"
                         <?php if ($item['fixed']) echo "disabled "; ?>
                             style="width: 50px;"
                             aria-invalid="false"/>&nbsp;%
@@ -92,6 +97,7 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                                 id="markup_<?php echo $item['id']; ?>"
                                 class="input"
                                 autocomplete="off"
+                                onchange="getSum(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>');"
                             <?php if ($item['fixed']) echo "disabled "; ?>
                                 aria-invalid="false">
                             <option value="0" <?php if ($item['markup'] == 0 || $item['markup'] == null) echo 'selected'; ?>><?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MARKUP_0');?></option>

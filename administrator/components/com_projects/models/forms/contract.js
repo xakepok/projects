@@ -43,3 +43,34 @@ function closeTask(id) {
             console.log('Request failed', error);
         });
 }
+function getSum(id, currency) {
+    var sum = 0;
+    var field = parseFloat(document.querySelector("#price_" + id).dataset.cost);
+    var value = parseInt(document.querySelector("#price_" + id).value);
+    sum = field * value;
+    field = document.querySelector("#value2_" + id);
+    if (field !== null)
+    {
+        sum = sum * parseInt(field.value);
+    }
+    field = document.querySelector("#factor_" + id);
+    if (field !== null)
+    {
+        sum = sum * parseFloat((100 - parseInt(field.value)) / 100);
+    }
+    field = document.querySelector("#markup_" + id);
+    if (field !== null)
+    {
+        sum = sum * parseFloat((100 + parseInt(field.options[field.selectedIndex].value)) / 100);
+    }
+    sum = Math.round(sum);
+    document.querySelector("#sum_" + id).innerHTML = sum;
+    document.querySelector("#currency_" + id).innerHTML = currency;
+    var amounts = document.querySelectorAll(".amounts");
+    sum = 0;
+    for (var i = 0; i < amounts.length; i++)
+    {
+        if (amounts[i].innerText !== "") sum = sum + parseFloat(amounts[i].innerText);
+    }
+    document.querySelector("#sum_amount").innerHTML = sum + " " + currency;
+}
