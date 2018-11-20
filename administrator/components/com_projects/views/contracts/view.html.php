@@ -44,7 +44,7 @@ class ProjectsViewContracts extends HtmlView
         JToolbarHelper::divider();
         if (Factory::getUser()->authorise('projects.contract.allow', 'com_projects'))
         {
-            JToolbarHelper::publish('contracts.publish', 'COM_PROJECTS_ACTION_ALLOW_CONTRACT', true);
+            JToolbarHelper::custom('contracts.getNumber', '', '', 'COM_PROJECTS_ACTION_CONTRACT_SET_NUMBER');
             JToolbarHelper::custom('contracts.calculate', '', '', 'COM_PROJECTS_ACTION_CALCULATE_CONTRACT');
         }
         if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
