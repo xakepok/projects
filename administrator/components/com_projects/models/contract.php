@@ -271,7 +271,7 @@ class ProjectsModelContract extends AdminModel {
         $result = array();
         $query = $db->getQuery(true);
         $query
-            ->select("`i`.`id`, `i`.`unit`, `unit_2` as `isUnit2`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `i`.`is_markup`")
+            ->select("`i`.`id`, `i`.`unit`, `unit_2` as `isUnit2`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `i`.`is_factor`, `i`.`is_markup`")
             ->select("IFNULL(`i`.`title_ru`,`i`.`title_en`) as `title`")
             ->select("`i`.`price_{$currency}`*`i`.`column_{$columnID}` as `cost`")
             ->from("`#__prc_items` as `i`")
@@ -294,6 +294,7 @@ class ProjectsModelContract extends AdminModel {
             $arr['value2'] = $values[$item->id]['value2'];
             $arr['is_markup'] = $item->is_markup;
             $arr['markup'] = (float) ($values[$item->id]['markup'] != null) ? (float) $values[$item->id]['markup'] * 100 - 100 : 0;
+            $arr['is_factor'] = $item->is_factor;
             $arr['factor'] = (int) ($values[$item->id]['factor'] != null) ? 100 - $values[$item->id]['factor'] * 100 : 0;
             $arr['fixed'] = $values[$item->id]['fixed'];
             $sum = 0;

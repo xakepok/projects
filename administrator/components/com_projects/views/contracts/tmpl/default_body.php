@@ -12,6 +12,9 @@ foreach ($this->items['items'] as $i => $item) :
             <?php echo JHtml::_('jgrid.published', $item['state'], $i, 'contracts.', $canChange); ?>
         </td>
         <td>
+            <?php echo $item['number'];?>
+        </td>
+        <td>
             <?php echo $item['edit_link'];?>
         </td>
         <td>

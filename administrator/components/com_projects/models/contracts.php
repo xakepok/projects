@@ -14,6 +14,7 @@ class ProjectsModelContracts extends ListModel
                 '`project`',  '`project`',
                 '`manager`',  '`manager`',
                 '`group`',  '`group`',
+                '`c`.`number`',  '`c`.`number`',
                 '`e`.`title_ru_short`',  '`e`.`title_ru_short`',
                 '`c`.`state`',  '`c`.`state`',
             );
@@ -26,7 +27,7 @@ class ProjectsModelContracts extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`c`.`id`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`, `c`.`currency`, `c`.`amount`, `c`.`state`")
+            ->select("`c`.`id`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`number`, `c`.`status`, `c`.`currency`, `c`.`amount`, `c`.`state`")
             ->select("`p`.`title` as `project`, `p`.`id` as `projectID`")
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
             ->select("`u`.`name` as `manager`")
@@ -113,6 +114,7 @@ class ProjectsModelContracts extends ListModel
             $exponentName = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $exponentUrl = JHtml::link($url, $exponentName);
             $arr['exponent'] = ($format != 'html') ? $exponentName : $exponentUrl;
+            $arr['number'] = $item->number;
             $arr['manager']['title'] = $item->manager ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MANAGER_UNDEFINED');
             $arr['manager']['class'] = (!empty($item->manager)) ? '' : 'no-data';
             $arr['group']['title'] = $item->group ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_UNDEFINED');

@@ -17,7 +17,7 @@ $sum = 0;
         </thead>
         <tbody>
         <?php foreach ($this->price as $item) :
-            if ($item['value'] == null) continue;
+            //if ($item['value'] == null) continue;
             $currency = $item['currency'];
             $sum += $item['sum'];
             ?>
