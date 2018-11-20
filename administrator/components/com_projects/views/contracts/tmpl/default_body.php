@@ -4,7 +4,7 @@ defined('_JEXEC') or die;
 foreach ($this->items['items'] as $i => $item) :
     $canChange = JFactory::getUser()->authorise('projects.contract.allow', 'com_projects.contract.' . $item['id']);
     ?>
-    <tr class="row0">
+    <tr class="row0" style="color: <?php echo ($item['plan'] < 1) ? 'red' : 'black';?>">
         <td class="center">
             <?php echo JHtml::_('grid.id', $i, $item['id']); ?>
         </td>
@@ -24,7 +24,7 @@ foreach ($this->items['items'] as $i => $item) :
             <?php echo $item['exponent'];?>
         </td>
         <td>
-            <?php echo $item['todo'];?>
+            <?php echo $item['plan'];?>
         </td>
         <td>
             <?php echo $item['dat'];?>

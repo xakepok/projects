@@ -23,7 +23,7 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_EXPONENT', '`e`.`title_ru_short`', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_TODOS'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_ACTIVE_TODOS', '`plan`', $listDirn, $listOrder); ?>
     </th>
     <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_DATE', '`c`.`dat`', $listDirn, $listOrder); ?>

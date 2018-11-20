@@ -14,6 +14,8 @@ class ProjectsModelContracts extends ListModel
                 '`project`',  '`project`',
                 '`manager`',  '`manager`',
                 '`group`',  '`group`',
+                '`plan`',  '`plan`',
+                '`plan_dat`',  '`plan_dat`',
                 '`c`.`number`',  '`c`.`number`',
                 '`e`.`title_ru_short`',  '`e`.`title_ru_short`',
                 '`c`.`state`',  '`c`.`state`',
@@ -30,8 +32,8 @@ class ProjectsModelContracts extends ListModel
             ->select("`c`.`id`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`number`, `c`.`status`, `c`.`currency`, `c`.`amount`, `c`.`state`")
             ->select("`p`.`title` as `project`, `p`.`id` as `projectID`")
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
-            ->select("`u`.`name` as `manager`")
-            ->select("`g`.`title` as `group`")
+            ->select("`u`.`name` as `manager`, (SELECT MIN(`dat`) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan_dat`")
+            ->select("`g`.`title` as `group`, (SELECT COUNT(*) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan`")
             ->from("`#__prj_contracts` as `c`")
             ->leftJoin("`#__prj_projects` AS `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `expID`")
@@ -85,8 +87,8 @@ class ProjectsModelContracts extends ListModel
         }
 
         /* Сортировка */
-        $orderCol  = $this->state->get('list.ordering', '`c`.`id`');
-        $orderDirn = $this->state->get('list.direction', 'asc');
+        $orderCol  = $this->state->get('list.ordering', '`plan_dat`');
+        $orderDirn = $this->state->get('list.direction', 'desc');
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
         return $query;
@@ -119,6 +121,7 @@ class ProjectsModelContracts extends ListModel
             $arr['manager']['class'] = (!empty($item->manager)) ? '' : 'no-data';
             $arr['group']['title'] = $item->group ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_UNDEFINED');
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
+            $arr['plan'] = $item->plan;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
             //$amount = $item->amount;
             $amount = $this->getAmount($item);
@@ -147,7 +150,7 @@ class ProjectsModelContracts extends ListModel
         $this->setState('filter.manager', $manager);
         $this->setState('filter.manager', $status);
         $this->setState('filter.state', $published);
-        parent::populateState('`c`.`id`', 'asc');
+        parent::populateState('`plan_dat`', 'asc');
     }
 
     protected function getStoreId($id = '')
