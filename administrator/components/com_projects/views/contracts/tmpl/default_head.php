@@ -7,6 +7,9 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
     <th width="1%" class="hidden-phone">
         <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::sprintf('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
     </th>
+    <th>
+        №
+    </th>
     <th width="5%">
         <?php echo JHtml::_('grid.sort', 'JSTATUS', '`state`', $listDirn, $listOrder); ?>
     </th>
