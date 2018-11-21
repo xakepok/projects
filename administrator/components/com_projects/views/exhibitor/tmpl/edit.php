@@ -65,10 +65,10 @@ HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto',
                     <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'history', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_HISTORY')); ?>
                     <div class="row-fluid">
                         <div class="span6">
-                            <?php echo $this->loadTemplate('history'); ?>
+                            <?php echo $this->loadTemplate('history_active'); ?>
                         </div>
                         <div class="span6">
-
+                            <?php echo $this->loadTemplate('history_complete'); ?>
                         </div>
                     </div>
                     <?php echo JHtml::_('bootstrap.endTab'); ?>

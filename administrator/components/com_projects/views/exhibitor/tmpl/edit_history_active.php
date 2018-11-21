@@ -1,7 +1,8 @@
 <?php
 defined('_JEXEC') or die;
 ?>
-<table id="history">
+<div class="center"><h4><?php echo JText::sprintf('COM_PROJECTS_BLANK_ACTIVE_PROJECTS');?></h4></div>
+<table class="history">
     <thead>
         <tr>
             <th>
@@ -25,7 +26,7 @@ defined('_JEXEC') or die;
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($this->history['complete'] as $item):?>
+        <?php foreach ($this->history['process'] as  $projectID => $item):?>
         <tr>
             <td>
                 <?php echo $item['year'];?>

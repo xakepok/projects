@@ -15,11 +15,11 @@
   color: #ff0004;
 }
 
-#history {
+.history {
   border-collapse: collapse;
   width: 100%;
 }
-#history tr td {
+.history tr td {
   border: 1px solid black;
 }
 
