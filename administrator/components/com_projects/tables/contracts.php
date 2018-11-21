@@ -7,6 +7,7 @@ class TableProjectsContracts extends Table
     var $id = null;
     var $prjID = null;
     var $expID = null;
+    var $managerID = null;
     var $parentID = null;
     var $dat = null;
     var $currency = null;

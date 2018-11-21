@@ -37,7 +37,7 @@ class ProjectsModelContracts extends ListModel
             ->from("`#__prj_contracts` as `c`")
             ->leftJoin("`#__prj_projects` AS `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `expID`")
-            ->leftJoin("`#__users` as `u` ON `u`.`id` = `p`.`managerID`")
+            ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`")
             ->leftJoin("`#__usergroups` as `g` ON `g`.`id` = `p`.`groupID`");
 
         /* Фильтр */

@@ -32,6 +32,14 @@
                 class="input-xlarge"
         />
         <field
+                name="managerID"
+                type="user"
+                label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
+                description="COM_PROJECTS_HEAD_CONTRACT_MANAGER_DESC"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
                 name="dat"
                 type="calendar"
                 label="COM_PROJECTS_HEAD_CONTRACT_DATE"
