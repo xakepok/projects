@@ -35,27 +35,53 @@ class ProjectsModelHistory extends AdminModel {
      */
     public function getExpHistory(int $expID): array
     {
-        $result = array();
+        $result = array('process' => array(), 'complete' => array());
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
             ->select("DATE_FORMAT(`h`.`dat`,'%d.%m.%Y %k:%i') as `dat`, DATE_FORMAT(`h`.`dat`,'%Y') as `year`, `h`.`status`")
+            ->select("`h`.`contractID`")
+            ->select("`c`.`number`")
             ->select("`u`.`name` as `manager`")
-            ->select("`p`.`title` as `project`")
+            ->select("`p`.`id` as `projectID`, `p`.`title` as `project`")
             ->from("`#__prj_exp_history` as `h`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `h`.`contractID`")
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__users` as `u` ON `u`.`id` = `h`.`managerID`")
             ->order('`h`.`dat` DESC')
             ->where("`c`.`expID` = {$expID}");
+
         $items = $db->setQuery($query)->loadObjectList();
         foreach ($items as $item) {
             $arr = array();
             $arr['dat'] = $item->dat;
-            $arr['project'] = $item->project;
+            $arr['year'] = $item->year;
+            $url = JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contractID}");
+            $arr['contract'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_HEAD_TODO_CONTRACT'));
+            $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}");
+            $arr['project'] = JHtml::link($url, $item->project);
+            $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;filter_contract={$item->contractID}");
+            $arr['todos'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_BLANK_TODOS'));
+            $arr['projectID'] = $item->projectID;
             $arr['manager'] = $item->manager;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            $result[] = $arr;
+            if ($item->status == '1') $arr['status'] .= " №{$item->number}";
+            $section = ($item->status == '0' || $item->status == '1') ? 'complete' : 'process';
+            if ($item->status == '0' || $item->status == '1')
+            {
+                $result[$section][] = $arr;
+            }
+            else
+            {
+                if (!isset($result[$section][$item->projectID]))
+                {
+                    $result[$section][$item->projectID] = $arr;
+                }
+                else
+                {
+                    if ($item->status > $result[$section][$item->projectID]['status']) $result[$section][$item->projectID] = $arr;
+                }
+            }
         }
         return $result;
     }
