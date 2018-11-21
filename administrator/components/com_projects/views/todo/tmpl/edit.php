@@ -29,8 +29,7 @@ if ($return != null)
                 <div class="tab-pane active" id="general">
                     <fieldset class="adminform">
                         <div class="control-group form-inline">
-                            <?php foreach ($this->form->getFieldset('names') as $field) :
-                                if ($field->name == 'jform[managerID]' && !$this->isAdmin) continue; ?>
+                            <?php foreach ($this->form->getFieldset('names') as $field) :?>
                                 <div class="control-label"><?php echo $field->label; ?></div>
                                 <div class="controls">
                                     <?php echo ($this->isAdmin || (!$this->isAdmin && !in_array($field->name, $noedit))) ? $field->input : $field->value; ?>
