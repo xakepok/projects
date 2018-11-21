@@ -67,7 +67,7 @@ class ProjectsModelContracts extends ListModel
         // Фильтруем по менеджеру.
         $manager = $this->getState('filter.manager');
         if (is_numeric($manager)) {
-            $query->where('`c`.`managerID` = ' . (int)$manager);
+            $query->where('`p`.`managerID` = ' . (int)$manager);
         }
         // Фильтруем по статусу.
         $status = $this->getState('filter.status');
