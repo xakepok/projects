@@ -111,9 +111,10 @@ class ProjectsModelContract extends AdminModel {
 
     public function save($data)
     {
-        $this->saveHistory($data['id'], $data['status']);
         if (!isset($data['managerID'])) $data['managerID'] = JFactory::getUser()->id;
         $s1 = parent::save($data);
+        if ($data['id'] == null) $data['id'] = $this->_db->insertid();
+        $this->saveHistory($data['id'], $data['status']);
         $s2 = $this->savePrice();
         return $s1 && $s2;
     }
