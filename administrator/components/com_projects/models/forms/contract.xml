@@ -100,4 +100,16 @@
             <option value="-2">JTRASHED</option>
         </field>
     </fieldset>
+    <fieldset name="files">
+        <field
+                name="files"
+                type="filelist"
+                label="COM_PROJECTS_HEAD_CONTRACT_ADDFILE"
+                description="COM_PROJECTS_HEAD_CONTRACT_ADDFILE_DESC"
+                class="inputbox"
+                directory="images/contracts"
+                multiple="true"
+                default=""
+        />
+    </fieldset>
 </form>

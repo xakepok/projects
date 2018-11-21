@@ -11,6 +11,7 @@ class ProjectsModelContract extends AdminModel {
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
+        $item->files = $this->loadFiles();
         return $item;
     }
 
@@ -116,6 +117,7 @@ class ProjectsModelContract extends AdminModel {
         if ($data['id'] == null) $data['id'] = $this->_db->insertid();
         $this->saveHistory($data['id'], $data['status']);
         $s2 = $this->savePrice();
+        $s3 = $this->saveFiles();
         return $s1 && $s2;
     }
 
@@ -308,6 +310,69 @@ class ProjectsModelContract extends AdminModel {
             $result[] = $arr;
         }
         return $result;
+    }
+
+    /**
+     * Возвращает список файлов в указанной сделке
+     * @return array
+     * @throws Exception
+     * @since 1.3.0.0
+     */
+    private function loadFiles(): array
+    {
+        $contractID = JFactory::getApplication()->input->getInt('id');
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`path`")
+            ->from("`#__prj_contract_files`")
+            ->where("`contractID` = {$contractID}");
+        return $db->setQuery($query)->loadColumn();
+    }
+
+    /**
+     * Сохраняет список файлов в сделке
+     * @return bool
+     * @since 1.3.0.0
+     * @throws
+     */
+    private function saveFiles(): bool
+    {
+        $post = $_POST['jform']['files'];
+        $model = AdminModel::getInstance('Files', 'ProjectsModel');
+        $table = $model->getTable();
+        $contractID = JFactory::getApplication()->input->getInt('id');
+        $alreadyFiles = $this->loadFiles(); //Список файлов, который на данный момент в таблице у этой сделке
+        foreach ($post as $path)
+        {
+            if (empty($path)) continue;
+            $pks = array('contractID' => $contractID, 'path' => $path);
+            $row = $model->getItem($pks);
+            $data = array(
+                'contractID' => $contractID,
+                'path' => $path,
+                'dat' => date("Y-m-d H:i:s"),
+                'id' => ($row->id != null) ? $row->id : NULL
+            );
+            $table->bind($data);
+            $s = $model->save($data);
+            foreach ($alreadyFiles as $i => $file)
+            {
+                if ($path == $file)
+                {
+                    unset($alreadyFiles[$i]);
+                    break;
+                }
+            }
+            if (!$s) exit(var_dump($model->getErrors()));
+        }
+        foreach ($alreadyFiles as $file)
+        {
+            $pks = array('contractID' => $contractID, 'path' => $file);
+            $row = $model->getItem($pks);
+            $model->delete($row->id);
+        }
+        return true;
     }
 
     /**

@@ -2,8 +2,8 @@
 defined('_JEXEC') or die;
 use Joomla\CMS\MVC\Model\AdminModel;
 
-class ProjectsModelCtritem extends AdminModel {
-    public function getTable($name = 'Ctritems', $prefix = 'TableProjects', $options = array())
+class ProjectsModelFiles extends AdminModel {
+    public function getTable($name = 'Files', $prefix = 'TableProjects', $options = array())
     {
         return JTable::getInstance($name, $prefix, $options);
     }
@@ -20,6 +20,12 @@ class ProjectsModelCtritem extends AdminModel {
         return parent::delete($pks);
     }
 
+    public function save($data)
+    {
+        $data['userID'] = JFactory::getUser()->id;
+        return parent::save($data);
+    }
+
     public function getForm($data = array(), $loadData = true)
     {
 
@@ -32,7 +38,7 @@ class ProjectsModelCtritem extends AdminModel {
 
     protected function prepareTable($table)
     {
-    	$nulls = array('markup', 'value2', 'fixed'); //Поля, которые NULL
+    	$nulls = array(); //Поля, которые NULL
 
 	    foreach ($nulls as $field)
 	    {

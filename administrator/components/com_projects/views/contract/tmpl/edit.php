@@ -4,12 +4,14 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 JHtml::_('formbehavior.chosen', 'select');
+
 use Joomla\CMS\HTML\HTMLHelper;
+
 HTMLHelper::_('script', $this->script);
 HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto', 'relative' => true));
 ?>
 <script type="text/javascript">
-    Joomla.submitbutton = function(task) {
+    Joomla.submitbutton = function (task) {
         if (task == 'contract.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
             Joomla.submitform(task, document.getElementById('adminForm'));
         }
@@ -24,7 +26,7 @@ HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto',
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::sprintf('COM_PROJECTS_BLANK_CONTRACT')); ?>
                 <div class="row-fluid">
                     <div class="span6">
-                        <?php echo $this->loadTemplate('general');?>
+                        <?php echo $this->loadTemplate('general'); ?>
                     </div>
                     <div class="span6">
 
@@ -34,10 +36,10 @@ HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto',
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'price', JText::sprintf('COM_PROJECTS_BLANK_CONTRACT_PRICE')); ?>
                 <div class="row-fluid">
                     <div class="span6">
-                        <?php echo $this->loadTemplate('price');?>
+                        <?php echo $this->loadTemplate('price'); ?>
                     </div>
                     <div class="span6 price_summary">
-                        <?php echo $this->loadTemplate('summary');?>
+                        <?php echo $this->loadTemplate('summary'); ?>
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
@@ -45,16 +47,23 @@ HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto',
                     <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'todos', JText::sprintf('COM_PROJECTS_BLANK_TODOS')); ?>
                     <div class="row-fluid">
                         <div>
-                            <?php echo $this->loadTemplate('todos');?>
+                            <?php echo $this->loadTemplate('todos'); ?>
                         </div>
                     </div>
                     <?php echo JHtml::_('bootstrap.endTab'); ?>
-                <?php endif;?>
+                <?php endif; ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'files', JText::sprintf('COM_PROJECTS_BLANK_FILES')); ?>
+                <div class="row-fluid">
+                    <div>
+                        <?php echo $this->loadTemplate('files'); ?>
+                    </div>
+                </div>
+                <?php echo JHtml::_('bootstrap.endTab'); ?>
             </div>
             <?php echo JHtml::_('bootstrap.endTabSet'); ?>
         </div>
         <div>
-            <input type="hidden" name="task" value="" />
+            <input type="hidden" name="task" value=""/>
             <?php echo JHtml::_('form.token'); ?>
         </div>
     </div>
