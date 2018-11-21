@@ -48,12 +48,15 @@ class ProjectsModelContracts extends ListModel
             $query->where('`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . 'OR `p`.`title` LIKE ' . $search);
         }
         // Фильтруем по состоянию.
-        /*$published = $this->getState('filter.state');
-        if (is_numeric($published)) {
-            $query->where('`c.`state` = ' . (int)$published);
-        } elseif ($published === '') {
+        $published = $this->getState('filter.state');
+        if (is_numeric($published))
+        {
+            $query->where('`c`.`state` = ' . (int) $published);
+        }
+        elseif ($published === '')
+        {
             $query->where('(`c`.`state` = 0 OR `c`.`state` = 1)');
-        }*/
+        }
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
         if (is_numeric($project)) {
