@@ -320,7 +320,8 @@ class ProjectsModelContract extends AdminModel {
      */
     private function loadFiles(): array
     {
-        $contractID = JFactory::getApplication()->input->getInt('id');
+        $contractID = JFactory::getApplication()->input->getInt('id', 0);
+        if ($contractID == 0) return array();
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
