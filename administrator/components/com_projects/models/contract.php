@@ -425,6 +425,10 @@ class ProjectsModelContract extends AdminModel {
             if (!isset($arr['markup'])) $arr['markup'] = NULL;
             if (!isset($arr['value2'])) $arr['value2'] = NULL;
             if (!isset($arr['value'])) continue;
+            if ($arr['value'] == 0 && $row->id != null)
+            {
+                $model->delete($row->id);
+            }
 
             if (!$table->bind($arr))
             {
