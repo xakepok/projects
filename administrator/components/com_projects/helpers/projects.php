@@ -77,6 +77,23 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает список стендов из указанной сделки
+     * @param int $contractID
+     * @return array
+     * @since 1.3.0.2
+     */
+    public function getContractStands(int $contractID): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("*")
+            ->from("`#__prj_stands` as `s`")
+            ->where("`s`.`contractID` = {$contractID}");
+        return $db->setQuery($query)->loadObjectList();
+    }
+
+    /**
      * Возвращает список заданий из планировщика для указанной сделки
      * @param int $contractID
      * @return array
@@ -161,6 +178,16 @@ class ProjectsHelper
         if ($status == null) return JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS_UNDEFINED');
         $status = mb_strtoupper($status);
         return JText::sprintf("COM_PROJECTS_HEAD_CONTRACT_STATUS_{$status}");
+    }
+
+    /**
+     * @param int $id ID типа стенда
+     * @return string
+     * @since 1.3.0.2
+     */
+    public static function getStandType(int $id): string
+    {
+        return JText::sprintf("COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_{$id}");
     }
 
     /**

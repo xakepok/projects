@@ -11,6 +11,32 @@ class ProjectsControllerContracts extends AdminController
     }
 
     /**
+     * Удаляет стенд
+     * @since 1.3.0.2
+     */
+    public function removeStand()
+    {
+        $id = $this->input->getInt('id', 0);
+        if ($id == 0)
+        {
+            $result = array('result' => 0, 'message' => 'Empty ID');
+            echo new JsonResponse($result);
+            jexit();
+        }
+        $model = $this->getModel('Stand', 'ProjectsModel');
+        $del = $model->delete($id);
+        if (!$del)
+        {
+            $result = array('result' => 0, 'message' => $model->getErrors());
+            echo new JsonResponse($result);
+            jexit();
+        }
+        $result = array('result' => 1);
+        echo new JsonResponse($result);
+        jexit();
+    }
+
+    /**
      * Присваивает сделке номер договора
      * @since 1.2.2
      */

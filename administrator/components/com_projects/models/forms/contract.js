@@ -3,6 +3,26 @@ window.onload = function () {
     setNumber();
 };
 
+function removeStand(standID) {
+    fetch('/administrator/index.php?option=com_projects&task=contracts.removeStand&id=' + standID)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (text) {
+            if (text.data.result !== 1)
+            {
+                alert(text.data.message);
+            }
+            else
+            {
+                document.querySelector('#row_stand_' + standID).remove();
+            }
+        })
+        .catch(function (error) {
+            console.log('Request failed', error);
+        });
+}
+
 function setNumber() {
     var status = document.getElementById("jform_status");
     var tip = status.options[status.selectedIndex].value;

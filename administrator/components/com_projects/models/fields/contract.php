@@ -21,7 +21,7 @@ class JFormFieldContract extends JFormFieldList
             ->order("`c`.`id`");
         $session = JFactory::getSession();
         $view = JFactory::getApplication()->input->getString('view', '');
-        if ($view == 'todo' && $session->get('contractID') != null)
+        if (($view == 'todo' || $view == 'stand') && $session->get('contractID') != null)
         {
             $contractID = $session->get('contractID');
             $query->where("`c`.`id` = {$contractID}");

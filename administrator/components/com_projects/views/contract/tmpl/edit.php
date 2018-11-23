@@ -61,6 +61,15 @@ HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto',
                     </div>
                     <?php echo JHtml::_('bootstrap.endTab'); ?>
                 <?php endif;?>
+                <?php if ($this->item->id != null): ?>
+                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'stands', JText::sprintf('COM_PROJECTS_BLANK_STANDS')); ?>
+                    <div class="row-fluid">
+                        <div>
+                            <?php echo $this->loadTemplate('stands');?>
+                        </div>
+                    </div>
+                    <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php endif;?>
             </div>
             <?php echo JHtml::_('bootstrap.endTabSet'); ?>
         </div>

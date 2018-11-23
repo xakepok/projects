@@ -12,12 +12,28 @@ class ProjectsModelContract extends AdminModel {
     {
         $item = parent::getItem($pk);
         $item->files = $this->loadFiles();
+        $item->stands = $this->getStands();
         return $item;
+    }
+
+    public function getStands(): array
+    {
+        $item = parent::getItem();
+        $items = ProjectsHelper::getContractStands($item->id);
+        $result = array();
+        foreach ($items as $item) {
+            $arr = array();
+            $arr['id'] = $item->id;
+            $arr['number'] = $item->number;
+            $arr['tip'] = ProjectsHelper::getStandType($item->tip);
+            $arr['action'] = JRoute::_("index.php?option=com_projects&amp;view=stand&amp;layout=edit&amp;id={$item->id}");
+            $result[] = $arr;
+        }
+        return $result;
     }
 
     /**
      * Возвращает список заданий из планировщика для указанной сделки
-     * @param int $contractID
      * @return array
      * @since 1.2.9.7
      */
