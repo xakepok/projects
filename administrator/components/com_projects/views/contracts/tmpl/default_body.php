@@ -19,6 +19,9 @@ foreach ($this->items['items'] as $i => $item) :
             <?php echo $item['number'];?>
         </td>
         <td>
+            <?php echo $this->items['stands'][$item['id']];?>
+        </td>
+        <td>
             <?php echo $item['edit_link'];?>
         </td>
         <td>

@@ -135,6 +135,7 @@ class ProjectsModelContracts extends ListModel
             $result['items'][] = $arr;
             $result['amount'][$item->currency] += $amount;
         }
+        $result['stands'] = $this->getStands($ids);
         return $result;
     }
 
@@ -165,6 +166,37 @@ class ProjectsModelContracts extends ListModel
         $id .= ':' . $this->getState('filter.status');
         $id .= ':' . $this->getState('filter.state');
         return parent::getStoreId($id);
+    }
+
+    /**
+     * Возвращает массив с номерами стендов по сделкам
+     * @param array $ids Массив с ID сделок
+     * @return array
+     * @since 1.3.0.2
+     */
+    private function getStands(array $ids): array
+    {
+        $result = array();
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        if (empty($ids)) return $result;
+        $ids = implode(", ", $ids);
+        $query
+            ->select("*")
+            ->from("`#__prj_stands`")
+            ->where("`contractID` IN ({$ids})");
+        $stands = $db->setQuery($query)->loadObjectList();
+        foreach ($stands as $stand) {
+            $contractID = $stand->contractID;
+            if (!isset($result[$contractID]))
+            {
+                $result[$contractID] = $stand->number;
+            }
+            else {
+                $result[$contractID] .= "/{$stand->number}";
+            }
+        }
+        return $result;
     }
 
     /**
@@ -201,5 +233,4 @@ class ProjectsModelContracts extends ListModel
             ->where("`state` = 1");
         return (float) $db->setQuery($query)->loadResult();
     }
-
 }
