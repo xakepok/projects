@@ -49,7 +49,51 @@ function closeTask(id) {
             console.log('Request failed', error);
         });
 }
-function getSum(id, currency) {
+function getSum2(id, currency)
+{
+    var tr = document.querySelector('#sum_'+id);
+    if (tr === null) addSum(id);
+    var span = document.querySelector('#sum_'+id);
+    var sum = getSum(id);
+    if (sum !== 0 && sum !== null && sum !== undefined)
+    {
+        span.textContent = sum;
+    }
+    else
+    {
+        removeTr(id);
+    }
+    document.querySelector("#currency_"+id).textContent = currency;
+    document.querySelector("#sum_amount").textContent = calculate() + ' ' + currency;
+}
+function removeTr(id)
+{
+    document.querySelector("#summary_"+id).remove();
+}
+function addSum(id) {
+    var tbody = document.querySelector(".sumbody");
+    var tr = document.createElement('tr');
+    var td = document.createElement('td');
+    tr.id = 'summary_'+id;
+    td.width='80%';
+    var label = document.querySelector('#label_'+id);
+    var title = document.createTextNode(label.textContent);
+    td.appendChild(title);
+    tr.appendChild(td);
+    td = document.createElement('td');
+    var span = document.createElement('span');
+    span.id='sum_'+id;
+    span.className='amounts';
+    td.width='20%';
+    td.appendChild(span);
+    span = document.createElement('span');
+    span.id='currency_'+id;
+    td.appendChild(document.createTextNode(' '));
+    td.appendChild(span);
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+}
+function getSum(id) {
     var sum = 0;
     var field = parseFloat(document.querySelector("#price_" + id).dataset.cost);
     var value = parseInt(document.querySelector("#price_" + id).value);
@@ -70,13 +114,14 @@ function getSum(id, currency) {
         sum = sum * parseFloat((100 + parseInt(field.options[field.selectedIndex].value)) / 100);
     }
     sum = Math.round(sum);
-    document.querySelector("#sum_" + id).innerHTML = sum;
-    document.querySelector("#currency_" + id).innerHTML = currency;
+    return sum;
+}
+function calculate() {
     var amounts = document.querySelectorAll(".amounts");
-    sum = 0;
+    var sum = 0;
     for (var i = 0; i < amounts.length; i++)
     {
-        if (amounts[i].innerText !== "") sum = sum + parseFloat(amounts[i].innerText);
+        if (amounts[i].textContent !== "") sum = sum + parseFloat(amounts[i].textContent);
     }
-    document.querySelector("#sum_amount").innerHTML = sum + " " + currency;
+    return sum;
 }

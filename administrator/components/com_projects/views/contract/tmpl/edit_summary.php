@@ -15,13 +15,14 @@ $sum = 0;
             </th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="sumbody">
         <?php foreach ($this->price as $item) :
             //if ($item['value'] == null) continue;
+            if ($item['sum'] == 0) continue;
             $currency = $item['currency'];
             $sum += $item['sum'];
             ?>
-            <tr>
+            <tr id="summary_<?php echo $item['id']; ?>">
                 <td style="width: 80%">
                     <div class="control-label">
                         <label for="price_<?php echo $item['id']; ?>" class="hasPopover"

@@ -28,11 +28,12 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
         </thead>
         <tbody>
         <?php foreach ($this->price as $item) : ?>
-            <tr>
+            <tr id="item_<?php echo $item['id']; ?>">
                 <td>
                     <div class="control-label">
                         <label for="price_<?php echo $item['id']; ?>" class="hasPopover"
                                title="<?php echo $item['title']; ?>"
+                               id="label_<?php echo $item['id']; ?>"
                                data-content="<?php echo $item['title']; ?>">
                             <?php echo $item['title']; ?>
                         </label>
@@ -52,7 +53,7 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                             class="input"
                             placeholder=""
                             autocomplete="off"
-                            onkeyup="getSum(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>');"
+                            onkeyup="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency'];?>')"
                         <?php if ($item['fixed']) echo "disabled "; ?>
                             style="width: 50px;"
                             aria-invalid="false"/>&nbsp;
@@ -68,8 +69,8 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                                 class="input"
                                 placeholder=""
                                 autocomplete="off"
-                                onkeyup="getSum(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>');"
-                                onchange="getSum(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>');"
+                                onkeyup="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency'];?>')"
+                                onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency'];?>')"
                             <?php if ($item['fixed']) echo "disabled "; ?>
                                 style="width: 50px;"
                                 aria-invalid="false"/>&nbsp;
@@ -88,7 +89,7 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                                 class="input"
                                 placeholder="1.0"
                                 autocomplete="off"
-                                onkeyup="getSum(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>');"
+                                onkeyup="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency'];?>')"
                             <?php if ($item['fixed']) echo "disabled "; ?>
                                 style="width: 50px;"
                                 aria-invalid="false"/>&nbsp;%
@@ -101,7 +102,7 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                             id="markup_<?php echo $item['id']; ?>"
                             class="input"
                             autocomplete="off"
-                            onchange="getSum(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>');"
+                            onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency'];?>')"
                         <?php if ($item['fixed']) echo "disabled "; ?>
                             aria-invalid="false">
                         <option value="0" <?php if ($item['markup'] == 0 || $item['markup'] == null) echo 'selected'; ?>><?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MARKUP_0'); ?></option>
