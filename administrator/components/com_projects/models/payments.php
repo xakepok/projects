@@ -67,6 +67,12 @@ class ProjectsModelPayments extends ListModel
         {
             $query->where('`c`.`prjID` = ' . (int) $project);
         }
+        // Фильтруем по счёту.
+        $score = $this->getState('filter.score');
+        if (is_numeric($score))
+        {
+            $query->where('`pm`.`scoreID` = ' . (int) $score);
+        }
         //Если не руководитель, выводим только свои платежи
         if (!ProjectsHelper::canDo('projects.exec.edit'))
         {
@@ -113,10 +119,12 @@ class ProjectsModelPayments extends ListModel
         $contract = $this->getUserStateFromRequest($this->context . '.filter.contract', 'filter_contract', '', 'string');
         $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor', '', 'string');
         $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project', '', 'string');
+        $score = $this->getUserStateFromRequest($this->context . '.filter.score', 'filter_score', '', 'string');
         $this->setState('filter.state', $published);
         $this->setState('filter.contract', $contract);
         $this->setState('filter.exhibitor', $exhibitor);
         $this->setState('filter.project', $project);
+        $this->setState('filter.score', $score);
         parent::populateState('`pm`.`dat`', 'desc');
     }
 
@@ -126,6 +134,7 @@ class ProjectsModelPayments extends ListModel
         $id .= ':' . $this->getState('filter.contract');
         $id .= ':' . $this->getState('filter.exhibitor');
         $id .= ':' . $this->getState('filter.project');
+        $id .= ':' . $this->getState('filter.score');
         return parent::getStoreId($id);
     }
 }
