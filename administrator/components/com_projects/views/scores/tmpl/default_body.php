@@ -34,6 +34,9 @@ foreach ($this->items as $i => $item) :
             <?php echo $item['amount'];?>
         </td>
         <td>
+            <?php echo $item['payments'];?>
+        </td>
+        <td>
             <?php echo $item['doPayment'];?>
         </td>
         <td>

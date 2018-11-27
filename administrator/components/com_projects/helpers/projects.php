@@ -22,6 +22,32 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает массив, ключ - ID счёта, значение - сумма платежей по нему
+     * Используется в списке счетов
+     * @param array $scoreIDs Массив с ID сделок
+     * @return array
+     * @since 1.3.0.8
+     */
+    public static function getPaymentSum(array $scoreIDs): array
+    {
+        $result = array();
+        if (empty($scoreIDs)) return $result;
+        $ids = implode(', ', $scoreIDs);
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`id`, `scoreID`, `amount`")
+            ->from("`#__prj_payments`")
+            ->where("`scoreID` IN ({$ids})");
+        $payments = $db->setQuery($query)->loadObjectList();
+        foreach ($payments as $payment) {
+            if ($result[$payment->scoreID]) $result[$payment->scoreID] = (float) 0;
+            $result[$payment->scoreID] += $payment->amount;
+        }
+        return $result;
+    }
+
+    /**
      * Возвращает активную колонку прайса для указанной сделки
      * @param int $contractID ID контракта
      * @return int ID колонки

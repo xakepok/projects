@@ -75,6 +75,11 @@ class ProjectsModelScores extends ListModel
     {
         $items = parent::getItems();
         $result = array();
+        $ids = array();
+        foreach ($items as $item) {
+            $ids[] = $item->id;
+        }
+        $payments = ProjectsHelper::getPaymentSum($ids);
         foreach ($items as $item)
         {
             $arr = array();
@@ -89,6 +94,7 @@ class ProjectsModelScores extends ListModel
             $arr['project'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}"), $item->project);
             $arr['amount'] = sprintf("%s %s", $item->amount, $item->currency);
             $arr['state'] = $item->state;
+            $arr['payments'] = ($payments[$item->id] != 0) ? sprintf("%s %s", $payments[$item->id], $item->currency) : sprintf("%s %s", 0, $item->currency);
             $arr['state_text'] = ProjectsHelper::getScoreState($item->state);
             $result[] = $arr;
         }
