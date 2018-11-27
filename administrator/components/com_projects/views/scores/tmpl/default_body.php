@@ -22,9 +22,6 @@ foreach ($this->items as $i => $item) :
             <?php echo $item['dat'];?>
         </td>
         <td>
-            <?php echo $item['contract_id'];?>
-        </td>
-        <td>
             <?php echo $item['project'];?>
         </td>
         <td>

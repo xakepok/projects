@@ -10,6 +10,10 @@ class ProjectsModelScores extends ListModel
         {
             $config['filter_fields'] = array(
                 '`s`.`id`', '`s`.`id`',
+                '`s`.`dat`', '`s`.`dat`',
+                '`number`', '`number`',
+                '`project`', '`project`',
+                '`title_ru_short`', '`title_ru_short`',
                 '`s`.`state`', '`s`.`state`',
             );
         }
