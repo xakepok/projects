@@ -16,7 +16,7 @@ foreach ($this->items as $i => $item) :
             <?php echo JHtml::_('jgrid.published', $item['state'], $i, 'scores.', $canChange); ?>
         </td>
         <td>
-            <?php echo $item['number'];?>
+            №<?php echo $item['number'];?>
         </td>
         <td>
             <?php echo $item['dat'];?>
@@ -29,6 +29,9 @@ foreach ($this->items as $i => $item) :
         </td>
         <td>
             <?php echo $item['amount'];?>
+        </td>
+        <td>
+            <?php echo $item['doPayment'];?>
         </td>
         <td>
             <?php echo $item['state_text'];?>

@@ -26,9 +26,9 @@ class ProjectsModelScores extends ListModel
         $query = $db->getQuery(true);
         $query
             ->select("`s`.`id`, `s`.`contractID`, DATE_FORMAT(`s`.`dat`,'%d.%m.%Y') as `dat`, `s`.`number`, `s`.`amount`, `s`.`state`")
-            ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
+            ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `e`.`id` as `expID`")
             ->select("`c`.`currency`")
-            ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`")
+            ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`, `p`.`id` as `projectID`")
             ->from("`#__prj_scores` as `s`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
@@ -81,9 +81,11 @@ class ProjectsModelScores extends ListModel
             $arr['id'] = $item->id;
             $arr['contract_id'] = $item->contractID;
             $arr['dat'] = $item->dat;
-            $arr['number'] = $item->number;
-            $arr['exp'] = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
-            $arr['project'] = $item->project;
+            $arr['number'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contractID}"),$item->number);
+            $arr['doPayment'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=payment.add&amp;scoreID={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_TODO_PAYMENT'));
+            $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+            $arr['exp'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->expID}"), $exp);
+            $arr['project'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}"), $item->project);
             $arr['amount'] = sprintf("%s %s", $item->amount, $item->currency);
             $arr['state'] = $item->state;
             $arr['state_text'] = ProjectsHelper::getScoreState($item->state);
