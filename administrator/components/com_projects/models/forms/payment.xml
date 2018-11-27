@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fieldset name="names">
+        <field
+                name="id"
+                type="hidden"
+        />
+        <field
+                name="scoreID"
+                type="Score"
+                label="COM_PROJECTS_HEAD_PAYMENT_SCORE"
+                description="COM_PROJECTS_HEAD_PAYMENT_SCORE_DESC"
+                autocomplete="off"
+                required="true"
+                class="input-xlarge"
+        />
+        <field
+                name="pp"
+                type="text"
+                label="COM_PROJECTS_HEAD_PAYMENT_PP"
+                description="COM_PROJECTS_HEAD_PAYMENT_PP_DESC"
+                autocomplete="off"
+                required="true"
+                class="input-xlarge"
+        />
+        <field
+                name="dat"
+                type="calendar"
+                label="COM_PROJECTS_HEAD_PAYMENT_DATE"
+                description="COM_PROJECTS_HEAD_PAYMENT_DATE_DESC"
+                autocomplete="off"
+                required="true"
+                class="input-xlarge"
+        />
+        <field
+                name="amount"
+                type="text"
+                label="COM_PROJECTS_HEAD_PAYMENT_AMOUNT"
+                description="COM_PROJECTS_HEAD_PAYMENT_AMOUNT_DESC"
+                autocomplete="off"
+                required="true"
+                class="input-xlarge"
+        />
+    </fieldset>
+</form>

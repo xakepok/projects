@@ -62,6 +62,26 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает дополнительную информацию о планируемом платеже
+     * @param int $scoreID ID счёта
+     * @return object
+     * @since 1.3.0.8
+     */
+    public static function getPaymentAdvInfo(int $scoreID): object
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`s`.`number` as `score`, `c`.`number` as `contract`")
+            ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`")
+            ->from("`#__prj_scores` as `s`")
+            ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
+            ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
+            ->where("`s`.`id` = {$scoreID}");
+        return $db->setQuery($query)->loadObject();
+    }
+
+    /**
      * Возвращает следующий по очереди номер договора
      * @return int
      * @since 1.2.2

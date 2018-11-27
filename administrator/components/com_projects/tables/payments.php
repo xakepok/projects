@@ -2,7 +2,7 @@
 use Joomla\CMS\Table\Table;
 defined('_JEXEC') or die;
 
-class TableProjectsScores extends Table
+class TableProjectsPayments extends Table
 {
     var $id = null;
     var $dat = null;
