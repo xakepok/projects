@@ -11,24 +11,24 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         №
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_PP'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_PP', '`pm`.`pp`', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_DATE'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_DATE', '`pm`.`dat`', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_CONTRACT'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_CONTRACT', '`number`', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_EXP'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_EXP', '`title_ru_short`', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_PROJECT'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_PROJECT', '`project`', $listDirn, $listOrder); ?>
     </th>
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_AMOUNT'); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_AUTHOR'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_AUTHOR', '`author`', $listDirn, $listOrder); ?>
     </th>
 </tr>

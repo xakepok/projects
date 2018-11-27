@@ -10,12 +10,11 @@ class ProjectsModelPayments extends ListModel
         {
             $config['filter_fields'] = array(
                 '`id`', '`id`',
+                '`pm`.`pp`','`pm`.`pp`',
                 '`pm`.`dat`','`pm`.`dat`',
-                '`t`.`dat_open`','`t`.`dat_open`',
-                '`t`.`dat_close`','`t`.`dat_close`',
-                '`open`','`open`',
-                '`close`','`close`',
-                '`manager`','`manager`',
+                '`number`','`number`',
+                '`title_ru_short`','`title_ru_short`',
+                '`author`','`author`',
                 '`project`','`project`',
                 '`state`', '`state`',
             );
@@ -91,7 +90,8 @@ class ProjectsModelPayments extends ListModel
             $exponentName = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr = array();
             $arr['id'] = $item->id;
-            $arr['pp'] = $item->pp;
+            $url = JRoute::_("index.php?option=com_projects&amp;view=payment&amp;layout=edit&amp;id={$item->id}");
+            $arr['pp'] = JHtml::link($url, $item->pp);
             $arr['dat'] = $item->dat;
             $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->exponentID}");
             $arr['exp'] = JHtml::link($url, $exponentName);

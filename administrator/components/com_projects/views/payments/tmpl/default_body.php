@@ -19,7 +19,7 @@ foreach ($this->items as $i => $item) :
             <?php echo $item['dat'];?>
         </td>
         <td>
-            <?php echo $item['number'];?>
+            №<?php echo $item['contract'];?>
         </td>
         <td>
             <?php echo $item['exp'];?>
