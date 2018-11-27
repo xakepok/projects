@@ -18,7 +18,7 @@ class ProjectsViewItem extends HtmlView {
     }
 
     protected function addToolbar() {
-        JFactory::getApplication()->input->set('hidemainmenu', true);
+        //JFactory::getApplication()->input->set('hidemainmenu', true);
         $title = $this->item->title_ru ?? $this->item->title_en ?? JText::sprintf('COM_PROJECTS_TITLE_NEW_ITEM');
         if ($this->item->id != null) $title .= " ({$this->price})";
 

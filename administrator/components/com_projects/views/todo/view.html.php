@@ -18,7 +18,7 @@ class ProjectsViewTodo extends HtmlView {
     }
 
     protected function addToolbar() {
-        JFactory::getApplication()->input->set('hidemainmenu', true);
+        //JFactory::getApplication()->input->set('hidemainmenu', true);
         $title = $this->setTitle();
 
         JToolbarHelper::title($title, '');

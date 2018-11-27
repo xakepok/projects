@@ -17,7 +17,7 @@ class ProjectsViewSection extends HtmlView {
     }
 
     protected function addToolbar() {
-        JFactory::getApplication()->input->set('hidemainmenu', true);
+        //JFactory::getApplication()->input->set('hidemainmenu', true);
         $title = $this->item->title ?? JText::sprintf('COM_PROJECTS_TITLE_NEW_SECTION');
 
         JToolbarHelper::title($title, '');

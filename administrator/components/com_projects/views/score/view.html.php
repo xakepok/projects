@@ -17,7 +17,7 @@ class ProjectsViewScore extends HtmlView {
     }
 
     protected function addToolbar() {
-        JFactory::getApplication()->input->set('hidemainmenu', true);
+        //JFactory::getApplication()->input->set('hidemainmenu', true);
         $title = $this->item->number ?? JText::sprintf('COM_PROJECTS_TITLE_NEW_SCORE');
 
         JToolbarHelper::title($title, '');

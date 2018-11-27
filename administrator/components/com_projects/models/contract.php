@@ -11,14 +11,18 @@ class ProjectsModelContract extends AdminModel {
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
-        $item->files = $this->loadFiles();
-        $item->stands = $this->getStands();
+        if ($item->id != null)
+        {
+            $item->files = $this->loadFiles();
+            $item->stands = $this->getStands();
+        }
         return $item;
     }
 
     public function getStands(): array
     {
         $item = parent::getItem();
+        if ($item->id == null) return array();
         $items = ProjectsHelper::getContractStands($item->id);
         $result = array();
         foreach ($items as $item) {
