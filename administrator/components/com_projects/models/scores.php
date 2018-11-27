@@ -84,6 +84,7 @@ class ProjectsModelScores extends ListModel
             $arr['edit'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=score&amp;layout=edit&amp;id={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_EDIT'));
             $arr['dat'] = $item->dat;
             $arr['number'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contractID}"),"№".$item->number);
+            $arr['showPaymens'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=payments&amp;filter_score={$item->id}"), JText::sprintf('COM_PROJECTS_MENU_PAYMENTS'));
             $arr['doPayment'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=payment.add&amp;scoreID={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_TODO_PAYMENT'));
             $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr['exp'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->expID}"), $exp);

@@ -40,7 +40,7 @@ foreach ($this->items as $i => $item) :
             <?php echo $item['debt'];?>
         </td>
         <td>
-            <?php echo $item['doPayment'];?>
+            <?php echo $item['showPaymens'], " / ", $item['doPayment'];?>
         </td>
         <td>
             <?php echo $item['state_text'];?>
