@@ -22,7 +22,7 @@ class JFormFieldScore extends JFormFieldList
         if (($view == 'payment') && $session->get('scoreID') != null)
         {
             $scoreID = $session->get('scoreID');
-            $query->where("`c`.`id` = {$scoreID}");
+            $query->where("`s`.`id` = {$scoreID}");
             $session->clear('scoreID');
         }
         $result = $db->setQuery($query)->loadObjectList();
