@@ -16,6 +16,9 @@ foreach ($this->items as $i => $item) :
             <?php echo JHtml::_('jgrid.published', $item['state'], $i, 'scores.', $canChange); ?>
         </td>
         <td>
+            <?php echo $item['edit'];?>
+        </td>
+        <td>
             №<?php echo $item['number'];?>
         </td>
         <td>

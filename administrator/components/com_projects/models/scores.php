@@ -80,6 +80,7 @@ class ProjectsModelScores extends ListModel
             $arr = array();
             $arr['id'] = $item->id;
             $arr['contract_id'] = $item->contractID;
+            $arr['edit'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=score&amp;layout=edit&amp;id={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_EDIT'));
             $arr['dat'] = $item->dat;
             $arr['number'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contractID}"),$item->number);
             $arr['doPayment'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=payment.add&amp;scoreID={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_TODO_PAYMENT'));

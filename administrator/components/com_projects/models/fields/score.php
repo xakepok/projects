@@ -9,9 +9,6 @@ class JFormFieldScore extends JFormFieldList
 
     protected function getOptions()
     {
-        $view = JFactory::getApplication()->input->getString('view');
-        $scoreID = JFactory::getApplication()->input->getInt('scoreID', 0);
-
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
@@ -20,7 +17,14 @@ class JFormFieldScore extends JFormFieldList
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
             ->where("`c`.`status` = 1")
             ->order("`c`.`number` DESC");
-        if ($view == 'payment' && $scoreID != 0) $query->where("`s`.`id` = {$scoreID}");
+        $session = JFactory::getSession();
+        $view = JFactory::getApplication()->input->getString('view', '');
+        if (($view == 'payment') && $session->get('scoreID') != null)
+        {
+            $scoreID = $session->get('scoreID');
+            $query->where("`c`.`id` = {$scoreID}");
+            $session->clear('scoreID');
+        }
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();
