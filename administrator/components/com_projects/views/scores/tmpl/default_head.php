@@ -35,6 +35,9 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_PAYMENT'); ?>
     </th>
     <th>
+        <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_DEBT'); ?>
+    </th>
+    <th>
         <?php echo JText::sprintf('COM_PROJECTS_ACTION_TODO_PAYMENT'); ?>
     </th>
     <th>

@@ -5,7 +5,7 @@ $ii = 0;
 foreach ($this->items as $i => $item) :
     $canChange = JFactory::getUser()->authorise('core.edit.state', 'com_projects.score.' . $item['id']);
     ?>
-    <tr class="row0">
+    <tr class="row0" style="color: <?php echo $item['color'];?>">
         <td class="center">
             <?php echo JHtml::_('grid.id', $i, $item['id']); ?>
         </td>
@@ -19,7 +19,7 @@ foreach ($this->items as $i => $item) :
             <?php echo $item['edit'];?>
         </td>
         <td>
-            №<?php echo $item['number'];?>
+            <?php echo $item['number'];?>
         </td>
         <td>
             <?php echo $item['dat'];?>
@@ -35,6 +35,9 @@ foreach ($this->items as $i => $item) :
         </td>
         <td>
             <?php echo $item['payments'];?>
+        </td>
+        <td>
+            <?php echo $item['debt'];?>
         </td>
         <td>
             <?php echo $item['doPayment'];?>

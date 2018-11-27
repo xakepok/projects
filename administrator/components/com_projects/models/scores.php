@@ -27,7 +27,8 @@ class ProjectsModelScores extends ListModel
         $query
             ->select("`s`.`id`, `s`.`contractID`, DATE_FORMAT(`s`.`dat`,'%d.%m.%Y') as `dat`, `s`.`number`, `s`.`amount`, `s`.`state`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `e`.`id` as `expID`")
-            ->select("`c`.`currency`")
+            ->select("`c`.`currency`, (SELECT IFNULL(SUM(`amount`),0) FROM `#__prj_payments` WHERE `scoreID` = `s`.`id`) as `payment`")
+            ->select("(SELECT `s`.`amount`-`payment`) as `debt`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`, `p`.`id` as `projectID`")
             ->from("`#__prj_scores` as `s`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
@@ -75,11 +76,6 @@ class ProjectsModelScores extends ListModel
     {
         $items = parent::getItems();
         $result = array();
-        $ids = array();
-        foreach ($items as $item) {
-            $ids[] = $item->id;
-        }
-        $payments = ProjectsHelper::getPaymentSum($ids);
         foreach ($items as $item)
         {
             $arr = array();
@@ -87,15 +83,17 @@ class ProjectsModelScores extends ListModel
             $arr['contract_id'] = $item->contractID;
             $arr['edit'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=score&amp;layout=edit&amp;id={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_EDIT'));
             $arr['dat'] = $item->dat;
-            $arr['number'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contractID}"),$item->number);
+            $arr['number'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contractID}"),"№".$item->number);
             $arr['doPayment'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=payment.add&amp;scoreID={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_TODO_PAYMENT'));
             $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr['exp'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->expID}"), $exp);
             $arr['project'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}"), $item->project);
             $arr['amount'] = sprintf("%s %s", $item->amount, $item->currency);
             $arr['state'] = $item->state;
-            $arr['payments'] = ($payments[$item->id] != 0) ? sprintf("%s %s", $payments[$item->id], $item->currency) : sprintf("%s %s", 0, $item->currency);
+            $arr['payments'] = sprintf("%s %s", $item->payment, $item->currency);
+            $arr['debt'] = sprintf("%s %s", $item->debt, $item->currency);
             $arr['state_text'] = ProjectsHelper::getScoreState($item->state);
+            $arr['color'] = ($arr['debt'] < 0) ? 'red' : 'black';
             $result[] = $arr;
         }
         return $result;

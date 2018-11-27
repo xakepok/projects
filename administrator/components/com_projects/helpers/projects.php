@@ -23,7 +23,6 @@ class ProjectsHelper
 
     /**
      * Возвращает массив, ключ - ID счёта, значение - сумма платежей по нему
-     * Используется в списке счетов
      * @param array $scoreIDs Массив с ID сделок
      * @return array
      * @since 1.3.0.8
