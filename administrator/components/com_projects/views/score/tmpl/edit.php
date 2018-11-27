@@ -25,7 +25,9 @@ HTMLHelper::_('script', $this->script);
                     <fieldset class="adminform">
                         <div class="control-group form-inline">
                             <?php foreach ($this->form->getFieldset('names') as $field) : ?>
-                                <div class="control-label"><?php echo $field->label; ?></div>
+                                <div class="control-label">
+                                    <?php echo ($field->name != 'jform[contractID]') ? $field->label : JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_CONTRACT'); ?>
+                                </div>
                                 <div class="controls">
                                     <?php echo $field->input; ?>
                                     <?php if ($field->name == 'jform[amount]'): ?>

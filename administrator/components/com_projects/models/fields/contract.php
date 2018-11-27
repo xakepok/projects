@@ -12,7 +12,7 @@ class JFormFieldContract extends JFormFieldList
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`c`.`id`")
+            ->select("`c`.`id`, `c`.`number`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
             ->from('`#__prj_contracts` as `c`')
@@ -27,13 +27,24 @@ class JFormFieldContract extends JFormFieldList
             $query->where("`c`.`id` = {$contractID}");
             $session->clear('contractID');
         }
+        if ($view == 'score')
+        {
+            $query->where("`c`.`status` = 1");
+        }
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();
 
         foreach ($result as $item) {
             $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
-            $name = JText::sprintf('COM_PROJECTS_FILTER_CONTRACT_FIELD', $item->id, $item->project, $exp);
+            if ($view == 'score')
+            {
+                $name = JText::sprintf('COM_PROJECTS_FILTER_CONTRACT_DOGOVOR_FIELD', $item->number, $item->project, $exp);
+            }
+            else
+            {
+                $name = JText::sprintf('COM_PROJECTS_FILTER_CONTRACT_FIELD', $item->id, $item->project, $exp);
+            }
             $options[] = JHtml::_('select.option', $item->id, $name);
         }
 
