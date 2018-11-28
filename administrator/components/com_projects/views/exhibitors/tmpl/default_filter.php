@@ -1,3 +1,6 @@
+<?php
+defined('_JEXEC') or die;
+?>
 <div class="clearfix">
     <div class="js-stools-container-bar">
         <label for="filter_search" class="element-invisible"><?php echo JText::sprintf('JSEARCH_FILTER_LABEL'); ?></label>
