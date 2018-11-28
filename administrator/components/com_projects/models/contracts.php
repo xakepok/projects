@@ -216,21 +216,4 @@ class ProjectsModelContracts extends ListModel
             ->where("`v`.`contractID` = {$item->id}");
         return (float) 0 + $db->setQuery($query)->loadResult();
     }
-
-    /**
-     * @param int  $contract_id ID сделки
-     * @return float
-     * @since 1.2.4
-     */
-    private function getDebt(int $contract_id): float
-    {
-        $db =& $this->getDbo();
-        $query = $db->getQuery(true);
-        $query
-            ->select("IFNULL(SUM(`amount`),0)")
-            ->from("`#__prj_scores`")
-            ->where("`contractID` = {$contract_id}")
-            ->where("`state` = 1");
-        return (float) $db->setQuery($query)->loadResult();
-    }
 }
