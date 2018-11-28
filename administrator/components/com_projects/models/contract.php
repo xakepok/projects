@@ -29,7 +29,10 @@ class ProjectsModelContract extends AdminModel {
             $arr = array();
             $arr['id'] = $item->id;
             $arr['number'] = $item->number;
+            $arr['freeze'] = $item->freeze;
+            $arr['comment'] = $item->comment;
             $arr['tip'] = ProjectsHelper::getStandType($item->tip);
+            $arr['status'] = ProjectsHelper::getStandStatus($item->status);
             $arr['action'] = JRoute::_("index.php?option=com_projects&amp;view=stand&amp;layout=edit&amp;id={$item->id}");
             $result[] = $arr;
         }

@@ -39,6 +39,7 @@ class ProjectsViewStand extends HtmlView {
         {
             $title = $this->item->task;
         }
+        if ($title == null) $title = '';
         return $title;
     }
 

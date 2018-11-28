@@ -8,6 +8,10 @@ class TableProjectsStands extends Table
     var $contractID = null;
     var $number = null;
     var $tip = null;
+    var $freeze = null;
+    var $comment = null;
+    var $status = null;
+    var $scheme = null;
 
     public function __construct(JDatabaseDriver $db)
     {

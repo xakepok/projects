@@ -237,6 +237,16 @@ class ProjectsHelper
     }
 
     /**
+     * @param int $id ID типа стенда
+     * @return string
+     * @since 1.3.0.2
+     */
+    public static function getStandStatus(int $id): string
+    {
+        return JText::sprintf("COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_{$id}");
+    }
+
+    /**
      * Возвращает русское значение единицы измерения пункта прайса.
      * @param string $name Значение из таблицы.
      * @return string

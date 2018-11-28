@@ -19,4 +19,15 @@ class ProjectsControllerStand extends FormController {
         }
         return parent::add();
     }
+
+    public function edit($key = null, $urlVar = null)
+    {
+        $contractID = $this->input->getInt('contractID', 0);
+        if ($contractID != 0)
+        {
+            $session = JFactory::getSession();
+            $session->set('contractID', $contractID);
+        }
+        return parent::edit($key, $urlVar);
+    }
 }

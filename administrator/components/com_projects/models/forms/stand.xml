@@ -22,7 +22,15 @@
                 class="input-xlarge"
         />
         <field
-                name="state"
+                name="freeze"
+                type="text"
+                label="COM_PROJECTS_HEAD_CONTRACT_STAND_FREEZE"
+                description="COM_PROJECTS_HEAD_CONTRACT_STAND_FREEZE_DESC"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="tip"
                 type="list"
                 label="COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE"
                 description="COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_DESC"
@@ -31,9 +39,40 @@
                 size="1"
         >
             <option value="0">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_0</option>
-            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_1</option>
             <option value="2">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_2</option>
             <option value="3">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_3</option>
+            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_1</option>
         </field>
+        <field
+                name="comment"
+                type="text"
+                label="COM_PROJECTS_HEAD_CONTRACT_STAND_COMMENT"
+                description="COM_PROJECTS_HEAD_CONTRACT_STAND_COMMENT_DESC"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="status"
+                type="list"
+                label="COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS"
+                description="COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_DESC"
+                class="inputbox"
+                required="true"
+                size="1"
+        >
+            <option value="0">COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_0</option>
+            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_1</option>
+            <option value="2">COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_2</option>
+            <option value="3">COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_3</option>
+        </field>
+        <field
+                name="scheme"
+                type="filelist"
+                label="COM_PROJECTS_HEAD_CONTRACT_STAND_SCHEME"
+                description="COM_PROJECTS_HEAD_CONTRACT_STAND_SCHEME_DESC"
+                class="inputbox"
+                directory="images/stands"
+                default=""
+        />
     </fieldset>
 </form>
