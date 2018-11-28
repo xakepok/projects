@@ -45,7 +45,7 @@ $sum = 0;
                 <td>
                     <span id="label_<?php echo $item['id']; ?>"><?php echo $item['title']; ?></span>
                 </td>
-                <td>
+                <td class="price_cost">
                     <?php echo $item['cost']; ?>
                 </td>
                 <td>
