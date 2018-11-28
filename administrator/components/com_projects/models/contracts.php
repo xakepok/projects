@@ -128,7 +128,7 @@ class ProjectsModelContracts extends ListModel
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
             //$amount = $item->amount;
             $amount = $this->getAmount($item);
-            $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", $amount, $item->currency);
+            $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", number_format($amount, 2, '.', "'"), $item->currency);
             $arr['amount_only'] = $amount; //Только цена
             //$arr['debt'] = ($format != 'html') ? $amount - $this->getDebt($item->id) : sprintf("%s %s", $amount - $this->getDebt($item->id), $item->currency);
             $arr['state'] = $item->state;

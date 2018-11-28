@@ -105,7 +105,7 @@ class ProjectsModelPayments extends ListModel
             $arr['project'] = JHtml::link($url, $item->project);
             $url = JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contractID}");
             $arr['contract'] = JHtml::link($url, $item->number);
-            $arr['amount'] = $item->amount."&nbsp;".$item->currency;
+            $arr['amount'] = number_format($item->amount, 2, '.', "'")."&nbsp;".$item->currency;
             $arr['author'] = $item->author;
             $result[] = $arr;
         }

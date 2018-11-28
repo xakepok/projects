@@ -89,10 +89,10 @@ class ProjectsModelScores extends ListModel
             $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr['exp'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->expID}"), $exp);
             $arr['project'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}"), $item->project);
-            $arr['amount'] = sprintf("%s %s", $item->amount, $item->currency);
+            $arr['amount'] = sprintf("%s %s", number_format($item->amount, 2, '.', "'"), $item->currency);
             $arr['state'] = $item->state;
-            $arr['payments'] = sprintf("%s %s", $item->payment, $item->currency);
-            $arr['debt'] = sprintf("%s %s", $item->debt, $item->currency);
+            $arr['payments'] = sprintf("%s %s", number_format($item->payment, 2, '.', "'"), $item->currency);
+            $arr['debt'] = sprintf("%s %s", number_format($item->debt, 2, '.', "'"), $item->currency);
             $arr['state_text'] = ProjectsHelper::getScoreState($item->state);
             $arr['color'] = ($arr['debt'] < 0) ? 'red' : 'black';
             $result[] = $arr;
