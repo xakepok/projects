@@ -32,12 +32,18 @@ HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto',
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
                 <?php if ($this->item->id != null): ?>
-                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'price', JText::sprintf('COM_PROJECTS_BLANK_CONTRACT_PRICE')); ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'priceAdd', JText::sprintf('COM_PROJECTS_BLANK_CONTRACT_PRICE_ADD')); ?>
                 <div class="row-fluid">
-                    <div class="span6">
+                    <div class="span12">
                         <?php echo $this->loadTemplate('price');?>
                     </div>
-                    <div class="span6 price_summary">
+                </div>
+                <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php endif;?>
+                <?php if ($this->item->id != null): ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'priceCurrent', JText::sprintf('COM_PROJECTS_BLANK_CONTRACT_PRICE_CURRENT')); ?>
+                <div class="row-fluid">
+                    <div class="span12">
                         <?php echo $this->loadTemplate('summary');?>
                     </div>
                 </div>

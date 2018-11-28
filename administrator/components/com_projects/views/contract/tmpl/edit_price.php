@@ -3,7 +3,7 @@ defined('_JEXEC') or die;
 if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf('COM_PROJECTS_MESSAGE_EDIT_PRICE_AFTER_SAVE');
 ?>
 <fieldset class="adminform">
-    <table>
+    <table class="addPrice">
         <thead>
         <tr>
             <th>
@@ -30,18 +30,10 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
         <?php foreach ($this->price as $item) : ?>
             <tr id="item_<?php echo $item['id']; ?>">
                 <td>
-                    <div class="control-label">
-                        <label for="price_<?php echo $item['id']; ?>" class="hasPopover"
-                               title="<?php echo $item['title']; ?>"
-                               id="label_<?php echo $item['id']; ?>"
-                               data-content="<?php echo $item['title']; ?>">
-                            <?php echo $item['title']; ?>
-                        </label>
-                    </div>
+                    <span id="label_<?php echo $item['id']; ?>"><?php echo $item['title']; ?></span>
                 </td>
                 <td>
-                    <div class="span2"
-                         style="text-align: right; vertical-align: bottom;"><?php echo $item['cost']; ?></div>
+                    <?php echo $item['cost']; ?>
                 </td>
                 <td>
                     <input
@@ -59,7 +51,7 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                             aria-invalid="false"/>&nbsp;
                     <span><?php echo $item['unit']; ?></span>
                 </td>
-                <td>
+                <td class="center">
                     <?php if ($item['isUnit2']): ?>
                         <input
                                 type="text"
@@ -77,7 +69,7 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                         <span><?php echo $item['unit2']; ?></span>
                     <?php endif; ?>
                 </td>
-                <td>
+                <td class="center">
                     <?php if ($item['isUnit2']): ?>
                         <input
                                 type="number"
@@ -95,7 +87,7 @@ if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf
                                 aria-invalid="false"/>&nbsp;%
                     <?php endif; ?>
                 </td>
-                <td>
+                <td class="center">
                     <?php if ($item['is_markup']): ?>
                     <select
                             name="jform[price][<?php echo $item['id']; ?>][markup]"

@@ -55,15 +55,15 @@ function getSum2(id, currency)
     if (tr === null) addSum(id);
     var span = document.querySelector('#sum_'+id);
     var sum = getSum(id);
-    if (sum !== 0 && sum !== null && sum !== undefined)
+    if (sum !== 0 && sum !== null && sum !== undefined && !isNaN(sum))
     {
         span.textContent = sum;
+        document.querySelector("#currency_"+id).textContent = currency;
     }
     else
     {
         removeTr(id);
     }
-    document.querySelector("#currency_"+id).textContent = currency;
     document.querySelector("#sum_amount").textContent = calculate() + ' ' + currency;
 }
 function removeTr(id)

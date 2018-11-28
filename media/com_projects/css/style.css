@@ -29,4 +29,13 @@
   overflow: auto;
 }
 
+.addPrice {
+  border-collapse: collapse;
+  width: 100%;
+}
+.addPrice tbody td {
+  border-top: 1px dotted black;
+  border-right: 1px dotted black;
+}
+
 /*# sourceMappingURL=style.css.map */

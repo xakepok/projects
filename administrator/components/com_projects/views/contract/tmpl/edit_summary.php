@@ -4,7 +4,7 @@ $currency = '';
 $sum = 0;
 ?>
 <fieldset class="adminform" style="border: 1px solid black">
-    <table width="100%">
+    <table style="width: 100%">
         <thead>
         <tr>
             <th>
