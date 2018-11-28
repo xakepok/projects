@@ -89,6 +89,12 @@ class ProjectsModelContracts extends ListModel
             $query->where("`c`.`id` = {$id}");
         }
 
+        if (!ProjectsHelper::canDo('core.admin'))
+        {
+            $userID = JFactory::getUser()->id;
+            $query->where("`c`.`managerID` = {$userID}");
+        }
+
         /* Сортировка */
         $orderCol  = $this->state->get('list.ordering', '`plan_dat`');
         $orderDirn = $this->state->get('list.direction', 'desc');
