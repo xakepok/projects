@@ -297,10 +297,11 @@ class ProjectsModelContract extends AdminModel {
         $result = array();
         $query = $db->getQuery(true);
         $query
-            ->select("`i`.`id`, `i`.`unit`, `unit_2` as `isUnit2`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `i`.`is_factor`, `i`.`is_markup`")
+            ->select("`i`.`id`, `i`.`unit`, `unit_2` as `isUnit2`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `i`.`is_factor`, `i`.`is_markup`, `i`.`sectionID`")
             ->select("IFNULL(`i`.`title_ru`,`i`.`title_en`) as `title`")
             ->select("`i`.`price_{$currency}` as `price`")
             ->select("`i`.`column_1`, `i`.`column_2`, `i`.`column_3`")
+            ->select("`s`.`title` as `section`")
             ->from("`#__prc_items` as `i`")
             ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
             ->leftJoin("`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`")
@@ -310,11 +311,12 @@ class ProjectsModelContract extends AdminModel {
         {
             $arr = array();
             $arr['id'] = $item->id;
+            $arr['section_id'] = $item->sectionID;
             $arr['title'] = $item->title;
             $pc = ($activeColumn != $values[$item->id]['columnID'] && !empty($values[$item->id]['columnID'])) ? $values[$item->id]['columnID'] : $activeColumn;
             $pc = "column_{$pc}";
             $cost = $item->price * $item->$pc;
-            $arr['cost'] = sprintf("%s %s", $cost, $currency);
+            $arr['cost'] = sprintf("%s %s", number_format($cost, 2, '.', " "), $currency);
             $arr['currency'] = $currency;
             $arr['cost_clean'] = $cost;
             $arr['unit'] = ProjectsHelper::getUnit($item->unit);
@@ -326,14 +328,15 @@ class ProjectsModelContract extends AdminModel {
             $arr['markup'] = (float) ($values[$item->id]['markup'] != null) ? (float) $values[$item->id]['markup'] * 100 - 100 : 0;
             $arr['is_factor'] = $item->is_factor;
             $arr['factor'] = (int) ($values[$item->id]['factor'] != null) ? 100 - $values[$item->id]['factor'] * 100 : 0;
-            $arr['fixed'] = ($activeColumn != $values[$item->id]['columnID'] && !empty($values[$item->id]['columnID'])) ? true : false;
+            $arr['fixed'] = ($activeColumn != $values[$item->id]['columnID'] && !empty($values[$item->id]['columnID']) && !ProjectsHelper::canDo('core.admin')) ? true : false;
             $sum = 0;
             if ($values[$item->id]['value']) $sum += $values[$item->id]['value'] * round($cost, 2);
             if ($values[$item->id]['value2'] != null) $sum = $sum * round($values[$item->id]['value2'], 2);
             if ($values[$item->id]['factor'] != null) $sum = $sum * $values[$item->id]['factor'];
             if ($values[$item->id]['markup'] != null) $sum = $sum * $values[$item->id]['markup'];
             $arr['sum'] = round($sum, 2);
-            $result[] = $arr;
+            if (!isset($result[$item->section])) $result[$item->section] = array();
+            $result[$item->section][] = $arr;
         }
         return $result;
     }

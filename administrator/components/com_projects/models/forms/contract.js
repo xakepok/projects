@@ -64,11 +64,13 @@ function getSum2(id, currency)
     {
         removeTr(id);
     }
-    document.querySelector("#sum_amount").textContent = calculate() + ' ' + currency;
+    subSum();
+    var itg = calculate();
+    document.querySelector("#sum_amount").textContent = itg.toLocaleString('ru') + ' ' + currency;
 }
 function removeTr(id)
 {
-    document.querySelector("#summary_"+id).remove();
+    //document.querySelector("#summary_"+id).remove();
 }
 function addSum(id) {
     var tbody = document.querySelector(".sumbody");
@@ -117,11 +119,29 @@ function getSum(id) {
     return sum;
 }
 function calculate() {
-    var amounts = document.querySelectorAll(".amounts");
+    var amounts = document.querySelectorAll("span[id^='subsum_']");
     var sum = 0;
     for (var i = 0; i < amounts.length; i++)
     {
-        if (amounts[i].textContent !== "") sum = sum + parseFloat(amounts[i].textContent);
+        if (amounts[i].textContent !== "0") sum = sum + parseFloat(amounts[i].textContent);
     }
     return sum;
+}
+function subSum() {
+    console.clear();
+    var trs = document.querySelectorAll("tr[class^='section_']");
+    var sum = [];
+    for (var i = 0; i < trs.length; i++)
+    {
+        var id = document.querySelector("#"+trs[i].id).dataset.section;
+        if (sum[id] === undefined) sum[id] = 0;
+        document.querySelector("#subsum_"+id).textContent = '0';
+        var sps = document.querySelectorAll("#"+trs[i].id+" > td > span[id^='sum_']");
+        for (var j = 0; j < sps.length; j++)
+        {
+            sum[id] = sum[id] + parseFloat(sps[j].textContent);
+            document.querySelector("#subsum_"+id).textContent = sum[id];
+        }
+    }
+
 }

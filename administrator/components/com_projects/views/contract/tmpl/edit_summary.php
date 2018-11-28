@@ -4,11 +4,14 @@ $currency = '';
 $sum = 0;
 ?>
 <fieldset class="adminform" style="border: 1px solid black">
-    <table style="width: 100%">
+    <table class="addPrice">
         <thead>
         <tr>
             <th>
-                <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_TITLE_RU'); ?>
+                <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_TITLE'); ?>
+            </th>
+            <th>
+                <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_SECTION'); ?>
             </th>
             <th>
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_AMOUNT'); ?>
@@ -16,35 +19,37 @@ $sum = 0;
         </tr>
         </thead>
         <tbody class="sumbody">
-        <?php foreach ($this->price as $item) :
-            //if ($item['value'] == null) continue;
+        <?php foreach ($this->price as $section => $arr) :
+            $subsum = 0;
+            ?>
+            <?php foreach ($arr as $i => $item):
             if ($item['sum'] == 0) continue;
-            $currency = $item['currency'];
             $sum += $item['sum'];
+            $currency = $item['currency'];
             ?>
             <tr id="summary_<?php echo $item['id']; ?>">
-                <td style="width: 80%">
-                    <div class="control-label">
-                        <label for="price_<?php echo $item['id']; ?>" class="hasPopover"
-                               title="<?php echo $item['title']; ?>"
-                               data-content="<?php echo $item['title']; ?>">
-                            <?php echo $item['title']; ?>
-                        </label>
-                    </div>
+                <td>
+                    <?php echo $item['title']; ?>
                 </td>
-                <td style="width: 20%">
-                    <span class="amounts" id="sum_<?php echo $item['id']; ?>"><?php echo $item['sum'];?></span>&nbsp;<span
-                            id="currency_<?php echo $item['id']; ?>"><?php echo $item['currency'];?></span>
+                <td>
+                    <?php echo $section; ?>
+                </td>
+                <td>
+                    <?php echo number_format($item['sum'], 2, '.', "'"), ' ', $currency; ?>
                 </td>
             </tr>
-        <?php endforeach; ?>
+        <?php
+        endforeach;
+        endforeach;
+        ?>
         </tbody>
-        <tfoot>
-        <tr>
-            <td colspan="2" style="text-align: right; font-weight: bold;">
-                <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_SUM'); ?>:&nbsp;<span id="sum_amount"><?php echo $sum, " ", $currency;?></span>
-            </td>
-        </tr>
-        </tfoot>
+        <tfoor>
+            <tr>
+                <td colspan="3" style="text-align: right; font-weight: bold;">
+                    <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_SUM'); ?>:&nbsp;
+                    <?php echo number_format($sum, 2, '.', "'"), ' ', $currency; ?>
+                </td>
+            </tr>
+        </tfoor>
     </table>
 </fieldset>
