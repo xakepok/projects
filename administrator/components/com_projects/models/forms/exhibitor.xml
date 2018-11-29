@@ -122,29 +122,38 @@
                 class="input-xlarge"
         />
         <field
-                name="addr_legal_ru"
+                name="addr_legal_street"
                 type="text"
-                label="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_RU"
-                description="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_RU_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_RU_HINT"
+                label="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_LEGAL_STREET"
+                description="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_LEGAL_STREET_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_LEGAL_STREET_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
         <field
-                name="addr_legal_en"
+                name="addr_legal_home"
                 type="text"
-                label="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_EN"
-                description="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_EN_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_EN_HINT"
+                label="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_LEGAL_HOME"
+                description="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_LEGAL_HOME_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_LEGAL_HOME_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
         <field
-                name="addr_fact"
+                name="addr_fact_street"
                 type="text"
-                label="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT"
-                description="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT_HINT"
+                label="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT_STREET"
+                description="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT_STREET_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT_STREET_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="addr_fact_home"
+                type="text"
+                label="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT_HOME"
+                description="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT_HOME_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT_HOME_HINT"
                 autocomplete="off"
                 class="input-xlarge"
         />
