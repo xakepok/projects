@@ -18,7 +18,10 @@ class ProjectsModelPayment extends AdminModel {
     public function save($data)
     {
         $data['created_by'] = JFactory::getUser()->id;
-        return parent::save($data);
+        $model = AdminModel::getInstance('Score', 'ProjectsModel');
+        $result = parent::save($data);
+        $model->checkState($data['scoreID']);
+        return $result;
     }
 
     public function getForm($data = array(), $loadData = true)
