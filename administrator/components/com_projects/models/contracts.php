@@ -109,6 +109,7 @@ class ProjectsModelContracts extends ListModel
         $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
         $ids = array();
         $format = JFactory::getApplication()->input->getString('format', 'html');
+        $pm = ListModel::getInstance('Payments', 'ProjectsModel');
         foreach ($items as $item) {
             $ids[] = $item->id;
             $arr['id'] = $item->id;
@@ -132,11 +133,12 @@ class ProjectsModelContracts extends ListModel
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             $arr['plan'] = $item->plan;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            //$amount = $item->amount;
             $amount = $this->getAmount($item);
+            $payments = $pm->getContractPayments($item->id);
+            $debt = (float) $amount - (float) $payments;
             $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", number_format($amount, 2, '.', "'"), $item->currency);
             $arr['amount_only'] = $amount; //Только цена
-            //$arr['debt'] = ($format != 'html') ? $amount - $this->getDebt($item->id) : sprintf("%s %s", $amount - $this->getDebt($item->id), $item->currency);
+            $arr['debt'] = ($format != 'html') ? $debt : sprintf("%s %s", number_format($debt, 2, '.', "'"), $item->currency);
             $arr['state'] = $item->state;
             $result['items'][] = $arr;
             $result['amount'][$item->currency] += $amount;

@@ -107,6 +107,27 @@ class ProjectsModelPayments extends ListModel
         return $db->setQuery($query)->loadResult();
     }
 
+    /**
+     * Возвращает сумму сделанных платежей по указанному номеру сделки
+     * @param int $contractID ID сделки
+     * @return float
+     * @since 1.3.0.9
+     */
+    public function getContractPayments(int $contractID): float
+    {
+        if ($contractID == 0) return 0;
+        $contractID = $this->_db->escape($contractID);
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("IFNULL(SUM(`p`.`amount`),0)")
+            ->from("`#__prj_payments` as `p`")
+            ->leftJoin("`#__prj_scores` as `s` ON `s`.`id` = `p`.`scoreID`")
+            ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
+            ->where("`s`.`contractID` = {$contractID}");
+        return $db->setQuery($query)->loadResult();
+    }
+
     public function getItems()
     {
         $items = parent::getItems();
