@@ -19,6 +19,9 @@ JHtml::_('searchtools.form');
             <tfoot><?php echo $this->loadTemplate('foot');?></tfoot>
         </table>
         <div>
+            <?php echo $this->loadTemplate('amount');?>
+        </div>
+        <div>
             <input type="hidden" name="task" value="" />
             <input type="hidden" name="boxchecked" value="0" />
             <input type="hidden" name="filter_order" value="<?php echo $this->escape($this->state->get('list.ordering')); ?>" />

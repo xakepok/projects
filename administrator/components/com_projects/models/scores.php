@@ -74,7 +74,7 @@ class ProjectsModelScores extends ListModel
     public function getItems()
     {
         $items = parent::getItems();
-        $result = array();
+        $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'debt' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
         $pm = ListModel::getInstance('Payments', 'ProjectsModel');
         foreach ($items as $item)
         {
@@ -97,7 +97,9 @@ class ProjectsModelScores extends ListModel
             $arr['debt'] = sprintf("%s %s", number_format($debt, 2, '.', "'"), $item->currency);
             $arr['state_text'] = ProjectsHelper::getScoreState($item->state);
             $arr['color'] = ($arr['debt'] < 0) ? 'red' : 'black';
-            $result[] = $arr;
+            $result['items'][] = $arr;
+            $result['amount'][$item->currency] += $payments;
+            $result['debt'][$item->currency] += $debt;
         }
         return $result;
     }

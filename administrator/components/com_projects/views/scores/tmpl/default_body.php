@@ -2,7 +2,7 @@
 // Запрет прямого доступа.
 defined('_JEXEC') or die;
 $ii = 0;
-foreach ($this->items as $i => $item) :
+foreach ($this->items['items'] as $i => $item) :
     $canChange = JFactory::getUser()->authorise('core.edit.state', 'com_projects.score.' . $item['id']);
     ?>
     <tr class="row0" style="color: <?php echo $item['color'];?>">
