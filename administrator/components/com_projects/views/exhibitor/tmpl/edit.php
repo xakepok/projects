@@ -66,6 +66,8 @@ HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto',
                     <div class="row-fluid">
                         <div class="span6">
                             <?php echo $this->loadTemplate('history_active'); ?>
+                            <br>
+                            <?php echo $this->loadTemplate('coexhibitors'); ?>
                         </div>
                         <div class="span6">
                             <?php echo $this->loadTemplate('history_complete'); ?>
