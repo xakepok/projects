@@ -20,6 +20,7 @@
                 description="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_DESC"
                 autocomplete="off"
                 class="input-xlarge"
+                validate="Standnumber"
         />
         <field
                 name="freeze"

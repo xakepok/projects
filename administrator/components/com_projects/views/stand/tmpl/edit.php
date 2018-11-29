@@ -3,6 +3,8 @@ defined('_JEXEC') or die;
 JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
+use Joomla\CMS\HTML\HTMLHelper;
+HTMLHelper::_('script', $this->script);
 $action = JRoute::_('index.php?option=com_projects&amp;view=stand&amp;layout=edit&amp;id=' . (int)$this->item->id);
 $return = JFactory::getApplication()->input->get('return', null);
 if ($return != null)
@@ -12,7 +14,7 @@ if ($return != null)
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function(task) {
-        if (task == 'stand.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
+        if (task === 'stand.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
             Joomla.submitform(task, document.getElementById('adminForm'));
         }
     }
