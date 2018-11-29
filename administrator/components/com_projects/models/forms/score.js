@@ -1,6 +1,6 @@
 'use strict';
 window.onload = function () {
-    //getDebt();
+    getDebt();
 };
 function getDebt() {
     var field = document.querySelector('#jform_contractID');
@@ -12,8 +12,8 @@ function getDebt() {
         .then(function (text) {
             var field = document.querySelector('#jform_amount');
             var cur = document.querySelector('#currency');
-            //field.value = text.data.items[0].debt;
-            //cur.innerText = text.data.items[0].currency;
+            field.value = text.data.items[0].debt;
+            cur.innerText = text.data.items[0].currency;
         })
         .catch(function (error) {
             console.log('Request failed', error);
