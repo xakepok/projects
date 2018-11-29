@@ -45,13 +45,10 @@ class ProjectsViewContracts extends HtmlView
         if (Factory::getUser()->authorise('projects.contract.allow', 'com_projects'))
         {
             JToolbarHelper::custom('contracts.getNumber', '', '', 'COM_PROJECTS_ACTION_CONTRACT_SET_NUMBER');
-            JToolbarHelper::custom('contracts.calculate', '', '', 'COM_PROJECTS_ACTION_CALCULATE_CONTRACT');
         }
         if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
         {
             JToolBarHelper::archiveList('contracts.archive', 'COM_PROJECTS_ACTION_CLOSE_CONTRACT');
-            JToolbarHelper::custom('contracts.resetAmount', '', '', 'COM_PROJECTS_ACTION_RESET_CONTRACT');
-            //JToolBarHelper::trash('contracts.trash');
         }
 		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
 		{

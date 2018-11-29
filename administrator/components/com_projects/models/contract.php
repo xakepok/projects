@@ -180,72 +180,9 @@ class ProjectsModelContract extends AdminModel {
         }
     }
 
-    public function resetAmount(int $contractID): void
-    {
-        $db =& $this->getDbo();
-        $query = $db->getQuery(true);
-        $query
-            ->update("`#__prj_contracts`")
-            ->set("`amount` = 0")
-            ->where("`id` = {$contractID}");
-        $db->setQuery($query)->execute();
-        $query = $db->getQuery(true);
-        $query
-            ->update("`#__prj_contract_items`")
-            ->set("`fixed` = NULL")
-            ->where("`contractID` = {$contractID}");
-        $db->setQuery($query)->execute();
-    }
-
     public function getScript()
     {
         return 'administrator/components/' . $this->option . '/models/forms/contract.js';
-    }
-
-    /**
-     * Расчёт и фиксация цены сделки
-     * @param int $contractID ID сделки
-     * @return void
-     * @since 1.2.9.2
-     */
-    public function calculate(int $contractID): void
-    {
-        $price = $this->getPrice($contractID);
-        $sum = 0;
-        $keys = array();
-        foreach ($price as $item)
-        {
-            if ($item['fixed'] != null) continue;
-            array_push($keys, $item['id']);
-            $sum += $item['cost_clean'] * $item['value'] * $item['factor'];
-            if ($item['isUnit2'] != null) $sum += $item['cost2_clean'] * $item['value2'] * $item['factor2'];
-        }
-        $this->fixedAmount($contractID, $sum, $keys);
-    }
-
-    /**
-     * Фиксация цены сделки
-     * @param int $contractID ID сделки
-     * @param float $amount Сумма сделки
-     * @param array $keys Массив с ключами таблицы заказа сделки
-     * @since 1.2.9.2
-     */
-    private function fixedAmount(int $contractID, float $amount, array $keys): void
-    {
-        $db =& $this->getDbo();
-        $query = $db->getQuery(true);
-        $query
-            ->update("`#__prj_contracts`")
-            ->set("`amount` = `amount` + {$amount}")
-            ->where("`id` = {$contractID}");
-        $db->setQuery($query)->execute();
-        $query = $db->getQuery(true);
-        $keys = implode(', ', $keys);
-        $query
-            ->update("`#__prj_contract_items`")
-            ->set("`fixed` = 1")
-            ->where("`id` IN ($keys)");
-        $db->setQuery($query)->execute();
     }
 
     /**

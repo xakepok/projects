@@ -70,42 +70,4 @@ class ProjectsControllerContracts extends AdminController
         $app->redirect(JRoute::_('index.php?option=com_projects&view=contracts'));
         jexit();
     }
-
-    /**
-     * Расчёт и фиксация цены сделки
-     * @return void
-     * @since 1.2.9.2
-     */
-    public function calculate(): void
-    {
-        $ids = $this->input->get('cid');
-        $model = $this->getModel();
-        foreach ($ids as $id)
-        {
-            $model->calculate($id);
-        }
-        $msg = JText::sprintf('COM_PROJECTS_MESSAGE_CALCULATE_SUCCESS');
-        $url = JRoute::_('index.php?option=com_projects&view=contracts');
-        $this->setRedirect($url, $msg)->redirect();
-        jexit();
-    }
-
-    /**
-     * Сброс расчитанной цены сделки
-     * @return void
-     * @since 1.2.9.2
-     */
-    public function resetAmount(): void
-    {
-        $ids = $this->input->get('cid');
-        $model = $this->getModel();
-        foreach ($ids as $id)
-        {
-            $model->resetAmount($id);
-        }
-        $msg = JText::sprintf('COM_PROJECTS_MESSAGE_CALCULATE_RESET');
-        $url = JRoute::link('administrator', 'index.php?option=com_projects&view=contracts');
-        $this->setRedirect($url, $msg)->redirect();
-        jexit();
-    }
 }
