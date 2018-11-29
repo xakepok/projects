@@ -27,8 +27,7 @@ class ProjectsModelScores extends ListModel
         $query
             ->select("`s`.`id`, `s`.`contractID`, DATE_FORMAT(`s`.`dat`,'%d.%m.%Y') as `dat`, `s`.`number`, `s`.`amount`, `s`.`state`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `e`.`id` as `expID`")
-            ->select("`c`.`currency`, (SELECT IFNULL(SUM(`amount`),0) FROM `#__prj_payments` WHERE `scoreID` = `s`.`id`) as `payment`")
-            ->select("(SELECT `s`.`amount`-`payment`) as `debt`")
+            ->select("`c`.`currency`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`, `p`.`id` as `projectID`")
             ->from("`#__prj_scores` as `s`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
@@ -76,6 +75,7 @@ class ProjectsModelScores extends ListModel
     {
         $items = parent::getItems();
         $result = array();
+        $pm = ListModel::getInstance('Payments', 'ProjectsModel');
         foreach ($items as $item)
         {
             $arr = array();
@@ -91,8 +91,10 @@ class ProjectsModelScores extends ListModel
             $arr['project'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}"), $item->project);
             $arr['amount'] = sprintf("%s %s", number_format($item->amount, 2, '.', "'"), $item->currency);
             $arr['state'] = $item->state;
-            $arr['payments'] = sprintf("%s %s", number_format($item->payment, 2, '.', "'"), $item->currency);
-            $arr['debt'] = sprintf("%s %s", number_format($item->debt, 2, '.', "'"), $item->currency);
+            $payments = $pm->getScorePayments($item->id);
+            $debt = $item->amount - $payments;
+            $arr['payments'] = sprintf("%s %s", number_format($payments, 2, '.', "'"), $item->currency);
+            $arr['debt'] = sprintf("%s %s", number_format($debt, 2, '.', "'"), $item->currency);
             $arr['state_text'] = ProjectsHelper::getScoreState($item->state);
             $arr['color'] = ($arr['debt'] < 0) ? 'red' : 'black';
             $result[] = $arr;

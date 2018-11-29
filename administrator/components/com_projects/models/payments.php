@@ -88,6 +88,25 @@ class ProjectsModelPayments extends ListModel
         return $query;
     }
 
+    /**
+     * Возвращает сумму сделанных платежей по указанному счёту
+     * @param int $scoreID
+     * @return float
+     * @since 1.3.0.9
+     */
+    public function getScorePayments(int $scoreID): float
+    {
+        if ($scoreID == 0) return 0;
+        $scoreID = $this->_db->escape($scoreID);
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("IFNULL(SUM(`amount`),0)")
+            ->from("`#__prj_payments`")
+            ->where("`scoreID` = {$scoreID}");
+        return $db->setQuery($query)->loadResult();
+    }
+
     public function getItems()
     {
         $items = parent::getItems();
