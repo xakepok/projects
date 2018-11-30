@@ -227,7 +227,8 @@ class ProjectsHelper
      */
     public static function getExpTitle($title_ru_short = null, $title_ru_full = null, $title_en = null): string
     {
-        return $title_ru_short ?? $title_ru_full ?? $title_en;
+        $title = $title_ru_short ?? $title_ru_full ?? $title_en;
+        return $title ?? JText::sprintf('COM_PROJECTS_ERROR_NOT_GET_EXP_TITLE');
     }
 
     /**

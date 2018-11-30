@@ -136,12 +136,13 @@ class ProjectsModelContract extends AdminModel {
     public function save($data)
     {
         if (!isset($data['managerID'])) $data['managerID'] = JFactory::getUser()->id;
+        if (empty($data['dat']) && ($data['status'] == 5 || $data['status'] == 6 || $data['status'] == 1)) $data['dat'] = date("Y-m-d");
         $s1 = parent::save($data);
         if ($data['id'] == null) $data['id'] = $this->_db->insertid();
         $this->saveHistory($data['id'], $data['status']);
         $s2 = $this->savePrice();
         $s3 = $this->saveFiles();
-        return $s1 && $s2;
+        return $s1 && $s2 && $s3;
     }
 
     protected function loadFormData()
