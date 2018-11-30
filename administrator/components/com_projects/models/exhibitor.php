@@ -11,6 +11,31 @@ class ProjectsModelExhibitor extends AdminModel
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    /**
+     * Возвращает текущих контактных лиц для экспонента
+     * @return array
+     * @since 1.3.0.9
+     */
+    public function getPersons(): array
+    {
+        $item = parent::getItem();
+        if ($item->id == null) return array();
+        $items = ProjectsHelper::getExhibitorPersons($item->id);
+        $result = array();
+        foreach ($items as $item) {
+            $arr = array();
+            $arr['id'] = $item->id;
+            $arr['fio'] = $item->fio;
+            $arr['post'] = $item->post;
+            $arr['phone_work'] = $item->phone_work;
+            $arr['phone_mobile'] = $item->phone_mobile;
+            $arr['email'] = (!empty($item->email)) ? JRoute::_("mailto:{$item->email}") : '';
+            $arr['action'] = JRoute::_("index.php?option=com_projects&amp;task=person.edit&amp;id={$item->id}");
+            $result[] = $arr;
+        }
+        return $result;
+    }
+
     public function getItem($pk = null)
     {
         $user_id =& JFactory::getUser()->id;

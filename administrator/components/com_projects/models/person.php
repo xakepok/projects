@@ -10,7 +10,20 @@ class ProjectsModelPerson extends AdminModel {
 
     public function getForm($data = array(), $loadData = true)
     {
+        $form = $this->loadForm(
+            $this->option.'.person', 'person', array('control' => 'jform', 'load_data' => $loadData)
+        );
+        if (empty($form))
+        {
+            return false;
+        }
+        $id = JFactory::getApplication()->input->get('id', 0);
+        $user = JFactory::getUser();
+        if ($id != 0 && (!$user->authorise('core.edit.state', $this->option . '.person.' . (int) $id))
+            || ($id == 0 && !$user->authorise('core.edit.state', $this->option)))
+            $form->setFieldAttribute('state', 'disabled', 'true');
 
+        return $form;
     }
 
     public function getItem($pk = null)
@@ -20,7 +33,13 @@ class ProjectsModelPerson extends AdminModel {
 
     protected function loadFormData()
     {
+        $data = JFactory::getApplication()->getUserState($this->option.'.edit.person.data', array());
+        if (empty($data))
+        {
+            $data = $this->getItem();
+        }
 
+        return $data;
     }
 
     protected function prepareTable($table)

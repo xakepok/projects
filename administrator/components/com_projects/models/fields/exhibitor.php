@@ -21,6 +21,13 @@ class JFormFieldExhibitor extends JFormFieldList
         {
             $query->where("`e`.`state` = 1");
         }
+        $session = JFactory::getSession();
+        if ($view == 'person' && $session->get('exbID') != null)
+        {
+            $exbID = $session->get('exbID');
+            $query->where("`e`.`id` = {$exbID}");
+            $session->clear('exbID');
+        }
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();

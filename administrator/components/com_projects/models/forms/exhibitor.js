@@ -10,6 +10,26 @@ window.onload = function () {
     inn.addEventListener('keyup', checkExp, false);
 };
 
+function removePerson(personID) {
+    fetch('/administrator/index.php?option=com_projects&task=exhibitors.removePerson&id=' + personID)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (text) {
+            if (text.data.result !== 1)
+            {
+                alert(text.data.message);
+            }
+            else
+            {
+                document.querySelector('#row_person_' + personID).remove();
+            }
+        })
+        .catch(function (error) {
+            console.log('Request failed', error);
+        });
+}
+
 function checkExp() {
     var title = '';
     var t1 = document.getElementById("jform_title_ru_short").value;

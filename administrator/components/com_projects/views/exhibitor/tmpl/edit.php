@@ -43,11 +43,8 @@ HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto',
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'contact', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_CONTACTS')); ?>
                 <div class="row-fluid">
-                    <div class="span6">
+                    <div class="span12">
                         <?php echo $this->loadTemplate('contacts'); ?>
-                    </div>
-                    <div class="span6">
-
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>

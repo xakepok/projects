@@ -203,42 +203,4 @@
                 class="input-xlarge"
         />
     </fieldset>
-    <fieldset name="contacts">
-        <field
-                name="director_name"
-                type="text"
-                label="COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_NAME"
-                description="COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_NAME_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_NAME_HINT"
-                autocomplete="off"
-                class="input-xlarge"
-        />
-        <field
-                name="director_post"
-                type="text"
-                label="COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_POST"
-                description="COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_POST_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_POST_HINT"
-                autocomplete="off"
-                class="input-xlarge"
-        />
-        <field
-                name="contact_person"
-                type="text"
-                label="COM_PROJECTS_HEAD_EXP_CONTACT_NAME"
-                description="COM_PROJECTS_HEAD_EXP_CONTACT_NAME_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_CONTACT_NAME_HINT"
-                autocomplete="off"
-                class="input-xlarge"
-        />
-        <field
-                name="contact_data"
-                type="text"
-                label="COM_PROJECTS_HEAD_EXP_CONTACT_DATA"
-                description="COM_PROJECTS_HEAD_EXP_CONTACT_DATA_DESC"
-                hint="COM_PROJECTS_HEAD_EXP_CONTACT_DATA_HINT"
-                autocomplete="off"
-                class="input-xlarge"
-        />
-    </fieldset>
 </form>

@@ -140,6 +140,23 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает массив с контактными лицами для указанного экспонента
+     * @param int $exbID ID экспонента
+     * @return array
+     * @since 1.3.0.9
+     */
+    public static function getExhibitorPersons(int $exbID): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("*")
+            ->from("`#__prj_exp_persons` as `p`")
+            ->where("`p`.`exbID` = {$exbID}");
+        return $db->setQuery($query)->loadObjectList();
+    }
+
+    /**
      * Возвращает список заданий из планировщика для указанной сделки
      * @param int $contractID
      * @return array
