@@ -38,18 +38,11 @@ class ProjectsModelExhibitor extends AdminModel
 
     public function getItem($pk = null)
     {
-        $user_id =& JFactory::getUser()->id;
         $table = $this->getTable();
         $id = JFactory::getApplication()->input->get('id', 0);
         if ($id != 0)
         {
             $table->load($id);
-            if ($table->isCheckedOut($user_id)) {
-                JFactory::getApplication()->redirect(JRoute::_('index.php?option=com_projects&view=exhibitors'), JText::sprintf('COM_PROJECTS_TABLE_ERROR_RECORD_BLOCKED'));
-                jexit();
-            } else {
-                $table->checkOut($user_id);
-            }
         }
         $item = parent::getItem($pk);
         $where = array('exbID' => $item->id);
