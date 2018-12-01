@@ -52,13 +52,13 @@ class ProjectsControllerContracts extends AdminController
             if ($item->status != 1)
             {
                 $app->enqueueMessage(JText::sprintf('COM_PROJECTS_ERROR_CONTRACT_IS_NOT_DOGOVOR'), 'error');
-                $app->redirect(JRoute::_('index.php?option=com_projects&view=contracts'));
+                $app->redirect(JUri::base() . 'index.php?option=com_projects&view=contracts');
                 jexit();
             }
             if ($item->number != null)
             {
                 $app->enqueueMessage(JText::sprintf('COM_PROJECTS_ERROR_CONTRACT_ALREADY_HAVE_NUMBER', $item->number), 'error');
-                $app->redirect(JRoute::_('index.php?option=com_projects&view=contracts'));
+                $app->redirect(JUri::base() . 'index.php?option=com_projects&view=contracts');
                 jexit();
             }
             $data = array('number' => $number, 'id' => $item->id, 'status' => $item->status);
@@ -67,7 +67,7 @@ class ProjectsControllerContracts extends AdminController
             $model->save($data);
         }
         $app->enqueueMessage(JText::sprintf('COM_PROJECTS_MESSAGE_CONTRACT_HAVE_NUM', $number), 'success');
-        $app->redirect(JRoute::_('index.php?option=com_projects&view=contracts'));
+        $app->redirect(JUri::base() . 'index.php?option=com_projects&view=contracts');
         jexit();
     }
 }
