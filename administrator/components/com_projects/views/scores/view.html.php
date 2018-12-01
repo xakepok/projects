@@ -33,11 +33,11 @@ class ProjectsViewScores extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_SCORES'), '');
 
-        if (Factory::getUser()->authorise('core.create', 'com_projects'))
+        if (Factory::getUser()->authorise('core.accountant', 'com_projects'))
         {
             JToolbarHelper::addNew('score.add');
         }
-        if (Factory::getUser()->authorise('core.edit', 'com_projects'))
+        if (Factory::getUser()->authorise('core.accountant', 'com_projects'))
         {
             JToolbarHelper::editList('score.edit');
         }

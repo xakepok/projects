@@ -33,11 +33,11 @@ class ProjectsViewContracts extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_CONTRACTS'), '');
 
-        if (Factory::getUser()->authorise('core.create', 'com_projects'))
+        if (Factory::getUser()->authorise('core.create', 'com_projects') && !Factory::getUser()->authorise('core.accountant', 'com_projects'))
         {
             JToolbarHelper::addNew('contract.add');
         }
-        if (Factory::getUser()->authorise('core.edit', 'com_projects'))
+        if (Factory::getUser()->authorise('core.edit', 'com_projects') && !Factory::getUser()->authorise('core.accountant', 'com_projects'))
         {
             JToolbarHelper::editList('contract.edit');
         }

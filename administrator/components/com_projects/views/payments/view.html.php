@@ -33,11 +33,11 @@ class ProjectsViewPayments extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_PAYMENTS'), '');
 
-        if (Factory::getUser()->authorise('core.create', 'com_projects'))
+        if (Factory::getUser()->authorise('core.accountant', 'com_projects'))
         {
             JToolbarHelper::addNew('payment.add');
         }
-        if (Factory::getUser()->authorise('core.edit', 'com_projects'))
+        if (Factory::getUser()->authorise('core.accountant', 'com_projects'))
         {
             JToolbarHelper::editList('payment.edit');
         }
