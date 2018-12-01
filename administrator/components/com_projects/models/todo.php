@@ -11,8 +11,8 @@ class ProjectsModelTodo extends AdminModel {
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
-        $isAdmin = ProjectsHelper::canDo('projects.exec.edit');
-        if (!$isAdmin) $item->dat = date("d.m.Y", strtotime($item->dat));
+        $item->dat = $item->dat ?? date("Y-m-d");
+        $item->managerID = $item->managerID ?? JFactory::getUser()->id;
 
         return $item;
     }
