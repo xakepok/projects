@@ -3,7 +3,6 @@ defined('_JEXEC') or die;
 JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
-$noedit = array('jform[task]','jform[contractID]','jform[dat]');
 $action = JRoute::_('index.php?option=com_projects&amp;view=todo&amp;layout=edit&amp;id=' . (int)$this->item->id);
 $return = JFactory::getApplication()->input->get('return', null);
 if ($return != null)
@@ -13,7 +12,7 @@ if ($return != null)
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function(task) {
-        if (task == 'todo.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
+        if (task === 'todo.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
             Joomla.submitform(task, document.getElementById('adminForm'));
         }
     }
@@ -32,7 +31,7 @@ if ($return != null)
                             <?php foreach ($this->form->getFieldset('names') as $field) :?>
                                 <div class="control-label"><?php echo $field->label; ?></div>
                                 <div class="controls">
-                                    <?php echo ($this->isAdmin || (!$this->isAdmin && !in_array($field->name, $noedit))) ? $field->input : $field->value; ?>
+                                    <?php echo $field->input; ?>
                                 </div>
                                 <br>
                             <?php endforeach; ?>
