@@ -11,7 +11,7 @@ class ProjectsModelTodo extends AdminModel {
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
-        $item->dat = $item->dat ?? date("Y-m-d");
+        $item->dat = $item->dat ?? date("Y-m-d", strtotime("+1 Weekday"));
         $item->managerID = $item->managerID ?? JFactory::getUser()->id;
 
         return $item;
