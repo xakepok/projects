@@ -33,16 +33,16 @@ class ProjectsViewContracts extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_CONTRACTS'), '');
 
-        if (Factory::getUser()->authorise('core.create', 'com_projects') && !Factory::getUser()->authorise('core.accountant', 'com_projects'))
+        if ((ProjectsHelper::canDo('core.create') && !ProjectsHelper::canDo('core.accountant')) || ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::addNew('contract.add');
         }
-        if (Factory::getUser()->authorise('core.edit', 'com_projects') && !Factory::getUser()->authorise('core.accountant', 'com_projects'))
+        if ((ProjectsHelper::canDo('core.edit') && !ProjectsHelper::canDo('core.accountant')) || ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::editList('contract.edit');
         }
         JToolbarHelper::divider();
-        if (Factory::getUser()->authorise('projects.contract.allow', 'com_projects'))
+        if (ProjectsHelper::canDo('projects.contract.allow'))
         {
             JToolbarHelper::custom('contracts.getNumber', '', '', 'COM_PROJECTS_ACTION_CONTRACT_SET_NUMBER');
         }

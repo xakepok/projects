@@ -33,11 +33,11 @@ class ProjectsViewExhibitors extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_EXHIBITORS'), '');
 
-        if (Factory::getUser()->authorise('core.create', 'com_projects'))
+        if ((ProjectsHelper::canDo('core.create') && !ProjectsHelper::canDo('core.accountant')) || ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::addNew('exhibitor.add');
         }
-        if (Factory::getUser()->authorise('core.edit', 'com_projects'))
+        if ((ProjectsHelper::canDo('core.edit') && !ProjectsHelper::canDo('core.accountant')) || ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::editList('exhibitor.edit');
         }
