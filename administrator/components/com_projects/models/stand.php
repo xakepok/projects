@@ -44,7 +44,7 @@ class ProjectsModelStand extends AdminModel {
 
     public function save($data)
     {
-        if ($data['status'] == '2')
+        if ($data['status'] == '3')
         {
             $this->_createTodo($data);
         }
