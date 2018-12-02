@@ -1,5 +1,4 @@
 <?php
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 
@@ -46,11 +45,7 @@ class ProjectsViewContracts extends HtmlView
         {
             JToolbarHelper::custom('contracts.getNumber', '', '', 'COM_PROJECTS_ACTION_CONTRACT_SET_NUMBER');
         }
-        if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
-        {
-            JToolBarHelper::archiveList('contracts.archive', 'COM_PROJECTS_ACTION_CLOSE_CONTRACT');
-        }
-		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
+		if (ProjectsHelper::canDo('core.admin'))
 		{
 			JToolBarHelper::preferences('com_projects');
 		}

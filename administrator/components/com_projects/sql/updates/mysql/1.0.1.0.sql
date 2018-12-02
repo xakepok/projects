@@ -1,0 +1,1 @@
+ALTER TABLE `#__prj_contracts` DROP `state`;

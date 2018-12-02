@@ -19,6 +19,7 @@ class ProjectsModelContract extends AdminModel {
         return $item;
     }
 
+
     public function getStands(): array
     {
         $item = parent::getItem();
@@ -96,12 +97,6 @@ class ProjectsModelContract extends AdminModel {
         {
             return false;
         }
-        $id = JFactory::getApplication()->input->get('id', 0);
-        $user = JFactory::getUser();
-        if ($id != 0 && (!$user->authorise('core.edit.state', $this->option . '.contract.' . (int) $id))
-            || ($id == 0 && !$user->authorise('core.edit.state', $this->option)))
-            $form->setFieldAttribute('state', 'disabled', 'true');
-
         return $form;
     }
 

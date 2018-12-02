@@ -10,9 +10,6 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
     <th>
         №
     </th>
-    <th width="5%">
-        <?php echo JHtml::_('grid.sort', 'JSTATUS', '`state`', $listDirn, $listOrder); ?>
-    </th>
     <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_NUMBER_SHORT', '`c`.`number`', $listDirn, $listOrder); ?>
     </th>
