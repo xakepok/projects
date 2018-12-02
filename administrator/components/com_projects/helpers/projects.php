@@ -8,17 +8,29 @@ class ProjectsHelper
 {
     public function addSubmenu($vName)
     {
-        JHtmlSidebar::addEntry(Text::_('COM_PROJECTS'), 'index.php?option=com_projects&amp;view=projects', $vName == 'projects');
-        JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CONTRACTS'), 'index.php?option=com_projects&amp;view=contracts', $vName == 'contracts');
-        JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_TODOS'), 'index.php?option=com_projects&amp;view=todos', $vName == 'todos');
-        JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_EXHIBITORS'), 'index.php?option=com_projects&amp;view=exhibitors', $vName == 'exhibitors');
-        JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_SCORES'), 'index.php?option=com_projects&amp;view=scores', $vName == 'scores');
-        JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PAYMENTS'), 'index.php?option=com_projects&amp;view=payments', $vName == 'payments');
-        JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PRICES'), 'index.php?option=com_projects&amp;view=prices', $vName == 'prices');
-        JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_SECTIONS'), 'index.php?option=com_projects&amp;view=sections', $vName == 'sections');
-        JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ITEMS'), 'index.php?option=com_projects&amp;view=items', $vName == 'items');
-        JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PLANS'), 'index.php?option=com_projects&amp;view=plans', $vName == 'plans');
-        JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ACTIVITIES'), 'index.php?option=com_projects&amp;view=activities', $vName == 'activities');
+        if (self::canDo('core.general'))
+        {
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS'), 'index.php?option=com_projects&amp;view=projects', $vName == 'projects');
+        }
+        if (self::canDo('core.manager') || self::canDo('core.accountant'))
+        {
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CONTRACTS'), 'index.php?option=com_projects&amp;view=contracts', $vName == 'contracts');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_TODOS'), 'index.php?option=com_projects&amp;view=todos', $vName == 'todos');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_EXHIBITORS'), 'index.php?option=com_projects&amp;view=exhibitors', $vName == 'exhibitors');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PLANS'), 'index.php?option=com_projects&amp;view=plans', $vName == 'plans');
+        }
+        if (self::canDo('core.accountant'))
+        {
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_SCORES'), 'index.php?option=com_projects&amp;view=scores', $vName == 'scores');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PAYMENTS'), 'index.php?option=com_projects&amp;view=payments', $vName == 'payments');
+        }
+        if (self::canDo('core.general'))
+        {
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PRICES'), 'index.php?option=com_projects&amp;view=prices', $vName == 'prices');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_SECTIONS'), 'index.php?option=com_projects&amp;view=sections', $vName == 'sections');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ITEMS'), 'index.php?option=com_projects&amp;view=items', $vName == 'items');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ACTIVITIES'), 'index.php?option=com_projects&amp;view=activities', $vName == 'activities');
+        }
     }
 
     /**
