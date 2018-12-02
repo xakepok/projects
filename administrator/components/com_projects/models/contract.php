@@ -162,20 +162,6 @@ class ProjectsModelContract extends AdminModel {
         parent::prepareTable($table);
     }
 
-    protected function canEditState($record)
-    {
-        $user = JFactory::getUser();
-
-        if (!empty($record->id))
-        {
-            return $user->authorise('core.edit.state', $this->option . '.contract.' . (int) $record->id);
-        }
-        else
-        {
-            return parent::canEditState($record);
-        }
-    }
-
     public function getScript()
     {
         return 'administrator/components/' . $this->option . '/models/forms/contract.js';
