@@ -1,5 +1,4 @@
 <?php
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 
@@ -32,28 +31,15 @@ class ProjectsViewScores extends HtmlView
 	private function toolbar()
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_SCORES'), '');
-
         if (ProjectsHelper::canDo('core.accountant') || ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::addNew('score.add');
-        }
-        if (ProjectsHelper::canDo('core.accountant') || ProjectsHelper::canDo('core.general'))
-        {
             JToolbarHelper::editList('score.edit');
-        }
-        if ($this->state->get('filter.state') == -2 && Factory::getUser()->authorise('core.delete', 'com_projects'))
-        {
             JToolbarHelper::deleteList('', 'scores.delete');
+            JToolbarHelper::publish('scores.publish', 'COM_PROJECTS_ACTION_TASK_SCORE_SUCCESS', true);
+            JToolbarHelper::unpublish('scores.unpublish', 'COM_PROJECTS_ACTION_TASK_SCORE_NO_SUCCESS', true);
         }
-        if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
-        {
-            JToolbarHelper::divider();
-            JToolbarHelper::publish('scores.publish', 'JTOOLBAR_PUBLISH', true);
-            JToolbarHelper::unpublish('scores.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-            JToolBarHelper::archiveList('scores.archive');
-            JToolBarHelper::trash('scores.trash');
-        }
-		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
+		if (ProjectsHelper::canDo('core.admin'))
 		{
 			JToolBarHelper::preferences('com_projects');
 		}
