@@ -5,3 +5,4 @@ ALTER TABLE `#__prj_exp`
   DROP `checked_out_time`,
   DROP `state`;
 ALTER TABLE `#__prj_plans` DROP `state`;
+ALTER TABLE `#__prj_payments` DROP `state`;

@@ -41,7 +41,7 @@ class ProjectsViewPayments extends HtmlView
         {
             JToolbarHelper::editList('payment.edit');
         }
-		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
+		if (ProjectsHelper::canDo('core.admin'))
 		{
 			JToolBarHelper::preferences('com_projects');
 		}

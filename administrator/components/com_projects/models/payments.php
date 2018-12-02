@@ -16,7 +16,6 @@ class ProjectsModelPayments extends ListModel
                 '`title_ru_short`','`title_ru_short`',
                 '`author`','`author`',
                 '`project`','`project`',
-                '`state`', '`state`',
             );
         }
         parent::__construct($config);
@@ -38,17 +37,6 @@ class ProjectsModelPayments extends ListModel
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
             ->leftJoin("`#__users` as `u` ON `u`.`id` = `pm`.`created_by`");
-
-        // Фильтруем по состоянию.
-        $published = $this->getState('filter.state');
-        if (is_numeric($published))
-        {
-            $query->where('`pm`.`state` = ' . (int) $published);
-        }
-        elseif ($published === '')
-        {
-            $query->where('(`pm`.`state` = 0 OR `pm`.`state` = 1)');
-        }
         // Фильтруем по сделке.
         $contract = $this->getState('filter.contract');
         if (is_numeric($contract))
@@ -72,12 +60,6 @@ class ProjectsModelPayments extends ListModel
         if (is_numeric($score))
         {
             $query->where('`pm`.`scoreID` = ' . (int) $score);
-        }
-        //Если не руководитель, выводим только свои платежи
-        if (!ProjectsHelper::canDo('projects.exec.edit'))
-        {
-            $user = JFactory::getUser();
-            $query->where("`pm`.`created_by` = {$user->id}");
         }
 
         /* Сортировка */
@@ -155,12 +137,10 @@ class ProjectsModelPayments extends ListModel
     /* Сортировка по умолчанию */
     protected function populateState($ordering = null, $direction = null)
     {
-        $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
         $contract = $this->getUserStateFromRequest($this->context . '.filter.contract', 'filter_contract', '', 'string');
         $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor', '', 'string');
         $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project', '', 'string');
         $score = $this->getUserStateFromRequest($this->context . '.filter.score', 'filter_score', '', 'string');
-        $this->setState('filter.state', $published);
         $this->setState('filter.contract', $contract);
         $this->setState('filter.exhibitor', $exhibitor);
         $this->setState('filter.project', $project);
@@ -170,7 +150,6 @@ class ProjectsModelPayments extends ListModel
 
     protected function getStoreId($id = '')
     {
-        $id .= ':' . $this->getState('filter.state');
         $id .= ':' . $this->getState('filter.contract');
         $id .= ':' . $this->getState('filter.exhibitor');
         $id .= ':' . $this->getState('filter.project');

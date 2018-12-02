@@ -18,7 +18,7 @@ class ProjectsViewPayment extends HtmlView {
     }
 
     protected function addToolbar() {
-	    JToolBarHelper::apply('payment.apply', 'JTOOLBAR_APPLY');
+	    //JToolBarHelper::apply('payment.apply', 'JTOOLBAR_APPLY');
         JToolbarHelper::save('payment.save', 'JTOOLBAR_SAVE');
         JToolbarHelper::cancel('payment.cancel', 'JTOOLBAR_CLOSE');
     }
