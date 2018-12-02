@@ -21,19 +21,5 @@
                 directory="images/plans"
                 class="input-xlarge"
         />
-        <field
-                name="state"
-                type="list"
-                label="JSTATUS"
-                description="JFIELD_PUBLISHED_DESC"
-                class="inputbox"
-                size="1"
-                default="1"
-        >
-            <option value="1">JPUBLISHED</option>
-            <option value="0">JUNPUBLISHED</option>
-            <option value="2">JARCHIVED</option>
-            <option value="-2">JTRASHED</option>
-        </field>
     </fieldset>
 </form>

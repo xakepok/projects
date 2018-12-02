@@ -1,5 +1,4 @@
 <?php
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 
@@ -33,27 +32,19 @@ class ProjectsViewPlans extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_PLANS'), '');
 
-        if (Factory::getUser()->authorise('core.create', 'com_projects'))
+        if (ProjectsHelper::canDo('core.create'))
         {
             JToolbarHelper::addNew('plan.add');
         }
-        if (Factory::getUser()->authorise('core.edit', 'com_projects'))
+        if (ProjectsHelper::canDo('core.edit'))
         {
             JToolbarHelper::editList('plan.edit');
         }
-        if ($this->state->get('filter.state') == -2 && Factory::getUser()->authorise('core.delete', 'com_projects'))
+        if (ProjectsHelper::canDo('core.delete') && ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::deleteList('', 'plans.delete');
         }
-        if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
-        {
-            JToolbarHelper::divider();
-            JToolbarHelper::publish('plans.publish', 'JTOOLBAR_PUBLISH', true);
-            JToolbarHelper::unpublish('plans.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-            JToolBarHelper::archiveList('plans.archive');
-            JToolBarHelper::trash('plans.trash');
-        }
-		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
+		if (ProjectsHelper::canDo('core.admin'))
 		{
 			JToolBarHelper::preferences('com_projects');
 		}

@@ -11,7 +11,6 @@ class ProjectsModelPlans extends ListModel
             $config['filter_fields'] = array(
                 '`pl`.`id`', '`pl`.`id`',
                 '`title`', '`title`',
-                '`pl`.`state`', '`pl`.`state`',
             );
         }
         parent::__construct($config);
@@ -22,21 +21,10 @@ class ProjectsModelPlans extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select('`pl`.`id`, `pr`.`title`, `pl`.`path`, `pl`.`state`')
+            ->select('`pl`.`id`, `pr`.`title`, `pl`.`path`')
             ->from("`#__prj_plans` as `pl`")
             ->leftJoin("`#__prj_projects` as `pr` ON `pr`.`id` = `pl`.`prjID`");
-
-        // Фильтруем по состоянию.
-        $published = $this->getState('filter.state');
-        if (is_numeric($published))
-        {
-            $query->where('`pl`.`state` = ' . (int) $published);
-        }
-        elseif ($published === '')
-        {
-            $query->where('(`pl`.`state` = 0 OR `pl`.`state` = 1)');
-        }
-        // Фильтруем по типу лицензии.
+        // Фильтруем по проекту.
         $project = $this->getState('filter.project');
         if (is_numeric($project))
         {
@@ -61,7 +49,6 @@ class ProjectsModelPlans extends ListModel
             $link = JHtml::link($url, $item->title);
             $arr['title'] = $link;
             $arr['path'] = $item->path;
-            $arr['state'] = $item->state;
             $result[] = $arr;
         }
         return $result;
@@ -71,15 +58,12 @@ class ProjectsModelPlans extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');
-        $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
-        $this->setState('filter.state', $published);
         $this->setState('filter.project', $project);
         parent::populateState('`pl`.`id`', 'asc');
     }
 
     protected function getStoreId($id = '')
     {
-        $id .= ':' . $this->getState('filter.state');
         $id .= ':' . $this->getState('filter.project');
         return parent::getStoreId($id);
     }

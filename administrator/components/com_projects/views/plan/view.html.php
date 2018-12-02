@@ -21,15 +21,12 @@ class ProjectsViewPlan extends HtmlView {
         $title = $this->item->title ?? JText::sprintf('COM_PROJECTS_TITLE_NEW_PLAN');
 
         JToolbarHelper::title($title, '');
-	    JToolBarHelper::apply('plan.apply', 'JTOOLBAR_APPLY');
+	    //JToolBarHelper::apply('plan.apply', 'JTOOLBAR_APPLY');
         JToolbarHelper::save('plan.save', 'JTOOLBAR_SAVE');
         JToolbarHelper::cancel('plan.cancel', 'JTOOLBAR_CLOSE');
     }
 
     protected function setDocument() {
-        JHtml::_('jquery.framework');
         JHtml::_('bootstrap.framework');
-        $document = JFactory::getDocument();
-        $document->addScript(JURI::root() . $this->script);
     }
 }
