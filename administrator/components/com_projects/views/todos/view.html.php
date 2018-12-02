@@ -34,20 +34,19 @@ class ProjectsViewTodos extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_TODOS'), '');
 
-        if (Factory::getUser()->authorise('core.create', 'com_projects'))
+        if (ProjectsHelper::canDo('core.create'))
         {
             JToolbarHelper::addNew('todo.add');
         }
-        if (Factory::getUser()->authorise('core.edit', 'com_projects'))
+        if (ProjectsHelper::canDo('core.edit'))
         {
             JToolbarHelper::editList('todo.edit');
         }
         if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
         {
             JToolbarHelper::divider();
-            JToolbarHelper::publish('todos.publish', 'JTOOLBAR_PUBLISH', true);
-            JToolbarHelper::unpublish('todos.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-            JToolBarHelper::archiveList('todos.archive');
+            JToolbarHelper::publish('todos.publish', 'COM_PROJECTS_ACTION_TASK_DOES', true);
+            JToolbarHelper::unpublish('todos.unpublish', 'COM_PROJECTS_ACTION_TASK_DOSE_DOES', true);
         }
 		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
 		{

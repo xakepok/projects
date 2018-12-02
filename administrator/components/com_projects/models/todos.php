@@ -72,7 +72,7 @@ class ProjectsModelTodos extends ListModel
             $query->where('`c`.`prjID` = ' . (int) $project);
         }
         //Если не руководитель, выводим только назначенные пользователю задания
-        if (!ProjectsHelper::canDo('projects.exec.edit'))
+        if (!ProjectsHelper::canDo('core.general'))
         {
             $user = JFactory::getUser();
             $query->where("`t`.`managerID` = {$user->id}");
@@ -145,6 +145,7 @@ class ProjectsModelTodos extends ListModel
      * @param string $dat Дата, в которую должно быть выполнено задание
      * @param int $state Состояние задания
      * @return bool
+     * @throws
      * @since 1.2.6
      */
     private function isExpired(string $dat, int $state): bool
