@@ -19,7 +19,6 @@ defined('_JEXEC') or die;
         <div class="js-stools-field-filter">
             <?php echo ProjectsHtmlFilters::city($this->state->get('filter.city')); ?>
             <?php echo ProjectsHtmlFilters::activity($this->state->get('filter.activity')); ?>
-            <?php echo ProjectsHtmlFilters::state($this->state->get('filter.state')); ?>
         </div>
         <div class="btn-wrapper">
             <button type="button" class="btn hasTooltip js-stools-btn-clear"

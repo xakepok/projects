@@ -17,10 +17,6 @@ class JFormFieldExhibitor extends JFormFieldList
             ->select("`r`.`name` as `region`")
             ->from('`#__prj_exp` as `e`')
             ->leftJoin("`#__grph_cities` as `r` ON `r`.`id` = `e`.`regID`");
-        if ($view == 'contract')
-        {
-            $query->where("`e`.`state` = 1");
-        }
         $session = JFactory::getSession();
         if ($view == 'person' && $session->get('exbID') != null)
         {

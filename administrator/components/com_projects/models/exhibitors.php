@@ -14,7 +14,6 @@ class ProjectsModelExhibitors extends ListModel
                 '`title_ru_full`', '`title_ru_full`',
                 '`title_en`', '`title_en`',
                 '`city`', '`city`',
-                '`state`', '`e`.`state`',
             );
         }
         parent::__construct($config);
@@ -26,7 +25,7 @@ class ProjectsModelExhibitors extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select('`e`.`id`, `e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`state`')
+            ->select('`e`.`id`, `e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`')
             ->select("`r`.`name` as `city`")
             ->from("`#__prj_exp` as `e`")
             ->leftJoin("`#__prj_exp_bank` as `b` ON `b`.`exbID` = `e`.`id`")
@@ -37,13 +36,6 @@ class ProjectsModelExhibitors extends ListModel
         if (!empty($search)) {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('(`title_ru_full` LIKE ' . $search . 'OR `title_ru_short` LIKE ' . $search . 'OR `title_en` LIKE ' . $search . ')');
-        }
-        // Фильтруем по состоянию.
-        $published = $this->getState('filter.state');
-        if (is_numeric($published)) {
-            $query->where('`e`.`state` = ' . (int)$published);
-        } elseif ($published === '') {
-            $query->where('(`e`.`state` = 0 OR `e`.`state` = 1)');
         }
         // Фильтруем по городу.
         $city = $this->getState('filter.city');
@@ -63,7 +55,7 @@ class ProjectsModelExhibitors extends ListModel
                 $query->where("`e`.`id` IN (-1)");
             }
         }
-        // Фильтруем по ИНН
+        // Фильтруем по ИНН (для поиска синонимов)
         $inn = JFactory::getApplication()->input->getInt('inn', 0);
         if ($inn !== 0)
         {
@@ -97,7 +89,6 @@ class ProjectsModelExhibitors extends ListModel
             $link = JHtml::link($url, $title);
             $arr['region'] = $item->city;
             $arr['title'] = ($format != 'html') ? $title : $link;
-            $arr['state'] = $item->state;
             $result[] = $arr;
         }
         return $result;
@@ -107,11 +98,9 @@ class ProjectsModelExhibitors extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-        $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
         $activity = $this->getUserStateFromRequest($this->context . '.filter.activity', 'filter_activity', '', 'string');
         $city = $this->getUserStateFromRequest($this->context . '.filter.city', 'filter_city', '', 'string');
         $this->setState('filter.search', $search);
-        $this->setState('filter.state', $published);
         $this->setState('filter.state', $activity);
         $this->setState('filter.city', $city);
         parent::populateState('`title_ru_short`', 'asc');
@@ -120,7 +109,6 @@ class ProjectsModelExhibitors extends ListModel
     protected function getStoreId($id = '')
     {
         $id .= ':' . $this->getState('filter.search');
-        $id .= ':' . $this->getState('filter.state');
         $id .= ':' . $this->getState('filter.activity');
         $id .= ':' . $this->getState('filter.city');
         return parent::getStoreId($id);

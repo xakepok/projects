@@ -60,12 +60,6 @@ class ProjectsModelExhibitor extends AdminModel
         if (empty($form)) {
             return false;
         }
-        $id = JFactory::getApplication()->input->get('id', 0);
-        $user = JFactory::getUser();
-        if ($id != 0 && (!$user->authorise('core.edit.state', $this->option . '.exhibitor.' . (int)$id))
-            || ($id == 0 && !$user->authorise('core.edit.state', $this->option)))
-            $form->setFieldAttribute('state', 'disabled', 'true');
-
         return $form;
     }
 
@@ -86,17 +80,6 @@ class ProjectsModelExhibitor extends AdminModel
             if (!strlen($table->$field)) $table->$field = NULL;
         }
         parent::prepareTable($table);
-    }
-
-    protected function canEditState($record)
-    {
-        $user = JFactory::getUser();
-
-        if (!empty($record->id)) {
-            return $user->authorise('core.edit.state', $this->option . '.exhibitor.' . (int)$record->id);
-        } else {
-            return parent::canEditState($record);
-        }
     }
 
     public function getScript()

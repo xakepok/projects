@@ -3,7 +3,6 @@
 defined('_JEXEC') or die;
 $ii = 0;
 foreach ($this->items as $i => $item) :
-    $canChange = JFactory::getUser()->authorise('core.edit.state', 'com_projects.exhibitor.' . $item['id']);
     ?>
     <tr class="row0">
         <td class="center">
@@ -11,9 +10,6 @@ foreach ($this->items as $i => $item) :
         </td>
         <td>
             <?php echo ++$ii; ?>
-        </td>
-        <td>
-            <?php echo JHtml::_('jgrid.published', $item['state'], $i, 'exhibitors.', $canChange); ?>
         </td>
         <td>
             <?php echo $item['title'];?>

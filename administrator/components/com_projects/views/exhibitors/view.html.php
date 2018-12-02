@@ -1,5 +1,4 @@
 <?php
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 
@@ -41,19 +40,11 @@ class ProjectsViewExhibitors extends HtmlView
         {
             JToolbarHelper::editList('exhibitor.edit');
         }
-        if ($this->state->get('filter.state') == -2 && Factory::getUser()->authorise('core.delete', 'com_projects'))
+        if (ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::deleteList('', 'exhibitors.delete');
         }
-        if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
-        {
-            JToolbarHelper::divider();
-            JToolbarHelper::publish('exhibitors.publish', 'JTOOLBAR_PUBLISH', true);
-            JToolbarHelper::unpublish('exhibitors.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-            JToolBarHelper::archiveList('exhibitors.archive');
-            JToolBarHelper::trash('exhibitors.trash');
-        }
-		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
+		if (ProjectsHelper::canDo('core.admin'))
 		{
 			JToolBarHelper::preferences('com_projects');
 		}

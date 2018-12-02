@@ -26,7 +26,7 @@ class ProjectsViewExhibitor extends HtmlView {
         $title = ($this->id != 0) ? ProjectsHelper::getExpTitle($this->item->title_ru_short, $this->item->title_ru_full, $this->item->title_en) : JText::sprintf('COM_PROJECTS_TITLE_NEW_EXHIBITOR');
 
         JToolbarHelper::title($title, '');
-	    JToolBarHelper::apply('exhibitor.apply', 'JTOOLBAR_APPLY');
+	    //JToolBarHelper::apply('exhibitor.apply', 'JTOOLBAR_APPLY');
         JToolbarHelper::save('exhibitor.save', 'JTOOLBAR_SAVE');
         JToolbarHelper::cancel('exhibitor.cancel', 'JTOOLBAR_CLOSE');
     }
