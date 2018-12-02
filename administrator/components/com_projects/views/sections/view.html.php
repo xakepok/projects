@@ -33,15 +33,15 @@ class ProjectsViewSections extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_SECTIONS'), '');
 
-        if (Factory::getUser()->authorise('core.create', 'com_projects'))
+        if (ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::addNew('section.add');
         }
-        if (Factory::getUser()->authorise('core.edit', 'com_projects'))
+        if (ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::editList('section.edit');
         }
-        if ($this->state->get('filter.state') == -2 && Factory::getUser()->authorise('core.delete', 'com_projects'))
+        if (ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::deleteList('', 'sections.delete');
         }
