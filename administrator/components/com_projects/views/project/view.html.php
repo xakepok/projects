@@ -23,7 +23,7 @@ class ProjectsViewProject extends HtmlView {
         $title = $this->item->title ?? JText::sprintf('COM_PROJECTS_TITLE_NEW_PROJECT');
 
         JToolbarHelper::title($title, '');
-	    JToolBarHelper::apply('project.apply', 'JTOOLBAR_APPLY');
+	    //JToolBarHelper::apply('project.apply', 'JTOOLBAR_APPLY');
         JToolbarHelper::save('project.save', 'JTOOLBAR_SAVE');
         JToolbarHelper::cancel('project.cancel', 'JTOOLBAR_CLOSE');
     }

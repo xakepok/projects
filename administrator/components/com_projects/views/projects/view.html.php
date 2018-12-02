@@ -1,5 +1,4 @@
 <?php
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 
@@ -33,27 +32,19 @@ class ProjectsViewProjects extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_PROJECTS'), '');
 
-        if (Factory::getUser()->authorise('core.create', 'com_projects'))
+        if (ProjectsHelper::canDo('core.create') && ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::addNew('project.add');
         }
-        if (Factory::getUser()->authorise('core.edit', 'com_projects'))
+        if (ProjectsHelper::canDo('core.edit') && ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::editList('project.edit');
         }
-        if ($this->state->get('filter.state') == -2 && Factory::getUser()->authorise('core.delete', 'com_projects'))
+        if (ProjectsHelper::canDo('core.delete') && ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::deleteList('', 'projects.delete');
         }
-        if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
-        {
-            JToolbarHelper::divider();
-            JToolbarHelper::publish('projects.publish', 'JTOOLBAR_PUBLISH', true);
-            JToolbarHelper::unpublish('projects.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-            JToolBarHelper::archiveList('projects.archive');
-            JToolBarHelper::trash('projects.trash');
-        }
-		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
+		if (ProjectsHelper::canDo('core.admin'))
 		{
 			JToolBarHelper::preferences('com_projects');
 		}

@@ -17,7 +17,6 @@ class ProjectsModelProjects extends ListModel
                 '`group`', '`group`',
                 '`price`', '`price`',
                 '`column`', '`column`',
-                '`state`', '`state`',
             );
         }
         parent::__construct($config);
@@ -28,7 +27,7 @@ class ProjectsModelProjects extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select('`p`.`id`, `p`.`title`, `p`.`columnID` as `column`, `p`.`state`')
+            ->select('`p`.`id`, `p`.`title`, `p`.`columnID` as `column`')
             ->select('`pr`.`title` as `price`')
             ->select("DATE_FORMAT(`p`.`date_start`,'%d.%m.%Y') as `date_start`")
             ->select("DATE_FORMAT(`p`.`date_end`,'%d.%m.%Y') as `date_end`")
@@ -45,16 +44,6 @@ class ProjectsModelProjects extends ListModel
         {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`p`.`title` LIKE ' . $search);
-        }
-        // Фильтруем по состоянию.
-        $published = $this->getState('filter.state');
-        if (is_numeric($published))
-        {
-            $query->where('`p`.`state` = ' . (int) $published);
-        }
-        elseif ($published === '')
-        {
-            $query->where('(`p`.`state` = 0 OR `p`.`state` = 1)');
         }
 
         /* Сортировка */
@@ -80,7 +69,6 @@ class ProjectsModelProjects extends ListModel
             $arr['price'] = $item->price;
             $arr['column'] = $item->column;
             $arr['group'] = $item->group;
-            $arr['state'] = $item->state;
             $result[] = $arr;
         }
         return $result;
@@ -90,16 +78,13 @@ class ProjectsModelProjects extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-        $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
         $this->setState('filter.search', $search);
-        $this->setState('filter.state', $published);
         parent::populateState('`p`.`title`', 'asc');
     }
 
     protected function getStoreId($id = '')
     {
         $id .= ':' . $this->getState('filter.search');
-        $id .= ':' . $this->getState('filter.state');
         return parent::getStoreId($id);
     }
 }
