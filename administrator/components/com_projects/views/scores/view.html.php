@@ -33,11 +33,11 @@ class ProjectsViewScores extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_SCORES'), '');
 
-        if (ProjectsHelper::canDo('core.accountant') || ProjectsHelper::canDo('core.admin'))
+        if (ProjectsHelper::canDo('core.accountant') || ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::addNew('score.add');
         }
-        if (ProjectsHelper::canDo('core.accountant') || ProjectsHelper::canDo('core.admin'))
+        if (ProjectsHelper::canDo('core.accountant') || ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::editList('score.edit');
         }
