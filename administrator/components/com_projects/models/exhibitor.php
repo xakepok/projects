@@ -93,7 +93,11 @@ class ProjectsModelExhibitor extends AdminModel
 
         $data = $this->addId($data);
 
+        $data['id'] = $data['bank_id'];
+        unset($data['bank_id']);
         $s2 = $this->saveData('Bank', $data);
+        $data['id'] = $data['address_id'];
+        unset($data['address_id']);
         $s3 = $this->saveData('Address', $data);
         $s4 = $this->saveActivities();
         return $s1 && $s2 && $s3 && $s4;
@@ -246,7 +250,9 @@ class ProjectsModelExhibitor extends AdminModel
         $model = AdminModel::getInstance($modelName, 'ProjectsModel');
         $table = $model->getTable()->bind($data);
         $model->prepareTable($table);
-        return $model->save($data);
+        $result = (!$model->save($data)) ? false : true;
+        if (!$result) JFactory::getApplication()->enqueueMessage($model->getError(), 'error');
+        return $result;
     }
 
     /**
@@ -261,9 +267,18 @@ class ProjectsModelExhibitor extends AdminModel
     {
         $id = $this->getId();
         if ($id !== 0) $data['exbID'] = $id;
-        $table = $this->getTable('Banks', 'TableProjects');
-        $table->load(array('exbID' => $id));
-        if ($table->id != null) $data['id'] = $table->id;
+        $model = AdminModel::getInstance('Bank', 'ProjectsModel');
+        $item = $model->getItem(array('exbID' => $id));
+        if ($item->id != null)
+        {
+            $data['bank_id'] = $item->id;
+        }
+        $model = AdminModel::getInstance('Address', 'ProjectsModel');
+        $item = $model->getItem(array('exbID' => $id));
+        if ($item->id != null)
+        {
+            $data['address_id'] = $item->id;
+        }
         return $data;
     }
 

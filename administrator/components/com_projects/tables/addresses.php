@@ -10,6 +10,7 @@ class TableProjectsAddresses extends Table
 {
     var $id = null;
     var $exbID = null;
+    var $indexcode = null;
     var $addr_legal_street = null;
     var $addr_legal_home = null;
     var $addr_fact_street = null;

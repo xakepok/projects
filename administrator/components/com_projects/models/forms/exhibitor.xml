@@ -109,6 +109,15 @@
                 default="4400"
         />
         <field
+                name="indexcode"
+                type="text"
+                label="COM_PROJECTS_HEAD_EXP_INDEX"
+                description="COM_PROJECTS_HEAD_EXP_INDEX_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_INDEX_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
                 name="addr_legal_street"
                 type="text"
                 label="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_LEGAL_STREET"
