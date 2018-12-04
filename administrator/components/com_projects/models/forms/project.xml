@@ -36,8 +36,9 @@
         <field
                 name="managerID"
                 type="user"
-                label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
-                description="COM_PROJECTS_HEAD_CONTRACT_MANAGER_DESC"
+                label="COM_PROJECTS_HEAD_CONTRACT_GENERAL"
+                description="COM_PROJECTS_HEAD_CONTRACT_GENERAL_DESC"
+                hint="COM_PROJECTS_HEAD_CONTRACT_GENERAL_UNDEFINED"
                 autocomplete="off"
                 class="input-xlarge"
         />

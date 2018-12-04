@@ -8,6 +8,13 @@ class ProjectsModelProject extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    public function getItem($pk = null)
+    {
+        $item = parent::getItem($pk);
+        if ($item->id == null) $item->managerID = JFactory::getUser()->id;
+        return $item;
+    }
+
     public function getForm($data = array(), $loadData = true)
     {
         $form = $this->loadForm(
