@@ -11,7 +11,7 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_EXPONENT"
                 description="COM_PROJECTS_HEAD_CONTRACT_EXPONENT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="person-field"
         />
         <field
                 name="fio"
@@ -20,7 +20,7 @@
                 description="COM_PROJECTS_HEAD_PERSON_FIO_DESC"
                 hint="COM_PROJECTS_HEAD_PERSON_FIO_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="person-field"
         />
         <field
                 name="post"
@@ -29,7 +29,7 @@
                 description="COM_PROJECTS_HEAD_PERSON_POST_DESC"
                 hint="COM_PROJECTS_HEAD_PERSON_POST_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="person-field"
         />
         <field
                 name="phone_work"
@@ -38,7 +38,7 @@
                 description="COM_PROJECTS_HEAD_PERSON_PHONE_WORK_DESC"
                 hint="COM_PROJECTS_HEAD_PERSON_PHONE_WORK_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="person-field"
         />
         <field
                 name="phone_mobile"
@@ -47,7 +47,7 @@
                 description="COM_PROJECTS_HEAD_PERSON_PHONE_MOBILE_DESC"
                 hint="COM_PROJECTS_HEAD_PERSON_PHONE_MOBILE_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="person-field"
         />
         <field
                 name="email"
@@ -56,7 +56,7 @@
                 description="COM_PROJECTS_HEAD_PERSON_EMAIL_DESC"
                 hint="COM_PROJECTS_HEAD_PERSON_EMAIL_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="person-field"
         />
     </fieldset>
 </form>

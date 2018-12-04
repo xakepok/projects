@@ -5,6 +5,7 @@ JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
 use Joomla\CMS\HTML\HTMLHelper;
 HTMLHelper::_('script', $this->script);
+HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto', 'relative' => true));
 $action = JRoute::_('index.php?option=com_projects&amp;view=person&amp;layout=edit&amp;id=' . (int)$this->item->id);
 $return = JFactory::getApplication()->input->get('return', null);
 if ($return != null)
