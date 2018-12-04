@@ -48,7 +48,11 @@ class ProjectsModelTodo extends AdminModel {
 
     public function save($data)
     {
-        if ($data['id'] == 0) $data['userOpen'] = JFactory::getUser()->id;
+        if ($data['id'] == 0)
+        {
+            $data['userOpen'] = JFactory::getUser()->id;
+            $data['dat_open'] = date("Y-m-d");
+        }
         if ($data['id'] != 0 && $data['state'] == 1)
         {
             $data['userClose'] = JFactory::getUser()->id;

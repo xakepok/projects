@@ -93,7 +93,7 @@ class ProjectsModelStand extends AdminModel {
         $cdata = $this->__getContractData($data['contractID']);
         $arr = array();
         $arr['id'] = NULL;
-        $arr['dat'] = date('Y-m-d', strtotime(' +1 day'));
+        $arr['dat'] = date('Y-m-d', strtotime(' +1 weekdays'));
         $arr['contractID'] = $data['contractID'];
         $arr['managerID'] = $cdata->managerID;
         $arr['task'] = JText::sprintf('COM_PROJECT_TASK_ACCEPT_SCHEME', $data['number'], $cdata->number);
