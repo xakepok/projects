@@ -106,6 +106,7 @@
                 description="COM_PROJECTS_HEAD_CITY_DESC"
                 required="true"
                 class="input-xlarge"
+                default="4400"
         />
         <field
                 name="addr_legal_street"
