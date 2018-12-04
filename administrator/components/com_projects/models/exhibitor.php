@@ -29,7 +29,7 @@ class ProjectsModelExhibitor extends AdminModel
             $arr['post'] = $item->post;
             $arr['phone_work'] = $item->phone_work;
             $arr['phone_mobile'] = $item->phone_mobile;
-            $arr['email'] = (!empty($item->email)) ? JRoute::_("mailto:{$item->email}") : '';
+            $arr['email'] = (!empty($item->email)) ? $item->email." / ".JHtml::link(JRoute::_("mailto:{$item->email}"), JText::sprintf('COM_PROJECTS_ACTION_WRITE')) : '';
             $arr['action'] = JRoute::_("index.php?option=com_projects&amp;task=person.edit&amp;id={$item->id}");
             $result[] = $arr;
         }
