@@ -8,6 +8,7 @@ window.onload = function () {
     field3.addEventListener('keyup', checkExp, false);
     var inn = document.getElementById("jform_inn");
     inn.addEventListener('keyup', checkExp, false);
+    jQuery(".phone_mask").mask("+9 (999) 999-99-99");
 };
 
 function removePerson(personID) {

@@ -38,7 +38,7 @@
                 description="COM_PROJECTS_HEAD_PERSON_PHONE_WORK_DESC"
                 hint="COM_PROJECTS_HEAD_PERSON_PHONE_WORK_HINT"
                 autocomplete="off"
-                class="person-field"
+                class="person-field phone_mask"
         />
         <field
                 name="phone_mobile"
@@ -47,7 +47,7 @@
                 description="COM_PROJECTS_HEAD_PERSON_PHONE_MOBILE_DESC"
                 hint="COM_PROJECTS_HEAD_PERSON_PHONE_MOBILE_HINT"
                 autocomplete="off"
-                class="person-field"
+                class="person-field phone_mask"
         />
         <field
                 name="email"

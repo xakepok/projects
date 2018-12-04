@@ -160,7 +160,7 @@
                 description="COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_1_DESC"
                 hint="COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="input-xlarge phone_mask"
         />
         <field
                 name="phone_2"
@@ -169,7 +169,7 @@
                 description="COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_2_DESC"
                 hint="COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="input-xlarge phone_mask"
         />
         <field
                 name="fax"
@@ -178,7 +178,7 @@
                 description="COM_PROJECTS_HEAD_EXP_CONTACT_FAX_DESC"
                 hint="COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="input-xlarge phone_mask"
         />
         <field
                 name="email"
