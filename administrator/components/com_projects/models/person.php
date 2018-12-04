@@ -57,4 +57,9 @@ class ProjectsModelPerson extends AdminModel {
     {
         return parent::publish($pks, $value);
     }
+
+    public function getScript()
+    {
+        return 'administrator/components/' . $this->option . '/models/forms/person.js';
+    }
 }

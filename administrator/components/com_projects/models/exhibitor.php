@@ -48,6 +48,7 @@ class ProjectsModelExhibitor extends AdminModel
         $where = array('exbID' => $item->id);
         $bank = AdminModel::getInstance('Bank', 'ProjectsModel')->getItem($where);
         $address = AdminModel::getInstance('Address', 'ProjectsModel')->getItem($where);
+        if (mb_strpos($address->site, 'http://') === false && !empty($address->site)) $address->site = "http://".$address->site;
         unset($item->_errors, $bank->exbID, $bank->id, $bank->_errors, $address->exbID, $address->id, $address->_errors);
         return (object)array_merge((array)$item, (array)$bank, (array)$address);
     }

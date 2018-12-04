@@ -197,6 +197,7 @@
                 hint="COM_PROJECTS_HEAD_EXP_CONTACT_SITE_HINT"
                 autocomplete="off"
                 class="input-xlarge"
+                onblur="checkURL(this)"
         />
     </fieldset>
 </form>
