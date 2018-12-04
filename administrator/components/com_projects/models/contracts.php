@@ -78,7 +78,7 @@ class ProjectsModelContracts extends ListModel
             $query->where("`c`.`id` = {$id}");
         }
 
-        if (!ProjectsHelper::canDo('core.admin') && !ProjectsHelper::canDo('core.accountant'))
+        if (!ProjectsHelper::canDo('core.general') && !ProjectsHelper::canDo('core.accountant'))
         {
             $userID = JFactory::getUser()->id;
             $query->where("`c`.`managerID` = {$userID}");
