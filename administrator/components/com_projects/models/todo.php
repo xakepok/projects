@@ -8,6 +8,28 @@ class ProjectsModelTodo extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    /**
+     * Возвращает количество активных заданий у текущего пользователя на определённую дату
+     * @param string $dat Дата в формате Y-m-d
+     * @return int Количество активных заданий или -1, если получена пустая дата
+     * @since 1.0.2.0
+     */
+    public function getTodosCountOnDate(string $dat): int
+    {
+        if (empty($dat)) return -1;
+        $dat = $this->_db->q($dat);
+        $uid = JFactory::getUser()->id;
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("IFNULL(COUNT(*),0) as `cnt`")
+            ->from("`#__prj_todos`")
+            ->where("`managerID` = {$uid}")
+            ->where("`dat` = {$dat}")
+            ->where("`state` = 0");
+        return $db->setQuery($query)->loadResult() ?? 0;
+    }
+
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);

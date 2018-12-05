@@ -43,6 +43,7 @@
                 description="COM_PROJECTS_HEAD_TODO_DATE_DESC"
                 autocomplete="off"
                 required="true"
+                onchange="getTodosCountOnDate()"
                 class="input-xlarge"
         />
         <field

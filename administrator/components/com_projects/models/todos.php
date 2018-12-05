@@ -71,6 +71,13 @@ class ProjectsModelTodos extends ListModel
         {
             $query->where('`c`.`prjID` = ' . (int) $project);
         }
+        //Фильтруем по дате из URL
+        $dat = JFactory::getApplication()->input->getString('date');
+        if ($dat !== null)
+        {
+            $dat = $this->_db->quote($this->_db->escape($dat));
+            $query->where("`t`.`dat` = {$dat}");
+        }
         //Если не руководитель, выводим только назначенные пользователю задания
         if (!ProjectsHelper::canDo('core.general'))
         {

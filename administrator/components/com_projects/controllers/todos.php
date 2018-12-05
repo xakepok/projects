@@ -10,6 +10,21 @@ class ProjectsControllerTodos extends AdminController
         return parent::getModel($name, $prefix, array('ignore_request' => true));
     }
 
+    public function getTodosCountOnDate()
+    {
+        $dat = $this->input->getString('date', null);
+        if ($dat == null)
+        {
+            echo new JsonResponse(array("error" => JText::sprintf('COM_PROJECTS_ERROR_EMPTY_DATE')));
+            jexit();
+        }
+        $dat = JFactory::getDbo()->escape($dat);
+        $model = $this->getModel();
+        $cnt = $model->getTodosCountOnDate($dat);
+        echo new JsonResponse(array("cnt" => $cnt));
+        jexit();
+    }
+
     public function close()
     {
         $model = $this->getModel();
