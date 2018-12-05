@@ -11,14 +11,15 @@ class ProjectsModelTodo extends AdminModel {
     /**
      * Возвращает количество активных заданий у текущего пользователя на определённую дату
      * @param string $dat Дата в формате Y-m-d
+     * @param int $uid ID пользоватедя. Если 0 - текущий
      * @return int Количество активных заданий или -1, если получена пустая дата
      * @since 1.0.2.0
      */
-    public function getTodosCountOnDate(string $dat): int
+    public function getTodosCountOnDate(string $dat, int $uid = 0): int
     {
         if (empty($dat)) return -1;
         $dat = $this->_db->q($dat);
-        $uid = JFactory::getUser()->id;
+        $uid = ($uid != 0) ? $uid : JFactory::getUser()->id;
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query

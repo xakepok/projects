@@ -13,6 +13,7 @@ class ProjectsControllerTodos extends AdminController
     public function getTodosCountOnDate()
     {
         $dat = $this->input->getString('date', null);
+        $uid = $this->input->getInt('uid', 0);
         if ($dat == null)
         {
             echo new JsonResponse(array("error" => JText::sprintf('COM_PROJECTS_ERROR_EMPTY_DATE')));
@@ -20,7 +21,7 @@ class ProjectsControllerTodos extends AdminController
         }
         $dat = JFactory::getDbo()->escape($dat);
         $model = $this->getModel();
-        $cnt = $model->getTodosCountOnDate($dat);
+        $cnt = $model->getTodosCountOnDate($dat, $uid);
         echo new JsonResponse(array("cnt" => $cnt));
         jexit();
     }

@@ -84,6 +84,15 @@ class ProjectsModelTodos extends ListModel
             $user = JFactory::getUser();
             $query->where("`t`.`managerID` = {$user->id}");
         }
+        if (ProjectsHelper::canDo('core.general'))
+        {
+            //Фильтруем по менеджеру из URL
+            $man = JFactory::getApplication()->input->getInt('uid', 0);
+            if ($man !== 0)
+            {
+                $query->where("`t`.`managerID` = {$man}");
+            }
+        }
 
         /* Сортировка */
         $orderCol  = $this->state->get('list.ordering', '`t`.`dat`');
