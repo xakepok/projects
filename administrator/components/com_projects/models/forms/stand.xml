@@ -11,15 +11,16 @@
                 label="COM_PROJECTS_HEAD_TODO_CONTRACT"
                 description="COM_PROJECTS_HEAD_TODO_CONTRACT_DESC"
                 autocomplete="off"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="number"
                 type="text"
                 label="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER"
                 description="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_DESC"
+                hint="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="x2"
                 validate="Standnumber"
         />
         <field
@@ -27,15 +28,16 @@
                 type="text"
                 label="COM_PROJECTS_HEAD_CONTRACT_STAND_FREEZE"
                 description="COM_PROJECTS_HEAD_CONTRACT_STAND_FREEZE_DESC"
+                hint="COM_PROJECTS_HEAD_CONTRACT_STAND_FREEZE_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="tip"
                 type="list"
                 label="COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE"
                 description="COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_DESC"
-                class="inputbox"
+                class="x2"
                 required="true"
                 size="1"
         >
@@ -50,14 +52,15 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_STAND_COMMENT"
                 description="COM_PROJECTS_HEAD_CONTRACT_STAND_COMMENT_DESC"
                 autocomplete="off"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="status"
                 type="list"
                 label="COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS"
                 description="COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_DESC"
-                class="inputbox"
+                hint="COM_PROJECTS_HEAD_CONTRACT_STAND_COMMENT_HINT"
+                class="x2"
                 required="true"
                 size="1"
         >
@@ -72,7 +75,7 @@
                 type="filelist"
                 label="COM_PROJECTS_HEAD_CONTRACT_STAND_SCHEME"
                 description="COM_PROJECTS_HEAD_CONTRACT_STAND_SCHEME_DESC"
-                class="inputbox"
+                class="x2"
                 directory="images/stands"
                 default=""
         />
