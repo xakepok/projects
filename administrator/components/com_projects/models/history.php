@@ -65,11 +65,12 @@ class ProjectsModelHistory extends AdminModel {
             $arr['projectID'] = $item->projectID;
             $arr['manager'] = $item->manager;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            if ($item->status == '1') $arr['status'] .= " №{$item->number}";
+            if ($item->status == '1' && !empty($item->number)) $arr['status'] .= " №{$item->number}";
+            if ($item->status == '1' && empty($item->number)) $arr['status'] = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
             $section = ($item->status == '0' || $item->status == '1') ? 'complete' : 'process';
             if ($item->status == '0' || $item->status == '1')
             {
-                $result[$section][] = $arr;
+                $result[$section][$item->projectID] = $arr;
             }
             else
             {
@@ -83,6 +84,7 @@ class ProjectsModelHistory extends AdminModel {
                 }
             }
         }
+        $result = $this->checkDuplicate($result);
         return $result;
     }
 
@@ -115,5 +117,14 @@ class ProjectsModelHistory extends AdminModel {
     public function publish(&$pks, $value = 1)
     {
         return parent::publish($pks, $value);
+    }
+
+    private function checkDuplicate(array $history): array
+    {
+        foreach ($history['complete'] as $projectID => $item)
+        {
+            if (isset($history['process'][$projectID])) unset($history['process'][$projectID]);
+        }
+        return $history;
     }
 }
