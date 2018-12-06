@@ -34,7 +34,7 @@ class ProjectsModelTodos extends ListModel
             ->select("`c`.`id` as `contract`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `e`.`id` as `expID`")
             ->select("`u1`.`name` as `open`, `u2`.`name` as `close`, `u3`.`name` as `manager`")
-            ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`")
+            ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`, `p`.`id` as `projectID`")
             ->from("`#__prj_todos` as `t`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `t`.`contractID`")
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
@@ -113,8 +113,11 @@ class ProjectsModelTodos extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contract}");
             $link = JHtml::link($url, $item->contract);
             $arr['contract'] = $link;
-            $arr['project'] = $item->project;
-            $arr['exp'] = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+            $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}");
+            $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->project : JHtml::link($url, $item->project);
+            $exhibitor = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+            $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->expID}");
+            $arr['exp'] = JHtml::link($url, $exhibitor);
             $url = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;layout=edit&amp;id={$item->id}");
             $link = JHtml::link($url, $item->date);
             $arr['dat'] = $link;
