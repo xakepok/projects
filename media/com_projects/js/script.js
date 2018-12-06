@@ -32,38 +32,78 @@ function showCard(id) {
         })
         .then(function (text) {
             var title = document.querySelector('#modalExpCardTitle');
-            title.textContent = text.data.title;
+            title.textContent = text.data.info.title;
             var myNode = document.querySelector('#cardValues');
             while (myNode.firstChild) {
                 myNode.removeChild(myNode.firstChild);
             }
-            if (text.data.phone_1 != null) {
+            if (text.data.info.phone_1 != null) {
                 var phone1 = document.createElement('p');
-                phone1.textContent = 'Телефон 1: ' + text.data.phone_1;
+                phone1.textContent = 'Телефон 1: ' + text.data.info.phone_1;
                 myNode.appendChild(phone1);
             }
-            if (text.data.phone_2 != null) {
+            if (text.data.info.phone_2 != null) {
                 var phone2 = document.createElement('p');
-                phone2.textContent = 'Телефон 2: ' + text.data.phone_2;
+                phone2.textContent = 'Телефон 2: ' + text.data.info.phone_2;
                 myNode.appendChild(phone2);
             }
-            if (text.data.email != null) {
+            if (text.data.info.email != null) {
                 var email = document.createElement('p');
                 var url = document.createElement('a');
-                url.href = 'mailto:' + text.data.email;
-                url.innerText = text.data.email;
+                url.href = 'mailto:' + text.data.info.email;
+                url.innerText = text.data.info.email;
                 email.appendChild(url);
                 myNode.appendChild(document.createTextNode('Электронная почта: '));
                 myNode.appendChild(url);
             }
-            if (text.data.site != null) {
+            if (text.data.info.site != null) {
                 var site = document.createElement('p');
                 var url1 = document.createElement('a');
-                url1.href = text.data.site;
-                url1.innerText = text.data.site;
+                url1.href = text.data.info.site;
+                url1.innerText = text.data.info.site;
                 site.appendChild(url1);
                 myNode.appendChild(document.createTextNode('Веб-сайт: '));
                 myNode.appendChild(url1);
+            }
+            myNode = document.querySelector('#contactsValues');
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
+            for (var i = 0; i < text.data.persons.length; i++)
+            {
+                if (text.data.persons[i].main === '1')
+                {
+                    if (text.data.persons[i].fio != null) {
+                        var fio = document.createElement('p');
+                        fio.textContent = 'ФИО: ' + text.data.persons[i].fio;
+                        myNode.appendChild(fio);
+                    }
+                    if (text.data.persons[i].post != null) {
+                        var post = document.createElement('p');
+                        post.textContent = 'Должность: ' + text.data.persons[i].post;
+                        myNode.appendChild(post);
+                    }
+                    if (text.data.persons[i].phone_work != null) {
+                        var phone_work = document.createElement('p');
+                        phone_work.textContent = 'Рабочий тел.: ' + text.data.persons[i].phone_work;
+                        myNode.appendChild(phone_work);
+                    }
+                    if (text.data.persons[i].phone_mobile != null) {
+                        var phone_mobile = document.createElement('p');
+                        phone_mobile.textContent = 'Мобильный тел.: ' + text.data.persons[i].phone_mobile;
+                        myNode.appendChild(phone_mobile);
+                    }
+                    if (text.data.persons[i].email_clean != null) {
+                        var email = document.createElement('p');
+                        var url = document.createElement('a');
+                        url.href = 'mailto:' + text.data.persons[i].email_clean;
+                        url.innerText = text.data.persons[i].email_clean;
+                        email.appendChild(url);
+                        myNode.appendChild(document.createTextNode('Электронная почта: '));
+                        myNode.appendChild(url);
+                    }
+                    myNode.appendChild(document.createElement('hr'));
+                }
             }
         })
         .catch(function (error) {

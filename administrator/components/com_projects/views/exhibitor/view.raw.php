@@ -10,7 +10,7 @@ class ProjectsViewExhibitor extends HtmlView {
         $this->id = JFactory::getApplication()->input->getInt('id', 0);
         $this->item = $this->get('Item');
         $this->persons = $this->get('Persons');
-        echo new JsonResponse($this->item);
+        echo new JsonResponse(array('info' => $this->item, 'persons' => $this->persons));
         jexit();
     }
 }
