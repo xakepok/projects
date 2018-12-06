@@ -32,7 +32,7 @@ class ProjectsModelTodos extends ListModel
             ->select("DATE_FORMAT(`t`.`dat`,'%d.%m.%Y') as `date`")
             ->select("DATE_FORMAT(`t`.`dat_open`,'%d.%m.%Y') as `dat_open`, DATE_FORMAT(`t`.`dat_close`,'%d.%m.%Y') as `dat_close`")
             ->select("`c`.`id` as `contract`")
-            ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
+            ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `e`.`id` as `expID`")
             ->select("`u1`.`name` as `open`, `u2`.`name` as `close`, `u3`.`name` as `manager`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`")
             ->from("`#__prj_todos` as `t`")
@@ -119,6 +119,7 @@ class ProjectsModelTodos extends ListModel
             $link = JHtml::link($url, $item->date);
             $arr['dat'] = $link;
             $arr['dat_open'] = $item->dat_open;
+            $arr['expID'] = $item->expID;
             $arr['dat_close'] = $item->dat_close ?? JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_NOT_CLOSE');
             $arr['task'] = $item->task;
             $arr['result'] = ($arr['expired']) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : $item->result;

@@ -45,6 +45,7 @@ class ProjectsModelExhibitor extends AdminModel
             $table->load($id);
         }
         $item = parent::getItem($pk);
+        $item->title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
         $where = array('exbID' => $item->id);
         $bank = AdminModel::getInstance('Bank', 'ProjectsModel')->getItem($where);
         $address = AdminModel::getInstance('Address', 'ProjectsModel')->getItem($where);

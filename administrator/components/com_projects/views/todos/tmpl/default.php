@@ -30,3 +30,4 @@ HTMLHelper::_('script', 'com_projects/script.js', array('version' => 'auto', 're
         </div>
     </form>
 </div>
+<?php echo $this->loadTemplate('exhibitor');?>
