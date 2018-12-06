@@ -14,7 +14,6 @@
             </button>
         </div>
         <div class="js-stools-field-filter">
-            <?php echo ProjectsHtmlFilters::contract($this->state->get('filter.contract')); ?>
             <?php echo ProjectsHtmlFilters::exhibitor($this->state->get('filter.exhibitor')); ?>
             <?php echo ProjectsHtmlFilters::project($this->state->get('filter.project')); ?>
             <?php echo ProjectsHtmlFilters::stateTodo($this->state->get('filter.state')); ?>
