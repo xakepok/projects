@@ -42,13 +42,13 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         <th>
             <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_CLOSE', '`close`', $listDirn, $listOrder); ?>
         </th>
-    <?php endif; ?>
     <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_DATE_OPEN', '`t`.`dat_open`', $listDirn, $listOrder); ?>
     </th>
     <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_DATE_CLOSE', '`t`.`dat_close`', $listDirn, $listOrder); ?>
     </th>
+    <?php endif; ?>
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE'); ?>
     </th>

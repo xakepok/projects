@@ -30,8 +30,18 @@ foreach ($this->items as $i => $item) :
         <td>
             <?php echo $item['task']; ?>
         </td>
-        <td>
-            <?php echo $item['result']; ?>
+        <td class="resultTodo_<?php echo $item['id'];?>">
+            <?php if ($item['state'] != '1'): ?>
+            <div class="clearfix">
+                <div class="js-stools-container-bar">
+                    <div class="btn-wrapper input-append">
+                        <input type="text" autocomplete="off" id="todo_res_<?php echo $item['id'];?>" style="width: 280px;" />
+                        <button onclick="updateTodo(<?php echo $item['id'];?>);return false;" class="btn btn-small button-publish" style="height: 28px">OK</button>
+                    </div>
+                </div>
+            </div>
+            <?php endif;?>
+            <?php if ($item['state'] != '0') echo $item['result']; ?>
         </td>
         <?php if ($this->isAdmin): ?>
             <td>
@@ -40,17 +50,17 @@ foreach ($this->items as $i => $item) :
             <td>
                 <?php echo $item['manager']; ?>
             </td>
-        <td>
-            <?php echo $item['close']; ?>
-        </td>
-        <?php endif; ?>
+            <td>
+                <?php echo $item['close']; ?>
+            </td>
         <td>
             <?php echo $item['dat_open']; ?>
         </td>
         <td>
             <?php echo $item['dat_close']; ?>
         </td>
-        <td>
+        <?php endif; ?>
+        <td class="resultTodoState_<?php echo $item['id'];?>">
             <?php echo $item['state_text']; ?>
         </td>
         <td>

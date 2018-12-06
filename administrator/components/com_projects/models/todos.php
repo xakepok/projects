@@ -30,7 +30,7 @@ class ProjectsModelTodos extends ListModel
         $query
             ->select("`t`.`id`, `t`.`task`, `t`.`result`, `t`.`state`")
             ->select("DATE_FORMAT(`t`.`dat`,'%d.%m.%Y') as `date`")
-            ->select("DATE_FORMAT(`t`.`dat_open`,'%d.%m.%Y %k:%i') as `dat_open`, DATE_FORMAT(`t`.`dat_close`,'%d.%m.%Y %k:%i') as `dat_close`")
+            ->select("DATE_FORMAT(`t`.`dat_open`,'%d.%m.%Y') as `dat_open`, DATE_FORMAT(`t`.`dat_close`,'%d.%m.%Y') as `dat_close`")
             ->select("`c`.`id` as `contract`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
             ->select("`u1`.`name` as `open`, `u2`.`name` as `close`, `u3`.`name` as `manager`")

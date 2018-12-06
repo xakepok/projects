@@ -16,7 +16,7 @@ class ProjectsViewTodos extends HtmlView
 	    $this->items = $this->get('Items');
 	    $this->pagination = $this->get('Pagination');
 	    $this->state = $this->get('State');
-	    $this->isAdmin = ProjectsHelper::canDo('projects.exec.edit');
+	    $this->isAdmin = ProjectsHelper::canDo('core.general');
 
 		// Show the toolbar
 		$this->toolbar();
