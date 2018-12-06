@@ -58,5 +58,16 @@
                 autocomplete="off"
                 class="person-field"
         />
+        <field
+                name="main"
+                type="list"
+                label="COM_PROJECTS_HEAD_PERSON_IS_MAIN"
+                description="COM_PROJECTS_HEAD_PERSON_IS_MAIN_DESC"
+                class="person-field"
+                default="0"
+                >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
     </fieldset>
 </form>

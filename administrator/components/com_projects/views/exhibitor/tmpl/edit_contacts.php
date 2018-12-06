@@ -29,6 +29,9 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_PERSON'))
             <?php echo JText::sprintf('COM_PROJECTS_HEAD_PERSON_EMAIL'); ?>
         </th>
         <th>
+            <?php echo JText::sprintf('COM_PROJECTS_HEAD_PERSON_IS_MAIN'); ?>
+        </th>
+        <th>
             <?php echo JText::sprintf('COM_PROJECTS_TITLE_EDIT_PERSON'); ?>
         </th>
         <th>
@@ -61,6 +64,9 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_PERSON'))
                 </td>
                 <td>
                     <?php echo $person['email']; ?>
+                </td>
+                <td>
+                    <?php echo JText::sprintf((!$person['main']) ? 'JNO' : 'JYES'); ?>
                 </td>
                 <td>
                     <?php echo $editLink; ?>
