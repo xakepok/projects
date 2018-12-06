@@ -1,12 +1,12 @@
 <?php
 defined('_JEXEC') or die;
 $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=exhibitor&layout=edit&id={$this->item->id}");
-$addUrl = JRoute::_("index.php?option=com_projects&amp;task=person.add&amp;exbID={$this->item->id}&amp;return={$return}");
-$addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_PERSON'));
+if ($this->item->id != null) {
+    $addUrl = JRoute::_("index.php?option=com_projects&amp;task=person.add&amp;exbID={$this->item->id}&amp;return={$return}");
+    $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_PERSON'));
+    echo "<div>{$addLink}</div>";
+}
 ?>
-<div>
-    <?php echo $addLink; ?>
-</div>
 <table class="addPrice">
     <thead>
     <tr>

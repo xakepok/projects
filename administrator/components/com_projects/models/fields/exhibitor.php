@@ -18,7 +18,7 @@ class JFormFieldExhibitor extends JFormFieldList
             ->from('`#__prj_exp` as `e`')
             ->leftJoin("`#__grph_cities` as `r` ON `r`.`id` = `e`.`regID`");
         $session = JFactory::getSession();
-        if ($view == 'person' && $session->get('exbID') != null)
+        if (($view == 'person' || $view == 'contract') && $session->get('exbID') != null)
         {
             $exbID = $session->get('exbID');
             $query->where("`e`.`id` = {$exbID}");
