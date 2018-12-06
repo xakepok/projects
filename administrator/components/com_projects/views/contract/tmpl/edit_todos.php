@@ -31,12 +31,18 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO'));
                     <?php echo $todo['dat']; ?>
                 </td>
                 <td>
-                    <?php echo $todo['task']; ?>
+                    <?php echo JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=todo.edit&amp;id={$todo['id']}&amp;return={$return}"), $todo['task']); ?>
                 </td>
                 <td class="resultTodo_<?php echo $todo['id']; ?>">
                     <?php if ($todo['state'] != 1): ?>
-                        <input type="text" value="" name="result_<?php echo $todo['id']; ?>" />
-                        <input type="button" onclick="closeTask(<?php echo $todo['id']; ?>);" value="<?php echo JText::sprintf('COM_PROJECTS_ACTION_TODO_CLOSE');?>">
+                    <div class="clearfix">
+                        <div class="js-stools-container-bar">
+                            <div class="btn-wrapper input-append">
+                                <input type="text" value="" name="result_<?php echo $todo['id']; ?>" style="width: 280px;" />
+                                <button class="btn btn-small button-publish" style="height: 28px" onclick="closeTask(<?php echo $todo['id']; ?>); return false;"><?php echo JText::sprintf('JYES');?></button>
+                            </div>
+                        </div>
+                    </div>
                     <?php endif;?>
                     <?php if ($todo['state'] == 1): ?>
                         <?php echo $todo['dat'], ": ", $todo['user'], " ", $todo['result'];?>
