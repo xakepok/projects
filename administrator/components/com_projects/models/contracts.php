@@ -134,6 +134,7 @@ class ProjectsModelContracts extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}");
             if (ProjectsHelper::canDo('core.accountant') && $debt > 0) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE')));
             if ($format != 'html') $arr['debt'] = $debt;
+
             $result['items'][] = $arr;
             $result['amount'][$item->currency] += $amount;
         }
