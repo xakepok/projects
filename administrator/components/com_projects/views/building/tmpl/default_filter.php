@@ -4,9 +4,9 @@
         <div class="btn-wrapper input-append">
             <input type="text" autocomplete="off" name="filter_search" id="filter_search"
                    value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-                   title aria-label="<?php echo JText::sprintf('COM_PROJECTS_FILTER_PROJECT'); ?>"
-                   data-original-title="<?php echo JText::sprintf('COM_PROJECTS_FILTER_PROJECT'); ?>"
-                   placeholder="<?php echo JText::sprintf('COM_PROJECTS_FILTER_PROJECT'); ?>"
+                   title aria-label="<?php echo JText::sprintf('COM_PROJECTS_FILTER_EXHIBITOR'); ?>"
+                   data-original-title="<?php echo JText::sprintf('COM_PROJECTS_FILTER_EXHIBITOR'); ?>"
+                   placeholder="<?php echo JText::sprintf('COM_PROJECTS_FILTER_EXHIBITOR'); ?>"
             >
             <button type="submit" class="btn hasTooltip">
                 <?php echo JText::sprintf('JSEARCH_FILTER_SUBMIT'); ?>
@@ -14,10 +14,7 @@
             </button>
         </div>
         <div class="js-stools-field-filter">
-            <?php echo ProjectsHtmlFilters::contract($this->state->get('filter.contract')); ?>
-            <?php echo ProjectsHtmlFilters::exhibitor($this->state->get('filter.exhibitor')); ?>
             <?php echo ProjectsHtmlFilters::project($this->state->get('filter.project')); ?>
-            <?php echo ProjectsHtmlFilters::stateTodo($this->state->get('filter.state')); ?>
         </div>
         <div class="btn-wrapper">
             <button type="button" class="btn hasTooltip js-stools-btn-clear"

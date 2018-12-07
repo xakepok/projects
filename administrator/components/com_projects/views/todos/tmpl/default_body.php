@@ -25,8 +25,7 @@ foreach ($this->items as $i => $item) :
             <?php echo $item['project']; ?>
         </td>
         <td>
-            <?php echo $item['exp']; ?> /
-            <a href="#modalCard" data-toggle="modal" onclick="showCard(<?php echo $item['expID'];?>); return true;"><?php echo JText::sprintf('COM_PROJECTS_HEAD_EXP_CARD');?></a>
+            <?php echo $item['exp']; ?>
         </td>
         <td>
             <?php echo $item['task']; ?>

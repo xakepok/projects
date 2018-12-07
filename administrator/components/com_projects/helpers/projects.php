@@ -12,6 +12,7 @@ class ProjectsHelper
         {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS'), 'index.php?option=com_projects&amp;view=projects', $vName == 'projects');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PLANS'), 'index.php?option=com_projects&amp;view=plans', $vName == 'plans');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_BUILDING'), 'index.php?option=com_projects&amp;view=building', $vName == 'building');
         }
         if (self::canDo('core.manager') || self::canDo('core.accountant'))
         {
