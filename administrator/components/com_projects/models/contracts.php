@@ -94,6 +94,7 @@ class ProjectsModelContracts extends ListModel
 
     public function getItems()
     {
+        $view = JFactory::getApplication()->input->getString('view');
         $items = parent::getItems();
         $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
         $ids = array();
@@ -132,6 +133,7 @@ class ProjectsModelContracts extends ListModel
             $arr['debt'] = ($format != 'html') ? $debt : sprintf("%s %s", number_format($debt, 2, '.', "'"), $item->currency);
             $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}");
             if (ProjectsHelper::canDo('core.accountant') && $debt > 0) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE')));
+            if ($format != 'html') $arr['debt'] = $debt;
             $result['items'][] = $arr;
             $result['amount'][$item->currency] += $amount;
         }
