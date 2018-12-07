@@ -127,6 +127,8 @@ class ProjectsModelContracts extends ListModel
             $debt = (float) $amount - (float) $payments;
             $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", number_format($amount, 2, '.', "'"), $item->currency);
             $arr['amount_only'] = $amount; //Только цена
+            $paid = (float) $amount - (float) $debt;
+            $arr['paid'] = sprintf(("%s %s"), number_format($paid, 2, '.', "'"), $item->currency); //Только цена
             $arr['debt'] = ($format != 'html') ? $debt : sprintf("%s %s", number_format($debt, 2, '.', "'"), $item->currency);
             $result['items'][] = $arr;
             $result['amount'][$item->currency] += $amount;
