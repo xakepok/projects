@@ -130,6 +130,8 @@ class ProjectsModelContracts extends ListModel
             $paid = (float) $amount - (float) $debt;
             $arr['paid'] = sprintf(("%s %s"), number_format($paid, 2, '.', "'"), $item->currency); //Только цена
             $arr['debt'] = ($format != 'html') ? $debt : sprintf("%s %s", number_format($debt, 2, '.', "'"), $item->currency);
+            $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}");
+            if (ProjectsHelper::canDo('core.accountant') && $debt > 0) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE')));
             $result['items'][] = $arr;
             $result['amount'][$item->currency] += $amount;
         }
