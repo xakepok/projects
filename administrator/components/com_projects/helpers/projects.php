@@ -34,6 +34,39 @@ class ProjectsHelper
         }
     }
 
+    public static function getProjectContracts(int $projectID): array
+    {
+        $result = array();
+        if ($projectID == 0) return $result;
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`c`.`id` as `contractID`, `c`.`number`, `c`.`status`")
+            ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
+            ->select("`u`.`name` as `manager`, (SELECT COUNT(*) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan_cnt`")
+            ->from("`#__prj_contracts` as `c`")
+            ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `expID`")
+            ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`")
+            ->where("`c`.`prjID` = {$projectID}")
+            ->order("`plan_cnt` DESC");
+        $items = $db->setQuery($query)->loadObjectList();
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=project&layout=edit&id={$projectID}");
+        foreach ($items as $item) {
+            $arr = array();
+            $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
+            $contract = self::getExpStatus($item->status);
+            if (!empty($item->number)) $contract = sprintf("%s №%s", $contract, $item->number);
+            $arr['contract'] = JHtml::link($url, $contract);
+            $arr['manager'] = $item->manager;
+            $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->exponentID}&amp;return={$return}");
+            $exhibitor = self::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+            $arr['exhibitor'] = JHtml::link($url, $exhibitor);
+            $arr['plan_cnt'] = $item->plan_cnt;
+            $result[] = $arr;
+        }
+        return $result;
+    }
+
     /**
      * Возвращает массив, ключ - ID счёта, значение - сумма платежей по нему
      * @param array $scoreIDs Массив с ID сделок

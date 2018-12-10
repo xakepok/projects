@@ -2,43 +2,57 @@
 defined('_JEXEC') or die;
 JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.keepalive');
 JHtml::_('formbehavior.chosen', 'select');
+
+use Joomla\CMS\HTML\HTMLHelper;
+
+HTMLHelper::_('script', $this->script);
+HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto', 'relative' => true));
+$action = JRoute::_('index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id=' . (int)$this->item->id);
+$return = JFactory::getApplication()->input->get('return', null);
+if ($return != null)
+{
+    $action .= "&amp;return={$return}";
+}
 ?>
 <script type="text/javascript">
-    Joomla.submitbutton = function(task) {
-        if (task == 'project.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
+    Joomla.submitbutton = function (task) {
+        if (task === 'project.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
             Joomla.submitform(task, document.getElementById('adminForm'));
         }
     }
 </script>
-<form action="<?php echo JRoute::_('index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id=' . (int)$this->item->id); ?>"
+<form action="<?php echo $action; ?>"
       method="post" name="adminForm" id="adminForm" xmlns="http://www.w3.org/1999/html" class="form-validate">
     <div class="row-fluid">
         <div class="span12 form-horizontal">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#general" data-toggle="tab"><?php echo JText::sprintf('COM_PROJECTS_BLANK_PROJECT');?></a></li>
-            </ul>
+            <?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
             <div class="tab-content">
-                <div class="tab-pane active" id="general">
-                    <fieldset class="adminform">
-                        <div class="control-group form-inline">
-                            <?php foreach ($this->form->getFieldset('names') as $field) :
-                                if (($field->name == 'jform[managerID]' && !$this->setManager) || ($field->name == 'jform[groupID]' && !$this->setGroup)) continue;?>
-                                <div class="control-label"><?php echo $field->label; ?></div>
-                                <div class="controls">
-                                    <?php echo $field->input; ?>
-                                </div>
-                                <br>
-                            <?php endforeach; ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::sprintf('COM_PROJECTS_BLANK_PROJECT')); ?>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div>
+                            <?php echo $this->loadTemplate('general'); ?>
                         </div>
-                    </fieldset>
+                    </div>
                 </div>
+                <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php if ($this->item->id != 0): ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'contracts', JText::sprintf('COM_PROJECTS_MENU_CONTRACTS')); ?>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <?php echo $this->loadTemplate('contracts'); ?>
+                    </div>
+                </div>
+                <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php endif;?>
             </div>
+            <?php echo JHtml::_('bootstrap.endTabSet'); ?>
         </div>
         <div>
-            <input type="hidden" name="task" value="" />
+            <input type="hidden" name="task" value=""/>
             <?php echo JHtml::_('form.token'); ?>
         </div>
     </div>
 </form>
-

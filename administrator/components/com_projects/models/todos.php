@@ -115,16 +115,17 @@ class ProjectsModelTodos extends ListModel
         $items = parent::getItems();
         $result_no_expire = array();
         $result_expire = array();
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=todos");
         foreach ($items as $item) {
             $arr['expired'] = $this->isExpired($item->date, $item->state);
             $arr['id'] = $item->id;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contract}");
+            $url = JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contract}&amp;return={$return}");
             $link = JHtml::link($url, $item->contract);
             $arr['contract'] = $link;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}");
+            $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}&amp;return={$return}");
             $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->project : JHtml::link($url, $item->project);
             $exhibitor = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
-            $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->expID}");
+            $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->expID}&amp;return={$return}");
             $arr['exp'] = JHtml::link($url, $exhibitor);
             $url = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;layout=edit&amp;id={$item->id}");
             $link = JHtml::link($url, $item->date);

@@ -5,15 +5,21 @@ JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
 use Joomla\CMS\HTML\HTMLHelper;
 HTMLHelper::_('script', $this->script);
+$action = JRoute::_('index.php?option=com_projects&amp;view=score&amp;layout=edit&amp;id=' . (int)$this->item->id);
+$return = JFactory::getApplication()->input->get('return', null);
+if ($return != null)
+{
+    $action .= "&amp;return={$return}";
+}
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function(task) {
-        if (task == 'score.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
+        if (task === 'score.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
             Joomla.submitform(task, document.getElementById('adminForm'));
         }
     }
 </script>
-<form action="<?php echo JRoute::_('index.php?option=com_projects&amp;view=score&amp;layout=edit&amp;id=' . (int)$this->item->id); ?>"
+<form action="<?php echo $action; ?>"
       method="post" name="adminForm" id="adminForm" xmlns="http://www.w3.org/1999/html" class="form-validate">
     <div class="row-fluid">
         <div class="span12 form-horizontal">

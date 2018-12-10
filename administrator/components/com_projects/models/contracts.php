@@ -99,12 +99,13 @@ class ProjectsModelContracts extends ListModel
         $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
         $ids = array();
         $format = JFactory::getApplication()->input->getString('format', 'html');
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contracts");
         $pm = ListModel::getInstance('Payments', 'ProjectsModel');
         foreach ($items as $item) {
             $ids[] = $item->id;
             $arr['id'] = $item->id;
             $arr['dat'] = $item->dat;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}");
+            $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}&amp;return={$return}");
             $arr['project'] = ($format != 'html') ? $item->project : JHtml::link($url, $item->project);
             $arr['currency'] = $item->currency;
             $url = JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->id}");
@@ -112,7 +113,7 @@ class ProjectsModelContracts extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;filter_contract={$item->id}");
             $link = JHtml::link($url, JText::sprintf('COM_PROJECTS_HEAD_TODO_TODOS'));
             if ($format == 'html') $arr['todo'] = $link;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->exponentID}");
+            $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->exponentID}&amp;return={$return}");
             $exponentName = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $exponentUrl = JHtml::link($url, $exponentName);
             $arr['exponent'] = ($format != 'html') ? $exponentName : $exponentUrl;
@@ -131,7 +132,7 @@ class ProjectsModelContracts extends ListModel
             $paid = (float) $amount - (float) $debt;
             $arr['paid'] = sprintf(("%s %s"), number_format($paid, 2, '.', "'"), $item->currency); //Только цена
             $arr['debt'] = ($format != 'html') ? $debt : sprintf("%s %s", number_format($debt, 2, '.', "'"), $item->currency);
-            $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}&amp;return={$return}");
             if (ProjectsHelper::canDo('core.accountant') && $debt > 0) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE')));
             if ($format != 'html') $arr['debt'] = $debt;
 
