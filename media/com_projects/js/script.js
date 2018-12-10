@@ -1,4 +1,28 @@
 'use strict';
+function clrFilters() {
+    var project = document.querySelector("[name='filter_project']");
+    if (project !== null) project.selectedIndex = '';
+    var exhibitor = document.querySelector("[name='filter_exhibitor']");
+    if (exhibitor !== null) exhibitor.selectedIndex = '';
+    var state = document.querySelector("[name='filter_state']");
+    if (state !== null) state.selectedIndex = '';
+    var contract = document.querySelector("[name='filter_contract']");
+    if (contract !== null) contract.selectedIndex = '';
+    var status = document.querySelector("[name='filter_status']");
+    if (status !== null) status.selectedIndex = '';
+    var activity = document.querySelector("[name='filter_activity']");
+    if (activity !== null) activity.selectedIndex = '';
+    var price = document.querySelector("[name='filter_price']");
+    if (price !== null) price.selectedIndex = '';
+    var section = document.querySelector("[name='filter_section']");
+    if (section !== null) section.selectedIndex = '';
+    var manager = document.querySelector("[name='filter_manager']");
+    if (manager !== null) manager.selectedIndex = '';
+    var dat = document.querySelector("[name='filter_dat']");
+    if (dat !== null) dat.value = '';
+    var city = document.querySelector("[name='filter_city']");
+    if (city !== null) city.value = '';
+}
 function imp(to)
 {
     var id = document.querySelector("#valimp option:checked");

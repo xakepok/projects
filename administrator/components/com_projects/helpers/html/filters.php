@@ -4,6 +4,12 @@ use Joomla\CMS\MVC\Model\ListModel;
 
 abstract class ProjectsHtmlFilters
 {
+    public static function dat($selected)
+    {
+        $attribs = array('class' => "inputbox", 'onChange' => "this.form.submit()");
+        return JHtml::calendar($selected, $name='filter_dat', $id='jform_dat', $format = '%Y-%m-%d', $attribs);
+    }
+
     //Фильтр состояний
     public static function state($selected)
     {

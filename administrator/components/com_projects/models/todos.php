@@ -18,6 +18,7 @@ class ProjectsModelTodos extends ListModel
                 '`manager`','`manager`',
                 '`project`','`project`',
                 '`state`', '`state`',
+                '`dat`', '`dat`',
             );
         }
         parent::__construct($config);
@@ -58,6 +59,13 @@ class ProjectsModelTodos extends ListModel
         if (is_numeric($contract))
         {
             $query->where('`t`.`contractID` = ' . (int) $contract);
+        }
+        // Фильтруем по дате.
+        $dat = $this->getState('filter.dat');
+        if (!empty($dat))
+        {
+            $dat = $this->_db->quote($this->_db->escape($dat));
+            $query->where('`t`.`dat` = ' . $dat);
         }
         // Фильтруем по экспоненту.
         $exhibitor = $this->getState('filter.exhibitor');
@@ -144,10 +152,12 @@ class ProjectsModelTodos extends ListModel
         $contract = $this->getUserStateFromRequest($this->context . '.filter.contract', 'filter_contract', '', 'string');
         $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor', '', 'string');
         $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project', '', 'string');
+        $dat = $this->getUserStateFromRequest($this->context . '.filter.dat', 'filter_dat', '', 'string');
         $this->setState('filter.state', $published);
         $this->setState('filter.contract', $contract);
         $this->setState('filter.exhibitor', $exhibitor);
         $this->setState('filter.project', $project);
+        $this->setState('filter.dat', $dat);
         parent::populateState('`t`.`dat`', 'desc');
     }
 
@@ -157,6 +167,7 @@ class ProjectsModelTodos extends ListModel
         $id .= ':' . $this->getState('filter.contract');
         $id .= ':' . $this->getState('filter.exhibitor');
         $id .= ':' . $this->getState('filter.project');
+        $id .= ':' . $this->getState('filter.dat');
         return parent::getStoreId($id);
     }
 
