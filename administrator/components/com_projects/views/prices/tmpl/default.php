@@ -3,6 +3,9 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.multiselect');
 JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('searchtools.form');
+use Joomla\CMS\HTML\HTMLHelper;
+HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto', 'relative' => true));
+HTMLHelper::_('script', 'com_projects/script.js', array('version' => 'auto', 'relative' => true));
 ?>
 <div id="j-sidebar-container" class="span2">
     <?php echo $this->sidebar; ?>

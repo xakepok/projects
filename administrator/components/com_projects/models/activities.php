@@ -11,7 +11,6 @@ class ProjectsModelActivities extends ListModel
             $config['filter_fields'] = array(
                 '`id`', '`id`',
                 '`title`', '`title`',
-                '`state`', '`state`',
             );
         }
         parent::__construct($config);
@@ -31,16 +30,6 @@ class ProjectsModelActivities extends ListModel
         {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`title` LIKE ' . $search);
-        }
-        // Фильтруем по состоянию.
-        $published = $this->getState('filter.state');
-        if (is_numeric($published))
-        {
-            $query->where('`state` = ' . (int) $published);
-        }
-        elseif ($published === '')
-        {
-            $query->where('(`state` = 0 OR `state` = 1)');
         }
 
         /* Сортировка */
@@ -76,16 +65,13 @@ class ProjectsModelActivities extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-        $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
         $this->setState('filter.search', $search);
-        $this->setState('filter.state', $published);
         parent::populateState('`title`', 'asc');
     }
 
     protected function getStoreId($id = '')
     {
         $id .= ':' . $this->getState('filter.search');
-        $id .= ':' . $this->getState('filter.state');
         return parent::getStoreId($id);
     }
 }

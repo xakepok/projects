@@ -12,7 +12,6 @@ class ProjectsModelSections extends ListModel
                 '`id`', '`id`',
                 '`title`', '`title`',
                 '`price`', '`price`',
-                '`state`', '`state`',
             );
         }
         parent::__construct($config);
@@ -33,13 +32,6 @@ class ProjectsModelSections extends ListModel
         if (!empty($search)) {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`s`.`title` LIKE ' . $search);
-        }
-        // Фильтруем по состоянию.
-        $published = $this->getState('filter.state');
-        if (is_numeric($published)) {
-            $query->where('`s`.`state` = ' . (int)$published);
-        } elseif ($published === '') {
-            $query->where('(`s`.`state` = 0 OR `s`.`state` = 1)');
         }
         // Фильтруем по прайсу.
         $price = $this->getState('filter.price');
@@ -76,10 +68,8 @@ class ProjectsModelSections extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-        $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
         $price = $this->getUserStateFromRequest($this->context . '.filter.price', 'filter_price', '', 'string');
         $this->setState('filter.search', $search);
-        $this->setState('filter.state', $published);
         $this->setState('filter.price', $price);
         parent::populateState('`s`.`title`', 'asc');
     }
@@ -87,7 +77,6 @@ class ProjectsModelSections extends ListModel
     protected function getStoreId($id = '')
     {
         $id .= ':' . $this->getState('filter.search');
-        $id .= ':' . $this->getState('filter.state');
         $id .= ':' . $this->getState('filter.price');
         return parent::getStoreId($id);
     }

@@ -14,11 +14,11 @@
             </button>
         </div>
         <div class="js-stools-field-filter">
-            <?php echo ProjectsHtmlFilters::state($this->state->get('filter.state')); ?>
+            <?php //echo ProjectsHtmlFilters::state($this->state->get('filter.state')); ?>
         </div>
         <div class="btn-wrapper">
             <button type="button" class="btn hasTooltip js-stools-btn-clear"
-                    onclick="document.getElementById('filter_search').value='';this.form.submit();">
+                    onclick="clrFilters();this.form.submit();">
                 <?php echo JText::sprintf('JSEARCH_FILTER_CLEAR'); ?>
             </button>
         </div>

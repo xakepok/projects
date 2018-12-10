@@ -14,7 +14,6 @@ class ProjectsModelItems extends ListModel
                 '`title_en`', '`title_en`',
                 '`section`', '`section`',
                 '`price`', '`price`',
-                '`state`', '`state`',
             );
         }
         parent::__construct($config);
@@ -43,16 +42,6 @@ class ProjectsModelItems extends ListModel
         {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`i`.`title_ru` LIKE ' . $search. ' OR `i`.`title_en` LIKE ' . $search);
-        }
-        // Фильтруем по состоянию.
-        $published = $this->getState('filter.state');
-        if (is_numeric($published))
-        {
-            $query->where('`i`.`state` = ' . (int) $published);
-        }
-        elseif ($published === '')
-        {
-            $query->where('(`i`.`state` = 0 OR `i`.`state` = 1)');
         }
         // Фильтруем по прайсу.
         $price = $this->getState('filter.price');
@@ -98,11 +87,9 @@ class ProjectsModelItems extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-        $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
         $price = $this->getUserStateFromRequest($this->context . '.filter.price', 'filter_price', '', 'string');
         $section = $this->getUserStateFromRequest($this->context . '.filter.section', 'filter_section', '', 'string');
         $this->setState('filter.search', $search);
-        $this->setState('filter.state', $published);
         $this->setState('filter.price', $price);
         $this->setState('filter.section', $section);
         parent::populateState('`i`.`id`', 'asc');
@@ -111,7 +98,6 @@ class ProjectsModelItems extends ListModel
     protected function getStoreId($id = '')
     {
         $id .= ':' . $this->getState('filter.search');
-        $id .= ':' . $this->getState('filter.state');
         $id .= ':' . $this->getState('filter.price');
         $id .= ':' . $this->getState('filter.section');
         return parent::getStoreId($id);
