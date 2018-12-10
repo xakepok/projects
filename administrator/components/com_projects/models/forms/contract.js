@@ -52,44 +52,58 @@ function closeTask(id) {
 function getSum2(id, currency)
 {
     var tr = document.querySelector('#sum_'+id);
-    if (tr === null) addSum(id);
+    var newtr = document.querySelector('#summary_'+id);
+    if (newtr === null) addSum(id);
     var span = document.querySelector('#sum_'+id);
+    var spanS = document.querySelector('#sumS_'+id);
     var sum = getSum(id);
-    if (sum !== 0 && sum !== null && sum !== undefined && !isNaN(sum))
+    if (sum !== 0 && sum !== null && sum !== undefined && !isNaN(sum) && sum !== '')
     {
         span.textContent = sum;
         document.querySelector("#currency_"+id).textContent = currency;
+        spanS.textContent = sum;
+        document.querySelector("#currencyS_"+id).textContent = currency;
     }
     else
     {
+        span.textContent = 0;
+        document.querySelector("#currency_"+id).textContent = currency;
         removeTr(id);
     }
     subSum();
     var itg = calculate();
     document.querySelector("#sum_amount").textContent = itg.toLocaleString('ru') + ' ' + currency;
+    document.querySelector("#sum_amountS").textContent = itg.toLocaleString('ru');
 }
 function removeTr(id)
 {
-    //document.querySelector("#summary_"+id).remove();
+    try {
+        document.querySelector("#summary_" + id).remove();
+    }
+    catch (e) {
+        console.log("Элемента с id summary_" + id + " не существует");
+    }
 }
 function addSum(id) {
     var tbody = document.querySelector(".sumbody");
     var tr = document.createElement('tr');
     var td = document.createElement('td');
     tr.id = 'summary_'+id;
-    td.width='80%';
     var label = document.querySelector('#label_'+id);
     var title = document.createTextNode(label.textContent);
+    var section = document.createTextNode(label.dataset.section);
     td.appendChild(title);
     tr.appendChild(td);
     td = document.createElement('td');
+    td.appendChild(section);
+    tr.appendChild(td);
+    td = document.createElement('td');
     var span = document.createElement('span');
-    span.id='sum_'+id;
-    span.className='amounts';
-    td.width='20%';
+    span.id='sumS_'+id;
+    span.className='amountsS';
     td.appendChild(span);
     span = document.createElement('span');
-    span.id='currency_'+id;
+    span.id='currencyS_'+id;
     td.appendChild(document.createTextNode(' '));
     td.appendChild(span);
     tr.appendChild(td);
@@ -128,7 +142,6 @@ function calculate() {
     return sum;
 }
 function subSum() {
-    console.clear();
     var trs = document.querySelectorAll("tr[class^='section_']");
     var sum = [];
     for (var i = 0; i < trs.length; i++)

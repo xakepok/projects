@@ -43,7 +43,7 @@ $sum = 0;
             ?>
             <tr id="item_<?php echo $item['id']; ?>" class="section_<?php echo $item['section_id']; ?>" data-section="<?php echo $item['section_id']; ?>">
                 <td>
-                    <span id="label_<?php echo $item['id']; ?>"><?php echo $item['title']; ?></span>
+                    <span data-section="<?php echo $section; ?>" id="label_<?php echo $item['id']; ?>"><?php echo $item['title']; ?></span>
                 </td>
                 <td class="price_cost">
                     <?php echo $item['cost']; ?>
@@ -58,7 +58,7 @@ $sum = 0;
                             class="input"
                             placeholder=""
                             autocomplete="off"
-                            onkeyup="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
+                            onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
                         <?php if ($item['fixed']) echo "disabled "; ?>
                             style="width: 50px;"
                             aria-invalid="false"/>&nbsp;
@@ -74,7 +74,7 @@ $sum = 0;
                                 class="input"
                                 placeholder=""
                                 autocomplete="off"
-                                onkeyup="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
+                                onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
                                 onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
                             <?php if ($item['fixed']) echo "disabled "; ?>
                                 style="width: 50px;"
@@ -94,7 +94,7 @@ $sum = 0;
                                 class="input"
                                 placeholder="1.0"
                                 autocomplete="off"
-                                onkeyup="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
+                                onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
                             <?php if ($item['fixed']) echo "disabled "; ?>
                                 style="width: 50px;"
                                 aria-invalid="false"/>&nbsp;%

@@ -35,7 +35,8 @@ $sum = 0;
                     <?php echo $section; ?>
                 </td>
                 <td>
-                    <?php echo number_format($item['sum'], 2, '.', "'"), ' ', $currency; ?>
+                    <span id="sumS_<?php echo $item['id']; ?>"><?php echo $item['sum']; ?></span>
+                    <span id="currencyS_<?php echo $item['id']; ?>"><?php echo $currency; ?></span>
                 </td>
             </tr>
         <?php
@@ -47,7 +48,9 @@ $sum = 0;
             <tr>
                 <td colspan="3" style="text-align: right; font-weight: bold;">
                     <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_SUM'); ?>:&nbsp;
-                    <?php echo number_format($sum, 2, '.', "'"), ' ', $currency; ?>
+                    <span
+                            id="sum_amountS"><?php echo $sum; ?></span>
+                    <?php echo $currency;?>
                 </td>
             </tr>
         </tfoor>
