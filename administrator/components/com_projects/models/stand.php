@@ -8,6 +8,27 @@ class ProjectsModelStand extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    public function getStandTitle(int $id): string
+    {
+        $model = AdminModel::getInstance('Contract', 'ProjectsModel');
+        $session = JFactory::getSession();
+        if ($id === 0) $contractID = $session->get('contractID');
+        $contract = $model->getItem($contractID ?? $id);
+        if (!empty($contract->number))
+        {
+            $dat = new JDate($contract->dat);
+            $title = JText::sprintf('COM_PROJECTS_BLANK_STAND_FOR_CONTRACT', $contract->number, $dat->format("d.m.Y"));
+        }
+        else
+        {
+            $model = AdminModel::getInstance('Exhibitor', 'ProjectsModel');
+            $exhibitor = $model->getItem($contract->expID);
+            $title = ProjectsHelper::getExpTitle($exhibitor->title_ru_short, $exhibitor->title_ru_full, $exhibitor->title_en);
+            $title = JText::sprintf('COM_PROJECTS_BLANK_STAND_FOR_SDELKA', $title);
+        }
+        return $title;
+    }
+
     public function delete(&$pks)
     {
         return parent::delete($pks);
@@ -15,7 +36,9 @@ class ProjectsModelStand extends AdminModel {
 
     public function getItem($pk = null)
     {
-        return parent::getItem($pk);
+        $item = parent::getItem($pk);
+        $item->title = $this->getStandTitle($item->contractID ?? 0);
+        return $item;
     }
 
     public function getForm($data = array(), $loadData = true)

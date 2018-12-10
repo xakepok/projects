@@ -19,28 +19,12 @@ class ProjectsViewStand extends HtmlView {
 
     protected function addToolbar() {
         //JFactory::getApplication()->input->set('hidemainmenu', true);
-        $title = $this->setTitle();
+        $title =$this->item->title;
 
         JToolbarHelper::title($title, '');
 	    JToolBarHelper::apply('stand.apply', 'JTOOLBAR_APPLY');
         JToolbarHelper::save('stand.save', 'JTOOLBAR_SAVE');
         JToolbarHelper::cancel('stand.cancel', 'JTOOLBAR_CLOSE');
-    }
-
-    protected function setTitle(): string
-    {
-        if ($this->item->id == null)
-        {
-            $session = JFactory::getSession();
-            $contractID = $session->get('contractID');
-            $title = JText::sprintf('COM_PROJECTS_BLANK_STAND_FOR_CONTRACT', $contractID);
-        }
-        else
-        {
-            $title = $this->item->task;
-        }
-        if ($title == null) $title = '';
-        return $title;
     }
 
     protected function setDocument() {
