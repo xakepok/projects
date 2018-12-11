@@ -24,9 +24,15 @@ function removeStand(standID) {
 }
 
 function setNumber() {
-    var status = document.getElementById("jform_status");
-    var tip = status.options[status.selectedIndex].value;
-    if (tip === '5' || tip === '6') unlockParent(); else lockParent();
+    var radios = document.forms["adminForm"].elements["jform[isCoExp]"];
+    var val = document.querySelector('input[name="jform[isCoExp]"]:checked').value;
+    console.log(val);
+    if (val !== '1') lockParent(); else unlockParent();
+    for(var i = 0, max = radios.length; i < max; i++) {
+        radios[i].onclick = function() {
+            if (this.value !== '1') lockParent(); else unlockParent();
+        }
+    }
 }
 
 function unlockParent() {

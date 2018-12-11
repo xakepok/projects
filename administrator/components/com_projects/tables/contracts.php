@@ -11,6 +11,7 @@ class TableProjectsContracts extends Table
     var $parentID = null;
     var $dat = null;
     var $currency = null;
+    var $isCoExp = null;
     var $status = null;
     var $number = null;
 
