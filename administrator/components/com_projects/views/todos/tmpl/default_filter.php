@@ -2,7 +2,7 @@
     <div class="js-stools-container-bar">
         <label for="filter_search" class="element-invisible"><?php echo JText::sprintf('JSEARCH_FILTER_LABEL'); ?></label>
         <div class="btn-wrapper input-append">
-            <?php echo ProjectsHtmlFilters::dat($this->state->get('filter.dat')); ?>
+
         </div>
         <div class="js-stools-field-filter">
             <?php echo ProjectsHtmlFilters::exhibitor($this->state->get('filter.exhibitor')); ?>
@@ -16,5 +16,7 @@
             </button>
         </div>
     </div>
-    <div class="js-stools-container-list hidden-phone hidden-tablet shown" style=""></div>
+    <div class="js-stools-container-list hidden-phone hidden-tablet shown" style="">
+        <?php echo ProjectsHtmlFilters::dat($this->state->get('filter.dat')); ?>
+    </div>
 </div>

@@ -6,7 +6,7 @@ abstract class ProjectsHtmlFilters
 {
     public static function dat($selected)
     {
-        $attribs = array('class' => "inputbox", 'onChange' => "this.form.submit()");
+        $attribs = array('onChange' => "this.form.submit()", "placeholder" => JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE'));
         return JHtml::calendar($selected, $name='filter_dat', $id='jform_dat', $format = '%Y-%m-%d', $attribs);
     }
 
