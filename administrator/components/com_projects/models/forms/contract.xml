@@ -54,7 +54,7 @@
         <field
                 name="dat"
                 type="calendar"
-                label="COM_PROJECTS_HEAD_CONTRACT_DATE"
+                label="COM_PROJECTS_HEAD_CONTRACT_DATE_DESC"
                 description="COM_PROJECTS_HEAD_CONTRACT_DATE_DESC"
                 autocomplete="off"
                 class="input-xlarge"
