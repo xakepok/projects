@@ -28,7 +28,7 @@ class ProjectsModelPayments extends ListModel
         $query
             ->select("`pm`.`id`, `pm`.`pp`, `pm`.`amount`, `u`.`name` as `author`")
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
-            ->select("`p`.`title` as `project`, `p`.`id` as `projectID`")
+            ->select("`p`.`title_ru` as `project`, `p`.`id` as `projectID`")
             ->select("`c`.`id` as `contractID`, `c`.`number`, `c`.`currency`")
             ->select("DATE_FORMAT(`pm`.`dat`,'%d.%m.%Y') as `dat`")
             ->from("`#__prj_payments` as `pm`")
