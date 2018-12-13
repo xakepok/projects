@@ -16,7 +16,7 @@
         <div class="js-stools-field-filter">
             <?php echo ProjectsHtmlFilters::project($this->state->get('filter.project')); ?>
             <?php echo ProjectsHtmlFilters::exhibitor($this->state->get('filter.exhibitor')); ?>
-            <?php echo ProjectsHtmlFilters::manager($this->state->get('filter.manager')); ?>
+            <?php if (ProjectsHelper::canDo('core.general')) echo ProjectsHtmlFilters::manager($this->state->get('filter.manager')); ?>
             <?php echo ProjectsHtmlFilters::status($this->state->get('filter.status')); ?>
         </div>
         <div class="btn-wrapper">
