@@ -34,6 +34,10 @@ defined('_JEXEC') or die;
                     echo "<input type='checkbox' onclick='setMask(this.id, \"{$field->id}\")' id='mask_{$field->name}' value='1'{$checked} />";
                     echo "<label for='mask_{$field->name}'>", JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_MASK'), "</label>";
                 }
+                if ($field->name == 'jform[regID_fact]')
+                {
+                    echo "<a href='#' onclick='copyAddr();return false;'>", JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_COPY_ADDR') , "</a>";
+                }
                 ?>
             </div>
             <br>

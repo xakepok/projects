@@ -12,6 +12,18 @@ window.onload = function () {
     setMask('mask_jform[phone_2]', 'jform_phone_2');
 };
 
+function copyAddr() {
+    var field = document.querySelector('#jform_regID');
+    var city = field.options[field.selectedIndex].value;
+    jQuery('#jform_regID_fact').val(city).trigger("liszt:updated");
+    var indx = document.querySelector('#jform_indexcode').value;
+    document.querySelector("#jform_indexcode_fact").value = indx;
+    var jform_addr_legal_street = document.querySelector('#jform_addr_legal_street').value;
+    document.querySelector("#jform_addr_fact_street").value = jform_addr_legal_street;
+    var jform_addr_legal_home = document.querySelector('#jform_addr_legal_home').value;
+    document.querySelector("#jform_addr_fact_home").value = jform_addr_legal_home;
+}
+
 function setMask(id, field) {
     var mask = "+9 (999) 999-99-99? доб. 9999";
     var object = document.getElementById(id);
