@@ -8,8 +8,8 @@
         <field
                 name="contractID"
                 type="Contract"
-                label="COM_PROJECTS_HEAD_TODO_CONTRACT"
-                description="COM_PROJECTS_HEAD_TODO_CONTRACT_DESC"
+                label="COM_PROJECTS_HEAD_PAYMENT_CONTRACT"
+                description="COM_PROJECTS_HEAD_PAYMENT_CONTRACT_DESC"
                 autocomplete="off"
                 class="x2"
         />

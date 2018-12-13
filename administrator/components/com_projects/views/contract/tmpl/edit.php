@@ -33,7 +33,9 @@ if ($return != null)
                         <?php echo $this->loadTemplate('general');?>
                     </div>
                     <div class="span6">
-
+                        <?php if ($this->item->id != null): ?>
+                            <?php echo $this->loadTemplate('links');?>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
