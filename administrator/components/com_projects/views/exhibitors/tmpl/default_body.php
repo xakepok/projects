@@ -1,7 +1,7 @@
 <?php
 // Запрет прямого доступа.
 defined('_JEXEC') or die;
-$ii = 0;
+$ii = JFactory::getApplication()->input->getInt('limitstart', 0);
 foreach ($this->items as $i => $item) :
     ?>
     <tr class="row0">
