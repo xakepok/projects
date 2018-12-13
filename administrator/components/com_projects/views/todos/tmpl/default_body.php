@@ -68,8 +68,5 @@ foreach ($this->items as $i => $item) :
         <td class="resultTodoState_<?php echo $item['id']; ?>">
             <?php echo $item['state_text']; ?>
         </td>
-        <td>
-            <?php echo $item['id']; ?>
-        </td>
     </tr>
 <?php endforeach; ?>

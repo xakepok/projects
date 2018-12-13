@@ -52,7 +52,4 @@ $listDirn = $this->escape($this->state->get('list.direction'));
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE'); ?>
     </th>
-    <th width="1%">
-        <?php echo JHtml::_('grid.sort', 'ID', '`id`', $listDirn, $listOrder); ?>
-    </th>
 </tr>
