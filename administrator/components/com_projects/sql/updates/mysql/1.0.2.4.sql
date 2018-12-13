@@ -15,3 +15,4 @@ ALTER TABLE `#__prj_exp`
                                                               `id`
     ) ON DELETE RESTRICT ON UPDATE RESTRICT;
 UPDATE `#__prj_exp` SET `tip` = NULL WHERE `tip` = '';
+ALTER TABLE  `#__prj_exp_bank` CHANGE  `inn`  `inn` VARCHAR( 20 ) NOT NULL COMMENT  'ИНН';
