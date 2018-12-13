@@ -214,7 +214,6 @@ abstract class ProjectsHtmlFilters
         $options = array();
         $options[] = JHtml::_('select.option', '1', 'COM_PROJECTS_HEAD_TODO_STATE_1');
         $options[] = JHtml::_('select.option', '0', 'COM_PROJECTS_HEAD_TODO_STATE_0');
-        $options[] = JHtml::_('select.option', '2', 'COM_PROJECTS_HEAD_TODO_STATE_2');
 
         return $options;
     }

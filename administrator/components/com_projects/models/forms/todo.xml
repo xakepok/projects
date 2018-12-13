@@ -35,7 +35,6 @@
         >
             <option value="1">COM_PROJECTS_HEAD_TODO_STATE_1</option>
             <option value="0">COM_PROJECTS_HEAD_TODO_STATE_0</option>
-            <option value="2">COM_PROJECTS_HEAD_TODO_STATE_2</option>
         </field>
         <field
                 name="dat"
