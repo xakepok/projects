@@ -134,10 +134,32 @@ class ProjectsModelContract extends AdminModel {
         if (empty($data['dat']) && ($data['status'] == 5 || $data['status'] == 6 || $data['status'] == 1)) $data['dat'] = date("Y-m-d");
         $s1 = parent::save($data);
         if ($data['id'] == null) $data['id'] = $this->_db->insertid();
+        //if (!empty($data['children'])) $this->setCoExp($data['children'], $data['id']);
         $this->saveHistory($data['id'], $data['status']);
         $s2 = $this->savePrice();
         $s3 = $this->saveFiles();
         return $s1 && $s2 && $s3;
+    }
+
+    /**
+     * Прописывает экспонентам из массива $exhibitors значение родителя $parentID
+     * @param array $exhibitors Массив с ID экспонентов, которым нужно прописать родителя
+     * @param int $parentID ID родителя
+     * @since 1.0.3.0
+     */
+    public function setCoExp(array $exhibitors, int $parentID): void
+    {
+        if (empty($exhibitors) || $parentID == 0) return;
+        $ids = implode(", ", $exhibitors);
+        if (empty($ids)) return;
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $parentID = $db->q($parentID);
+        $query
+            ->update("`#__prj_contracts`")
+            ->set("`parentID` = {$parentID}")
+            ->where("`id` IN ({$ids})");
+        $db->setQuery($query)->execute();
     }
 
     protected function loadFormData()

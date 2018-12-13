@@ -12,7 +12,7 @@
                 description="COM_PROJECTS_HEAD_CONTRACT_PROJECT_DESC"
                 required="true"
                 autocomplete="off"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="expID"
@@ -21,7 +21,7 @@
                 description="COM_PROJECTS_HEAD_CONTRACT_EXPONENT_DESC"
                 required="true"
                 autocomplete="off"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="isCoExp"
@@ -41,7 +41,7 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_PARENT"
                 description="COM_PROJECTS_HEAD_CONTRACT_PARENT_DESC"
                 autocomplete="off"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="managerID"
@@ -49,7 +49,7 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
                 description="COM_PROJECTS_HEAD_CONTRACT_MANAGER_DESC"
                 autocomplete="off"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="dat"
@@ -57,7 +57,7 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_DATE_DESC"
                 description="COM_PROJECTS_HEAD_CONTRACT_DATE_DESC"
                 autocomplete="off"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="currency"
@@ -65,7 +65,7 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_CURRENCY"
                 description="COM_PROJECTS_HEAD_CONTRACT_CURRENCY_DESC"
                 autocomplete="off"
-                class="input-xlarge">
+                class="x2">
             <option value="rub">COM_PROJECTS_HEAD_ITEM_PRICE_RUB</option>
             <option value="usd">COM_PROJECTS_HEAD_ITEM_PRICE_USD</option>
             <option value="eur">COM_PROJECTS_HEAD_ITEM_PRICE_EUR</option>
@@ -78,7 +78,7 @@
                 autocomplete="off"
                 required="true"
                 default=""
-                class="input-xlarge">
+                class="x2">
             <option value="2">COM_PROJECTS_HEAD_CONTRACT_STATUS_2</option>
             <option value="3">COM_PROJECTS_HEAD_CONTRACT_STATUS_3</option>
             <option value="4">COM_PROJECTS_HEAD_CONTRACT_STATUS_4</option>
@@ -92,7 +92,7 @@
                 description="COM_PROJECTS_HEAD_CONTRACT_NUMBER_DESC"
                 hint="COM_PROJECTS_HEAD_CONTRACT_NUMBER_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="x2"
         />
     </fieldset>
     <fieldset name="files">
@@ -101,7 +101,7 @@
                 type="filelist"
                 label="COM_PROJECTS_HEAD_CONTRACT_ADDFILE"
                 description="COM_PROJECTS_HEAD_CONTRACT_ADDFILE_DESC"
-                class="inputbox"
+                class="x2"
                 directory="images/contracts"
                 multiple="true"
                 default=""

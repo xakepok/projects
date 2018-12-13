@@ -31,6 +31,10 @@ class JFormFieldContract extends JFormFieldList
         {
             $query->where("`c`.`status` = 1");
         }
+        if ($view == 'contract')
+        {
+            $query->where("`c`.`isCoExp` = 1");
+        }
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();
