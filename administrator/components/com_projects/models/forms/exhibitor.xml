@@ -42,6 +42,24 @@
                 class="input-xlarge"
         />
         <field
+                name="director_name"
+                type="text"
+                label="COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_NAME"
+                description="COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_NAME_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_NAME_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="director_post"
+                type="text"
+                label="COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_POST"
+                description="COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_POST_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_POST_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
                 name="comment"
                 type="textarea"
                 label="COM_PROJECTS_HEAD_EXP_COMMENT"
@@ -146,6 +164,24 @@
                 class="input-xlarge"
         />
         <field
+                name="regID_fact"
+                type="Region"
+                label="COM_PROJECTS_HEAD_CITY_FACT"
+                description="COM_PROJECTS_HEAD_CITY_FACT_DESC"
+                required="true"
+                class="input-xlarge"
+                default="4400"
+        />
+        <field
+                name="indexcode_fact"
+                type="text"
+                label="COM_PROJECTS_HEAD_EXP_INDEX_FACT"
+                description="COM_PROJECTS_HEAD_EXP_INDEX_FACT_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_INDEX_FACT_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
                 name="addr_fact_street"
                 type="text"
                 label="COM_PROJECTS_HEAD_EXP_CONTACT_ADDR_FACT_STREET"
@@ -173,6 +209,15 @@
                 class="input-xlarge phone_mask"
         />
         <field
+                name="phone_1_comment"
+                type="text"
+                label="COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_COMMENT"
+                description="COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_COMMENT_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_COMMENT_HINT_1"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
                 name="phone_2"
                 type="phone"
                 label="COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_2"
@@ -180,6 +225,15 @@
                 hint="COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_HINT"
                 autocomplete="off"
                 class="input-xlarge phone_mask"
+        />
+        <field
+                name="phone_2_comment"
+                type="text"
+                label="COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_COMMENT"
+                description="COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_COMMENT_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_CONTACT_PHONE_COMMENT_HINT_2"
+                autocomplete="off"
+                class="input-xlarge"
         />
         <field
                 name="fax"

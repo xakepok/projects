@@ -6,6 +6,7 @@ class TableProjectsExponents extends Table
 {
     var $id = null;
     var $regID = null;
+    var $regID_fact = null;
     var $tip = null;
     var $title_ru_full = null;
     var $title_ru_short = null;

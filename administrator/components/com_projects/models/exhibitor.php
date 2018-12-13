@@ -79,7 +79,7 @@ class ProjectsModelExhibitor extends AdminModel
 
     protected function prepareTable($table)
     {
-        $nulls = array('title_ru_short', 'title_ru_full', 'title_en'); //Поля, которые NULL
+        $nulls = array('tip', 'title_ru_short', 'title_ru_full', 'title_en', 'comment'); //Поля, которые NULL
         foreach ($nulls as $field) {
             if (!strlen($table->$field)) $table->$field = NULL;
         }

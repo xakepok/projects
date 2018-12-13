@@ -61,14 +61,30 @@ function showCard(id) {
             while (myNode.firstChild) {
                 myNode.removeChild(myNode.firstChild);
             }
+            if (text.data.info.director_name != null) {
+                var director_name = document.createElement('p');
+                director_name.textContent = 'Руководитель: ' + text.data.info.director_name;
+                myNode.appendChild(director_name);
+            }
+            if (text.data.info.director_post != null) {
+                var director_post = document.createElement('p');
+                director_post.textContent = 'Должность: ' + text.data.info.director_post;
+                myNode.appendChild(director_post);
+            }
             if (text.data.info.phone_1 != null) {
                 var phone1 = document.createElement('p');
                 phone1.textContent = 'Телефон 1: ' + text.data.info.phone_1;
+                if (text.data.info.phone_1_comment != null) {
+                    phone1.textContent += ' (' + text.data.info.phone_1_comment + ')';
+                }
                 myNode.appendChild(phone1);
             }
             if (text.data.info.phone_2 != null) {
                 var phone2 = document.createElement('p');
                 phone2.textContent = 'Телефон 2: ' + text.data.info.phone_2;
+                if (text.data.info.phone_2_comment != null) {
+                    phone2.textContent += ' (' + text.data.info.phone_2_comment + ')';
+                }
                 myNode.appendChild(phone2);
             }
             if (text.data.info.email != null) {

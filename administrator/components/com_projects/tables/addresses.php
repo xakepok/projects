@@ -11,12 +11,15 @@ class TableProjectsAddresses extends Table
     var $id = null;
     var $exbID = null;
     var $indexcode = null;
+    var $indexcode_fact = null;
     var $addr_legal_street = null;
     var $addr_legal_home = null;
     var $addr_fact_street = null;
     var $addr_fact_home = null;
     var $phone_1 = null;
     var $phone_2 = null;
+    var $phone_1_comment = null;
+    var $phone_2_comment = null;
     var $fax = null;
     var $email = null;
     var $site = null;
