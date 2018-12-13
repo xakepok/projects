@@ -110,8 +110,8 @@ class ProjectsModelContracts extends ListModel
             $arr['currency'] = $item->currency;
             $url = JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->id}");
             if ($format == 'html') $arr['edit_link'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_GO'));
-            $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;filter_contract={$item->id}");
-            $link = JHtml::link($url, JText::sprintf('COM_PROJECTS_HEAD_TODO_TODOS'));
+            $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$item->id}");
+            $link = JHtml::link($url, $item->plan);
             if ($format == 'html') $arr['todo'] = $link;
             $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->exponentID}&amp;return={$return}");
             $exponentName = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
@@ -122,7 +122,7 @@ class ProjectsModelContracts extends ListModel
             $arr['manager']['class'] = (!empty($item->manager)) ? '' : 'no-data';
             $arr['group']['title'] = $item->group ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_UNDEFINED');
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
-            $arr['plan'] = $item->plan;
+            if ($format == 'html') $arr['plan'] = $link;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
             $amount = $this->getAmount($item);
             $payments = $pm->getContractPayments($item->id);

@@ -92,6 +92,12 @@ class ProjectsModelTodos extends ListModel
             $user = JFactory::getUser();
             $query->where("`t`.`managerID` = {$user->id}");
         }
+        //Фильтруем по сделке из URL
+        $contractID = JFactory::getApplication()->input->getInt('contractID', 0);
+        if ($contractID !== 0)
+        {
+            $query->where("`t`.`contractID` = {$contractID}");
+        }
         if (ProjectsHelper::canDo('core.general'))
         {
             //Фильтруем по менеджеру из URL
