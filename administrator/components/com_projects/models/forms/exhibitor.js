@@ -8,8 +8,16 @@ window.onload = function () {
     field3.addEventListener('keyup', checkExp, false);
     var inn = document.getElementById("jform_inn");
     inn.addEventListener('keyup', checkExp, false);
-    jQuery(".phone_mask").mask("+9 (999) 999-99-99? доб. 9999");
+    setMask('mask_jform[phone_1]', 'jform_phone_1');
+    setMask('mask_jform[phone_2]', 'jform_phone_2');
 };
+
+function setMask(id, field) {
+    var mask = "+9 (999) 999-99-99? доб. 9999";
+    var object = document.getElementById(id);
+    field = jQuery("#" + field);
+    if (!object.checked) field.unmask(); else field.mask(mask);
+}
 
 function removePerson(personID) {
     fetch('/administrator/index.php?option=com_projects&task=exhibitors.removePerson&id=' + personID)
