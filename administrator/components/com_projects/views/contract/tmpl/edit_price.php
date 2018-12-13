@@ -10,22 +10,22 @@ $sum = 0;
             <th>
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_TITLE_RU'); ?>
             </th>
-            <th>
+            <th style="width: 10%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEM'); ?>
             </th>
-            <th>
+            <th style="width: 10%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT'); ?>
             </th>
-            <th>
+            <th style="width: 10%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_TWO'); ?>
             </th>
-            <th>
+            <th style="width: 5%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_DISCOUNT'); ?>
             </th>
-            <th>
+            <th style="width: 5%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_IS_MARKUP'); ?>
             </th>
-            <th>
+            <th style="width: 8%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_AMOUNT'); ?>
             </th>
         </tr>
@@ -83,7 +83,7 @@ $sum = 0;
                     <?php endif; ?>
                 </td>
                 <td class="center">
-                    <?php if ($item['isUnit2']): ?>
+                    <?php if ($item['is_factor']): ?>
                         <input
                                 type="number"
                                 name="jform[price][<?php echo $item['id']; ?>][factor]"
@@ -91,12 +91,11 @@ $sum = 0;
                                 value="<?php echo $item['factor'] ?? 0; ?>"
                                 min="0"
                                 max="100"
-                                class="input"
                                 placeholder="1.0"
                                 autocomplete="off"
                                 onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
                             <?php if ($item['fixed']) echo "disabled "; ?>
-                                style="width: 50px;"
+                                style="width: 30px;"
                                 aria-invalid="false"/>&nbsp;%
                     <?php endif; ?>
                 </td>
@@ -105,7 +104,6 @@ $sum = 0;
                     <select
                             name="jform[price][<?php echo $item['id']; ?>][markup]"
                             id="markup_<?php echo $item['id']; ?>"
-                            class="input"
                             autocomplete="off"
                             onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
                         <?php if ($item['fixed']) echo "disabled "; ?>
@@ -122,7 +120,7 @@ $sum = 0;
                         </option>
                         <?php endif; ?>
                 </td>
-                <td style="width: 20%">
+                <td>
                     <span class="amounts"
                           id="sum_<?php echo $item['id']; ?>"><?php echo $item['sum']; ?></span>&nbsp;<span
                             id="currency_<?php echo $item['id']; ?>"><?php echo $item['currency']; ?></span>
