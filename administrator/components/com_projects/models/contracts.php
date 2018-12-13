@@ -106,10 +106,10 @@ class ProjectsModelContracts extends ListModel
             $arr['id'] = $item->id;
             $arr['dat'] = $item->dat;
             $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}&amp;return={$return}");
-            $arr['project'] = ($format != 'html') ? $item->project : JHtml::link($url, $item->project);
+            $arr['project'] = ($format != 'html' || !ProjectsHelper::canDo('core.manager')) ? $item->project : JHtml::link($url, $item->project);
             $arr['currency'] = $item->currency;
             $url = JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->id}");
-            if ($format == 'html') $arr['edit_link'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_GO'));
+            if ($format == 'html') $arr['edit_link'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_GO_CONTRACT'));
             $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$item->id}");
             $link = JHtml::link($url, $item->plan);
             if ($format == 'html') $arr['todo'] = $link;
