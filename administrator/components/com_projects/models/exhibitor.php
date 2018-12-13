@@ -108,46 +108,6 @@ class ProjectsModelExhibitor extends AdminModel
     }
 
     /**
-     * Возвращает массив с соэкспонентами, с которыми текущий был в сделках
-     * @return array
-     * @since 1.3.0.9
-     */
-    public function getCoExhibitors(): array
-    {
-        $result = array();
-        $item = $this->getItem();
-        $itemID = $this->_db->escape($item->id);
-        if ($item->id == null) return array();
-        $db =& $this->getDbo();
-        $query = $db->getQuery(true);
-        $query
-            ->select("`c`.`number`, `c`.`status`, `c`.`parentID`, `c`.`id` as `contractID`, DATE_FORMAT(`c`.`dat`,'%Y') as `year`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`")
-            ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
-            ->select("`p`.`title` as `project`, `p`.`id` as `projectID`")
-            ->from("`#__prj_contracts` as `c`")
-            ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = (SELECT IF(`c`.`parentID`='{$itemID}',`c`.`expID`,`c`.`parentID`))")
-            ->leftJoin("`#__prj_projects` AS `p` ON `p`.`id` = `c`.`prjID`")
-            ->where("(`c`.`parentID` = {$itemID}) OR (`c`.`expID` = {$itemID} AND `c`.`status` IN (5, 6))");
-        $items = $db->setQuery($query)->loadObjectList();
-
-        foreach ($items as $item) {
-            $arr = array();
-            $arr['id'] = $item->id;
-            $arr['year'] = $item->year;
-            $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
-            $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->exponentID}");
-            $arr['exp'] = JHtml::link($url, $exp);
-            $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}");
-            $arr['project'] =  JHtml::link($url, $item->project);
-            $arr['status'] = ($item->parentID == $itemID) ? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS_PARENT') : ProjectsHelper::getExpStatus($item->status);
-            $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}");
-            $arr['contract'] =  JHtml::link($url, JText::sprintf('COM_PROJECTS_FILTER_CONTRACT_DOGOVOR_FIELD', $item->number, $item->dat));
-            $result[] = $arr;
-        }
-        return $result;
-    }
-
-    /**
      * Возвращает историю участия экспонента в проектах
      * @return array
      * @since 1.2.6
