@@ -43,7 +43,7 @@ class ProjectsModelHistory extends AdminModel {
             ->select("`h`.`contractID`")
             ->select("`c`.`number`")
             ->select("`u`.`name` as `manager`")
-            ->select("`p`.`id` as `projectID`, `p`.`title` as `project`")
+            ->select("`p`.`id` as `projectID`, `p`.`title` as `project`, IF(`p`.`date_end`<CURRENT_TIMESTAMP(),'process','complete') as `section`")
             ->from("`#__prj_exp_history` as `h`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `h`.`contractID`")
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
@@ -67,7 +67,7 @@ class ProjectsModelHistory extends AdminModel {
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
             if ($item->status == '1' && !empty($item->number)) $arr['status'] .= " №{$item->number}";
             if ($item->status == '1' && empty($item->number)) $arr['status'] = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
-            $section = ($item->status == '0' || $item->status == '1') ? 'complete' : 'process';
+            $section = $item->section;
             if ($item->status == '0' || $item->status == '1')
             {
                 $result[$section][$item->projectID] = $arr;
@@ -119,6 +119,12 @@ class ProjectsModelHistory extends AdminModel {
         return parent::publish($pks, $value);
     }
 
+    /**
+     * Удаляет дубликаты из истории участия экспонента в проектах, оставляя только последний статус
+     * @param array $history
+     * @return array
+     * @since 1.0.2.0
+     */
     private function checkDuplicate(array $history): array
     {
         foreach ($history['complete'] as $projectID => $item)
