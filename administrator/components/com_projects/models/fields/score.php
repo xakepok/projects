@@ -25,6 +25,10 @@ class JFormFieldScore extends JFormFieldList
             $query->where("`s`.`id` = {$scoreID}");
             $session->clear('scoreID');
         }
+        if ($view == 'payment')
+        {
+            $query->where("`s`.`state` = 0");
+        }
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();

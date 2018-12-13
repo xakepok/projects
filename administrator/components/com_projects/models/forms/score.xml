@@ -48,7 +48,6 @@
                 label="COM_PROJECTS_HEAD_SCORE_STATE"
                 description="COM_PROJECTS_HEAD_SCORE_STATE_DESC"
                 class="inputbox"
-                required="true"
                 size="1"
                 default="0"
         >

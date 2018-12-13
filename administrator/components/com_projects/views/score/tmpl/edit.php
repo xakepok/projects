@@ -30,7 +30,9 @@ if ($return != null)
                 <div class="tab-pane active" id="general">
                     <fieldset class="adminform">
                         <div class="control-group form-inline">
-                            <?php foreach ($this->form->getFieldset('names') as $field) : ?>
+                            <?php foreach ($this->form->getFieldset('names') as $field) :
+                                if ($field->name == 'jform[state]' && $field->value != '1') continue;
+                                ?>
                                 <div class="control-label">
                                     <?php echo ($field->name != 'jform[contractID]') ? $field->label : JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_CONTRACT'); ?>
                                 </div>
