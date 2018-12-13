@@ -41,6 +41,16 @@
                 autocomplete="off"
                 class="input-xlarge"
         />
+        <field
+                name="comment"
+                type="textarea"
+                label="COM_PROJECTS_HEAD_EXP_COMMENT"
+                description="COM_PROJECTS_HEAD_EXP_COMMENT_DESC"
+                hint="COM_PROJECTS_HEAD_EXP_COMMENT_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+                rows="5"
+        />
     </fieldset>
     <fieldset name="bank">
         <field
