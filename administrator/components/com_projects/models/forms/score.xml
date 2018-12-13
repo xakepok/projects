@@ -13,7 +13,7 @@
                 autocomplete="off"
                 required="true"
                 onchange="getDebt()"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="dat"
@@ -22,7 +22,7 @@
                 description="COM_PROJECTS_HEAD_SCORE_DATE_DESC"
                 autocomplete="off"
                 required="true"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="number"
@@ -31,7 +31,7 @@
                 description="COM_PROJECTS_HEAD_SCORE_NUMBER_DESC"
                 autocomplete="off"
                 required="true"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="amount"
@@ -40,14 +40,14 @@
                 description="COM_PROJECTS_HEAD_SCORE_AMOUNT_DESC"
                 hint="COM_PROJECTS_HEAD_SCORE_AMOUNT_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="state"
                 type="list"
                 label="COM_PROJECTS_HEAD_SCORE_STATE"
                 description="COM_PROJECTS_HEAD_SCORE_STATE_DESC"
-                class="inputbox"
+                class="x2"
                 size="1"
                 default="0"
         >

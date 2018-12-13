@@ -39,7 +39,7 @@ class JFormFieldContract extends JFormFieldList
             $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             if ($view == 'score' || $view == 'stand')
             {
-                $name = JText::sprintf('COM_PROJECTS_FILTER_CONTRACT_DOGOVOR_FIELD', $item->number, $item->dat);
+                $name = JText::sprintf('COM_PROJECTS_FILTER_CONTRACT_DOGOVOR_FIELD', $item->number, $item->dat, $exp);
             }
             else
             {
