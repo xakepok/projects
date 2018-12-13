@@ -127,11 +127,11 @@ class ProjectsModelContracts extends ListModel
             $amount = $this->getAmount($item);
             $payments = $pm->getContractPayments($item->id);
             $debt = (float) $amount - (float) $payments;
-            $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", number_format($amount, 2, '.', "'"), $item->currency);
+            $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", number_format($amount, 0, '.', " "), $item->currency);
             $arr['amount_only'] = $amount; //Только цена
             $paid = (float) $amount - (float) $debt;
-            $arr['paid'] = sprintf(("%s %s"), number_format($paid, 2, '.', "'"), $item->currency); //Только цена
-            $arr['debt'] = ($format != 'html') ? $debt : sprintf("%s %s", number_format($debt, 2, '.', "'"), $item->currency);
+            $arr['paid'] = sprintf(("%s %s"), number_format($paid, 0, '.', " "), $item->currency); //Только цена
+            $arr['debt'] = ($format != 'html') ? $debt : sprintf("%s %s", number_format($debt, 0, '.', " "), $item->currency);
             $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}&amp;return={$return}");
             if (ProjectsHelper::canDo('core.accountant') && $debt > 0) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE')));
             if ($format != 'html') $arr['debt'] = $debt;
@@ -211,7 +211,7 @@ class ProjectsModelContracts extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("ROUND(SUM(`i`.`price_{$item->currency}`*`v`.`value`*(CASE WHEN `v`.`columnID`='1' THEN `i`.`column_1` WHEN `v`.`columnID`='2' THEN `i`.`column_2` WHEN `v`.`columnID`='3' THEN `i`.`column_3` END)*IFNULL(`v`.`markup`,1)*IFNULL(`v`.`factor`,1)*IFNULL(`v`.`value2`,1)), 2) as `amount`")
+            ->select("ROUND(SUM(`i`.`price_{$item->currency}`*`v`.`value`*(CASE WHEN `v`.`columnID`='1' THEN `i`.`column_1` WHEN `v`.`columnID`='2' THEN `i`.`column_2` WHEN `v`.`columnID`='3' THEN `i`.`column_3` END)*IFNULL(`v`.`markup`,1)*IFNULL(`v`.`factor`,1)*IFNULL(`v`.`value2`,1)), 0) as `amount`")
             ->from("`#__prj_contract_items` as `v`")
             ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `v`.`itemID`")
             ->where("`v`.`contractID` = {$item->id}");
