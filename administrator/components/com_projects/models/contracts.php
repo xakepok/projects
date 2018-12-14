@@ -208,7 +208,7 @@ class ProjectsModelContracts extends ListModel
      * @return float
      * @since 1.2.0
      */
-    private function getAmount(object $item): float
+    public function getAmount(object $item): float
     {
         $db =& $this->getDbo();
         $query = $db->getQuery(true);

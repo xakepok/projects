@@ -27,6 +27,7 @@ class ProjectsHelper
         }
         if (self::canDo('core.general'))
         {
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_STAT'), 'index.php?option=com_projects&amp;view=stat', $vName == 'stat');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PRICES'), 'index.php?option=com_projects&amp;view=prices', $vName == 'prices');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_SECTIONS'), 'index.php?option=com_projects&amp;view=sections', $vName == 'sections');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ITEMS'), 'index.php?option=com_projects&amp;view=items', $vName == 'items');
