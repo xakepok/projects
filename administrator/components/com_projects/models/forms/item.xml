@@ -81,18 +81,15 @@
             <option value="1pd">COM_PROJECTS_HEAD_ITEM_UNIT_1PD</option>
         </field>
         <field
-                name="state"
-                type="list"
-                label="JSTATUS"
-                description="JFIELD_PUBLISHED_DESC"
-                class="inputbox"
-                size="1"
+                name="in_stat"
+                type="radio"
+                class="btn-group btn-group-yesno"
                 default="1"
+                label="COM_PROJECTS_HEAD_ITEM_IN_STAT"
+                description="COM_PROJECTS_HEAD_ITEM_IN_STAT_DESC"
         >
-            <option value="1">JPUBLISHED</option>
-            <option value="0">JUNPUBLISHED</option>
-            <option value="2">JARCHIVED</option>
-            <option value="-2">JTRASHED</option>
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
         </field>
         <field
             name="is_factor"
