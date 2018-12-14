@@ -246,7 +246,7 @@ abstract class ProjectsHtmlFilters
         $db =& JFactory::getDbo();
         $query =& $db->getQuery(true);
         $query
-            ->select("`id`, `title`")
+            ->select("`id`, `title_ru`")
             ->from('#__prj_projects')
             ->order("`title`");
         $result = $db->setQuery($query)->loadObjectList();
@@ -255,7 +255,7 @@ abstract class ProjectsHtmlFilters
 
         foreach ($result as $item)
         {
-            $options[] = JHtml::_('select.option', $item->id, $item->title);
+            $options[] = JHtml::_('select.option', $item->id, $item->title_ru);
         }
 
         return $options;

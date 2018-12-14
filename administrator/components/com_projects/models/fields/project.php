@@ -20,6 +20,13 @@ class JFormFieldProject extends JFormFieldList
         {
             $query->where("`priceID` IS NOT NULL");
         }
+        $session = JFactory::getSession();
+        if ($view == 'contract' && $session->get('projectID') != null)
+        {
+            $projectID = $session->get('projectID');
+            $query->where("`id` = {$projectID}");
+            $session->clear('projectID');
+        }
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();

@@ -2,6 +2,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\AdminModel;
 
 class ProjectsModelExhibitors extends ListModel
 {
@@ -86,14 +87,26 @@ class ProjectsModelExhibitors extends ListModel
     {
         $format = JFactory::getApplication()->input->getString('format', 'html');
         $items = parent::getItems();
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=exhibitors");
         $result = array();
+        $projectinactive = $this->getState('filter.projectinactive');
+        if (is_numeric($projectinactive))
+        {
+            $model = AdminModel::getInstance('Project', 'ProjectsModel');
+            $project = $model->getItem($projectinactive);
+        }
         foreach ($items as $item) {
             $title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr['id'] = $item->id;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->id}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->id}");
             $link = JHtml::link($url, $title);
             $arr['region'] = $item->city;
             $arr['title'] = ($format != 'html') ? $title : $link;
+            if (is_numeric($projectinactive))
+            {
+                $url = JRoute::_("index.php?option=com_projects&amp;task=contract.add&amp;exhibitorID={$item->id}&amp;projectID={$projectinactive}&amp;return={$return}");
+                $arr['contract'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_TITLE_NEW_CONTRACT_WITH_PROJECT', $project->title_ru));
+            }
             $result[] = $arr;
         }
         return $result;

@@ -22,6 +22,8 @@ function clrFilters() {
     if (dat !== null) dat.value = '';
     var city = document.querySelector("[name='filter_city']");
     if (city !== null) city.value = '';
+    var projectinactive = document.querySelector("[name='filter_projectinactive']");
+    if (projectinactive !== null) projectinactive.value = '';
     var search = document.querySelector("[name='filter_search']");
     if (search !== null) search.value = '';
 }
