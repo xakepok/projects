@@ -43,7 +43,7 @@ class ProjectsModelHistory extends AdminModel {
             ->select("`h`.`contractID`")
             ->select("`c`.`number`")
             ->select("`u`.`name` as `manager`")
-            ->select("`p`.`id` as `projectID`, `p`.`title` as `project`, IF(`p`.`date_end`<CURRENT_TIMESTAMP(),'process','complete') as `section`")
+            ->select("`p`.`id` as `projectID`, `p`.`title` as `project`, IF(`p`.`date_end`>CURRENT_TIMESTAMP(),'process','complete') as `section`")
             ->from("`#__prj_exp_history` as `h`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `h`.`contractID`")
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
