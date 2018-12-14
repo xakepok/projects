@@ -96,7 +96,7 @@ class ProjectsModelContracts extends ListModel
     {
         $view = JFactory::getApplication()->input->getString('view');
         $items = parent::getItems();
-        $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
+        $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'debt' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'payments' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
         $ids = array();
         $format = JFactory::getApplication()->input->getString('format', 'html');
         $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contracts");
@@ -138,6 +138,8 @@ class ProjectsModelContracts extends ListModel
 
             $result['items'][] = $arr;
             $result['amount'][$item->currency] += $amount;
+            $result['debt'][$item->currency] += $debt;
+            $result['payments'][$item->currency] += $payments;
         }
         $result['stands'] = $this->getStands($ids);
         return $result;

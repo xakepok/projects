@@ -19,11 +19,9 @@ HTMLHelper::_('script', 'com_projects/script.js', array('version' => 'auto', 're
         <table class="table table-striped">
             <thead><?php echo $this->loadTemplate('head');?></thead>
             <tbody><?php echo $this->loadTemplate('body');?></tbody>
+            <?php echo $this->loadTemplate('amount');?>
             <tfoot><?php echo $this->loadTemplate('foot');?></tfoot>
         </table>
-        <div>
-            <?php echo $this->loadTemplate('amount');?>
-        </div>
         <div>
             <input type="hidden" name="task" value="" />
             <input type="hidden" name="boxchecked" value="0" />
