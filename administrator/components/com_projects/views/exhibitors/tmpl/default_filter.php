@@ -17,6 +17,7 @@ defined('_JEXEC') or die;
             </button>
         </div>
         <div class="js-stools-field-filter">
+            <?php echo ProjectsHtmlFilters::projectinactive($this->state->get('filter.projectinactive')); ?>
             <?php echo ProjectsHtmlFilters::city($this->state->get('filter.city')); ?>
             <?php echo ProjectsHtmlFilters::activity($this->state->get('filter.activity')); ?>
         </div>

@@ -42,6 +42,11 @@ class ProjectsModelExhibitors extends ListModel
         if (is_numeric($city) && $format != 'html') {
             $query->where('`e`.`regID` = ' . (int)$city);
         }
+        // Фильтруем проектам, в которых экспонент не учавствует
+        $projectinactive = $this->getState('filter.projectinactive');
+        if (is_numeric($projectinactive)) {
+            $query->where("`e`.`id` NOT IN (SELECT DISTINCT `expID` FROM `#__prj_contracts` WHERE `prjID` = {$projectinactive})");
+        }
         // Фильтруем по видам деятельности.
         $act = $this->getState('filter.activity');
         if (is_numeric($act)) {
@@ -100,9 +105,11 @@ class ProjectsModelExhibitors extends ListModel
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $activity = $this->getUserStateFromRequest($this->context . '.filter.activity', 'filter_activity', '', 'string');
         $city = $this->getUserStateFromRequest($this->context . '.filter.city', 'filter_city', '', 'string');
+        $projectinactive = $this->getUserStateFromRequest($this->context . '.filter.projectinactive', 'filter_projectinactive', '', 'string');
         $this->setState('filter.search', $search);
         $this->setState('filter.state', $activity);
         $this->setState('filter.city', $city);
+        $this->setState('filter.projectinactive', $projectinactive);
         parent::populateState('`title_ru_short`', 'asc');
     }
 
@@ -111,6 +118,7 @@ class ProjectsModelExhibitors extends ListModel
         $id .= ':' . $this->getState('filter.search');
         $id .= ':' . $this->getState('filter.activity');
         $id .= ':' . $this->getState('filter.city');
+        $id .= ':' . $this->getState('filter.projectinactive');
         return parent::getStoreId($id);
     }
 }

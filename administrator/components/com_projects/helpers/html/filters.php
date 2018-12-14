@@ -75,6 +75,19 @@ abstract class ProjectsHtmlFilters
         return JHtml::_('select.genericlist', $options, 'filter_project', $attribs, 'value', 'text', $selected, null, true);
     }
 
+    //Фильтр неактивных проектов для экспонентов
+    public static function projectinactive($selected)
+    {
+        $options = array();
+
+        $options[] = JHtml::_('select.option', '', 'COM_PROJECTS_FILTER_SELECT_PROJECT_INACTIVE');
+        $options = array_merge($options, self::projectOptions());
+
+        $attribs = 'class="inputbox" onchange="this.form.submit()"';
+
+        return JHtml::_('select.genericlist', $options, 'filter_projectinactive', $attribs, 'value', 'text', $selected, null, true);
+    }
+
     //Фильтр видов деятельности
     public static function activity($selected)
     {

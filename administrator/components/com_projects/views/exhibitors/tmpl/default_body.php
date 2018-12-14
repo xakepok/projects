@@ -17,8 +17,5 @@ foreach ($this->items as $i => $item) :
         <td>
             <?php echo $item['region'];?>
         </td>
-        <td>
-            <?php echo $item['id']; ?>
-        </td>
     </tr>
 <?php endforeach; ?>
