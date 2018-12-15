@@ -39,7 +39,7 @@ class ProjectsModelHistory extends AdminModel {
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("DATE_FORMAT(`h`.`dat`,'%d.%m.%Y %k:%i') as `dat`, DATE_FORMAT(`h`.`dat`,'%Y') as `year`, `h`.`status`")
+            ->select("DATE_FORMAT(`h`.`dat`,'%d.%m.%Y %k:%i') as `dat`, `h`.`status`")
             ->select("`h`.`contractID`")
             ->select("`c`.`number`")
             ->select("`u`.`name` as `manager`")
@@ -52,14 +52,12 @@ class ProjectsModelHistory extends AdminModel {
             ->where("`c`.`expID` = {$expID}");
 
         $items = $db->setQuery($query)->loadObjectList();
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&task=exhibitor.edit&id={$expID}");
         foreach ($items as $item) {
             $arr = array();
             $arr['dat'] = $item->dat;
-            $arr['year'] = $item->year;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contractID}");
-            $arr['contract'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_HEAD_TODO_CONTRACT'));
-            $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}");
-            $arr['project'] = JHtml::link($url, $item->project);
+            $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}");
+            $arr['project'] = (ProjectsHelper::canDo('core.general')) ? JHtml::link($url, $item->project) : $item->project;
             $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;filter_contract={$item->contractID}");
             $arr['todos'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_BLANK_TODOS'));
             $arr['projectID'] = $item->projectID;
@@ -67,6 +65,8 @@ class ProjectsModelHistory extends AdminModel {
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
             if ($item->status == '1' && !empty($item->number)) $arr['status'] .= " №{$item->number}";
             if ($item->status == '1' && empty($item->number)) $arr['status'] = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
+            $url_contract = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
+            $arr['status'] = JHtml::link($url_contract, $arr['status']);
             $section = $item->section;
             if ($item->status == '0' || $item->status == '1')
             {

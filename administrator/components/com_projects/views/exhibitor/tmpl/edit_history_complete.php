@@ -6,9 +6,6 @@ defined('_JEXEC') or die;
     <thead>
         <tr>
             <th>
-                <?php echo JText::sprintf('COM_PROJECTS_HEAD_EXP_HISTORY_YEAR');?>
-            </th>
-            <th>
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_EXP_HISTORY_PROJECT');?>
             </th>
             <th>
@@ -16,9 +13,6 @@ defined('_JEXEC') or die;
             </th>
             <th>
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_EXP_HISTORY_STATUS');?>
-            </th>
-            <th>
-                <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_CONTRACT');?>
             </th>
             <th>
                 <?php echo JText::sprintf('COM_PROJECTS_BLANK_TODOS');?>
@@ -29,9 +23,6 @@ defined('_JEXEC') or die;
         <?php foreach ($this->history['complete'] as $item):?>
         <tr>
             <td>
-                <?php echo $item['year'];?>
-            </td>
-            <td>
                 <?php echo $item['project'];?>
             </td>
             <td>
@@ -39,9 +30,6 @@ defined('_JEXEC') or die;
             </td>
             <td>
                 <?php echo $item['status'];?>
-            </td>
-            <td>
-                <?php echo $item['contract'];?>
             </td>
             <td>
                 <?php echo $item['todos'];?>

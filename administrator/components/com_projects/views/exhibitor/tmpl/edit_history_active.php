@@ -4,7 +4,7 @@ $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=exhib
 if ($this->item->id != null)
 {
     $addUrl = JRoute::_("index.php?option=com_projects&amp;task=contract.add&amp;exhibitorID={$this->item->id}&amp;return={$return}");
-    $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_ACTION_OPEN_CONTRACT'));
+    $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_ACTION_OPEN_CONTRACT'), array('style' => 'font-size: 2em;'));
     echo "<div>{$addLink}</div>";
 }
 ?>
@@ -12,9 +12,6 @@ if ($this->item->id != null)
 <table class="history">
     <thead>
         <tr>
-            <th>
-                <?php echo JText::sprintf('COM_PROJECTS_HEAD_EXP_HISTORY_YEAR');?>
-            </th>
             <th>
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_EXP_HISTORY_PROJECT');?>
             </th>
@@ -25,9 +22,6 @@ if ($this->item->id != null)
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_EXP_HISTORY_STATUS');?>
             </th>
             <th>
-                <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_CONTRACT');?>
-            </th>
-            <th>
                 <?php echo JText::sprintf('COM_PROJECTS_BLANK_TODOS');?>
             </th>
         </tr>
@@ -36,9 +30,6 @@ if ($this->item->id != null)
         <?php foreach ($this->history['process'] as  $projectID => $item):?>
         <tr>
             <td>
-                <?php echo $item['year'];?>
-            </td>
-            <td>
                 <?php echo $item['project'];?>
             </td>
             <td>
@@ -46,9 +37,6 @@ if ($this->item->id != null)
             </td>
             <td>
                 <?php echo $item['status'];?>
-            </td>
-            <td>
-                <?php echo $item['contract'];?>
             </td>
             <td>
                 <?php echo $item['todos'];?>
