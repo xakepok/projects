@@ -14,7 +14,6 @@ class ProjectsModelProjects extends ListModel
                 '`date_start`', '`date_start`',
                 '`date_end`', '`date_end`',
                 '`manager`', '`manager`',
-                '`group`', '`group`',
                 '`price`', '`price`',
                 '`column`', '`column`',
                 'search',
@@ -34,10 +33,8 @@ class ProjectsModelProjects extends ListModel
             ->select("DATE_FORMAT(`p`.`date_end`,'%d.%m.%Y') as `date_end`")
             ->from("`#__prj_projects` `p`")
             ->select("`u`.`name` as `manager`")
-            ->select("`g`.`title` as `group`")
             ->leftJoin("`#__prc_prices` as `pr` ON `pr`.`id` = `p`.`priceID`")
-            ->leftJoin("`#__users` as `u` ON `u`.`id` = `p`.`managerID`")
-            ->leftJoin("`#__usergroups` as `g` ON `g`.`id` = `p`.`groupID`");
+            ->leftJoin("`#__users` as `u` ON `u`.`id` = `p`.`managerID`");
 
         /* Фильтр */
         $search = $this->getState('filter.search');
@@ -69,7 +66,6 @@ class ProjectsModelProjects extends ListModel
             $arr['manager'] = $item->manager;
             $arr['price'] = $item->price;
             $arr['column'] = $item->column;
-            $arr['group'] = $item->group;
             $result[] = $arr;
         }
         return $result;

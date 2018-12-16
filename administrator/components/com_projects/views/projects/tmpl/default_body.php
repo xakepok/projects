@@ -17,9 +17,6 @@ foreach ($this->items as $i => $item) : ?>
             <?php echo $item['manager'];?>
         </td>
         <td>
-            <?php echo $item['group'];?>
-        </td>
-        <td>
             <?php echo $item['price'];?>
         </td>
         <td>
@@ -30,9 +27,6 @@ foreach ($this->items as $i => $item) : ?>
         </td>
         <td>
             <?php echo $item['date_end'];?>
-        </td>
-        <td>
-            <?php echo $item['id']; ?>
         </td>
     </tr>
 <?php endforeach; ?>

@@ -17,9 +17,6 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_GENERAL', '`manager`', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP', '`group`', $listDirn, $listOrder); ?>
-    </th>
-    <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PRICE_LIST', '`price`', $listDirn, $listOrder); ?>
     </th>
     <th>
@@ -30,8 +27,5 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
     </th>
     <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_DATE_END', '`date_end`', $listDirn, $listOrder); ?>
-    </th>
-    <th width="1%">
-        <?php echo JHtml::_('grid.sort', 'ID', '`id`', $listDirn, $listOrder); ?>
     </th>
 </tr>
