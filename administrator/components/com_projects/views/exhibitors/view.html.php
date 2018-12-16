@@ -8,13 +8,15 @@ class ProjectsViewExhibitors extends HtmlView
 {
 	protected $helper;
 	protected $sidebar = '';
-	public $items, $pagination, $uid, $state, $links;
+	public $items, $pagination, $uid, $state, $links, $filterForm, $activeFilters;
 
 	public function display($tpl = null)
 	{
 	    $this->items = $this->get('Items');
 	    $this->pagination = $this->get('Pagination');
 	    $this->state = $this->get('State');
+        $this->filterForm = $this->get('FilterForm');
+        $this->activeFilters = $this->get('ActiveFilters');
 
 		// Show the toolbar
 		$this->toolbar();

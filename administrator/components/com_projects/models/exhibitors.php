@@ -15,6 +15,9 @@ class ProjectsModelExhibitors extends ListModel
                 '`title_ru_full`', '`title_ru_full`',
                 '`title_en`', '`title_en`',
                 '`city`', '`city`',
+                'projectinactive',
+                'activity',
+                'city',
             );
         }
         parent::__construct($config);
@@ -113,7 +116,7 @@ class ProjectsModelExhibitors extends ListModel
     }
 
     /* Сортировка по умолчанию */
-    protected function populateState($ordering = null, $direction = null)
+    protected function populateState($ordering = '`title_ru_short`', $direction = 'asc')
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $activity = $this->getUserStateFromRequest($this->context . '.filter.activity', 'filter_activity', '', 'string');

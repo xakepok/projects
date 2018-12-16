@@ -6,6 +6,7 @@ JFormHelper::loadFieldClass('list');
 class JFormFieldPrice extends JFormFieldList
 {
     protected $type = 'Price';
+    protected $loadExternally = 0;
 
     protected function getOptions()
     {
@@ -26,8 +27,16 @@ class JFormFieldPrice extends JFormFieldList
             $options[] = JHtml::_('select.option', $item->id, $item->title);
         }
 
-        $options = array_merge(parent::getOptions(), $options);
+        if (!$this->loadExternally) {
+            $options = array_merge(parent::getOptions(), $options);
+        }
 
         return $options;
+    }
+
+    public function getOptionsExternally()
+    {
+        $this->loadExternally = 1;
+        return $this->getOptions();
     }
 }

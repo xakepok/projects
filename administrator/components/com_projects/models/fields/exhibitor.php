@@ -6,6 +6,7 @@ JFormHelper::loadFieldClass('list');
 class JFormFieldExhibitor extends JFormFieldList
 {
     protected $type = 'Exhibitor';
+    protected $loadExternally = 0;
 
     protected function getOptions()
     {
@@ -34,8 +35,16 @@ class JFormFieldExhibitor extends JFormFieldList
             $options[] = JHtml::_('select.option', $item->id, $name);
         }
 
-        $options = array_merge(parent::getOptions(), $options);
+        if (!$this->loadExternally) {
+            $options = array_merge(parent::getOptions(), $options);
+        }
 
         return $options;
+    }
+
+    public function getOptionsExternally()
+    {
+        $this->loadExternally = 1;
+        return $this->getOptions();
     }
 }

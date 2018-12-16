@@ -6,6 +6,7 @@ JFormHelper::loadFieldClass('groupedlist');
 class JFormFieldRegion extends JFormFieldGroupedList
 {
     protected $type = 'Region';
+    protected $loadExternally = 0;
 
     protected function getGroups()
     {
@@ -31,8 +32,16 @@ class JFormFieldRegion extends JFormFieldGroupedList
             }
         }
 
-        $options = array_merge(parent::getGroups(), $options);
+        if (!$this->loadExternally) {
+            $options = array_merge(parent::getGroups(), $options);
+        }
 
         return $options;
+    }
+
+    public function getOptionsExternally()
+    {
+        $this->loadExternally = 1;
+        return $this->getGroups();
     }
 }
