@@ -17,6 +17,7 @@ class ProjectsModelProjects extends ListModel
                 '`group`', '`group`',
                 '`price`', '`price`',
                 '`column`', '`column`',
+                'search',
             );
         }
         parent::__construct($config);
