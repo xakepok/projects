@@ -36,9 +36,6 @@ foreach ($this->items['items'] as $i => $item) :
             <td>
                 <span class="<?php echo $item['manager']['class']; ?>"><?php echo $item['manager']['title']; ?></span>
             </td>
-            <td>
-                <span class="<?php echo $item['group']['class']; ?>"><?php echo $item['group']['title']; ?></span>
-            </td>
         <?php endif; ?>
         <td>
             <?php echo $item['status']; ?>

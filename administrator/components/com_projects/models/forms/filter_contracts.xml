@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fields name="filter">
+        <field
+                name="search"
+                type="text"
+                label="COM_PROJECTS_FILTER_CONTRACT"
+                description="COM_PROJECTS_FILTER_CONTRACT"
+                hint="COM_PROJECTS_FILTER_CONTRACT"
+                autocomplete="off"
+                class="js-stools-search-string"
+        />
+        <field
+            name="project"
+            type="Project"
+            label="COM_PROJECTS_FILTER_SELECT_PROJECT"
+            description="COM_PROJECTS_FILTER_SELECT_PROJECT"
+            onchange="this.form.submit();"
+            >
+            <option value="">COM_PROJECTS_FILTER_SELECT_PROJECT</option>
+        </field>
+        <field
+            name="exhibitor"
+            type="Exhibitor"
+            label="COM_PROJECTS_FILTER_SELECT_EXHIBITOR"
+            description="COM_PROJECTS_FILTER_SELECT_EXHIBITOR"
+            onchange="this.form.submit();"
+            >
+            <option value="">COM_PROJECTS_FILTER_SELECT_EXHIBITOR</option>
+        </field>
+        <field
+                name="currency"
+                type="list"
+                label="COM_PROJECTS_FILTER_SELECT_CURRENCY"
+                description="COM_PROJECTS_FILTER_SELECT_CURRENCY"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_CURRENCY</option>
+            <option value="rub">COM_PROJECTS_HEAD_ITEM_PRICE_RUB</option>
+            <option value="usd">COM_PROJECTS_HEAD_ITEM_PRICE_USD</option>
+            <option value="eur">COM_PROJECTS_HEAD_ITEM_PRICE_EUR</option>
+        </field>
+
+        <field
+                name="status"
+                type="list"
+                label="COM_PROJECTS_FILTER_SELECT_STATUS"
+                description="COM_PROJECTS_FILTER_SELECT_STATUS"
+                hint="COM_PROJECTS_FILTER_SELECT_STATUS"
+                title="COM_PROJECTS_FILTER_SELECT_STATUS"
+                multiple="true"
+                onchange="this.form.submit();"
+        >
+            <option value="2">COM_PROJECTS_HEAD_CONTRACT_STATUS_2</option>
+            <option value="3">COM_PROJECTS_HEAD_CONTRACT_STATUS_3</option>
+            <option value="4">COM_PROJECTS_HEAD_CONTRACT_STATUS_4</option>
+            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STATUS_1</option>
+            <option value="0">COM_PROJECTS_HEAD_CONTRACT_STATUS_0</option>
+        </field>
+    </fields>
+    <fields name="list">
+        <field
+                name="limit"
+                type="limitbox"
+                class="input-mini"
+                default="25"
+                label="COM_PROJECTS_FILTER_SELECT_LIMIT"
+                description="COM_CONTENT_LIST_LIMIT_DESC"
+                onchange="this.form.submit();"
+        />
+    </fields>
+</form>

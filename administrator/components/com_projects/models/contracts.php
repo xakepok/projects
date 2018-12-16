@@ -9,15 +9,17 @@ class ProjectsModelContracts extends ListModel
         if (empty($config['filter_fields']))
         {
             $config['filter_fields'] = array(
-                '`id`', '`id`',
-                '`c`.`dat`',  '`c`.`dat`',
-                '`project`',  '`project`',
-                '`manager`',  '`manager`',
-                '`group`',  '`group`',
-                '`plan`',  '`plan`',
-                '`plan_dat`',  '`plan_dat`',
-                '`c`.`number`',  '`c`.`number`',
-                '`e`.`title_ru_short`',  '`e`.`title_ru_short`',
+                'id',
+                'c.dat',
+                'project',
+                'manager',
+                'exhibitor',  'title_ru_short',
+                'status',
+                'search',
+                'plan',
+                'plan_dat',
+                'currency',
+                'number'
             );
         }
         parent::__construct($config);
@@ -32,19 +34,18 @@ class ProjectsModelContracts extends ListModel
             ->select("`p`.`title_ru` as `project`, `p`.`id` as `projectID`")
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
             ->select("`u`.`name` as `manager`, (SELECT MIN(`dat`) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan_dat`")
-            ->select("`g`.`title` as `group`, (SELECT COUNT(*) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan`")
+            ->select("(SELECT COUNT(*) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan`")
             ->from("`#__prj_contracts` as `c`")
             ->leftJoin("`#__prj_projects` AS `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `expID`")
-            ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`")
-            ->leftJoin("`#__usergroups` as `g` ON `g`.`id` = `p`.`groupID`");
+            ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`");
 
         /* Фильтр */
         $search = $this->getState('filter.search');
         if (!empty($search))
         {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-            $query->where('`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . 'OR `p`.`title` LIKE ' . $search);
+            $query->where('`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . 'OR `p`.`title_ru` LIKE ' . $search);
         }
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
@@ -61,14 +62,23 @@ class ProjectsModelContracts extends ListModel
         if (is_numeric($manager)) {
             $query->where('`c`.`managerID` = ' . (int)$manager);
         }
+        // Фильтруем по валюте.
+        $currency = $this->getState('filter.currency');
+        if (!empty($currency))
+        {
+            $currency = $db->quote('%' . $db->escape($currency, true) . '%', false);
+            $query->where("`c`.`currency` LIKE {$currency}");
+        }
         // Фильтруем по статусу.
         $status = $this->getState('filter.status');
-        if (is_numeric($status)) {
-            if ($status != -1) {
-                $query->where('`c`.`status` = ' . (int)$status);
+        if (is_array($status)) {
+            if (!empty($status)) {
+                $statuses = implode(', ', $status);
+                $query->where("`c`.`status` IN ({$statuses})");
             }
-            else {
-                $query->where('`c`.`status` IS NULL');
+            else
+            {
+                $query->where("`c`.`status` IS NOT NULL");
             }
         }
         /* Фильтр по ID проекта (только через GET) */
@@ -86,7 +96,7 @@ class ProjectsModelContracts extends ListModel
 
         /* Сортировка */
         $orderCol  = $this->state->get('list.ordering', '`plan_dat`');
-        $orderDirn = $this->state->get('list.direction', 'desc');
+        $orderDirn = $this->state->get('list.direction', 'asc');
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
         return $query;
@@ -94,7 +104,6 @@ class ProjectsModelContracts extends ListModel
 
     public function getItems()
     {
-        $view = JFactory::getApplication()->input->getString('view');
         $items = parent::getItems();
         $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'debt' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'payments' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
         $ids = array();
@@ -153,11 +162,13 @@ class ProjectsModelContracts extends ListModel
         $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor');
         $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
         $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status');
+        $currency = $this->getUserStateFromRequest($this->context . '.filter.currency', 'filter_currency');
         $this->setState('filter.search', $search);
         $this->setState('filter.project', $project);
         $this->setState('filter.exhibitor', $exhibitor);
         $this->setState('filter.manager', $manager);
-        $this->setState('filter.manager', $status);
+        $this->setState('filter.status', $status);
+        $this->setState('filter.currency', $currency);
         parent::populateState('`plan_dat`', 'asc');
     }
 
@@ -168,6 +179,7 @@ class ProjectsModelContracts extends ListModel
         $id .= ':' . $this->getState('filter.exhibitor');
         $id .= ':' . $this->getState('filter.manager');
         $id .= ':' . $this->getState('filter.status');
+        $id .= ':' . $this->getState('filter.currency');
         return parent::getStoreId($id);
     }
 

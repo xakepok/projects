@@ -12,7 +12,7 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         №
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_NUMBER_SHORT', '`c`.`number`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_NUMBER_SHORT', 'number', $listDirn, $listOrder); ?>
     </th>
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_SHORT'); ?>
@@ -21,23 +21,20 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         <?php echo JText::sprintf('COM_PROJECTS_ACTION_GO'); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_PROJECT', '`project`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_PROJECT', 'project', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_EXPONENT', '`e`.`title_ru_short`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_EXPONENT', 'title_ru_short', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_ACTIVE_TODOS', '`plan`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_ACTIVE_TODOS', 'plan', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_DATE_DOG', '`c`.`dat`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_DATE_DOG', 'c.dat', $listDirn, $listOrder); ?>
     </th>
     <?php if (ProjectsHelper::canDo('core.general')): ?>
         <th>
-            <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_MANAGER', '`manager`', $listDirn, $listOrder); ?>
-        </th>
-        <th>
-            <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP', '`group`', $listDirn, $listOrder); ?>
+            <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_MANAGER', 'manager', $listDirn, $listOrder); ?>
         </th>
     <?php endif; ?>
     <th>

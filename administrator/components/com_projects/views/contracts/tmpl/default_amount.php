@@ -3,7 +3,7 @@
 defined('_JEXEC') or die;
 ?>
 <tr>
-    <td colspan="<?php echo (ProjectsHelper::canDo('core.general')) ? '12' : '10'; ?>" style="text-align: right;">
+    <td colspan="<?php echo (ProjectsHelper::canDo('core.general')) ? '11' : '10'; ?>" style="text-align: right;">
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_RUB');?>
     </td>
     <td>
@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
     </td>
 </tr>
 <tr>
-    <td colspan="<?php echo (ProjectsHelper::canDo('core.general')) ? '12' : '10'; ?>" style="text-align: right;">
+    <td colspan="<?php echo (ProjectsHelper::canDo('core.general')) ? '11' : '10'; ?>" style="text-align: right;">
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_USD');?>
     </td>
     <td>
@@ -31,7 +31,7 @@ defined('_JEXEC') or die;
     </td>
 </tr>
 <tr>
-    <td colspan="<?php echo (ProjectsHelper::canDo('core.general')) ? '12' : '10'; ?>" style="text-align: right;">
+    <td colspan="<?php echo (ProjectsHelper::canDo('core.general')) ? '11' : '10'; ?>" style="text-align: right;">
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_EUR');?>
     </td>
     <td>
