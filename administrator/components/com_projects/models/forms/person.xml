@@ -69,5 +69,15 @@
             <option value="0">JNO</option>
             <option value="1">JYES</option>
         </field>
+        <field
+                name="comment"
+                type="textarea"
+                label="COM_PROJECTS_HEAD_PERSON_COMMENT"
+                description="COM_PROJECTS_HEAD_PERSON_COMMENT_DESC"
+                hint="COM_PROJECTS_HEAD_PERSON_COMMENT_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+                rows="5"
+        />
     </fieldset>
 </form>

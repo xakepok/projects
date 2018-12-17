@@ -7,12 +7,9 @@ if ($this->item->id != null) {
     echo "<div>{$addLink}</div>";
 }
 ?>
-<table class="addPrice">
+<table class="table table-striped">
     <thead>
     <tr>
-        <th>
-            <?php echo 'ID'; ?>
-        </th>
         <th>
             <?php echo JText::sprintf('COM_PROJECTS_HEAD_PERSON_FIO'); ?>
         </th>
@@ -27,6 +24,9 @@ if ($this->item->id != null) {
         </th>
         <th>
             <?php echo JText::sprintf('COM_PROJECTS_HEAD_PERSON_EMAIL'); ?>
+        </th>
+        <th>
+            <?php echo JText::sprintf('COM_PROJECTS_HEAD_PERSON_COMMENT_HINT'); ?>
         </th>
         <th>
             <?php echo JText::sprintf('COM_PROJECTS_HEAD_PERSON_IS_MAIN'); ?>
@@ -47,9 +47,6 @@ if ($this->item->id != null) {
         <form action="<?php echo $person['action']; ?>" method="post"
               id="form_person_<?php echo $person['id']; ?>">
             <tr id="row_person_<?php echo $person['id']; ?>">
-                <td style="color:<?php echo ($person['expired']) ? 'red' : 'black';?>">
-                    <?php echo $person['id']; ?>
-                </td>
                 <td>
                     <?php echo $person['fio']; ?>
                 </td>
@@ -64,6 +61,9 @@ if ($this->item->id != null) {
                 </td>
                 <td>
                     <?php echo $person['email']; ?>
+                </td>
+                <td>
+                    <?php echo $person['comment']; ?>
                 </td>
                 <td>
                     <?php echo JText::sprintf((!$person['main']) ? 'JNO' : 'JYES'); ?>
