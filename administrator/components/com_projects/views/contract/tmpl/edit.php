@@ -84,6 +84,15 @@ if ($return != null)
                     </div>
                     <?php echo JHtml::_('bootstrap.endTab'); ?>
                 <?php endif;?>
+                <?php if ($this->item->finanses != null): ?>
+                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'finanses', JText::sprintf('COM_PROJECTS_BLANK_FINANSES')); ?>
+                    <div class="row-fluid">
+                        <div>
+                            <?php echo $this->loadTemplate('finanses');?>
+                        </div>
+                    </div>
+                    <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php endif;?>
             </div>
             <?php echo JHtml::_('bootstrap.endTabSet'); ?>
         </div>

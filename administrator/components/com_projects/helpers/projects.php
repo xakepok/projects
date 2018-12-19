@@ -35,6 +35,30 @@ class ProjectsHelper
         }
     }
 
+    public static function getContractAmount(int $contractID): float
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $currency = self::getContractCurrency($contractID);
+        $query
+            ->select("ROUND(SUM(`i`.`price_{$currency}`*`v`.`value`*(CASE WHEN `v`.`columnID`='1' THEN `i`.`column_1` WHEN `v`.`columnID`='2' THEN `i`.`column_2` WHEN `v`.`columnID`='3' THEN `i`.`column_3` END)*IFNULL(`v`.`markup`,1)*IFNULL(`v`.`factor`,1)*IFNULL(`v`.`value2`,1)), 0) as `amount`")
+            ->from("`#__prj_contract_items` as `v`")
+            ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `v`.`itemID`")
+            ->where("`v`.`contractID` = {$contractID}");
+        return (float) 0 + $db->setQuery($query)->loadResult();
+    }
+
+    public function getContractCurrency(int $contractID): string
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`currency`")
+            ->from("`#__prj_contracts`")
+            ->where("`id` = {$contractID}");
+        return $db->setQuery($query)->loadResult();
+    }
+
     public static function getProjectContracts(int $projectID): array
     {
         $result = array();
@@ -167,6 +191,48 @@ class ProjectsHelper
             ->from("`#__prj_contracts`")
             ->where("`number` IS NOT NULL");
         return $db->setQuery($query)->loadResult();
+    }
+
+    /**
+     * Возвращает счета текущей сделки
+     * @param int $contractID
+     * @return array
+     * @since 1.0.3.6
+     */
+    public static function getContractScores(int $contractID): array
+    {
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`id`, DATE_FORMAT(`dat`,'%d.%m.%Y') as `dat`, `number`, `amount`, `state`")
+            ->from("`#__prj_scores`")
+            ->where("`contractID` = {$contractID}");
+        return $db->setQuery($query)->loadObjectList() ?? array();
+    }
+
+    /**
+     * Возвращает платежи по счетам для текущей сделки
+     * @param int $contractID
+     * @return array
+     * @since 1.0.3.6
+     */
+    public static function getContractPayments(int $contractID): array
+    {
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("DATE_FORMAT(`p`.`dat`,'%d.%m.%Y') as `dat`, `p`.`scoreID`, `p`.`pp`, `p`.`amount`")
+            ->from("`#__prj_payments` as `p`")
+            ->leftJoin("`#__prj_scores` as `s` ON `s`.`id` = `p`.`scoreID`")
+            ->where("`s`.`contractID` = {$contractID}");
+        $items = $db->setQuery($query)->loadObjectList();
+        $result = array();
+        foreach ($items as $item) {
+
+            if (!isset($result[$item->scoreID])) $result[$item->scoreID] = array();
+            $result[$item->scoreID][] = $item;
+        }
+        return $result;
     }
 
     /**

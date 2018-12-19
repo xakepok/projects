@@ -133,7 +133,8 @@ class ProjectsModelContracts extends ListModel
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             if ($format == 'html') $arr['plan'] = $link;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            $amount = $this->getAmount($item);
+            //$amount = $this->getAmount($item);
+            $amount = ProjectsHelper::getContractAmount($item->id);
             $payments = $pm->getContractPayments($item->id);
             $debt = (float) $amount - (float) $payments;
             $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", number_format($amount, 0, '.', " "), $item->currency);

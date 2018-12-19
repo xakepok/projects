@@ -15,11 +15,31 @@ class ProjectsModelContract extends AdminModel {
         {
             $item->files = $this->loadFiles();
             $item->stands = $this->getStands();
+            $item->finanses = $this->getFinanses();
+            $item->amount = ProjectsHelper::getContractAmount($item->id);
         }
         return $item;
     }
 
+    /**
+     * Возвращает финансы для сделки
+     * @return array
+     * @since 1.0.3.6
+     */
+    public function getFinanses(): array
+    {
+        $item = parent::getItem();
+        if ($item->id == null) return array();
+        $result['scores'] = ProjectsHelper::getContractScores($item->id);
+        $result['payments'] = ProjectsHelper::getContractPayments($item->id);
+        return $result;
+    }
 
+    /**
+     * Возвращает массив со стендами текущей сделки
+     * @return array
+     * @since 1.0.2.0
+     */
     public function getStands(): array
     {
         $item = parent::getItem();
@@ -65,6 +85,20 @@ class ProjectsModelContract extends AdminModel {
             $result[] = $arr;
         }
         return $result;
+    }
+
+    /**
+     * Возвращает название экспонента, с которым заключена текущая сделка
+     * @return string
+     * @since 1.0.3.7
+     */
+    public function getExhibitor(): string
+    {
+        $item = parent::getItem();
+        if ($item->id == null) return '';
+        $model = AdminModel::getInstance('Exhibitor', 'ProjectsModel');
+        $exhibitor = $model->getItem($item->expID);
+        return ProjectsHelper::getExpTitle($exhibitor->title_ru_short, $exhibitor->title_ru_full, $exhibitor->title_en);
     }
 
     /**
