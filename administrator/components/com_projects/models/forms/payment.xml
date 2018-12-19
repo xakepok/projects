@@ -12,7 +12,7 @@
                 description="COM_PROJECTS_HEAD_PAYMENT_SCORE_DESC"
                 autocomplete="off"
                 required="true"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="pp"
@@ -21,7 +21,7 @@
                 description="COM_PROJECTS_HEAD_PAYMENT_PP_DESC"
                 autocomplete="off"
                 required="true"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="dat"
@@ -30,7 +30,7 @@
                 description="COM_PROJECTS_HEAD_PAYMENT_DATE_DESC"
                 autocomplete="off"
                 required="true"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="amount"
@@ -39,7 +39,7 @@
                 description="COM_PROJECTS_HEAD_PAYMENT_AMOUNT_DESC"
                 autocomplete="off"
                 required="true"
-                class="input-xlarge"
+                class="x2"
         />
     </fieldset>
 </form>

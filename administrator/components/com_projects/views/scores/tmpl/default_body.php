@@ -42,8 +42,5 @@ foreach ($this->items['items'] as $i => $item) :
         <td>
             <?php echo $item['state_text'];?>
         </td>
-        <td>
-            <?php echo $item['id']; ?>
-        </td>
     </tr>
 <?php endforeach; ?>
