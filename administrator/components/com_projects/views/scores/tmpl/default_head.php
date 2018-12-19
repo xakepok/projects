@@ -14,22 +14,28 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JText::sprintf('COM_PROJECTS_ACTION_EDIT'); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_NUMBER', '`number`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_NUMBER', 'number', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_DATE', '`s`.`dat`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_DATE', 's.dat', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_PROJECT', '`project`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_PROJECT', 'project', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_EXP', '`title_ru_short`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_EXP', 'title_ru_short', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_AMOUNT'); ?>
+        <?php
+        $currency = $this->state->get('filter.currency');
+        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_AMOUNT', 'amount', $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_SCORE_AMOUNT');
+        ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_PAYMENT'); ?>
+        <?php
+        $currency = $this->state->get('filter.currency');
+        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_PAYMENT', 'payments', $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_SCORE_PAYMENT');
+        ?>
     </th>
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_DEBT'); ?>
@@ -39,8 +45,5 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
     </th>
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_STATE'); ?>
-    </th>
-    <th width="1%">
-        <?php echo JHtml::_('grid.sort', 'ID', '`id`', $listDirn, $listOrder); ?>
     </th>
 </tr>
