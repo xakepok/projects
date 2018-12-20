@@ -11,6 +11,8 @@ if ($this->item->id != null) {
     $links[] = JHtml::link($standUrl, JText::sprintf('COM_PROJECTS_GO_CREATE_STAND'));
     $projectUrl = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$this->item->prjID}&amp;return={$return}");
     if (ProjectsHelper::canDo('core.general')) $links[] = JHtml::link($projectUrl, JText::sprintf('COM_PROJECTS_GO_PROJECT'));
+    $scoreUrl = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$this->item->id}&amp;return={$return}");
+    if (ProjectsHelper::canDo('core.general') || (ProjectsHelper::canDo('core.accountant'))) $links[] = JHtml::link($scoreUrl, JText::sprintf('COM_PROJECTS_GO_CREATE_SCORE'));
 }
 ?>
 <h4><?php if ($this->item->id != null) echo JText::sprintf('COM_PROJECTS_GO_TITLE');?></h4>
