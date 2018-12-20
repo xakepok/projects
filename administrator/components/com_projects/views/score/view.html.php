@@ -21,7 +21,7 @@ class ProjectsViewScore extends HtmlView {
         $title = $this->item->number ?? JText::sprintf('COM_PROJECTS_TITLE_NEW_SCORE');
 
         JToolbarHelper::title($title, '');
-	    //JToolBarHelper::apply('score.apply', 'JTOOLBAR_APPLY');
+	    JToolBarHelper::apply('score.apply', 'JTOOLBAR_APPLY');
         JToolbarHelper::save('score.save', 'JTOOLBAR_SAVE');
         JToolbarHelper::cancel('score.cancel', 'JTOOLBAR_CLOSE');
     }
