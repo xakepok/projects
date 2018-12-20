@@ -58,7 +58,7 @@ class ProjectsModelHistory extends AdminModel {
             $arr['dat'] = $item->dat;
             $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}");
             $arr['project'] = (ProjectsHelper::canDo('core.general')) ? JHtml::link($url, $item->project) : $item->project;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;filter_contract={$item->contractID}");
+            $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$item->contractID}");
             $arr['todos'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_BLANK_TODOS'));
             $arr['projectID'] = $item->projectID;
             $arr['manager'] = $item->manager;
