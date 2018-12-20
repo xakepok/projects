@@ -164,7 +164,7 @@ class ProjectsModelContract extends AdminModel {
 
     public function save($data)
     {
-        if (!isset($data['managerID'])) $data['managerID'] = JFactory::getUser()->id;
+        //if (!isset($data['managerID'])) $data['managerID'] = JFactory::getUser()->id;
         if (empty($data['dat']) && ($data['status'] == 5 || $data['status'] == 6 || $data['status'] == 1)) $data['dat'] = date("Y-m-d");
         $s1 = parent::save($data);
         if ($data['id'] == null) $data['id'] = $this->_db->insertid();

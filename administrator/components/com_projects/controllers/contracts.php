@@ -61,7 +61,7 @@ class ProjectsControllerContracts extends AdminController
                 $app->redirect(JUri::base() . 'index.php?option=com_projects&view=contracts');
                 jexit();
             }
-            $data = array('number' => $number, 'id' => $item->id, 'status' => $item->status);
+            $data = array('number' => $number, 'id' => $item->id, 'status' => $item->status, 'managerID' => $item->managerID);
             $table = $model->getTable();
             $table->bind($data);
             $model->save($data);
