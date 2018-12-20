@@ -44,7 +44,7 @@ class ProjectsViewExhibitors extends HtmlView
         }
         if (ProjectsHelper::canDo('core.general'))
         {
-            JToolbarHelper::deleteList('', 'exhibitors.delete');
+            JToolbarHelper::deleteList('COM_PROJECT_QUEST_REMOVE_EXHIBITOR', 'exhibitors.delete');
         }
 		if (ProjectsHelper::canDo('core.admin'))
 		{
