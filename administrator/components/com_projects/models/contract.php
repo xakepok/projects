@@ -44,7 +44,8 @@ class ProjectsModelContract extends AdminModel {
     {
         $item = parent::getItem();
         if ($item->id == null) return array();
-        $items = ProjectsHelper::getContractStands($item->id);
+        $cid = $item->id;
+        $items = ProjectsHelper::getContractStands($cid);
         $result = array();
         foreach ($items as $item) {
             $arr = array();
@@ -52,6 +53,7 @@ class ProjectsModelContract extends AdminModel {
             $arr['number'] = $item->number;
             $arr['freeze'] = $item->freeze;
             $arr['comment'] = $item->comment;
+            $arr['scheme'] = ($item->scheme != null) ? JHtml::link("/images/contracts/{$cid}/{$item->scheme}", $item->scheme, array('target' => 'blank')) : '';
             $arr['tip'] = ProjectsHelper::getStandType($item->tip);
             $arr['status'] = ProjectsHelper::getStandStatus($item->status);
             $arr['action'] = JRoute::_("index.php?option=com_projects&amp;view=stand&amp;layout=edit&amp;id={$item->id}");

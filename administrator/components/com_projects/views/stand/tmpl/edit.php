@@ -24,24 +24,20 @@ if ($return != null)
       method="post" name="adminForm" id="adminForm" xmlns="http://www.w3.org/1999/html" class="form-validate">
     <div class="row-fluid">
         <div class="span12 form-horizontal">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#general" data-toggle="tab"><?php echo JText::sprintf('COM_PROJECTS_BLANK_STAND');?></a></li>
-            </ul>
+            <?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
             <div class="tab-content">
-                <div class="tab-pane active" id="general">
-                    <fieldset class="adminform">
-                        <div class="control-group form-inline">
-                            <?php foreach ($this->form->getFieldset('names') as $field) :?>
-                                <div class="control-label"><?php echo $field->label; ?></div>
-                                <div class="controls">
-                                    <?php echo $field->input; ?>
-                                </div>
-                                <br>
-                            <?php endforeach; ?>
-                        </div>
-                    </fieldset>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::sprintf('COM_PROJECTS_BLANK_STAND')); ?>
+                <div class="row-fluid">
+                    <div class="span6">
+                        <?php echo $this->loadTemplate('general');?>
+                    </div>
+                    <div class="span6">
+                        <?php echo $this->loadTemplate('scheme');?>
+                    </div>
                 </div>
+                <?php echo JHtml::_('bootstrap.endTab'); ?>
             </div>
+            <?php echo JHtml::_('bootstrap.endTabSet'); ?>
         </div>
         <div>
             <input type="hidden" name="task" value="" />

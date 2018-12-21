@@ -50,6 +50,10 @@ class ProjectsModelStand extends AdminModel {
         {
             return false;
         }
+        $session = JFactory::getSession();
+        $contractID = $form->getValue('contractID') ?? $session->get('contractID');
+        $dir = ($contractID != null && JFolder::exists(JPATH_ROOT."/images/contracts/{$contractID}")) ? JPATH_ROOT."/images/contracts/{$contractID}" : JPATH_ROOT."/images/contracts";
+        $form->setFieldAttribute('scheme', 'directory', $dir);
 
         return $form;
     }

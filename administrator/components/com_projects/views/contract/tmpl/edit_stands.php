@@ -7,7 +7,7 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_STAND'));
 <div>
     <?php echo $addLink; ?>
 </div>
-<table class="addPrice">
+<table class="table table-striped">
     <thead>
     <tr>
         <th>
@@ -27,6 +27,9 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_STAND'));
         </th>
         <th>
             <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS'); ?>
+        </th>
+        <th>
+            <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_SCHEME_DESC'); ?>
         </th>
         <th>
             <?php echo JText::sprintf('COM_PROJECTS_TITLE_EDIT_STAND'); ?>
@@ -61,6 +64,9 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_STAND'));
                 </td>
                 <td>
                     <?php echo $stand['status']; ?>
+                </td>
+                <td>
+                    <?php echo $stand['scheme']; ?>
                 </td>
                 <td>
                     <?php echo $editLink; ?>

@@ -60,4 +60,8 @@
   display: none;
 }
 
+#scheme img {
+  max-width: 480px;
+}
+
 /*# sourceMappingURL=style.css.map */
