@@ -42,9 +42,9 @@
                 size="1"
         >
             <option value="0">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_0</option>
+            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_1</option>
             <option value="2">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_2</option>
             <option value="3">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_3</option>
-            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_1</option>
         </field>
         <field
                 name="comment"
