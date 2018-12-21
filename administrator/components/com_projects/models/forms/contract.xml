@@ -97,12 +97,18 @@
     </fieldset>
     <fieldset name="files">
         <field
+                name="upload"
+                type="file"
+                label="COM_PROJECTS_ACTION_UPLOAD"
+                description="COM_PROJECTS_ACTION_UPLOAD_DESC"
+        />
+        <field
                 name="files"
                 type="filelist"
                 label="COM_PROJECTS_HEAD_CONTRACT_ADDFILE"
                 description="COM_PROJECTS_HEAD_CONTRACT_ADDFILE_DESC"
                 class="x2"
-                directory="images/contracts"
+                hide_default="true"
                 multiple="true"
                 default=""
         />

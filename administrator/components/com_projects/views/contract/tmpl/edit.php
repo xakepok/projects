@@ -22,7 +22,7 @@ if ($return != null)
     }
 </script>
 <form action="<?php echo $action; ?>"
-      method="post" name="adminForm" id="adminForm" xmlns="http://www.w3.org/1999/html" class="form-validate">
+      method="post" name="adminForm" id="adminForm" xmlns="http://www.w3.org/1999/html" class="form-validate" enctype="multipart/form-data">
     <div class="row-fluid">
         <div class="span12 form-horizontal">
             <?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
@@ -69,8 +69,11 @@ if ($return != null)
                 <?php if ($this->item->id != null): ?>
                     <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'files', JText::sprintf('COM_PROJECTS_BLANK_FILES')); ?>
                     <div class="row-fluid">
-                        <div>
-                            <?php echo $this->loadTemplate('files');?>
+                        <div class="span6">
+                            <?php echo $this->loadTemplate('files_list');?>
+                        </div>
+                        <div class="span6">
+                            <?php echo $this->loadTemplate('files_preview');?>
                         </div>
                     </div>
                     <?php echo JHtml::_('bootstrap.endTab'); ?>

@@ -7,13 +7,9 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO'));
 <div>
     <fieldset class="adminform">
         <div class="control-group form-inline">
-            <?php foreach ($this->form->getFieldset('files') as $field) :?>
-                <div class="control-label"><?php echo $field->label; ?></div>
-                <div class="controls">
-                    <?php echo $field->input; ?>
-                </div>
-                <br>
-            <?php endforeach; ?>
+            <?php foreach ($this->form->getFieldset('files') as $field):
+                echo $field->renderField();
+            endforeach; ?>
         </div>
     </fieldset>
 </div>

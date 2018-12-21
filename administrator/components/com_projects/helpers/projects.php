@@ -1,6 +1,8 @@
 <?php
 
 use Joomla\CMS\Language\Text;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\File;
 
 defined('_JEXEC') or die;
 
@@ -35,6 +37,37 @@ class ProjectsHelper
         }
     }
 
+
+    /**
+     * Загружает файл из формы в указанную директорию
+     * @param string $field название поля из глобального массива $_FILES
+     * @param string $folder наименование директории, куда загружать файл
+     * @param int $id ID элемента
+     * @return string имя загруженного файла
+     * @since 1.0.4.2
+     */
+    public static function uploadFile(string $field, string $folder, int $id): string
+    {
+        $path = JPATH_ROOT."/images/{$folder}/{$id}";
+        $name = File::makeSafe($_FILES['jform']['name'][$field]);
+        $tmp = $_FILES['jform']['tmp_name'][$field];
+        Folder::create($path);
+        if (!empty($tmp) && !empty($name))
+        {
+            if (File::upload($tmp, $path."/".$name))
+            {
+                chmod($path."/".$name, 0777);
+            }
+        }
+        return $name;
+    }
+
+    /**
+     * Возвращает сумму договора
+     * @param int $contractID ID договора
+     * @return float сумма договора
+     * @since 1.0.4.0
+     */
     public static function getContractAmount(int $contractID): float
     {
         $db =& JFactory::getDbo();
@@ -48,6 +81,12 @@ class ProjectsHelper
         return (float) 0 + $db->setQuery($query)->loadResult();
     }
 
+    /**
+     * Возвращает валюту сделки
+     * @param int $contractID ID сделки
+     * @return string
+     * @since 1.0.4.0
+     */
     public function getContractCurrency(int $contractID): string
     {
         $db =& JFactory::getDbo();
@@ -59,6 +98,12 @@ class ProjectsHelper
         return $db->setQuery($query)->loadResult();
     }
 
+    /**
+     * Возвращает сделки, которые участвуют в проекте
+     * @param int $projectID ID проекта
+     * @return array массив со сделками
+     * @since 1.0.3.5
+     */
     public static function getProjectContracts(int $projectID): array
     {
         $result = array();

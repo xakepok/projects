@@ -150,6 +150,8 @@ class ProjectsModelContract extends AdminModel {
             {
                 $form->removeField('dat');
             }
+            $dir = JPATH_ROOT."/images/contracts/{$id}";
+            $form->setFieldAttribute('files', 'directory', (JFolder::exists($dir)) ? $dir : 'images/contracts');
         }
         return $form;
     }
@@ -182,6 +184,7 @@ class ProjectsModelContract extends AdminModel {
         return parent::publish($pks, $value);
     }
 
+
     public function save($data)
     {
         if ($data['id'] == null && !ProjectsHelper::canDo('core.general')) $data['managerID'] = JFactory::getUser()->id;
@@ -191,7 +194,12 @@ class ProjectsModelContract extends AdminModel {
         //if (!empty($data['children'])) $this->setCoExp($data['children'], $data['id']);
         $this->saveHistory($data['id'], $data['status']);
         $s2 = $this->savePrice();
-        $s3 = $this->saveFiles();
+        if (!empty($_FILES))
+        {
+            $file = ProjectsHelper::uploadFile('upload', 'contracts', $data['id']);
+            $data['files'][] = $file;
+        }
+        $s3 = $this->saveFiles($data['files']);
         return $s1 && $s2 && $s3;
     }
 
@@ -359,18 +367,18 @@ class ProjectsModelContract extends AdminModel {
 
     /**
      * Сохраняет список файлов в сделке
+     * @param array $files массив со списком файлов
      * @return bool
      * @since 1.3.0.0
      * @throws
      */
-    private function saveFiles(): bool
+    private function saveFiles(array $files): bool
     {
-        $post = $_POST['jform']['files'];
         $model = AdminModel::getInstance('Files', 'ProjectsModel');
         $table = $model->getTable();
         $contractID = JFactory::getApplication()->input->getInt('id');
         $alreadyFiles = $this->loadFiles(); //Список файлов, который на данный момент в таблице у этой сделке
-        foreach ($post as $path)
+        foreach ($files as $path)
         {
             if (empty($path)) continue;
             $pks = array('contractID' => $contractID, 'path' => $path);
