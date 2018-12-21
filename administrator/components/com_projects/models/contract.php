@@ -131,6 +131,26 @@ class ProjectsModelContract extends AdminModel {
         {
             return false;
         }
+        $id = JFactory::getApplication()->input->get('id', 0);
+        if ($id == 0)
+        {
+            if (!ProjectsHelper::canDo('core.general'))
+            {
+                $form->removeField('managerID');
+            }
+            if (!ProjectsHelper::canDo('projects.contract.allow') || $form->getValue('number') == null)
+            {
+                $form->removeField('number');
+            }
+            $form->removeField('dat');
+        }
+        if ($id != 0)
+        {
+            if ($form->getValue('dat') == null)
+            {
+                $form->removeField('dat');
+            }
+        }
         return $form;
     }
 
@@ -164,7 +184,7 @@ class ProjectsModelContract extends AdminModel {
 
     public function save($data)
     {
-        //if (!isset($data['managerID'])) $data['managerID'] = JFactory::getUser()->id;
+        if ($data['id'] == null && !ProjectsHelper::canDo('core.general')) $data['managerID'] = JFactory::getUser()->id;
         if (empty($data['dat']) && ($data['status'] == 5 || $data['status'] == 6 || $data['status'] == 1)) $data['dat'] = date("Y-m-d");
         $s1 = parent::save($data);
         if ($data['id'] == null) $data['id'] = $this->_db->insertid();
@@ -214,7 +234,6 @@ class ProjectsModelContract extends AdminModel {
 	    {
 		    if (!strlen($table->$field)) $table->$field = NULL;
     	}
-    	if ($table->status != '5' && $table->status != '6') $table->parentID = NULL;
         parent::prepareTable($table);
     }
 
