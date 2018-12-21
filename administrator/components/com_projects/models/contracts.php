@@ -214,14 +214,17 @@ class ProjectsModelContracts extends ListModel
             ->from("`#__prj_stands`")
             ->where("`contractID` IN ({$ids})");
         $stands = $db->setQuery($query)->loadObjectList();
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contracts");
         foreach ($stands as $stand) {
             $contractID = $stand->contractID;
+            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand->id}&amp;return={$return}");
+            $link = JHtml::link($url, $stand->number);
             if (!isset($result[$contractID]))
             {
-                $result[$contractID] = $stand->number;
+                $result[$contractID] = $link;
             }
             else {
-                $result[$contractID] .= "/{$stand->number}";
+                $result[$contractID] .= "/{$link}";
             }
         }
         return $result;
