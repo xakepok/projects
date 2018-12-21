@@ -19,7 +19,14 @@ class ProjectsModelContracts extends ListModel
                 'plan',
                 'plan_dat',
                 'currency',
-                'number'
+                'number',
+                'amount_rub',
+                'amount_usd',
+                'amount_eur',
+                'debt_rub',
+                'debt_usd',
+                'debt_eur',
+                'payments',
             );
         }
         parent::__construct($config);
@@ -35,10 +42,15 @@ class ProjectsModelContracts extends ListModel
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
             ->select("`u`.`name` as `manager`, (SELECT MIN(`dat`) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan_dat`")
             ->select("(SELECT COUNT(*) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan`")
+            ->select("`a`.`amount_rub`, `a`.`amount_usd`, `a`.`amount_eur`")
+            ->select("`pay`.`payments`")
+            ->select("IFNULL(`a`.`amount_rub`,0)-IFNULL(`pay`.`payments`,0) as `debt_rub`, IFNULL(`a`.`amount_usd`,0)-IFNULL(`pay`.`payments`,0) as `debt_usd`, IFNULL(`a`.`amount_eur`,0)-IFNULL(`pay`.`payments`,0) as `debt_eur`")
             ->from("`#__prj_contracts` as `c`")
             ->leftJoin("`#__prj_projects` AS `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `expID`")
-            ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`");
+            ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`")
+            ->leftJoin("`#__prj_contract_amounts` as `a` ON `a`.`contractID` = `c`.`id`")
+            ->leftJoin("`#__prj_contract_payments` as `pay` ON `pay`.`contractID` = `c`.`id`");
 
         /* Фильтр */
         $search = $this->getState('filter.search');
@@ -109,7 +121,6 @@ class ProjectsModelContracts extends ListModel
         $ids = array();
         $format = JFactory::getApplication()->input->getString('format', 'html');
         $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contracts");
-        $pm = ListModel::getInstance('Payments', 'ProjectsModel');
         foreach ($items as $item) {
             $ids[] = $item->id;
             $arr['id'] = $item->id;
@@ -133,10 +144,11 @@ class ProjectsModelContracts extends ListModel
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             if ($format == 'html') $arr['plan'] = $link;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            //$amount = $this->getAmount($item);
-            $amount = ProjectsHelper::getContractAmount($item->id);
-            $payments = $pm->getContractPayments($item->id);
-            $debt = (float) $amount - (float) $payments;
+            $amount_field = "amount_{$item->currency}";
+            $debt_field = "debt_{$item->currency}";
+            $amount = $item->$amount_field;
+            $payments = $item->payments;
+            $debt = $item->$debt_field;
             $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", number_format($amount, 0, '.', " "), $item->currency);
             $arr['amount_only'] = $amount; //Только цена
             $paid = (float) $amount - (float) $debt;

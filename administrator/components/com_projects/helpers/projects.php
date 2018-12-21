@@ -74,10 +74,9 @@ class ProjectsHelper
         $query = $db->getQuery(true);
         $currency = self::getContractCurrency($contractID);
         $query
-            ->select("ROUND(SUM(`i`.`price_{$currency}`*`v`.`value`*(CASE WHEN `v`.`columnID`='1' THEN `i`.`column_1` WHEN `v`.`columnID`='2' THEN `i`.`column_2` WHEN `v`.`columnID`='3' THEN `i`.`column_3` END)*IFNULL(`v`.`markup`,1)*IFNULL(`v`.`factor`,1)*IFNULL(`v`.`value2`,1)), 0) as `amount`")
-            ->from("`#__prj_contract_items` as `v`")
-            ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `v`.`itemID`")
-            ->where("`v`.`contractID` = {$contractID}");
+            ->select("`amount_{$currency}`")
+            ->from("`#__prj_contract_amounts`")
+            ->where("`contractID` = {$contractID}");
         return (float) 0 + $db->setQuery($query)->loadResult();
     }
 

@@ -38,15 +38,24 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         </th>
     <?php endif; ?>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_STATUS', 'status', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_AMOUNT'); ?>
+        <?php
+        $currency = $this->state->get('filter.currency');
+        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_AMOUNT', "amount_{$currency}", $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_AMOUNT');
+        ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_PAYMENT'); ?>
+        <?php
+        $currency = $this->state->get('filter.currency');
+        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_PAYMENT', "payments", $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_SCORE_PAYMENT');
+        ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_DEBT'); ?>
+        <?php
+        $currency = $this->state->get('filter.currency');
+        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_DEBT', "debt_{$currency}", $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_DEBT');
+        ?>
     </th>
 </tr>

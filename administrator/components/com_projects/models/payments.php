@@ -74,7 +74,7 @@ class ProjectsModelPayments extends ListModel
      * Возвращает сумму сделанных платежей по указанному счёту
      * @param int $scoreID
      * @return float
-     * @since 1.3.0.9
+     * @since 1.0.3.9
      */
     public function getScorePayments(int $scoreID): float
     {
@@ -93,7 +93,8 @@ class ProjectsModelPayments extends ListModel
      * Возвращает сумму сделанных платежей по указанному номеру сделки
      * @param int $contractID ID сделки
      * @return float
-     * @since 1.3.0.9
+     * @since 1.0.3.9
+     * @deprecated 1.0.4.3
      */
     public function getContractPayments(int $contractID): float
     {
