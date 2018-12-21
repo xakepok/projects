@@ -1,7 +1,7 @@
 <?php
 // Запрет прямого доступа.
 defined('_JEXEC') or die;
-$ii = 0;
+$ii = JFactory::getApplication()->input->getInt('limitstart', 0);
 foreach ($this->items as $i => $item) :
     $canChange = JFactory::getUser()->authorise('core.edit.state', 'com_projects.activity.' . $item['id']);
     ?>
@@ -14,9 +14,6 @@ foreach ($this->items as $i => $item) :
         </td>
         <td>
             <?php echo $item['title'];?>
-        </td>
-        <td>
-            <?php echo $item['id']; ?>
         </td>
     </tr>
 <?php endforeach; ?>

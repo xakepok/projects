@@ -9,8 +9,9 @@ class ProjectsModelActivities extends ListModel
         if (empty($config['filter_fields']))
         {
             $config['filter_fields'] = array(
-                '`id`', '`id`',
-                '`title`', '`title`',
+                'id',
+                'title',
+                'search',
             );
         }
         parent::__construct($config);
@@ -40,12 +41,6 @@ class ProjectsModelActivities extends ListModel
         return $query;
     }
 
-    /**
-     * Получает массив со списком специальностей
-     * @param bool $raw. False - возвращаем данные для отображения в браузере, True - возвращает просто данные.
-     * @return array|mixed
-     * @since 1.1
-     */
     public function getItems($raw = false)
     {
         $items = parent::getItems();
@@ -66,7 +61,7 @@ class ProjectsModelActivities extends ListModel
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $this->setState('filter.search', $search);
-        parent::populateState('`title`', 'asc');
+        parent::populateState('title', 'asc');
     }
 
     protected function getStoreId($id = '')
