@@ -63,6 +63,25 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает сумму договоров по проекту
+     * @param int $projectID ID проекта
+     * @return array массив с 3 валютами
+     * @since 1.0.4.3
+     */
+    public static function getProjectAmount(int $projectID): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("IFNULL(SUM(`a`.`amount_rub`),0) as `rub`, IFNULL(SUM(`a`.`amount_usd`),0) as `usd`, IFNULL(SUM(`a`.`amount_eur`),0) as `eur`")
+            ->from("`#__prj_contract_amounts` as `a`")
+            ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `a`.`contractID`")
+            ->where("`c`.`prjID` = {$projectID}")
+            ->where("`c`.`status` = 1");
+        return $db->setQuery($query)->loadAssocList();
+    }
+
+    /**
      * Возвращает сумму договора
      * @param int $contractID ID договора
      * @return float сумма договора

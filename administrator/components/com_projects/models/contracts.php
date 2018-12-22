@@ -163,6 +163,11 @@ class ProjectsModelContracts extends ListModel
             $result['debt'][$item->currency] += $debt;
             $result['payments'][$item->currency] += $payments;
         }
+        if (is_numeric($this->state->get('filter.project')))
+        {
+            $project = $this->state->get('filter.project');
+            $result['amount']['total'] = ProjectsHelper::getProjectAmount($project);
+        }
         $result['stands'] = $this->getStands($ids);
         return $result;
     }
