@@ -11,10 +11,10 @@ $title = JText::sprintf(is_numeric($this->state->get('filter.project')) ? 'COM_P
         <?php echo number_format($this->items['amount']['total']['rub'] ?? $this->items['amount']['rub'], 0, '.', " ");?>
     </td>
     <td>
-        <?php echo number_format($this->items['payments']['rub'], 0, '.', " ");?>
+        <?php echo number_format($this->items['payments']['total']['rub'] ?? $this->items['payments']['rub'], 0, '.', " ");?>
     </td>
     <td>
-        <?php echo number_format($this->items['debt']['rub'], 0, '.', " ");?>
+        <?php echo number_format($this->items['debt']['total']['rub'] ?? $this->items['debt']['rub'], 0, '.', " ");?>
     </td>
 </tr>
 <tr>
@@ -25,10 +25,10 @@ $title = JText::sprintf(is_numeric($this->state->get('filter.project')) ? 'COM_P
         <?php echo number_format($this->items['amount']['total']['usd'] ?? $this->items['amount']['usd'], 0, '.', " ");?>
     </td>
     <td>
-        <?php echo number_format($this->items['payments']['usd'], 0, '.', " ");?>
+        <?php echo number_format($this->items['payments']['total']['usd'] ?? $this->items['payments']['usd'], 0, '.', " ");?>
     </td>
     <td>
-        <?php echo number_format($this->items['debt']['usd'], 0, '.', " ");?>
+        <?php echo number_format($this->items['debt']['total']['usd'] ?? $this->items['debt']['usd'], 0, '.', " ");?>
     </td>
 </tr>
 <tr>
@@ -39,9 +39,9 @@ $title = JText::sprintf(is_numeric($this->state->get('filter.project')) ? 'COM_P
         <?php echo number_format($this->items['amount']['total']['eur'] ?? $this->items['amount']['eur'], 0, '.', " ");?>
     </td>
     <td>
-        <?php echo number_format($this->items['payments']['eur'], 0, '.', " ");?>
+        <?php echo number_format($this->items['payments']['total']['eur'] ?? $this->items['payments']['eur'], 0, '.', " ");?>
     </td>
     <td>
-        <?php echo number_format($this->items['debt']['eur'], 0, '.', " ");?>
+        <?php echo number_format($this->items['debt']['total']['eur'] ?? $this->items['debt']['eur'], 0, '.', " ");?>
     </td>
 </tr>

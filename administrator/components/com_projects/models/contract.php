@@ -336,12 +336,26 @@ class ProjectsModelContract extends AdminModel {
             $arr['is_factor'] = $item->is_factor;
             $arr['factor'] = (int) ($values[$item->id]['factor'] != null) ? 100 - $values[$item->id]['factor'] * 100 : 0;
             $arr['fixed'] = ($activeColumn != $values[$item->id]['columnID'] && !empty($values[$item->id]['columnID']) && !ProjectsHelper::canDo('core.admin')) ? true : false;
-            $sum = 0;
-            if ($values[$item->id]['value']) $sum += $values[$item->id]['value'] * round($cost, 2);
-            if ($values[$item->id]['value2'] != null) $sum = $sum * round($values[$item->id]['value2'], 2);
-            if ($values[$item->id]['factor'] != null) $sum = $sum * $values[$item->id]['factor'];
-            if ($values[$item->id]['markup'] != null) $sum = $sum * $values[$item->id]['markup'];
-            $arr['sum'] = round($sum, 2);
+            $a = 0;
+            $b = 0;
+            $c = 0;
+            if ($values[$item->id]['value'])
+            {
+                $a += $values[$item->id]['value'] * round($cost, 2);
+            }
+            if ($values[$item->id]['value2'] != null)
+            {
+                $a *= $a * $values[$item->id]['value2'];
+            }
+            if ($values[$item->id]['markup'] != null)
+            {
+                $b = $a * $values[$item->id]['markup'] - $a;
+            }
+            if ($values[$item->id]['factor'] != null)
+            {
+                $c = $a * (1 - $values[$item->id]['factor']);
+            }
+            $arr['sum'] = round($a + $b - $c, 2);
             if (!isset($result[$item->section])) $result[$item->section] = array();
             $result[$item->section][] = $arr;
         }

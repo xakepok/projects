@@ -116,27 +116,28 @@ function addSum(id) {
     tbody.appendChild(tr);
 }
 function getSum(id) {
-    var sum = 0;
+    var b = 0;
+    var c = 0;
     var field = parseFloat(document.querySelector("#price_" + id).dataset.cost);
     var value = parseInt(document.querySelector("#price_" + id).value);
-    sum = field * value;
+    var a = field * value;
     field = document.querySelector("#value2_" + id);
     if (field !== null)
     {
-        sum = sum * parseInt(field.value);
-    }
-    field = document.querySelector("#factor_" + id);
-    if (field !== null)
-    {
-        sum = sum * parseFloat((100 - parseInt(field.value)) / 100);
+        a *= parseInt(field.value);
     }
     field = document.querySelector("#markup_" + id);
     if (field !== null)
     {
-        sum = sum * parseFloat((100 + parseInt(field.options[field.selectedIndex].value)) / 100);
+        b = Math.round(a * parseFloat((100 + parseInt(field.options[field.selectedIndex].value)) / 100) - a);
     }
-    sum = Math.round(sum);
-    return sum;
+    field = document.querySelector("#factor_" + id);
+    if (field !== null)
+    {
+        c = Math.round(a * parseFloat(1 - (100 - parseInt(field.value)) / 100));
+    }
+    console.log(a,b,c);
+    return Math.round(a + b - c);
 }
 function calculate() {
     var amounts = document.querySelectorAll("span[id^='subsum_']");

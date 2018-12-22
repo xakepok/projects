@@ -78,7 +78,32 @@ class ProjectsHelper
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `a`.`contractID`")
             ->where("`c`.`prjID` = {$projectID}")
             ->where("`c`.`status` = 1");
-        return $db->setQuery($query)->loadAssocList();
+        $result = $db->setQuery($query)->loadAssocList();
+        return $result[0];
+    }
+
+    /**
+     * Возвращает сумму всех платежей по проекту
+     * @param int $projectID ID проекта
+     * @return array сумма всех платежей в трёх валютах
+     * @since 1.0.4.3
+     */
+    public static function getProjectPayments(int $projectID): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`p`.`payments`, `c`.`currency`")
+            ->from("`#__prj_contract_payments` as `p`")
+            ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `p`.`contractID`")
+            ->where("`c`.`prjID` = {$projectID}")
+            ->where("`c`.`status` = 1");
+        $payments = $db->setQuery($query)->loadObjectList();
+        $result = array('rub' => 0, 'usd' => 0, 'eur' => 0);
+        foreach ($payments as $payment) {
+            $result[$payment->currency] += $payment->payments;
+        }
+        return $result;
     }
 
     /**

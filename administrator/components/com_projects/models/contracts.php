@@ -167,6 +167,10 @@ class ProjectsModelContracts extends ListModel
         {
             $project = $this->state->get('filter.project');
             $result['amount']['total'] = ProjectsHelper::getProjectAmount($project);
+            $result['payments']['total'] = ProjectsHelper::getProjectPayments($project);
+            $result['debt']['total']['rub'] = $result['amount']['total']['rub'] - $result['payments']['total']['rub'];
+            $result['debt']['total']['usd'] = $result['amount']['total']['usd'] - $result['payments']['total']['usd'];
+            $result['debt']['total']['eur'] = $result['amount']['total']['eur'] - $result['payments']['total']['eur'];
         }
         $result['stands'] = $this->getStands($ids);
         return $result;
