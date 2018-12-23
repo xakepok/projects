@@ -7,7 +7,7 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO'));
 <div>
     <?php echo $addLink; ?>
 </div>
-<table class="addPrice">
+<table class="table table-striped">
     <thead>
     <tr>
         <th>

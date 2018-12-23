@@ -302,12 +302,13 @@ class ProjectsModelContract extends AdminModel {
             ->select("`i`.`id`, `i`.`unit`, `unit_2` as `isUnit2`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `i`.`is_factor`, `i`.`is_markup`, `i`.`sectionID`")
             ->select("IFNULL(`i`.`title_ru`,`i`.`title_en`) as `title`")
             ->select("`i`.`price_{$currency}` as `price`")
-            ->select("`i`.`column_1`, `i`.`column_2`, `i`.`column_3`")
+            ->select("`i`.`column_1`, `i`.`column_2`, `i`.`column_3`, `i`.`application`")
             ->select("`s`.`title` as `section`")
             ->from("`#__prc_items` as `i`")
             ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
             ->leftJoin("`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`")
-            ->where("`p`.`id` = {$priceID}");
+            ->where("`p`.`id` = {$priceID}")
+            ->order("`i`.`application`");
         $items = $db->setQuery($query)->loadObjectList();
         foreach ($items as $item)
         {
@@ -351,8 +352,9 @@ class ProjectsModelContract extends AdminModel {
                 $c = $a * (1 - $values[$item->id]['factor']);
             }
             $arr['sum'] = round($a + $b - $c, 2);
-            if (!isset($result[$item->section])) $result[$item->section] = array();
-            $result[$item->section][] = $arr;
+            if (!isset($result[$item->application][$item->section])) $result[$item->application][$item->section] = array();
+            //if (!isset($result[$item->section])) $result[$item->section] = array();
+            $result[$item->application][$item->section][] = $arr;
         }
         return $result;
     }

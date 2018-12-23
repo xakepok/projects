@@ -26,7 +26,6 @@ function removeStand(standID) {
 function setNumber() {
     var radios = document.forms["adminForm"].elements["jform[isCoExp]"];
     var val = document.querySelector('input[name="jform[isCoExp]"]:checked').value;
-    console.log(val);
     if (val !== '1') lockParent(); else unlockParent();
     for(var i = 0, max = radios.length; i < max; i++) {
         radios[i].onclick = function() {
@@ -59,7 +58,7 @@ function getSum2(id, currency)
 {
     var tr = document.querySelector('#sum_'+id);
     var newtr = document.querySelector('#summary_'+id);
-    if (newtr === null) addSum(id);
+    /*if (newtr === null)*/ addSum(id);
     var span = document.querySelector('#sum_'+id);
     var spanS = document.querySelector('#sumS_'+id);
     var sum = getSum(id);
@@ -76,21 +75,24 @@ function getSum2(id, currency)
         document.querySelector("#currency_"+id).textContent = currency;
         removeTr(id);
     }
-    subSum();
+    //subSum();
+    subSumApp();
     var itg = calculate();
-    document.querySelector("#sum_amount").textContent = itg.toLocaleString('ru') + ' ' + currency;
+    //document.querySelector("#sum_amount").textContent = itg.toLocaleString('ru') + ' ' + currency;
     document.querySelector("#sum_amountS").textContent = itg.toLocaleString('ru');
 }
 function removeTr(id)
 {
     try {
-        document.querySelector("#summary_" + id).remove();
+        document.querySelector("#summary_" + id).classList.add('hidden');
     }
     catch (e) {
         console.log("Элемента с id summary_" + id + " не существует");
     }
 }
 function addSum(id) {
+    document.querySelector("#summary_" + id).classList.remove('hidden');
+/*
     var tbody = document.querySelector(".sumbody");
     var tr = document.createElement('tr');
     var td = document.createElement('td');
@@ -114,6 +116,7 @@ function addSum(id) {
     td.appendChild(span);
     tr.appendChild(td);
     tbody.appendChild(tr);
+*/
 }
 function getSum(id) {
     var b = 0;
@@ -136,11 +139,10 @@ function getSum(id) {
     {
         c = Math.round(a * parseFloat(1 - (100 - parseInt(field.value)) / 100));
     }
-    console.log(a,b,c);
     return Math.round(a + b - c);
 }
 function calculate() {
-    var amounts = document.querySelectorAll("span[id^='subsum_']");
+    var amounts = document.querySelectorAll("span[id^='subsumapp_']");
     var sum = 0;
     for (var i = 0; i < amounts.length; i++)
     {
@@ -163,5 +165,20 @@ function subSum() {
             document.querySelector("#subsum_"+id).textContent = sum[id];
         }
     }
-
+}
+function subSumApp() {
+    var trs = document.querySelectorAll("tr[class^='app_']");
+    var sum = [];
+    for (var i = 0; i < trs.length; i++)
+    {
+        var id = document.querySelector("#"+trs[i].id).dataset.app;
+        if (sum[id] === undefined) sum[id] = 0;
+        if (trs[i].classList.contains('hidden')) continue;
+        var sps = document.querySelectorAll("#"+trs[i].id+" > td > span[id^='sumS_']");
+        for (var j = 0; j < sps.length; j++)
+        {
+            sum[id] = sum[id] + parseFloat(sps[j].textContent);
+            document.querySelector("#subsumapp_"+id).textContent = sum[id];
+        }
+    }
 }

@@ -445,6 +445,12 @@ class ProjectsHelper
         return JText::sprintf("COM_PROJECTS_HEAD_CONTRACT_STATUS_{$status}");
     }
 
+    public static function getApplication(string $app): string
+    {
+        $app = strtoupper($app);
+        return JText::sprintf("COM_PROJECTS_HEAD_ITEM_APPLICATION_{$app}");
+    }
+
     /**
      * @param int $id ID типа стенда
      * @return string

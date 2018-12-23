@@ -3,8 +3,8 @@ defined('_JEXEC') or die;
 $currency = '';
 $sum = 0;
 ?>
-<fieldset class="adminform" style="border: 1px solid black">
-    <table class="addPrice">
+<fieldset class="adminform">
+    <table class="addPrice table table-striped">
         <thead>
         <tr>
             <th>
@@ -19,30 +19,43 @@ $sum = 0;
         </tr>
         </thead>
         <tbody class="sumbody">
-        <?php foreach ($this->price as $section => $arr) :
+        <?php foreach ($this->price as $application => $sec) :
             $subsum = 0;
             ?>
-            <?php foreach ($arr as $i => $item):
-            if ($item['sum'] == 0) continue;
-            $sum += $item['sum'];
-            $currency = $item['currency'];
-            ?>
-            <tr id="summary_<?php echo $item['id']; ?>">
+            <tr>
+                <td colspan="3" class="center"
+                    style="font-weight: bold;"><?php echo ProjectsHelper::getApplication($application); ?></td>
+            </tr>
+            <?php foreach ($sec as $section => $arr) :
+                foreach ($arr as $i => $item):
+                    $dsp = ($item['sum'] == 0) ? 'hidden' : '';
+                    $sum += $item['sum'];
+                    $currency = $item['currency'];
+                    $subsum += $item['sum']; ?>
+                    <tr id="summary_<?php echo $item['id']; ?>" class="app_<?php echo $application;?> <?php echo $dsp; ?>" data-app="<?php echo $application;?>">
+                        <td>
+                            <?php echo $item['title']; ?>
+                        </td>
+                        <td>
+                            <?php echo $section; ?>
+                        </td>
+                        <td>
+                            <span id="sumS_<?php echo $item['id']; ?>"><?php echo $item['sum']; ?></span>
+                            <span id="currencyS_<?php echo $item['id']; ?>"><?php echo $currency; ?></span>
+                        </td>
+                    </tr>
+                <?php
+                endforeach;
+            endforeach; ?>
+            <tr>
+                <td colspan="2"
+                    style="text-align: right; font-weight: bold;"><?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_SUBSUM'); ?></td>
                 <td>
-                    <?php echo $item['title']; ?>
-                </td>
-                <td>
-                    <?php echo $section; ?>
-                </td>
-                <td>
-                    <span id="sumS_<?php echo $item['id']; ?>"><?php echo $item['sum']; ?></span>
-                    <span id="currencyS_<?php echo $item['id']; ?>"><?php echo $currency; ?></span>
+                    <span id="subsumapp_<?php echo $application;?>"><?php echo $subsum; ?></span>
+                    <?php echo $currency; ?>
                 </td>
             </tr>
-        <?php
-        endforeach;
-        endforeach;
-        ?>
+        <?php endforeach; ?>
         </tbody>
         <tfoor>
             <tr>
@@ -50,7 +63,7 @@ $sum = 0;
                     <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_SUM'); ?>:&nbsp;
                     <span
                             id="sum_amountS"><?php echo $sum; ?></span>
-                    <?php echo $currency;?>
+                    <?php echo $currency; ?>
                 </td>
             </tr>
         </tfoor>

@@ -6,6 +6,7 @@ class TableProjectsItems extends Table
 {
     var $id = null;
     var $sectionID = null;
+    var $application = null;
     var $unit = null;
     var $unit_2 = null;
     var $title_ru = null;
