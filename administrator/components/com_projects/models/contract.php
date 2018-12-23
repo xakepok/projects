@@ -444,7 +444,6 @@ class ProjectsModelContract extends AdminModel {
         foreach ($post as $itemID => $values) {
             $pks = array('contractID' => $contractID, 'columnID' => $columnID, 'itemID' => $itemID);
             $row = $model->getItem($pks);
-            $arr = array();
             $arr['id'] = ($row->id != null) ? $row->id : null;
             $arr['contractID'] = $contractID;
             $arr['itemID'] = $itemID;
@@ -458,6 +457,7 @@ class ProjectsModelContract extends AdminModel {
             }
             if (!isset($arr['markup'])) $arr['markup'] = NULL;
             if (!isset($arr['value2'])) $arr['value2'] = NULL;
+            if (!isset($arr['factor'])) $arr['factor'] = NULL;
             if (!isset($arr['value'])) continue;
             if ($arr['value'] == 0 && $row->id != null)
             {
