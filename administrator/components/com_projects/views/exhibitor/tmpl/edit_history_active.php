@@ -1,12 +1,5 @@
 <?php
 defined('_JEXEC') or die;
-$return = base64_encode(JUri::base() . "index.php?option=com_projects&view=exhibitor&layout=edit&id={$this->item->id}");
-if ($this->item->id != null)
-{
-    $addUrl = JRoute::_("index.php?option=com_projects&amp;task=contract.add&amp;exhibitorID={$this->item->id}&amp;return={$return}");
-    $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_ACTION_OPEN_CONTRACT'), array('style' => 'font-size: 2em;'));
-    echo "<div>{$addLink}</div>";
-}
 ?>
 <div class="center"><h4><?php echo JText::sprintf('COM_PROJECTS_BLANK_ACTIVE_PROJECTS');?></h4></div>
 <table class="history">
