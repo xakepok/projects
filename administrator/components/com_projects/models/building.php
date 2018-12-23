@@ -24,7 +24,7 @@ class ProjectsModelBuilding extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select('`s`.`id` as `standID`, `s`.`number` as `stand`, IF(`s`.`freeze`=NULL,0,1) as `freeze`')
+            ->select('`s`.`id` as `standID`, `s`.`number` as `stand`, IF(`s`.`freeze` IS NULL,0,1) as `freeze`')
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
             ->select("`c`.`number` as `contract`, `c`.`id` as `contractID`")
             ->from("`#__prj_stands` as `s`")
