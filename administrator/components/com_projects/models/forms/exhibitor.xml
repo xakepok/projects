@@ -73,7 +73,7 @@
     <fieldset name="bank">
         <field
                 name="inn"
-                type="number"
+                type="text"
                 label="COM_PROJECTS_HEAD_EXP_BANK_INN"
                 description="COM_PROJECTS_HEAD_EXP_BANK_INN_DESC"
                 hint="COM_PROJECTS_HEAD_EXP_BANK_INN_HINT"
@@ -82,7 +82,7 @@
         />
         <field
                 name="kpp"
-                type="number"
+                type="text"
                 label="COM_PROJECTS_HEAD_EXP_BANK_KPP"
                 description="COM_PROJECTS_HEAD_EXP_BANK_KPP_DESC"
                 hint="COM_PROJECTS_HEAD_EXP_BANK_KPP_HINT"
@@ -91,7 +91,7 @@
         />
         <field
                 name="rs"
-                type="number"
+                type="text"
                 label="COM_PROJECTS_HEAD_EXP_BANK_RS"
                 description="COM_PROJECTS_HEAD_EXP_BANK_RS_DESC"
                 hint="COM_PROJECTS_HEAD_EXP_BANK_RS_HINT"
@@ -100,7 +100,7 @@
         />
         <field
                 name="ks"
-                type="number"
+                type="text"
                 label="COM_PROJECTS_HEAD_EXP_BANK_KS"
                 description="COM_PROJECTS_HEAD_EXP_BANK_KS_DESC"
                 hint="COM_PROJECTS_HEAD_EXP_BANK_KS_HINT"
@@ -118,7 +118,7 @@
         />
         <field
                 name="bik"
-                type="number"
+                type="text"
                 label="COM_PROJECTS_HEAD_EXP_BANK_BIK"
                 description="COM_PROJECTS_HEAD_EXP_BANK_BIK_DESC"
                 hint="COM_PROJECTS_HEAD_EXP_BANK_BIK_HINT"
