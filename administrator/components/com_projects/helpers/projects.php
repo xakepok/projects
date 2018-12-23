@@ -142,6 +142,23 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает ID проекта, на который заключена сделка
+     * @param int $contractID ID сделки
+     * @return int ID проекта
+     * #@since 1.0.4.5
+     */
+    public static function getContractProject(int $contractID): int
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`prjID`")
+            ->from("`#__prj_contracts`")
+            ->where("`id` = {$contractID}");
+        return $db->setQuery($query)->loadResult();
+    }
+
+    /**
      * Возвращает сделки, которые участвуют в проекте
      * @param int $projectID ID проекта
      * @return array массив со сделками

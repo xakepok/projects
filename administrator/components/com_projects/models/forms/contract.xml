@@ -44,6 +44,15 @@
                 class="x2"
         />
         <field
+                name="children"
+                type="Children"
+                label="COM_PROJECTS_HEAD_CONTRACT_CHILDREN"
+                description="COM_PROJECTS_HEAD_CONTRACT_CHILDREN_DESC"
+                multiple="true"
+                autocomplete="off"
+                class="x2"
+        />
+        <field
                 name="managerID"
                 type="user"
                 label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"

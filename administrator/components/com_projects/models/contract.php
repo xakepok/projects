@@ -17,6 +17,7 @@ class ProjectsModelContract extends AdminModel {
             $item->stands = $this->getStands();
             $item->finanses = $this->getFinanses();
             $item->amount = ProjectsHelper::getContractAmount($item->id);
+            $item->children = $this->loadCoExp($item->expID, $item->prjID);
         }
         return $item;
     }
@@ -188,7 +189,7 @@ class ProjectsModelContract extends AdminModel {
         if ($data['id'] == null && !ProjectsHelper::canDo('core.general')) $data['managerID'] = JFactory::getUser()->id;
         $s1 = parent::save($data);
         if ($data['id'] == null) $data['id'] = $this->_db->insertid();
-        //if (!empty($data['children'])) $this->setCoExp($data['children'], $data['id']);
+        if (!empty($data['children'])) $this->setCoExp($data['children'], $data['expID'], $data['prjID']);
         $this->saveHistory($data['id'], $data['status']);
         $s2 = $this->savePrice();
         if (!empty($_FILES))
@@ -204,10 +205,12 @@ class ProjectsModelContract extends AdminModel {
      * Прописывает экспонентам из массива $exhibitors значение родителя $parentID
      * @param array $exhibitors Массив с ID экспонентов, которым нужно прописать родителя
      * @param int $parentID ID родителя
-     * @since 1.0.3.0
+     * @param int $projectID ID проекта, в котором будут соэкспоненты
+     * @since 1.0.4.5
      */
-    public function setCoExp(array $exhibitors, int $parentID): void
+    private function setCoExp(array $exhibitors, int $parentID, int $projectID): void
     {
+        $this->removeCoExp($parentID, $projectID);
         if (empty($exhibitors) || $parentID == 0) return;
         $ids = implode(", ", $exhibitors);
         if (empty($ids)) return;
@@ -216,9 +219,50 @@ class ProjectsModelContract extends AdminModel {
         $parentID = $db->q($parentID);
         $query
             ->update("`#__prj_contracts`")
-            ->set("`parentID` = {$parentID}")
-            ->where("`id` IN ({$ids})");
+            ->set("`parentID` = {$parentID}, `isCoExp` = 1")
+            ->where("`expID` IN ({$ids})")
+            ->where("`prjID` = {$projectID}");
         $db->setQuery($query)->execute();
+    }
+
+    /**
+     * Возвращает массив с потомками - экспонентами, у которых текущий родитель в этом проекте
+     * @param int $expID ID экспонента родителя
+     * @param int $prjID ID проекта
+     * @return array массив с ID дочерних экспонентов
+     * @since 1.0.4.5
+     */
+    private function loadCoExp(int $expID, int $prjID): array
+    {
+        if ($expID == 0 || $prjID == 0) return array();
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("DISTINCT `expID`")
+            ->from("`#__prj_contracts`")
+            ->where("`parentID` = {$expID}")
+            ->where("`prjID` = {$prjID}");
+        return $db->setQuery($query)->loadColumn();
+    }
+
+    /**
+     * Обнуляет значение потомков у экспонента-родителя
+     * @param int $expID ID экспонента родителя
+     * @param int $prjID ID проекта
+     * @return array массив с ID дочерних экспонентов
+     * @since 1.0.4.5
+     */
+    private function removeCoExp(int $expID, int $prjID): array
+    {
+        if ($expID == 0 || $prjID == 0) return array();
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->update("`#__prj_contracts`")
+            ->set("`parentID` = NULL, `isCoExp` = 0")
+            ->where("`parentID` = {$expID}")
+            ->where("`prjID` = {$prjID}");
+        return $db->setQuery($query)->loadColumn();
     }
 
     protected function loadFormData()
