@@ -148,10 +148,6 @@ class ProjectsModelContract extends AdminModel {
         }
         if ($id != 0)
         {
-            if ($form->getValue('dat') == null)
-            {
-                $form->removeField('dat');
-            }
             $dir = JPATH_ROOT."/images/contracts/{$id}";
             $form->setFieldAttribute('files', 'directory', (JFolder::exists($dir)) ? $dir : 'images/contracts');
         }
@@ -190,7 +186,6 @@ class ProjectsModelContract extends AdminModel {
     public function save($data)
     {
         if ($data['id'] == null && !ProjectsHelper::canDo('core.general')) $data['managerID'] = JFactory::getUser()->id;
-        if (empty($data['dat']) && ($data['status'] == 5 || $data['status'] == 6 || $data['status'] == 1)) $data['dat'] = date("Y-m-d");
         $s1 = parent::save($data);
         if ($data['id'] == null) $data['id'] = $this->_db->insertid();
         //if (!empty($data['children'])) $this->setCoExp($data['children'], $data['id']);
