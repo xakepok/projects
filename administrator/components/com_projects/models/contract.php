@@ -146,6 +146,7 @@ class ProjectsModelContract extends AdminModel {
                 $form->removeField('number');
             }
             $form->removeField('dat');
+            $form->removeField('children');
         }
         if ($id != 0)
         {
@@ -197,7 +198,7 @@ class ProjectsModelContract extends AdminModel {
             $file = ProjectsHelper::uploadFile('upload', 'contracts', $data['id']);
             $data['files'][] = $file;
         }
-        $s3 = $this->saveFiles($data['files']);
+        $s3 = ($data['id]'] != null) ? $this->saveFiles($data['files']) : true;
         return $s1 && $s2 && $s3;
     }
 
