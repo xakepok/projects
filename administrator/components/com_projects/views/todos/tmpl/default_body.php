@@ -13,9 +13,6 @@ foreach ($this->items as $i => $item) :
             <?php echo ++$ii; ?>
         </td>
         <td>
-            <?php echo JHtml::_('jgrid.published', $item['state'], $i, 'todos.', $canChange); ?>
-        </td>
-        <td>
             <?php echo $item['dat']; ?>
         </td>
         <td>

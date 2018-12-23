@@ -9,7 +9,7 @@ class ProjectsViewTodos extends HtmlView
 {
 	protected $helper;
 	protected $sidebar = '';
-	public $items, $pagination, $uid, $state, $links, $isAdmin;
+	public $items, $pagination, $uid, $state, $links, $isAdmin, $filterForm, $activeFilters;
 
 	public function display($tpl = null)
 	{
@@ -17,6 +17,8 @@ class ProjectsViewTodos extends HtmlView
 	    $this->pagination = $this->get('Pagination');
 	    $this->state = $this->get('State');
 	    $this->isAdmin = ProjectsHelper::canDo('core.general');
+        $this->filterForm = $this->get('FilterForm');
+        $this->activeFilters = $this->get('ActiveFilters');
 
 		// Show the toolbar
 		$this->toolbar();

@@ -9,16 +9,18 @@ class ProjectsModelTodos extends ListModel
         if (empty($config['filter_fields']))
         {
             $config['filter_fields'] = array(
-                '`id`', '`id`',
-                '`t`.`dat`','`t`.`dat`',
-                '`t`.`dat_open`','`t`.`dat_open`',
-                '`t`.`dat_close`','`t`.`dat_close`',
-                '`open`','`open`',
-                '`close`','`close`',
-                '`manager`','`manager`',
-                '`project`','`project`',
-                '`state`', '`state`',
-                '`dat`', '`dat`',
+                't.dat',
+                't.dat_open',
+                't.dat_close',
+                'open',
+                'close',
+                'manager',
+                'project',
+                'exhibitor',
+                'e.title_ru_short',
+                'c.number',
+                'state',
+                'dat',
             );
         }
         parent::__construct($config);
@@ -43,7 +45,13 @@ class ProjectsModelTodos extends ListModel
             ->leftJoin("`#__users` as `u1` ON `u1`.`id` = `t`.`userOpen`")
             ->leftJoin("`#__users` as `u2` ON `u2`.`id` = `t`.`userClose`")
             ->leftJoin("`#__users` as `u3` ON `u3`.`id` = `t`.`managerID`");
-
+        /* Фильтр */
+        $search = $this->getState('filter.search');
+        if (!empty($search))
+        {
+            $search = $db->quote('%' . $db->escape($search, true) . '%', false);
+            $query->where('`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . 'OR `p`.`title_ru` LIKE ' . $search);
+        }
         // Фильтруем по состоянию.
         $published = $this->getState('filter.state');
         if (is_numeric($published))
@@ -54,11 +62,10 @@ class ProjectsModelTodos extends ListModel
         {
             $query->where('(`t`.`state` = 0 OR `t`.`state` = 1)');
         }
-        // Фильтруем по сделке.
-        $contract = $this->getState('filter.contract');
-        if (is_numeric($contract))
-        {
-            $query->where('`t`.`contractID` = ' . (int) $contract);
+        // Фильтруем по менеджеру.
+        $manager = $this->getState('filter.manager');
+        if (is_numeric($manager)) {
+            $query->where('`t`.`managerID` = ' . (int)$manager);
         }
         // Фильтруем по дате.
         $dat = $this->getState('filter.dat');
@@ -125,16 +132,16 @@ class ProjectsModelTodos extends ListModel
         foreach ($items as $item) {
             $arr['expired'] = $this->isExpired($item->date, $item->state);
             $arr['id'] = $item->id;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contract}&amp;return={$return}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contract}&amp;return={$return}");
             $c = (!$item->number) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_CONTRACT') : JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number);
             $link = JHtml::link($url, $c);
             $arr['contract'] = $link;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}&amp;return={$return}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}");
             $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->project : JHtml::link($url, $item->project);
             $exhibitor = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
-            $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->expID}&amp;return={$return}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}");
             $arr['exp'] = JHtml::link($url, $exhibitor);
-            $url = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;layout=edit&amp;id={$item->id}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=todo.edit&amp;id={$item->id}");
             $link = JHtml::link($url, $item->date);
             $arr['dat'] = $link;
             $arr['dat_open'] = $item->dat_open;
@@ -157,14 +164,16 @@ class ProjectsModelTodos extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
-        $contract = $this->getUserStateFromRequest($this->context . '.filter.contract', 'filter_contract', '', 'string');
+        $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', '', 'string');
         $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor', '', 'string');
         $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project', '', 'string');
+        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager', '', 'string');
         $dat = $this->getUserStateFromRequest($this->context . '.filter.dat', 'filter_dat', '', 'string');
         $this->setState('filter.state', $published);
-        $this->setState('filter.contract', $contract);
+        $this->setState('filter.search', $search);
         $this->setState('filter.exhibitor', $exhibitor);
         $this->setState('filter.project', $project);
+        $this->setState('filter.manager', $manager);
         $this->setState('filter.dat', $dat);
         parent::populateState('`t`.`dat`', 'desc');
     }
@@ -172,9 +181,10 @@ class ProjectsModelTodos extends ListModel
     protected function getStoreId($id = '')
     {
         $id .= ':' . $this->getState('filter.state');
-        $id .= ':' . $this->getState('filter.contract');
+        $id .= ':' . $this->getState('filter.search');
         $id .= ':' . $this->getState('filter.exhibitor');
         $id .= ':' . $this->getState('filter.project');
+        $id .= ':' . $this->getState('filter.manager');
         $id .= ':' . $this->getState('filter.dat');
         return parent::getStoreId($id);
     }

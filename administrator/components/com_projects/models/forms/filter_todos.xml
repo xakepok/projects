@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fields name="filter">
+        <field
+                name="search"
+                type="text"
+                label="COM_PROJECTS_FILTER_CONTRACT"
+                description="COM_PROJECTS_FILTER_CONTRACT"
+                hint="COM_PROJECTS_FILTER_CONTRACT"
+                autocomplete="off"
+                class="js-stools-search-string"
+        />
+        <field
+                name="dat"
+                type="calendar"
+                label="COM_PROJECTS_HEAD_TODO_DATE"
+                description="COM_PROJECTS_HEAD_TODO_DATE"
+                hint="COM_PROJECTS_HEAD_TODO_DATE"
+                onchange="this.form.submit();"
+        />
+        <field
+            name="project"
+            type="Project"
+            label="COM_PROJECTS_FILTER_SELECT_PROJECT"
+            description="COM_PROJECTS_FILTER_SELECT_PROJECT"
+            onchange="this.form.submit();"
+            >
+            <option value="">COM_PROJECTS_FILTER_SELECT_PROJECT</option>
+        </field>
+        <field
+            name="exhibitor"
+            type="Exhibitor"
+            label="COM_PROJECTS_FILTER_SELECT_EXHIBITOR"
+            description="COM_PROJECTS_FILTER_SELECT_EXHIBITOR"
+            onchange="this.form.submit();"
+            >
+            <option value="">COM_PROJECTS_FILTER_SELECT_EXHIBITOR</option>
+        </field>
+        <field
+                name="manager"
+                type="manager"
+                label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
+                description="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
+                hint="COM_PROJECTS_FILTER_SELECT_MANAGER"
+                onchange="this.form.submit();"
+                >
+            <option value="">COM_PROJECTS_FILTER_SELECT_MANAGER</option>
+        </field>
+        <field
+                name="state"
+                type="list"
+                label="COM_PROJECTS_FILTER_SELECT_STATUS_TODO"
+                description="COM_PROJECTS_FILTER_SELECT_STATUS_TODO"
+                hint="COM_PROJECTS_FILTER_SELECT_STATUS_TODO"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_STATUS_TODO</option>
+            <option value="0">COM_PROJECTS_HEAD_TODO_STATE_0</option>
+            <option value="1">COM_PROJECTS_HEAD_TODO_STATE_1</option>
+        </field>
+    </fields>
+    <fields name="list">
+        <field
+                name="limit"
+                type="limitbox"
+                class="input-mini"
+                default="25"
+                label="COM_PROJECTS_FILTER_SELECT_LIMIT"
+                description="COM_CONTENT_LIST_LIMIT_DESC"
+                onchange="this.form.submit();"
+        />
+    </fields>
+</form>
