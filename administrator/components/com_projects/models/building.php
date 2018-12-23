@@ -30,7 +30,8 @@ class ProjectsModelBuilding extends ListModel
             ->from("`#__prj_stands` as `s`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
-            ->where("`c`.`status` = 1");
+            ->where("`c`.`status` = 1")
+            ->where("`s`.`number` IS NOT NULL");
 
         /* Фильтр */
         $search = $this->getState('filter.search');
@@ -67,8 +68,9 @@ class ProjectsModelBuilding extends ListModel
             if (!isset($stands[$item->contractID])) $stands[$item->contractID] = array();
             $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$item->standID}&amp;return={$return}");
             $stands[$item->contract][] = JHtml::link($url, $item->stand);
+            $number = (!empty($item->contract)) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->contract) : JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
             $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
-            $arr['contract'] = JHtml::link($url, $item->contract);
+            $arr['contract'] = JHtml::link($url,$number);
             $arr['contractID'] = $item->contract;
             $arr['freeze'] = JText::sprintf(($item->freeze != 0) ? 'JYES' : 'JNO');
             $results[] = $arr;
