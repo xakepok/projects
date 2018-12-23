@@ -11,24 +11,30 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         №
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_PP', '`pm`.`pp`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_CONTRACT', 'c.number', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_DATE', '`pm`.`dat`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_PP', 'pm.pp', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_CONTRACT', '`number`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_SCORE_DESC', 'score', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_EXP', '`title_ru_short`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_DATE', 'pm.dat', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_PROJECT', '`project`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_EXP', 'title_ru_short', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_AMOUNT'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_PROJECT', 'project', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_AUTHOR', '`author`', $listDirn, $listOrder); ?>
+        <?php
+        $currency = $this->state->get('filter.currency');
+        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_AMOUNT', "pm.amount", $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_AMOUNT');
+        ?>
+    </th>
+    <th>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_AUTHOR', 'author', $listDirn, $listOrder); ?>
     </th>
 </tr>

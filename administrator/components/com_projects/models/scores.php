@@ -85,9 +85,10 @@ class ProjectsModelScores extends ListModel
             $arr['contract_id'] = $item->contractID;
             $arr['number'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=score.edit&amp;id={$item->id}"), "№".$item->number);
             $arr['dat'] = $item->dat;
+            $number = (!empty($item->number_contract)) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number_contract) : JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
             $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
-            $arr['contract'] = JHtml::link($url,JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number_contract));
-            $arr['showPaymens'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=payments&amp;filter_score={$item->id}"), JText::sprintf('COM_PROJECTS_MENU_PAYMENTS'));
+            $arr['contract'] = JHtml::link($url,$number);
+            $arr['showPaymens'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=payments&amp;scoreID={$item->id}"), JText::sprintf('COM_PROJECTS_MENU_PAYMENTS'));
             $arr['doPayment'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=payment.add&amp;scoreID={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_TODO_PAYMENT'));
             $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr['exp'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}"), $exp);

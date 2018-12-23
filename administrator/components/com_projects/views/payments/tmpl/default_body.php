@@ -1,9 +1,8 @@
 <?php
 // Запрет прямого доступа.
 defined('_JEXEC') or die;
-$ii = 0;
+$ii = JFactory::getApplication()->input->getInt('limitstart', 0);
 foreach ($this->items as $i => $item) :
-    $canChange = JFactory::getUser()->authorise('core.edit.state', 'com_projects.score.' . $item['id']);
     ?>
     <tr class="row0">
         <td class="center">
@@ -13,13 +12,16 @@ foreach ($this->items as $i => $item) :
             <?php echo ++$ii; ?>
         </td>
         <td>
+            <?php echo $item['contract'];?>
+        </td>
+        <td>
             <?php echo $item['pp'];?>
         </td>
         <td>
-            <?php echo $item['dat'];?>
+            <?php echo $item['score'];?>
         </td>
         <td>
-            №<?php echo $item['contract'];?>
+            <?php echo $item['dat'];?>
         </td>
         <td>
             <?php echo $item['exp'];?>

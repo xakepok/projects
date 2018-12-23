@@ -1,7 +1,7 @@
 <?php
 // Запрет прямого доступа.
 defined('_JEXEC') or die;
-$ii = 0;
+$ii = JFactory::getApplication()->input->getInt('limitstart', 0);
 foreach ($this->items['items'] as $i => $item) :
     $canChange = JFactory::getUser()->authorise('core.edit.state', 'com_projects.score.' . $item['id']);
     ?>

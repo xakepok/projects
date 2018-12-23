@@ -9,13 +9,18 @@ class ProjectsModelPayments extends ListModel
         if (empty($config['filter_fields']))
         {
             $config['filter_fields'] = array(
-                '`id`', '`id`',
-                '`pm`.`pp`','`pm`.`pp`',
-                '`pm`.`dat`','`pm`.`dat`',
-                '`number`','`number`',
-                '`title_ru_short`','`title_ru_short`',
-                '`author`','`author`',
-                '`project`','`project`',
+                'pm.pp',
+                'pm.dat',
+                'score',
+                'c.number',
+                'title_ru_short',
+                'author',
+                'exhibitor',
+                'project',
+                'search',
+                'currency',
+                'dat',
+                'pm.amount',
             );
         }
         parent::__construct($config);
@@ -26,22 +31,23 @@ class ProjectsModelPayments extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`pm`.`id`, `pm`.`pp`, `pm`.`amount`, `u`.`name` as `author`")
+            ->select("`pm`.`id`, `pm`.`pp`, `pm`.`amount`, `u`.`name` as `author`, DATE_FORMAT(`pm`.`dat`,'%d.%m.%Y') as `dat`")
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
             ->select("`p`.`title_ru` as `project`, `p`.`id` as `projectID`")
             ->select("`c`.`id` as `contractID`, `c`.`number`, `c`.`currency`")
-            ->select("DATE_FORMAT(`pm`.`dat`,'%d.%m.%Y') as `dat`")
+            ->select("`s`.`number` as `score`, `s`.`id` as `scoreID`, `s`.`amount` as `score_amount`, DATE_FORMAT(`s`.`dat`,'%d.%m.%Y') as `score_dat`")
             ->from("`#__prj_payments` as `pm`")
             ->leftJoin("`#__prj_scores` as `s` ON `s`.`id` = `pm`.`scoreID`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
             ->leftJoin("`#__users` as `u` ON `u`.`id` = `pm`.`created_by`");
-        // Фильтруем по сделке.
-        $contract = $this->getState('filter.contract');
-        if (is_numeric($contract))
+        /* Фильтр */
+        $search = $this->getState('filter.search');
+        if (!empty($search))
         {
-            $query->where('`s`.`contractID` = ' . (int) $contract);
+            $search = $db->quote('%' . $db->escape($search, true) . '%', false);
+            $query->where('`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . 'OR `p`.`title_ru` LIKE ' . $search);
         }
         // Фильтруем по экспоненту.
         $exhibitor = $this->getState('filter.exhibitor');
@@ -60,6 +66,26 @@ class ProjectsModelPayments extends ListModel
         if (is_numeric($score))
         {
             $query->where('`pm`.`scoreID` = ' . (int) $score);
+        }
+        // Фильтруем по дате.
+        $dat = $this->getState('filter.dat');
+        if (!empty($dat))
+        {
+            $dat = $this->_db->quote($this->_db->escape($dat));
+            $query->where('`pm`.`dat` = ' . $dat);
+        }
+        // Фильтруем по валюте.
+        $currency = $this->getState('filter.currency');
+        if (!empty($currency))
+        {
+            $currency = $db->quote('%' . $db->escape($currency, true) . '%', false);
+            $query->where("`c`.`currency` LIKE {$currency}");
+        }
+        // Фильтруем по ID счёта из URL
+        $scoreID = JFactory::getApplication()->input->getInt('scoreID', 0);
+        if ($scoreID != 0)
+        {
+            $query->where('`pm`.`scoreID` = ' . (int) $scoreID);
         }
 
         /* Сортировка */
@@ -115,20 +141,25 @@ class ProjectsModelPayments extends ListModel
     {
         $items = parent::getItems();
         $result = array();
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=payments");
         foreach ($items as $item) {
             $exponentName = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr = array();
             $arr['id'] = $item->id;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=payment&amp;layout=edit&amp;id={$item->id}");
-            $arr['pp'] = JHtml::link($url, $item->pp);
+            $url = JRoute::_("index.php?option=com_projects&amp;task=score.edit&amp;id={$item->scoreID}&amp;return={$return}");
+            $score = JText::sprintf('COM_PROJECTS_HEAD_SCORE_NUM_AMOUNT_FROM', $item->score, $item->score_amount, $item->currency, $item->score_dat);
+            $arr['score'] = (!ProjectsHelper::canDo('core.accountant')) ? $score : JHtml::link($url, $score);
+            $url = JRoute::_("index.php?option=com_projects&amp;task=payment.edit&amp;id={$item->id}");
+            $arr['pp'] = (!ProjectsHelper::canDo('core.accountant')) ? $item->pp : JHtml::link($url, $item->pp);
+            $number = (!empty($item->number)) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number) : JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
+            $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
+            $arr['contract'] = JHtml::link($url,$number);
             $arr['dat'] = $item->dat;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->exponentID}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->exponentID}&amp;return={$return}");
             $arr['exp'] = JHtml::link($url, $exponentName);
-            $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}");
-            $arr['project'] = JHtml::link($url, $item->project);
-            $url = JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contractID}");
-            $arr['contract'] = JHtml::link($url, $item->number);
-            $arr['amount'] = number_format($item->amount, 2, '.', "'")."&nbsp;".$item->currency;
+            $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}");
+            $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->project : JHtml::link($url, $item->project);
+            $arr['amount'] = number_format($item->amount, 2, '.', " ")."&nbsp;".$item->currency;
             $arr['author'] = $item->author;
             $result[] = $arr;
         }
@@ -138,23 +169,29 @@ class ProjectsModelPayments extends ListModel
     /* Сортировка по умолчанию */
     protected function populateState($ordering = null, $direction = null)
     {
-        $contract = $this->getUserStateFromRequest($this->context . '.filter.contract', 'filter_contract', '', 'string');
+        $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', '', 'string');
         $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor', '', 'string');
         $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project', '', 'string');
         $score = $this->getUserStateFromRequest($this->context . '.filter.score', 'filter_score', '', 'string');
-        $this->setState('filter.contract', $contract);
+        $currency = $this->getUserStateFromRequest($this->context . '.filter.currency', 'filter_currency');
+        $dat = $this->getUserStateFromRequest($this->context . '.filter.dat', 'filter_dat', '', 'string');
+        $this->setState('filter.search', $search);
         $this->setState('filter.exhibitor', $exhibitor);
         $this->setState('filter.project', $project);
         $this->setState('filter.score', $score);
+        $this->setState('filter.currency', $currency);
+        $this->setState('filter.dat', $dat);
         parent::populateState('`pm`.`dat`', 'desc');
     }
 
     protected function getStoreId($id = '')
     {
-        $id .= ':' . $this->getState('filter.contract');
+        $id .= ':' . $this->getState('filter.search');
         $id .= ':' . $this->getState('filter.exhibitor');
         $id .= ':' . $this->getState('filter.project');
         $id .= ':' . $this->getState('filter.score');
+        $id .= ':' . $this->getState('filter.currency');
+        $id .= ':' . $this->getState('filter.dat');
         return parent::getStoreId($id);
     }
 }

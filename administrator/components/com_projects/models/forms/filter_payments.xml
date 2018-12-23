@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fields name="filter">
+        <field
+                name="search"
+                type="text"
+                label="COM_PROJECTS_FILTER_EXHIBITOR"
+                description="COM_PROJECTS_FILTER_EXHIBITOR"
+                hint="COM_PROJECTS_FILTER_EXHIBITOR"
+                autocomplete="off"
+                class="js-stools-search-string"
+        />
+        <field
+                name="exhibitor"
+                type="Exhibitor"
+                label="COM_PROJECTS_FILTER_SELECT_EXHIBITOR"
+                description="COM_PROJECTS_FILTER_SELECT_EXHIBITOR"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_EXHIBITOR</option>
+        </field>
+        <field
+                name="project"
+                type="Project"
+                label="COM_PROJECTS_FILTER_SELECT_PROJECT"
+                description="COM_PROJECTS_FILTER_SELECT_PROJECT"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_PROJECT</option>
+        </field>
+        <field
+                name="dat"
+                type="calendar"
+                label="COM_PROJECTS_FILTER_SELECT_PAYMENT_DATE"
+                description="COM_PROJECTS_FILTER_SELECT_PAYMENT_DATE"
+                hint="COM_PROJECTS_FILTER_SELECT_PAYMENT_DATE"
+                onchange="this.form.submit();"
+        />
+        <field
+                name="currency"
+                type="list"
+                label="COM_PROJECTS_FILTER_SELECT_CURRENCY"
+                description="COM_PROJECTS_FILTER_SELECT_CURRENCY"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_CURRENCY</option>
+            <option value="rub">COM_PROJECTS_HEAD_ITEM_PRICE_RUB</option>
+            <option value="usd">COM_PROJECTS_HEAD_ITEM_PRICE_USD</option>
+            <option value="eur">COM_PROJECTS_HEAD_ITEM_PRICE_EUR</option>
+        </field>
+    </fields>
+    <fields name="list">
+        <field
+                name="limit"
+                type="limitbox"
+                class="input-mini"
+                default="25"
+                label="COM_PROJECTS_FILTER_SELECT_LIMIT"
+                description="COM_CONTENT_LIST_LIMIT_DESC"
+                onchange="this.form.submit();"
+        />
+    </fields>
+</form>
