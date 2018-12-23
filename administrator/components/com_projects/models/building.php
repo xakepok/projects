@@ -9,10 +9,11 @@ class ProjectsModelBuilding extends ListModel
         if (empty($config['filter_fields']))
         {
             $config['filter_fields'] = array(
-                '`id`', '`id`',
-                '`title_ru_short`', '`title_ru_short`',
-                '`contract`', '`contract`',
-                '`freeze`', '`freeze`',
+                'title_ru_short',
+                'contract',
+                'freeze',
+                'search',
+                'project',
             );
         }
         parent::__construct($config);
@@ -29,8 +30,7 @@ class ProjectsModelBuilding extends ListModel
             ->from("`#__prj_stands` as `s`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
-            ->where("`c`.`status` IN (1,5,6)")
-            ->where("`c`.`number` IS NOT NULL");
+            ->where("`c`.`status` = 1");
 
         /* Фильтр */
         $search = $this->getState('filter.search');
@@ -58,16 +58,16 @@ class ProjectsModelBuilding extends ListModel
         $results = array();
         $stands = array(); //Массив контракт - массив стендов
         $itog = array(); //Итоговый массив
-        $return = base64_encode(JUri::base() . "administrator/index.php?option=com_projects&view=building");
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=building");
         foreach ($items as $item) {
             $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->exponentID}&amp;return={$return}");
             $exhibitor = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $link = JHtml::link($url, $exhibitor);
             $arr['exhibitor'] = $link;
             if (!isset($stands[$item->contractID])) $stands[$item->contractID] = array();
-            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$item->standID}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$item->standID}&amp;return={$return}");
             $stands[$item->contract][] = JHtml::link($url, $item->stand);
-            $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
             $arr['contract'] = JHtml::link($url, $item->contract);
             $arr['contractID'] = $item->contract;
             $arr['freeze'] = JText::sprintf(($item->freeze != 0) ? 'JYES' : 'JNO');
