@@ -19,7 +19,7 @@ if ($return != null)
         if (task === 'contract.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
             Joomla.submitform(task, document.getElementById('adminForm'));
         }
-    }
+    };
 </script>
 <form action="<?php echo $action; ?>"
       method="post" name="adminForm" id="adminForm" xmlns="http://www.w3.org/1999/html" class="form-validate" enctype="multipart/form-data">
@@ -105,4 +105,5 @@ if ($return != null)
         </div>
     </div>
 </form>
+<?php echo $this->loadTemplate('exhibitor');?>
 

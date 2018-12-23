@@ -17,6 +17,9 @@ if ($this->item->id != null) {
 ?>
 <h4><?php if ($this->item->id != null) echo JText::sprintf('COM_PROJECTS_GO_TITLE');?></h4>
 <ul>
+    <li>
+        <a href="#modalCard" data-toggle="modal" onclick="showCard(<?php echo $this->item->expID;?>); return true;"><?php echo JText::sprintf('COM_PROJECTS_GO_EXHIBITOR_FAST');?></a>
+    </li>
     <?php foreach ($links as $link): ?>
         <li>
             <?php echo $link;?>
