@@ -9,12 +9,13 @@ class ProjectsModelScores extends ListModel
         if (empty($config['filter_fields']))
         {
             $config['filter_fields'] = array(
-                '`s`.`id`', '`s`.`id`',
-                '`s`.`dat`', '`s`.`dat`',
-                '`number`', '`number`',
-                '`project`', '`project`',
-                '`title_ru_short`', '`title_ru_short`',
-                '`s`.`state`', '`s`.`state`',
+                's.dat',
+                'number',
+                'number_contract',
+                'project',
+                'title_ru_short',
+                'amount',
+                's.state',
             );
         }
         parent::__construct($config);
@@ -27,7 +28,7 @@ class ProjectsModelScores extends ListModel
         $query
             ->select("`s`.`id`, `s`.`contractID`, DATE_FORMAT(`s`.`dat`,'%d.%m.%Y') as `dat`, `s`.`number`, `s`.`amount`, `s`.`state`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `e`.`id` as `expID`")
-            ->select("`c`.`currency`")
+            ->select("`c`.`currency`, `c`.`number` as `number_contract`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`, `p`.`id` as `projectID`")
             ->from("`#__prj_scores` as `s`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
@@ -76,19 +77,21 @@ class ProjectsModelScores extends ListModel
         $items = parent::getItems();
         $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'debt' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
         $pm = ListModel::getInstance('Payments', 'ProjectsModel');
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=scores");
         foreach ($items as $item)
         {
             $arr = array();
             $arr['id'] = $item->id;
             $arr['contract_id'] = $item->contractID;
-            $arr['edit'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=score&amp;layout=edit&amp;id={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_EDIT'));
+            $arr['number'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=score.edit&amp;id={$item->id}"), "№".$item->number);
             $arr['dat'] = $item->dat;
-            $arr['number'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->contractID}"),"№".$item->number);
+            $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
+            $arr['contract'] = JHtml::link($url,JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number_contract));
             $arr['showPaymens'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=payments&amp;filter_score={$item->id}"), JText::sprintf('COM_PROJECTS_MENU_PAYMENTS'));
             $arr['doPayment'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=payment.add&amp;scoreID={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_TODO_PAYMENT'));
             $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
-            $arr['exp'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->expID}"), $exp);
-            $arr['project'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}"), $item->project);
+            $arr['exp'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}"), $exp);
+            $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->projectID : JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}"), $item->project);
             $arr['amount'] = sprintf("%s %s", number_format($item->amount, 2, '.', "'"), $item->currency);
             $arr['state'] = $item->state;
             $payments = $pm->getScorePayments($item->id);

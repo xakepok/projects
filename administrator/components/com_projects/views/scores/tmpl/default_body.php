@@ -13,10 +13,10 @@ foreach ($this->items['items'] as $i => $item) :
             <?php echo ++$ii; ?>
         </td>
         <td>
-            <?php echo $item['edit'];?>
+            <?php echo $item['number'];?>
         </td>
         <td>
-            <?php echo $item['number'];?>
+            <?php echo $item['contract'];?>
         </td>
         <td>
             <?php echo $item['dat'];?>

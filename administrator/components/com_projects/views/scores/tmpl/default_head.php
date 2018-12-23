@@ -11,10 +11,10 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         №
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_ACTION_EDIT'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_NUMBER', 'number', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_NUMBER', 'number', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_NUMBER', 'number_contract', $listDirn, $listOrder); ?>
     </th>
     <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_DATE', 's.dat', $listDirn, $listOrder); ?>
@@ -32,10 +32,7 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         ?>
     </th>
     <th>
-        <?php
-        $currency = $this->state->get('filter.currency');
-        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_PAYMENT', 'payments', $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_SCORE_PAYMENT');
-        ?>
+        <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_PAYMENT'); ?>
     </th>
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_DEBT'); ?>
