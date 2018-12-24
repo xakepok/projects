@@ -9,7 +9,7 @@ foreach ($this->items['items'] as $i => $item) :
             <?php echo ++$ii; ?>
         </td>
         <td>
-            <?php echo $item['section']; ?>
+            <?php echo $item['application']; ?>
         </td>
         <td>
             <?php echo $item['title']; ?>
