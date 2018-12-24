@@ -4,15 +4,27 @@ use Joomla\CMS\MVC\Model\ListModel;
 
 class ProjectsModelStat extends ListModel
 {
+    public $itemID;
+
     public function __construct(array $config)
     {
+        $this->itemID = JFactory::getApplication()->input->getInt('itemID', 0);
         if (empty($config['filter_fields']))
         {
             $config['filter_fields'] = array(
                 'p.title_ru',
+                'title_ru_short',
                 'search',
+                'c.number',
                 'project',
                 'application',
+                'price_rub',
+                'price_usd',
+                'price_eur',
+                'amount_rub',
+                'amount_usd',
+                'amount_eur',
+                'value',
             );
         }
         parent::__construct($config);
@@ -23,23 +35,36 @@ class ProjectsModelStat extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select('`prj`.`title_ru` as `project`, `c`.`number` as `contract`, `c`.`currency`, `c`.`id` as `id`')
-            ->select("`p`.`column_1`, `p`.`column_2`, `p`.`column_3`, `p`.`application`")
-            ->select("`p`.`id` as `itemID`, `p`.`title_ru` as `item`, `p`.`unit`, IFNULL(`p`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `p`.`price_rub`, `p`.`price_usd`, `p`.`price_eur`")
-            ->select('`i`.`columnID`, `i`.`value`, `i`.`factor`, `i`.`markup`, `i`.`value2`')
-            ->from("`#__prj_contract_items` as `i`")
-            ->leftJoin("`#__prc_items` as `p` ON `p`.`id` = `i`.`itemID`")
-            ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `i`.`contractID`")
-            ->leftJoin("`#__prj_projects` as `prj` ON `prj`.`id` = `c`.`prjID`")
-            ->where("`c`.`status` = 1")
-            ->where("`p`.`in_stat` = 1");
+            ->select("`s`.`itemID`, `i`.`title_ru` as `item`, `i`.`application`, `i`.`unit`")
+            ->select("SUM(`s`.`value`) as `value`")
+            ->select("SUM(`s`.`price_rub`) as `amount_rub`, SUM(`s`.`price_usd`) as `amount_usd`, SUM(`s`.`price_eur`) as `amount_eur`")
+            ->select("`i`.`price_rub`, `i`.`price_usd`,`i`.`price_eur`")
+            ->select("`c`.`currency`")
+            ->from("`#__prj_stat` as `s`")
+            ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `s`.`itemID`")
+            ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
+            ->where("`i`.`in_stat` = 1");
+
+        if ($this->itemID != 0)
+        {
+            $query
+                ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `c`.`expID`")
+                ->select("`c`.`number` as `contract`, `c`.`id` as `contractID`")
+                ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
+                ->where("`s`.`itemID` = {$this->itemID}")
+                ->group("`c`.`expID`");
+        }
+        else
+        {
+            $query->group("`s`.`itemID`");
+        }
 
         /* Фильтр */
         $search = $this->getState('filter.search');
         if (!empty($search))
         {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-            $query->where('`p`.`title_ru` LIKE ' . $search);
+            $query->where('`i`.`title_ru` LIKE ' . $search);
         }
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
@@ -48,7 +73,7 @@ class ProjectsModelStat extends ListModel
         }
 
         /* Сортировка */
-        $orderCol  = $this->state->get('list.ordering', '`p`.`title_ru`');
+        $orderCol  = $this->state->get('list.ordering', '`i`.`title_ru`');
         $orderDirn = $this->state->get('list.direction', 'asc');
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
@@ -62,42 +87,53 @@ class ProjectsModelStat extends ListModel
         $result['amount'] = array('rub' => 0, 'usd' => 0, 'eur' => 0);
         $result['items'] = array();
         foreach ($items as $item) {
-            $arr['id'] = $item->id;
-            $url = JRoute::_("index.php?option=com_projects&amp;task=item.edit&amp;&id={$item->itemID}");
-            $link = JHtml::link($url, $item->item);
-            $arr['title'] = $link;
+            if ($this->itemID != 0)
+            {
+                $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=stat&itemID={$this->itemID}");
+                $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}");
+                $title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_rn);
+                $arr['title'] = JHtml::link($url, $title);
+                $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
+                $title = ($item->contract != null) ? JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITH_NUMBER', $item->contract) : JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
+                $arr['contract'] = JHtml::link($url, $title);
+            }
+            else
+            {
+                $url = JRoute::_("index.php?option=com_projects&amp;view=stat&amp;itemID={$item->itemID}");
+                $arr['title'] = JHtml::link($url, $item->item);
+            }
             $arr['application'] = ProjectsHelper::getApplication($item->application);
             $arr['unit'] = ProjectsHelper::getUnit($item->unit);
-            $arr['unit_2'] = ProjectsHelper::getUnit($item->unit_2);
-            $currency = "price_".$item->currency;
+            $arr['unit_2'] = '';
             $arr['value'] = $item->value;
-            $arr['price'][$item->currency] = sprintf("%s %s", $item->$currency, $item->currency);
-            if (!isset($result['items'][$item->itemID]))
-            {
-                $result['items'][$item->itemID]['amount'] = array('rub' => 0, 'usd' => 0, 'eur' => 0);
-                $result['items'][$item->itemID] = $arr;
-            }
-            $result['items'][$item->itemID]['amount'][$item->currency] += $this->getAmount($item);
-            $result['amount'][$item->currency] += $this->getAmount($item);
+            $currency = "price_".$item->currency;
+            $arr['price'][$item->currency] = sprintf("%s %s", number_format($item->$currency, 0, ".", " "), $item->currency);
+            $currency = "amount_".$item->currency;
+            $arr['amount'][$item->currency] = sprintf("%s %s", number_format($item->$currency, 0, ".", " "), $item->currency);
+            $result['items'][] = $arr;
         }
         return $result;
     }
 
-    /**
-     * Возвращает сумму по конкретному пункту в договоре
-     * @param object $item
-     * @return float
-     * @since 1.0.3.2
-     */
-    private function getAmount(object $item): float
+    public function getItemID(): int
     {
-        $columnID = "column_{$item->columnID}";
-        $currency = "price_".$item->currency;
-        $amount = $item->$currency * $item->$columnID * $item->value;
-        if ($item->factor) $amount *= $item->factor;
-        if ($item->markup) $amount *= $item->markup;
-        if ($item->value2) $amount *= $item->value2;
-        return $amount;
+        return $this->itemID;
+    }
+
+    /**
+     * Возвращает название пункта прайс-листа
+     * @return string
+     * @since 1.0.5.0
+     */
+    public function getExhibitorTitle(): string
+    {
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`title_ru`")
+            ->from("`#__prc_items`")
+            ->where("`id` = {$this->itemID}");
+        return $db->setQuery($query)->loadResult();
     }
 
     /* Сортировка по умолчанию */
@@ -107,7 +143,7 @@ class ProjectsModelStat extends ListModel
         $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');
         $this->setState('filter.search', $search);
         $this->setState('filter.project', $project);
-        parent::populateState('`p`.`title_ru`', 'asc');
+        parent::populateState('`i`.`title_ru`', 'asc');
     }
 
     protected function getStoreId($id = '')

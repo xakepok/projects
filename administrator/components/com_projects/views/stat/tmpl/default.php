@@ -8,20 +8,22 @@ use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto', 'relative' => true));
 HTMLHelper::_('script', 'com_projects/script.js', array('version' => 'auto', 'relative' => true));
+$itemID = JFactory::getApplication()->input->getInt('itemID', 0);
+$action = JRoute::_(($itemID != 0) ? "index.php?option=com_projects&amp;view=stat&amp;itemID={$itemID}" : "index.php?option=com_projects&amp;view=stat");
 ?>
 <div class="row-fluid">
     <div id="j-sidebar-container" class="span2">
         <?php echo $this->sidebar; ?>
     </div>
     <div id="j-main-container" class="span10 j-toggle-main">
-        <form action="<?php echo JRoute::_('index.php?option=com_projects&amp;view=stat'); ?>" method="post"
+        <form action="<?php echo $action; ?>" method="post"
               name="adminForm" id="adminForm">
             <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
             <table class="table table-striped">
                 <thead><?php echo $this->loadTemplate('head'); ?></thead>
                 <tbody><?php echo $this->loadTemplate('body'); ?></tbody>
                 <tfoot><?php echo $this->loadTemplate('foot'); ?></tfoot>
-                <?php echo $this->loadTemplate('amount'); ?>
+                <?php //echo $this->loadTemplate('amount'); ?>
             </table>
             <div>
                 <input type="hidden" name="task" value=""/>

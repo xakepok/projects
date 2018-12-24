@@ -9,7 +9,7 @@ class ProjectsViewStat extends HtmlView
 {
 	protected $helper;
 	protected $sidebar = '';
-	public $items, $pagination, $uid, $state, $links, $isAdmin, $filterForm, $activeFilters;
+	public $items, $pagination, $uid, $state, $links, $isAdmin, $filterForm, $activeFilters, $itemID;
 
 	public function display($tpl = null)
 	{
@@ -18,6 +18,7 @@ class ProjectsViewStat extends HtmlView
 	    $this->state = $this->get('State');
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
+        $this->itemID = $this->get('ItemID');
 
 		// Show the toolbar
 		$this->toolbar();
@@ -33,7 +34,12 @@ class ProjectsViewStat extends HtmlView
 
 	private function toolbar()
 	{
-		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_STAT_DESC'), '');
+	    $title = ($this->itemID != 0) ? $this->get('ExhibitorTitle') : Text::_('COM_PROJECTS_MENU_STAT_DESC');
+		JToolBarHelper::title($title, '');
+		if ($this->itemID != 0)
+        {
+            JToolbarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_projects&view=stat');
+        }
 		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
 		{
 			JToolBarHelper::preferences('com_projects');

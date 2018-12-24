@@ -4,21 +4,18 @@ defined('_JEXEC') or die;
 $ii = JFactory::getApplication()->input->getInt('limitstart', 0);
 foreach ($this->items['items'] as $i => $item) :
     ?>
-    <tr class="row0<?php if ($item['expired']) echo ' expired'; ?>">
+    <tr>
         <td>
             <?php echo ++$ii; ?>
         </td>
         <td>
-            <?php echo $item['application']; ?>
+            <?php echo ($this->itemID != 0) ? $item['contract'] : $item['application']; ?>
         </td>
         <td>
             <?php echo $item['title']; ?>
         </td>
         <td>
             <?php echo $item['unit']; ?>
-        </td>
-        <td>
-            <?php echo $item['unit_2']; ?>
         </td>
         <td>
             <?php echo $item['price']['rub']; ?>
