@@ -43,6 +43,10 @@ class ProjectsViewPayments extends HtmlView
         {
             JToolbarHelper::editList('payment.edit');
         }
+        if (ProjectsHelper::canDo('core.accountant') || ProjectsHelper::canDo('core.general'))
+        {
+            JToolbarHelper::deleteList('COM_PROJECT_QUEST_REMOVE_PAYMENTS', 'payments.delete');
+        }
 		if (ProjectsHelper::canDo('core.admin'))
 		{
 			JToolBarHelper::preferences('com_projects');

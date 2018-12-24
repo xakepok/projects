@@ -66,6 +66,7 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_DATE_DESC"
                 description="COM_PROJECTS_HEAD_CONTRACT_DATE_DESC"
                 autocomplete="off"
+                format="%d.%m.%Y"
                 class="x2"
         />
         <field

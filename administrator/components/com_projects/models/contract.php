@@ -188,6 +188,11 @@ class ProjectsModelContract extends AdminModel {
     public function save($data)
     {
         if ($data['id'] == null && !ProjectsHelper::canDo('core.general')) $data['managerID'] = JFactory::getUser()->id;
+        if ($data['dat'] != null)
+        {
+            $dat = JDate::getInstance($data['dat']);
+            $data['dat'] = $dat->format("Y-m-d");
+        }
         $s1 = parent::save($data);
         if ($data['id'] == null) $data['id'] = $this->_db->insertid();
         if (!empty($data['children'])) $this->setCoExp($data['children'], $data['expID'], $data['prjID']);

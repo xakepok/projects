@@ -61,6 +61,18 @@ function getSum2(id, currency)
     /*if (newtr === null)*/ addSum(id);
     var span = document.querySelector('#sum_'+id);
     var spanS = document.querySelector('#sumS_'+id);
+    var cnt = document.querySelector("#price_"+id).value;
+    var factor = document.querySelector("#factor_" + id);
+    if (factor !== null)
+    {
+        document.querySelector("#sum_factor_"+id).textContent = factor.value;
+    }
+    var markup = document.querySelector("#markup_" + id);
+    if (markup !== null)
+    {
+        var mk = markup.options[markup.selectedIndex].value;
+        document.querySelector("#sum_markup_"+id).textContent = mk;
+    }
     var sum = getSum(id);
     if (sum !== 0 && sum !== null && sum !== undefined && !isNaN(sum) && sum !== '')
     {
@@ -68,6 +80,7 @@ function getSum2(id, currency)
         document.querySelector("#currency_"+id).textContent = currency;
         spanS.textContent = sum;
         document.querySelector("#currencyS_"+id).textContent = currency;
+        document.querySelector("#sum_cnt_"+id).textContent = cnt;
     }
     else
     {

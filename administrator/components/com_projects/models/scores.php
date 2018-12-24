@@ -34,6 +34,11 @@ class ProjectsModelScores extends ListModel
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`");
+        if (!ProjectsHelper::canDo('core.accountant') && !ProjectsHelper::canDo('core.general'))
+        {
+            $userID = JFactory::getUser()->id;
+            $query->where("`c`.`managerID` = {$userID}");
+        }
 
         // Фильтруем по состоянию оплаты.
         $published = $this->getState('filter.state');
