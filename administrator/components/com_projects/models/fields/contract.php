@@ -20,6 +20,11 @@ class JFormFieldContract extends JFormFieldList
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
             ->order("`c`.`id`");
+        if (!ProjectsHelper::canDo('core.general') && !ProjectsHelper::canDo('core.accountant'))
+        {
+            $userID = JFactory::getUser()->id;
+            $query->where("`c`.`managerID` = {$userID}");
+        }
         $session = JFactory::getSession();
         $view = JFactory::getApplication()->input->getString('view', '');
         if (($view == 'todo' || $view == 'stand' || $view == 'score') && $session->get('contractID') != null)
