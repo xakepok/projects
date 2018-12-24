@@ -61,6 +61,7 @@ function getSum2(id, currency)
     /*if (newtr === null)*/ addSum(id);
     var span = document.querySelector('#sum_'+id);
     var spanS = document.querySelector('#sumS_'+id);
+    var cnt = document.querySelector("#price_"+id).value;
     var sum = getSum(id);
     if (sum !== 0 && sum !== null && sum !== undefined && !isNaN(sum) && sum !== '')
     {
@@ -68,6 +69,7 @@ function getSum2(id, currency)
         document.querySelector("#currency_"+id).textContent = currency;
         spanS.textContent = sum;
         document.querySelector("#currencyS_"+id).textContent = currency;
+        document.querySelector("#sum_cnt_"+id).textContent = cnt;
     }
     else
     {

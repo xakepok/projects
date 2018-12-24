@@ -11,7 +11,7 @@ $sum = 0;
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_TITLE'); ?>
             </th>
             <th>
-                <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_SECTION'); ?>
+                <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT'); ?>
             </th>
             <th>
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_AMOUNT'); ?>
@@ -37,7 +37,7 @@ $sum = 0;
                             <?php echo $item['title']; ?>
                         </td>
                         <td>
-                            <?php echo $section; ?>
+                            <span id="sum_cnt_<?php echo $item['id']; ?>"><?php echo $item['value']; ?></span>
                         </td>
                         <td>
                             <span id="sumS_<?php echo $item['id']; ?>"><?php echo $item['sum']; ?></span>
