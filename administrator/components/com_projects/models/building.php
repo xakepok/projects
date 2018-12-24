@@ -65,13 +65,13 @@ class ProjectsModelBuilding extends ListModel
             $exhibitor = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $link = JHtml::link($url, $exhibitor);
             $arr['exhibitor'] = $link;
-            if (!isset($stands[$item->contractID])) $stands[$item->contractID] = array();
+            //if (!isset($stands[$item->contractID])) $stands[$item->contractID] = array();
             $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$item->standID}&amp;return={$return}");
-            $stands[$item->contract][] = JHtml::link($url, $item->stand);
+            $stands[$item->contractID][] = JHtml::link($url, $item->stand);
             $number = (!empty($item->contract)) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->contract) : JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
             $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
             $arr['contract'] = JHtml::link($url,$number);
-            $arr['contractID'] = $item->contract;
+            $arr['contractID'] = $item->contractID;
             $arr['freeze'] = JText::sprintf(($item->freeze != 0) ? 'JYES' : 'JNO');
             $results[] = $arr;
         }
