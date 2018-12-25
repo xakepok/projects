@@ -35,5 +35,4 @@ class ProjectsControllerExhibitors extends AdminController
         echo new JsonResponse($result);
         jexit();
     }
-
 }

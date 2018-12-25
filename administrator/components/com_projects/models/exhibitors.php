@@ -16,6 +16,7 @@ class ProjectsModelExhibitors extends ListModel
                 '`title_en`', '`title_en`',
                 '`city`', '`city`',
                 'projectinactive',
+                'search',
                 'activity',
                 'city',
             );
@@ -35,11 +36,21 @@ class ProjectsModelExhibitors extends ListModel
             ->leftJoin("`#__prj_exp_bank` as `b` ON `b`.`exbID` = `e`.`id`")
             ->leftJoin("`#__grph_cities` as `r` ON `r`.`id` = `e`.`regID`");
 
-        /* Фильтр */
-        $search = $this->getState('filter.search');
-        if (!empty($search)) {
-            $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-            $query->where('(`title_ru_full` LIKE ' . $search . 'OR `title_ru_short` LIKE ' . $search . 'OR `title_en` LIKE ' . $search . ')');
+        // Фильтруем по названию (для поиска синонимов)
+        $text = JFactory::getApplication()->input->getString('text', '');
+        if ($text != '')
+        {
+            $text = $db->quote('%' . $db->escape($text, true) . '%', false);
+            $query->where('(`title_ru_full` LIKE ' . $text . ' OR `title_ru_short` LIKE ' . $text . ' OR `title_en` LIKE ' . $text . ')');
+        }
+        else
+        {
+            /* Фильтр */
+            $search = $this->getState('filter.search');
+            if (!empty($search)) {
+                $search = $db->quote('%' . $db->escape($search, true) . '%', false);
+                $query->where('(`title_ru_full` LIKE ' . $search . 'OR `title_ru_short` LIKE ' . $search . 'OR `title_en` LIKE ' . $search . ')');
+            }
         }
         // Фильтруем по городу.
         $city = $this->getState('filter.city');
@@ -69,13 +80,6 @@ class ProjectsModelExhibitors extends ListModel
         if ($inn !== 0)
         {
             $query->where("`b`.`inn` LIKE {$inn}");
-        }
-        // Фильтруем по названию (для поиска синонимов)
-        $text = JFactory::getApplication()->input->getString('text', '');
-        $text = $db->quote('%' . $db->escape($text, true) . '%', false);
-        if ($text !== '')
-        {
-            $query->where('(`title_ru_full` LIKE ' . $text . ' OR `title_ru_short` LIKE ' . $text . ' OR `title_en` LIKE ' . $text . ')');
         }
 
         /* Сортировка */
