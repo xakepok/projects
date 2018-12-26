@@ -19,6 +19,7 @@ class TableProjectsItems extends Table
     var $column_3 = null;
     var $is_factor = null;
     var $is_markup = null;
+    var $is_sq = null;
     var $in_stat = null;
     var $state = null;
 

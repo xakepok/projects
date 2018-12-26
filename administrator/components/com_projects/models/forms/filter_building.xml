@@ -19,6 +19,43 @@
             >
             <option value="">COM_PROJECTS_FILTER_SELECT_PROJECT</option>
         </field>
+        <field
+                name="manager"
+                type="manager"
+                label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
+                description="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
+                hint="COM_PROJECTS_FILTER_SELECT_MANAGER"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_MANAGER</option>
+        </field>
+        <field
+                name="standtype"
+                label="COM_PROJECTS_FILTER_SELECT_STAND_TYPE"
+                description="COM_PROJECTS_FILTER_SELECT_STAND_TYPE"
+                type="list"
+                onchange="this.form.submit();"
+                >
+            <option value="">COM_PROJECTS_FILTER_SELECT_STAND_TYPE</option>
+            <option value="0">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_0</option>
+            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_1</option>
+            <option value="2">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_2</option>
+            <option value="3">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_3</option>
+        </field>
+        <field
+                name="standstatus"
+                label="COM_PROJECTS_FILTER_SELECT_STAND_STATUS"
+                description="COM_PROJECTS_FILTER_SELECT_STAND_STATUS"
+                type="list"
+                onchange="this.form.submit();"
+                >
+            <option value="">COM_PROJECTS_FILTER_SELECT_STAND_STATUS</option>
+            <option value="0">COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_0</option>
+            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_1</option>
+            <option value="2">COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_2</option>
+            <option value="3">COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_3</option>
+            <option value="3">COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_4</option>
+        </field>
     </fields>
     <fields name="list">
         <field

@@ -14,7 +14,13 @@ foreach ($this->items as $i => $item) :?>
             <?php echo $item['exhibitor']; ?>
         </td>
         <td>
+            <?php echo $item['manager']; ?>
+        </td>
+        <td>
             <?php echo $item['stands']; ?>
+        </td>
+        <td>
+            <?php echo $item['sq']; ?>
         </td>
         <td>
             <?php echo $item['freeze']; ?>

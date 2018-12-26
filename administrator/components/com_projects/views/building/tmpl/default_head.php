@@ -14,7 +14,13 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_EXP', 'title_ru_short', $listDirn, $listOrder); ?>
     </th>
     <th>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_MANAGER', 'manager', $listDirn, $listOrder); ?>
+    </th>
+    <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER'); ?>
+    </th>
+    <th>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_ITEM_HEAD_SQUARE', 'sq', $listDirn, $listOrder); ?>
     </th>
     <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_STAND_FREEZE', 'freeze', $listDirn, $listOrder); ?>
