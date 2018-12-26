@@ -15,6 +15,11 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         }
         ?>
     </th>
+    <?php if ($this->itemID != 0): ?>
+    <th>
+        <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER'); ?>
+    </th>
+    <?php endif;?>
     <th>
         <?php if ($this->itemID != 0) {
             echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_EXP_DESC', 'title_ru_short', $listDirn, $listOrder);

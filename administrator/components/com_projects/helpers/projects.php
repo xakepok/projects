@@ -241,6 +241,23 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает ID прайс-листа для указанного проекта
+     * @param int $projectID
+     * @return int
+     * @since 1.0.5.2
+     */
+    public static function getProjectPrice(int $projectID): int
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`priceID`")
+            ->from("`#__prj_projects`")
+            ->where("`id` = {$projectID}");
+        return $db->setQuery($query)->loadResult();
+    }
+
+    /**
      * Возвращает текстовый статус счёта
      * @param int $state
      * @return string
@@ -346,7 +363,7 @@ class ProjectsHelper
      * @return array
      * @since 1.3.0.2
      */
-    public function getContractStands(int $contractID): array
+    public static function getContractStands(int $contractID): array
     {
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);

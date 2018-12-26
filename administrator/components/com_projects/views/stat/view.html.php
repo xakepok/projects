@@ -36,13 +36,13 @@ class ProjectsViewStat extends HtmlView
 	{
 	    $title = ($this->itemID != 0) ? $this->get('ExhibitorTitle') : Text::_('COM_PROJECTS_MENU_STAT_DESC');
 		JToolBarHelper::title($title, '');
-		if ($this->itemID != 0)
+        if ($this->itemID != 0)
         {
             JToolbarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_projects&view=stat');
         }
-		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
-		{
-			JToolBarHelper::preferences('com_projects');
-		}
-	}
+        if (ProjectsHelper::canDo('core.admin'))
+        {
+            JToolBarHelper::preferences('com_projects');
+        }
+    }
 }

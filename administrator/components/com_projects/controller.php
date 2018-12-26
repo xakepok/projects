@@ -20,5 +20,8 @@ defined('_JEXEC') or die;
  */
 class ProjectsController extends BaseController
 {
-
+    public function display($cachable = false, $urlparams = array())
+    {
+        return parent::display($cachable, $urlparams);
+    }
 }

@@ -26,6 +26,14 @@ $action = JRoute::_(($itemID != 0) ? "index.php?option=com_projects&amp;view=sta
                 <?php //echo $this->loadTemplate('amount'); ?>
             </table>
             <div>
+                <?php
+                $url = "index.php?option=com_projects&amp;task=stat.exportxls";
+                if ($this->itemID != 0) $url .= "&amp;itemID={$this->itemID}";
+                $url = JRoute::_($url);
+                if (!is_array($this->state->get('filter.item')) || empty($this->state->get('filter.item'))) echo JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_EXPORT_XLS'));
+                ?>
+            </div>
+            <div>
                 <input type="hidden" name="task" value=""/>
                 <input type="hidden" name="boxchecked" value="0"/>
                 <input type="hidden" name="filter_order"

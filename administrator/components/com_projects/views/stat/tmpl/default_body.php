@@ -11,7 +11,11 @@ foreach ($this->items['items'] as $i => $item) :
         <td>
             <?php echo ($this->itemID != 0) ? $item['contract'] : $item['application']; ?>
         </td>
-        <td>
+        <?php if ($this->itemID != 0): ?>
+            <th>
+                <?php echo $item['stands']; ?>
+            </th>
+        <?php endif;?>        <td>
             <?php echo $item['title']; ?>
         </td>
         <td>
