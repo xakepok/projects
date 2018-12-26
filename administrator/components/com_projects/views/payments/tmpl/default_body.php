@@ -2,7 +2,7 @@
 // Запрет прямого доступа.
 defined('_JEXEC') or die;
 $ii = JFactory::getApplication()->input->getInt('limitstart', 0);
-foreach ($this->items as $i => $item) :
+foreach ($this->items['items'] as $i => $item) :
     ?>
     <tr class="row0">
         <td class="center">
