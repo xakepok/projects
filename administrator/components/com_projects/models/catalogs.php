@@ -60,15 +60,16 @@ class ProjectsModelCatalogs extends ListModel
     {
         $items = parent::getItems();
         $result = array();
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contracts");
         foreach ($items as $item) {
             $arr['id'] = $item->id;
             $url = JRoute::_("index.php?option=com_projects&amp;task=catalog.edit&amp;&id={$item->id}");
             $link = JHtml::link($url, $item->number);
             $arr['number'] = (!ProjectsHelper::canDo('core.general')) ? $item->price : $link;
-            $url = JRoute::_("index.php?option=com_projects&amp;task=item.edit&amp;&id={$item->itemID}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=item.edit&amp;&id={$item->itemID}&amp;return={$return}");
             $link = JHtml::link($url, $item->item);
-            $title = $item->title ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_NOT_ASSET');
-            $arr['item'] = (!ProjectsHelper::canDo('core.general') || $item->title == null) ? $title : $link;
+            $title = $item->item ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_NOT_ASSET');
+            $arr['item'] = (!ProjectsHelper::canDo('core.general') || $item->item == null) ? $title : $link;
             $title = ($item->unit != null) ? ProjectsHelper::getUnit($item->unit) : '';
             $arr['square'] = sprintf("%s %s", $item->square, $title);
             $result[] = $arr;

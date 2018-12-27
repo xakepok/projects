@@ -18,7 +18,6 @@ class JFormFieldItem extends JFormFieldList
             ->select("`i`.`id`, `i`.`title_ru`")
             ->from('`#__prc_items` as `i`')
             ->order("`i`.`title_ru`");
-        $result = $db->setQuery($query)->loadObjectList();
 
         if ($view == 'stat') {
             $query->where("`i`.`in_stat` = 1");
@@ -32,10 +31,11 @@ class JFormFieldItem extends JFormFieldList
                 $session->clear('projectID');
             }
         }
-        if ($view == 'catalogs')
+        if ($view == 'catalogs' || $view == 'catalog')
         {
             $query->where("`i`.`is_sq` = 1");
         }
+        $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();
 

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fieldset name="names">
+        <field
+                name="id"
+                type="hidden"
+        />
+        <field
+                name="number"
+                type="text"
+                label="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER"
+                description="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_DESC"
+                hint="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_HINT"
+                autocomplete="off"
+                class="x2"
+                validate="Standnumber"
+                required="true"
+        />
+        <field
+                name="itemID"
+                type="Item"
+                label="COM_PROJECTS_FILTER_SELECT_ITEM"
+                description="COM_PROJECTS_FILTER_SELECT_ITEM"
+                hint="COM_PROJECTS_FILTER_SELECT_ITEM"
+                required="true"
+                class="x2"
+        />
+        <field
+                name="square"
+                type="text"
+                label="COM_PROJECTS_HEAD_ITEM_HEAD_SQUARE"
+                description="COM_PROJECTS_HEAD_ITEM_HEAD_SQUARE_DESC"
+                hint="COM_PROJECTS_HEAD_ITEM_HEAD_SQUARE_HINT"
+                autocomplete="off"
+                required="true"
+                class="x2"
+        />
+    </fieldset>
+</form>
