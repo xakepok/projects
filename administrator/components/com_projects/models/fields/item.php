@@ -20,12 +20,10 @@ class JFormFieldItem extends JFormFieldList
             ->order("`i`.`title_ru`");
         $result = $db->setQuery($query)->loadObjectList();
 
-        if ($view == 'stat')
-        {
+        if ($view == 'stat') {
             $query->where("`i`.`in_stat` = 1");
             $session = JFactory::getSession();
-            if ($session->get('projectID'))
-            {
+            if ($session->get('projectID')) {
                 $projectID = $session->get('projectID');
                 $priceID = ProjectsHelper::getProjectPrice($projectID);
                 $query
@@ -33,6 +31,10 @@ class JFormFieldItem extends JFormFieldList
                     ->where("`s`.`priceID` = {$priceID}");
                 $session->clear('projectID');
             }
+        }
+        if ($view == 'catalogs')
+        {
+            $query->where("`i`.`is_sq` = 1");
         }
 
         $options = array();

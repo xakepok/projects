@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fields name="filter">
+        <field
+                name="search"
+                type="text"
+                label="COM_PROJECTS_FILTER_STAND_NUMBER"
+                description="COM_PROJECTS_FILTER_STAND_NUMBER"
+                hint="COM_PROJECTS_FILTER_STAND_NUMBER"
+                autocomplete="off"
+                class="js-stools-search-string"
+        />
+        <field
+                name="item"
+                type="Item"
+                label="COM_PROJECTS_FILTER_SELECT_ITEM"
+                multiple="true"
+                description="COM_PROJECTS_FILTER_SELECT_ITEM"
+                hint="COM_PROJECTS_FILTER_SELECT_ITEM"
+                onchange="this.form.submit();"
+        >
+        </field>
+    </fields>
+    <fields name="list">
+        <field
+                name="limit"
+                type="limitbox"
+                class="input-mini"
+                default="25"
+                label="COM_PROJECTS_FILTER_SELECT_LIMIT"
+                description="COM_CONTENT_LIST_LIMIT_DESC"
+                onchange="this.form.submit();"
+        />
+    </fields>
+</form>
