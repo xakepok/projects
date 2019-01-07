@@ -346,13 +346,14 @@ class ProjectsModelContract extends AdminModel {
         $item = parent::getItem();
         $activeColumn = ProjectsHelper::getActivePriceColumn($item->id);
         $db =& $this->getDbo();
+        $catalog = ProjectsHelper::getCatalogStands($item->id);
         $result = array();
         $query = $db->getQuery(true);
         $query
             ->select("`i`.`id`, `i`.`unit`, `unit_2` as `isUnit2`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `i`.`is_factor`, `i`.`is_markup`, `i`.`sectionID`")
             ->select("IFNULL(`i`.`title_ru`,`i`.`title_en`) as `title`")
             ->select("`i`.`price_{$currency}` as `price`")
-            ->select("`i`.`column_1`, `i`.`column_2`, `i`.`column_3`, `i`.`application`")
+            ->select("`i`.`column_1`, `i`.`column_2`, `i`.`column_3`, `i`.`application`, IFNULL(`i`.`is_sq`,0) as `is_sq`")
             ->select("`s`.`title` as `section`")
             ->from("`#__prc_items` as `i`")
             ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
@@ -382,6 +383,11 @@ class ProjectsModelContract extends AdminModel {
             $arr['is_factor'] = $item->is_factor;
             $arr['factor'] = (int) ($values[$item->id]['factor'] != null) ? 100 - $values[$item->id]['factor'] * 100 : 0;
             $arr['fixed'] = ($activeColumn != $values[$item->id]['columnID'] && !empty($values[$item->id]['columnID']) && !ProjectsHelper::canDo('core.admin')) ? true : false;
+            $arr['is_sq'] = $item->is_sq;
+            if ($item->is_sq)
+            {
+                $arr['stand'] = ProjectsHelper::getCatalogStandsHtml($item->id, $catalog, $item->catalogID ?? '');
+            }
             $a = 0;
             $b = 0;
             $c = 0;

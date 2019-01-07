@@ -14,6 +14,9 @@ $sum = 0;
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEM'); ?>
             </th>
             <th style="width: 10%">
+                <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER'); ?>
+            </th>
+            <th style="width: 10%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT'); ?>
             </th>
             <th style="width: 10%">
@@ -54,6 +57,9 @@ $sum = 0;
                     </td>
                     <td class="price_cost">
                         <?php echo $item['cost']; ?>
+                    </td>
+                    <td class="price_cost">
+                        <?php echo $item['stand']; ?>
                     </td>
                     <td>
                         <input
