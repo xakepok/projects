@@ -17,7 +17,7 @@ class JFormFieldRegion extends JFormFieldGroupedList
             ->from('`#__grph_cities` as `c`')
             ->leftJoin('`#__grph_regions` as `r` ON `r`.`id` = `c`.`region_id`')
             ->leftJoin('`#__grph_countries` as `s` ON `s`.`id` = `r`.`country_id`')
-            ->order("`c`.`name`")
+            ->order("`c`.`is_capital` DESC, `c`.`name`")
             ->where("`s`.`state` = 1");
         $result = $db->setQuery($query)->loadObjectList();
         $options = array();
