@@ -105,7 +105,8 @@ class ProjectsModelStat extends ListModel
                 $arr['stands'] = implode(' ', $stands);
             } else {
                 $url = JRoute::_("index.php?option=com_projects&amp;view=stat&amp;itemID={$item->itemID}");
-                $arr['title'] = (!$xls) ? JHtml::link($url, $item->item) : $item->item;
+                $options = array('class' => 'small');
+                $arr['title'] = (!$xls) ? JHtml::link($url, $item->item, $options) : $item->item;
             }
             $arr['application'] = ProjectsHelper::getApplication($item->application);
             $arr['unit'] = ProjectsHelper::getUnit($item->unit);
