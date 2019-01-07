@@ -21,6 +21,13 @@ foreach ($this->items as $i => $item) :
                 <?php echo $item['contract'];?>
             </td>
         <?php endif;?>
+        <?php
+        $projectactive = $this->state->get('filter.projectactive');
+        if (is_numeric($projectactive)) :?>
+            <td>
+                <?php echo $item['contracts'];?>
+            </td>
+        <?php endif;?>
         <td>
             <?php echo $item['region'];?>
         </td>

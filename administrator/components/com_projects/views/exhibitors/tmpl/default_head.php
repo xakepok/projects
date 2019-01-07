@@ -20,6 +20,13 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
             <?php echo JText::sprintf('COM_PROJECTS_TITLE_NEW_CONTRACT');?>
         </th>
     <?php endif;?>
+    <?php
+    $projectactive = $this->state->get('filter.projectactive');
+    if (is_numeric($projectactive)) :?>
+        <th>
+            <?php echo JText::sprintf('COM_PROJECTS_GO_FIND_CONTRACTS');?>
+        </th>
+    <?php endif;?>
     <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CITY', '`city`', $listDirn, $listOrder); ?>
     </th>
