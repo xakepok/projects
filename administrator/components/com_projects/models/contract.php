@@ -386,7 +386,7 @@ class ProjectsModelContract extends AdminModel {
             $arr['is_sq'] = $item->is_sq;
             if ($item->is_sq)
             {
-                $arr['stand'] = ProjectsHelper::getCatalogStandsHtml($item->id, $catalog, $item->catalogID ?? '');
+                $arr['stand'] = ProjectsHelper::getCatalogStandsHtml($item->id, $catalog, $values[$item->id]['catalogID'] ?? '');
             }
             $a = 0;
             $b = 0;
@@ -507,10 +507,12 @@ class ProjectsModelContract extends AdminModel {
                 if ($field == 'markup' && $value != null) $arr['markup'] = (float) (100 + $value) / 100;
                 if ($field == 'value' && $value != null) $arr['value'] = $value;
                 if ($field == 'value2' && $value != null) $arr['value2'] = $value;
+                if ($field == 'catalogID' && $value != null) $arr['catalogID'] = $value;
             }
             if (!isset($arr['markup'])) $arr['markup'] = NULL;
             if (!isset($arr['value2'])) $arr['value2'] = NULL;
             if (!isset($arr['factor'])) $arr['factor'] = NULL;
+            if (!isset($arr['catalogID'])) $arr['catalogID'] = NULL;
             if (!isset($arr['value'])) continue;
             if ($arr['value'] == 0 && $row->id != null)
             {

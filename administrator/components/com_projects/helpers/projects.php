@@ -170,7 +170,7 @@ class ProjectsHelper
 
         $attribs = 'class="inputbox"';
 
-        return JHtml::_('select.genericlist', $options, "jform[price][{$prcID}][stand]", $attribs, 'value', 'text', $selected, null, true);
+        return JHtml::_('select.genericlist', $options, "jform[price][{$prcID}][catalogID]", $attribs, 'value', 'text', $selected, null, true);
     }
 
     /**

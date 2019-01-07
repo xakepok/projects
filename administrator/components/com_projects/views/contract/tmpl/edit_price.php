@@ -36,14 +36,14 @@ $sum = 0;
         <tbody>
         <?php foreach ($this->price as $application => $sec) : ?>
             <tr>
-                <td colspan="7" class="center"
+                <td colspan="8" class="center"
                     style="font-weight: bold;"><?php echo ProjectsHelper::getApplication($application); ?></td>
             </tr>
             <?php foreach ($sec as $section => $arr) :
                 $subsum = 0;
                 ?>
                 <tr>
-                    <td colspan="7" class="center" style="font-weight: bold;"><?php echo $section; ?></td>
+                    <td colspan="8" class="center" style="font-weight: bold;"><?php echo $section; ?></td>
                 </tr>
                 <?php foreach ($arr as $i => $item) :
                 $sum += $item['sum'];
