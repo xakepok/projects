@@ -17,15 +17,6 @@
                 required="true"
         />
         <field
-                name="itemID"
-                type="Item"
-                label="COM_PROJECTS_FILTER_SELECT_ITEM"
-                description="COM_PROJECTS_FILTER_SELECT_ITEM"
-                hint="COM_PROJECTS_FILTER_SELECT_ITEM"
-                required="true"
-                class="x2"
-        />
-        <field
                 name="square"
                 type="text"
                 label="COM_PROJECTS_HEAD_ITEM_HEAD_SQUARE"

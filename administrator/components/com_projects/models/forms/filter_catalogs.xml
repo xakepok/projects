@@ -10,16 +10,6 @@
                 autocomplete="off"
                 class="js-stools-search-string"
         />
-        <field
-                name="item"
-                type="Item"
-                label="COM_PROJECTS_FILTER_SELECT_ITEM"
-                multiple="true"
-                description="COM_PROJECTS_FILTER_SELECT_ITEM"
-                hint="COM_PROJECTS_FILTER_SELECT_ITEM"
-                onchange="this.form.submit();"
-        >
-        </field>
     </fields>
     <fields name="list">
         <field

@@ -14,9 +14,6 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER', 'number', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_FILTER_ITEM', 'item', $listDirn, $listOrder); ?>
-    </th>
-    <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_ITEM_HEAD_SQUARE', 'square', $listDirn, $listOrder); ?>
     </th>
 </tr>

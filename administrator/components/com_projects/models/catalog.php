@@ -48,7 +48,7 @@ class ProjectsModelCatalog extends AdminModel {
 
     protected function prepareTable($table)
     {
-        $nulls = array('itemID'); //Поля, которые NULL
+        $nulls = array(); //Поля, которые NULL
         foreach ($nulls as $field)
         {
             if (!strlen($table->$field)) $table->$field = NULL;
