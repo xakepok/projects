@@ -136,14 +136,14 @@ class ProjectsModelScores extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
-        $contract = $this->getUserStateFromRequest($this->context . '.filter.contract', 'filter_contract', '', 'string');
-        $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor', '', 'string');
-        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project', '', 'string');
-        $currency = $this->getUserStateFromRequest($this->context . '.filter.currency', 'filter_currency');
         $this->setState('filter.state', $published);
+        $contract = $this->getUserStateFromRequest($this->context . '.filter.contract', 'filter_contract', '', 'string');
         $this->setState('filter.contract', $contract);
+        $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor', '', 'string');
         $this->setState('filter.exhibitor', $exhibitor);
+        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project', '', 'string');
         $this->setState('filter.project', $project);
+        $currency = $this->getUserStateFromRequest($this->context . '.filter.currency', 'filter_currency');
         $this->setState('filter.currency', $currency);
         parent::populateState('`s`.`id`', 'desc');
     }

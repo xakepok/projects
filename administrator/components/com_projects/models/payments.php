@@ -109,7 +109,7 @@ class ProjectsModelPayments extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("IFNULL(SUM(`amount`),0)")
+            ->select("ROUND(IFNULL(SUM(`amount`),0),2)")
             ->from("`#__prj_payments`")
             ->where("`scoreID` = {$scoreID}");
         return $db->setQuery($query)->loadResult();

@@ -26,10 +26,11 @@ class ProjectsModelScore extends AdminModel {
     {
         $pm = ListModel::getInstance('Payments', 'ProjectsModel');
         $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
-        $payments = $pm->getScorePayments($scoreID);
         $score = parent::getItem($scoreID);
+        $payments = (float) round($pm->getScorePayments($scoreID), 2);
         $contract = $cm->getItem($score->contractID);
-        if ($payments >= (float) $score->amount)
+        $score->amount = (float) round($score->amount, 2);
+        if ((float) $payments >= (float) $score->amount)
         {
             $item = $this->getItem($scoreID);
             $data = array('id' => $item->id, 'state' => 1);

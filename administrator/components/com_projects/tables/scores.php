@@ -13,6 +13,7 @@ class TableProjectsScores extends Table
 
     public function __construct(JDatabaseDriver $db)
     {
+        $this->setColumnAlias('published', 'state');
         parent::__construct('#__prj_scores', 'id', $db);
     }
 
