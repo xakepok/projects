@@ -38,12 +38,18 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_STAND'));
             <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_SCHEME_DESC'); ?>
         </th>
         <th>
+            <?php echo JText::sprintf('COM_PROJECTS_TITLE_EDIT_STAND'); ?>
+        </th>
+        <th>
             <?php echo JText::sprintf('COM_PROJECTS_TITLE_REMOVE_STAND'); ?>
         </th>
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($this->item->stands as $stand):?>
+    <?php foreach ($this->item->stands as $stand):
+        $editUrl = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand['id']}&amp;contractID={$this->item->id}&amp;return={$return}");
+        $editLink = JHtml::link($editUrl, JText::sprintf('COM_PROJECTS_TITLE_EDIT_STAND'));
+        ?>
         <form action="<?php echo $stand['action']; ?>" method="post"
               id="form_task_<?php echo $stand['id']; ?>">
             <tr id="row_stand_<?php echo $stand['id']; ?>">
@@ -73,6 +79,9 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_STAND'));
                 </td>
                 <td>
                     <?php echo $stand['scheme']; ?>
+                </td>
+                <td>
+                    <?php echo $editLink; ?>
                 </td>
                 <td class="standDel_<?php echo $stand['id']; ?>">
                     <input type="button" value="<?php echo JText::sprintf('COM_PROJECTS_TITLE_REMOVE_STAND');?>" onclick="removeStand(<?php echo $stand['id']; ?>);">

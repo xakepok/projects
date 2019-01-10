@@ -46,8 +46,9 @@ class ProjectsModelTodos extends ListModel
             ->leftJoin("`#__users` as `u2` ON `u2`.`id` = `t`.`userClose`")
             ->leftJoin("`#__users` as `u3` ON `u3`.`id` = `t`.`managerID`");
         /* Фильтр */
+        $contractID = JFactory::getApplication()->input->getInt('contractID', 0);
         $search = $this->getState('filter.search');
-        if (!empty($search))
+        if (!empty($search) && $contractID == 0)
         {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . 'OR `p`.`title_ru` LIKE ' . $search);
@@ -99,8 +100,6 @@ class ProjectsModelTodos extends ListModel
             $user = JFactory::getUser();
             $query->where("`t`.`managerID` = {$user->id}");
         }
-        //Фильтруем по сделке из URL
-        $contractID = JFactory::getApplication()->input->getInt('contractID', 0);
         if ($contractID !== 0)
         {
             $query->where("`t`.`contractID` = {$contractID}");
