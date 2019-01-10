@@ -149,11 +149,11 @@ class ProjectsModelContracts extends ListModel
             $amount = $item->$amount_field;
             $payments = $item->payments;
             $debt = $item->$debt_field;
-            $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", number_format($amount, 0, '.', " "), $item->currency);
+            $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", number_format($amount, 2, '.', " "), $item->currency);
             $arr['amount_only'] = $amount; //Только цена
             $paid = (float) $amount - (float) $debt;
-            $arr['paid'] = sprintf(("%s %s"), number_format($paid, 0, '.', " "), $item->currency); //Только цена
-            $arr['debt'] = ($format != 'html') ? $debt : sprintf("%s %s", number_format($debt, 0, '.', " "), $item->currency);
+            $arr['paid'] = sprintf(("%s %s"), number_format($paid, 2, '.', " "), $item->currency); //Только цена
+            $arr['debt'] = ($format != 'html') ? $debt : sprintf("%s %s", number_format($debt, 2, '.', " "), $item->currency);
             $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}&amp;return={$return}");
             if (ProjectsHelper::canDo('core.accountant') && $debt > 0) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE')));
             if ($format != 'html') $arr['debt'] = $debt;
@@ -180,16 +180,16 @@ class ProjectsModelContracts extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');
-        $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor');
-        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
-        $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status');
-        $currency = $this->getUserStateFromRequest($this->context . '.filter.currency', 'filter_currency');
         $this->setState('filter.search', $search);
+        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');
         $this->setState('filter.project', $project);
+        $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor');
         $this->setState('filter.exhibitor', $exhibitor);
+        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
         $this->setState('filter.manager', $manager);
+        $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status');
         $this->setState('filter.status', $status);
+        $currency = $this->getUserStateFromRequest($this->context . '.filter.currency', 'filter_currency');
         $this->setState('filter.currency', $currency);
         parent::populateState('`plan_dat`', 'asc');
     }
