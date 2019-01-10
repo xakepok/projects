@@ -38,6 +38,18 @@ class ProjectsHelper
         }
     }
 
+    /**
+     * Преобразует дату в нужный формат
+     * @param string $dat Строка с датой в любом формате
+     * @param string|null $format Необходимый формат
+     * @return string
+     * @since 1.0.5.5
+     */
+    public static function setDate(string $dat, $format = "Y-m-d"): string
+    {
+        $d = JDate::getInstance($dat);
+        return $d->format($format);
+    }
 
     /**
      * Загружает файл из формы в указанную директорию

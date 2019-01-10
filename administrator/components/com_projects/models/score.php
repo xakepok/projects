@@ -16,26 +16,45 @@ class ProjectsModelScore extends AdminModel {
         return $item;
     }
 
+    public function save($data)
+    {
+        $dat = new DateTime($data['dat']);
+        $data['dat'] = $dat->format("Y-m-d");
+        $s = parent::save($data);
+        $id = $data['id'] ?? $this->getTable()->getDbo()->insertid();
+        $this->checkState($id);
+        return $s;
+    }
+
     /**
      * Проверяет сумму по счёту, обновляет состояние счёта и создаёт задание в планировщике
+     * Необходимо вызывать метод ПОСЛЕ совершения транзакции с таблицей счетов или платежей
      * @param int $scoreID ID сделки
-     * @throws Exception
+     * @return void
      * @since 1.3.0.9
+     * @throws Exception
      */
     public function checkState(int $scoreID): void
     {
         $pm = ListModel::getInstance('Payments', 'ProjectsModel');
         $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
-        $score = parent::getItem($scoreID);
+        $score = $this->getItem($scoreID);
         $payments = (float) round($pm->getScorePayments($scoreID), 2);
         $contract = $cm->getItem($score->contractID);
         $score->amount = (float) round($score->amount, 2);
-        if ((float) $payments >= (float) $score->amount)
+        $item = parent::getItem($scoreID);
+        if ($score->amount > $payments)
+        {
+            $data = array('id' => $item->id, 'state' => 0);
+            $this->getTable()->bind($data);
+            parent::save($data);
+        }
+        if ($payments >= $score->amount)
         {
             $item = $this->getItem($scoreID);
             $data = array('id' => $item->id, 'state' => 1);
             $this->getTable()->bind($data);
-            $this->save($data);
+            parent::save($data);
             if ($payments > $score->amount)
             {
                 $data = array();
