@@ -429,8 +429,12 @@ class ProjectsHelper
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("*")
+            ->select("`s`.`id`, `s`.`tip`, `s`.`sq`, `s`.`freeze`, `s`.`comment`, `s`.`status`, `s`.`scheme`")
+            ->select("`c`.`number`")
+            ->select("`i`.`title_ru` as `item`")
             ->from("`#__prj_stands` as `s`")
+            ->leftJoin("`#__prj_catalog` as `c` ON `c`.`id` = `s`.`catalogID`")
+            ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `s`.`itemID`")
             ->where("`s`.`contractID` = {$contractID}");
         return $db->setQuery($query)->loadObjectList();
     }

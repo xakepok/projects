@@ -23,6 +23,14 @@
                 onchange="setSquare()"
         />
         <field
+                name="itemID"
+                type="Item"
+                label="COM_PROJECTS_MENU_ITEM"
+                description="COM_PROJECTS_FILTER_ITEM"
+                autocomplete="off"
+                class="x2"
+        />
+        <field
                 name="sq"
                 type="text"
                 label="COM_PROJECTS_HEAD_ITEM_HEAD_SQUARE"
@@ -62,6 +70,17 @@
             <option value="1">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_1</option>
             <option value="2">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_2</option>
             <option value="3">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_3</option>
+        </field>
+        <field
+                name="show"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                default="1"
+                label="COM_PROJECTS_HEAD_CONTRACT_STAND_SHOW"
+                description="COM_PROJECTS_HEAD_CONTRACT_STAND_SHOW_DESC"
+        >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
         </field>
         <field
                 name="comment"

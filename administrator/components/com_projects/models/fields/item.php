@@ -31,7 +31,7 @@ class JFormFieldItem extends JFormFieldList
                 $session->clear('projectID');
             }
         }
-        if ($view == 'catalogs' || $view == 'catalog')
+        if ($view == 'catalogs' || $view == 'catalog' || $view == 'stand')
         {
             $query->where("`i`.`is_sq` = 1");
         }

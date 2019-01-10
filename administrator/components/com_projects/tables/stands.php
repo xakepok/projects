@@ -7,11 +7,13 @@ class TableProjectsStands extends Table
     var $id = null;
     var $catalogID = null;
     var $contractID = null;
+    var $itemID = null;
     var $sq = null;
     var $number = null;
     var $tip = null;
     var $freeze = null;
     var $comment = null;
+    var $show = null;
     var $status = null;
     var $scheme = null;
 

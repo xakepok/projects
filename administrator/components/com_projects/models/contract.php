@@ -48,12 +48,16 @@ class ProjectsModelContract extends AdminModel {
         $cid = $item->id;
         $items = ProjectsHelper::getContractStands($cid);
         $result = array();
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contract&layout=edit&id={$item->id}");
         foreach ($items as $item) {
             $arr = array();
             $arr['id'] = $item->id;
-            $arr['number'] = $item->number;
+            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$item->id}&amp;return={$return}");
+            $arr['number'] = JHtml::link($url, $item->number);
             $arr['freeze'] = $item->freeze;
             $arr['comment'] = $item->comment;
+            $arr['sq'] = sprintf("%s %s", $item->sq, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
+            $arr['item'] = $item->item;
             $arr['scheme'] = ($item->scheme != null) ? JHtml::link("/images/contracts/{$cid}/{$item->scheme}", $item->scheme, array('target' => 'blank')) : '';
             $arr['tip'] = ProjectsHelper::getStandType($item->tip);
             $arr['status'] = ProjectsHelper::getStandStatus($item->status);
