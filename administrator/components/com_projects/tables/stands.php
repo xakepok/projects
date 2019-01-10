@@ -5,7 +5,9 @@ defined('_JEXEC') or die;
 class TableProjectsStands extends Table
 {
     var $id = null;
+    var $catalogID = null;
     var $contractID = null;
+    var $sq = null;
     var $number = null;
     var $tip = null;
     var $freeze = null;
