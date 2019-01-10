@@ -30,6 +30,7 @@
                 description="COM_PROJECTS_HEAD_PAYMENT_DATE_DESC"
                 autocomplete="off"
                 required="true"
+                format="%d.%m.%Y"
                 class="x2"
         />
         <field

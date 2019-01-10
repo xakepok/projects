@@ -8,6 +8,15 @@ class ProjectsModelProject extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    public function save($data)
+    {
+        $dat = new DateTime($data['date_start']);
+        $data['date_start'] = $dat->format("Y-m-d");
+        $dat = new DateTime($data['date_end']);
+        $data['date_end'] = $dat->format("Y-m-d");
+        return parent::save($data);
+    }
+
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
