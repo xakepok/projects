@@ -28,6 +28,7 @@ class ProjectsModelContracts extends ListModel
                 'debt_usd',
                 'debt_eur',
                 'payments',
+                'stand',
             );
         }
         parent::__construct($config);
@@ -43,6 +44,7 @@ class ProjectsModelContracts extends ListModel
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
             ->select("`u`.`name` as `manager`, (SELECT MIN(`dat`) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan_dat`")
             ->select("(SELECT COUNT(*) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan`")
+            ->select("(SELECT `number` FROM `#__prj_contract_stands` WHERE `contractID`=`c`.`id` AND `show`=1 LIMIT 1) as `stand`")
             ->select("`a`.`amount_rub`, `a`.`amount_usd`, `a`.`amount_eur`")
             ->select("`pay`.`payments`")
             ->select("IFNULL(`a`.`amount_rub`,0)-IFNULL(`pay`.`payments`,0) as `debt_rub`, IFNULL(`a`.`amount_usd`,0)-IFNULL(`pay`.`payments`,0) as `debt_usd`, IFNULL(`a`.`amount_eur`,0)-IFNULL(`pay`.`payments`,0) as `debt_eur`")
@@ -152,6 +154,7 @@ class ProjectsModelContracts extends ListModel
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             if ($format == 'html') $arr['plan'] = $link;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
+            $arr['stand'] = $item->stand;
             $amount_field = "amount_{$item->currency}";
             $debt_field = "debt_{$item->currency}";
             $amount = $item->$amount_field;

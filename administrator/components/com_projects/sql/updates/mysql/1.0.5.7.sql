@@ -16,3 +16,13 @@ WHERE `scheme` = '-1';
 ALTER TABLE `#__prj_stands`
   ADD `show` TINYINT NOT NULL DEFAULT '1' COMMENT 'Показывать в списке стендов' AFTER `status` ,
   ADD INDEX (`show`);
+CREATE VIEW `#__prj_contract_stands` AS
+SELECT `s`.`id`,
+       `contractID`,
+       `s`.`number`,
+       `s`.`sq`,
+       `s`.`show`
+FROM `#__prj_stands` as `s`
+       LEFT JOIN `#__prj_catalog` as `c` ON `c`.`id` = `s`.`catalogID`
+WHERE `s`.`catalogID` IS NOT NULL
+  AND `s`.`itemID` IS NOT NULL;
