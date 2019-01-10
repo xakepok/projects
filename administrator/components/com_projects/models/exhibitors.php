@@ -16,6 +16,7 @@ class ProjectsModelExhibitors extends ListModel
                 '`title_en`', '`title_en`',
                 '`city`', '`city`',
                 'projectinactive',
+                'projectactive',
                 'search',
                 'activity',
                 'city',
@@ -62,6 +63,11 @@ class ProjectsModelExhibitors extends ListModel
         if (is_numeric($projectinactive)) {
             $query->where("`e`.`id` NOT IN (SELECT DISTINCT `expID` FROM `#__prj_contracts` WHERE `prjID` = {$projectinactive})");
         }
+        // Фильтруем проектам, в которых экспонент учавствует
+        $projectactive = $this->getState('filter.projectactive');
+        if (is_numeric($projectactive)) {
+            $query->where("`e`.`id` IN (SELECT DISTINCT `expID` FROM `#__prj_contracts` WHERE `prjID` = {$projectactive})");
+        }
         // Фильтруем по видам деятельности.
         $act = $this->getState('filter.activity');
         if (is_numeric($act)) {
@@ -97,6 +103,7 @@ class ProjectsModelExhibitors extends ListModel
         $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=exhibitors");
         $result = array();
         $projectinactive = $this->getState('filter.projectinactive');
+        $projectactive = $this->getState('filter.projectactive');
         if (is_numeric($projectinactive))
         {
             $model = AdminModel::getInstance('Project', 'ProjectsModel');
@@ -114,6 +121,11 @@ class ProjectsModelExhibitors extends ListModel
                 $url = JRoute::_("index.php?option=com_projects&amp;task=contract.add&amp;exhibitorID={$item->id}&amp;projectID={$projectinactive}&amp;return={$return}");
                 $arr['contract'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_TITLE_NEW_CONTRACT_WITH_PROJECT', $project->title_ru));
             }
+            if (is_numeric($projectactive))
+            {
+                $url = JRoute::_("index.php?option=com_projects&amp;view=contracts&amp;exhibitorID={$item->id}&amp;projectID={$projectactive}");
+                $arr['contracts'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_GO_FIND_CONTRACTS'));
+            }
             $result[] = $arr;
         }
         return $result;
@@ -123,13 +135,15 @@ class ProjectsModelExhibitors extends ListModel
     protected function populateState($ordering = '`title_ru_short`', $direction = 'asc')
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-        $activity = $this->getUserStateFromRequest($this->context . '.filter.activity', 'filter_activity', '', 'string');
-        $city = $this->getUserStateFromRequest($this->context . '.filter.city', 'filter_city', '', 'string');
-        $projectinactive = $this->getUserStateFromRequest($this->context . '.filter.projectinactive', 'filter_projectinactive', '', 'string');
         $this->setState('filter.search', $search);
+        $activity = $this->getUserStateFromRequest($this->context . '.filter.activity', 'filter_activity', '', 'string');
         $this->setState('filter.state', $activity);
+        $city = $this->getUserStateFromRequest($this->context . '.filter.city', 'filter_city', '', 'string');
         $this->setState('filter.city', $city);
+        $projectinactive = $this->getUserStateFromRequest($this->context . '.filter.projectinactive', 'filter_projectinactive', '', 'string');
         $this->setState('filter.projectinactive', $projectinactive);
+        $projectactive = $this->getUserStateFromRequest($this->context . '.filter.projectactive', 'filter_$projectactive', '', 'string');
+        $this->setState('filter.projectactive', $projectactive);
         parent::populateState('`title_ru_short`', 'asc');
     }
 
@@ -139,6 +153,7 @@ class ProjectsModelExhibitors extends ListModel
         $id .= ':' . $this->getState('filter.activity');
         $id .= ':' . $this->getState('filter.city');
         $id .= ':' . $this->getState('filter.projectinactive');
+        $id .= ':' . $this->getState('filter.projectactive');
         return parent::getStoreId($id);
     }
 }

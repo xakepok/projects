@@ -135,7 +135,7 @@ function getSum(id) {
     var b = 0;
     var c = 0;
     var field = parseFloat(document.querySelector("#price_" + id).dataset.cost);
-    var value = parseInt(document.querySelector("#price_" + id).value);
+    var value = parseFloat(document.querySelector("#price_" + id).value);
     var a = field * value;
     field = document.querySelector("#value2_" + id);
     if (field !== null)

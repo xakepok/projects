@@ -45,7 +45,11 @@ function updateTodo(id) {
         })
         .then(function (text) {
             var td = document.querySelector('.resultTodo_' + id);
-            td.textContent = text.data.dat + ": " + text.data.user+ " " + result;
+            td.textContent = result;
+            td = document.querySelector('.resultTodoDat_' + id);
+            td.textContent = text.data.dat;
+            td = document.querySelector('.resultTodoClose_' + id);
+            td.textContent = text.data.user;
             td = document.querySelector('.resultTodoState_' + id);
             td.textContent = 'Выполнена';
         })

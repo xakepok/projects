@@ -1,7 +1,7 @@
 <?php
 // Запрет прямого доступа.
 defined('_JEXEC') or die;
-$ii = 0;
+$ii = JFactory::getApplication()->input->getInt('limitstart', 0);
 foreach ($this->items as $i => $item) :
     $canChange = JFactory::getUser()->authorise('core.edit.state', 'com_projects.todo.' . $item['id']);
     ?>
@@ -52,13 +52,13 @@ foreach ($this->items as $i => $item) :
             <td>
                 <?php echo $item['manager']; ?>
             </td>
-            <td>
+            <td class="resultTodoClose_<?php echo $item['id']; ?>">
                 <?php echo $item['close']; ?>
             </td>
             <td>
                 <?php echo $item['dat_open']; ?>
             </td>
-            <td>
+            <td class="resultTodoDat_<?php echo $item['id']; ?>">
                 <?php echo $item['dat_close']; ?>
             </td>
         <?php endif; ?>

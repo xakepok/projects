@@ -13,7 +13,8 @@ class ProjectsModelContracts extends ListModel
                 'c.dat',
                 'project',
                 'manager',
-                'exhibitor',  'title_ru_short',
+                'exhibitor',
+                'title_ru_short',
                 'status',
                 'search',
                 'plan',
@@ -98,6 +99,13 @@ class ProjectsModelContracts extends ListModel
         if ($id != 0)
         {
             $query->where("`c`.`id` = {$id}");
+        }
+        /* Фильтр по ID экспонента и проекту (только через GET) */
+        $exhibitor = JFactory::getApplication()->input->getInt('exhibitorID', 0);
+        $project = JFactory::getApplication()->input->getInt('projectID', 0);
+        if ($exhibitor != 0 && $project != 0)
+        {
+            $query->where("`c`.`prjID` = {$project} AND `c`.`expID` = {$exhibitor}");
         }
 
         if (!ProjectsHelper::canDo('core.general') && !ProjectsHelper::canDo('core.accountant'))

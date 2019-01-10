@@ -134,7 +134,55 @@ class ProjectsHelper
             ->select("`amount_{$currency}`")
             ->from("`#__prj_contract_amounts`")
             ->where("`contractID` = {$contractID}");
+
         return (float) 0 + $db->setQuery($query)->loadResult();
+    }
+
+    /**
+     * Возвращает массив каталога со стендами
+     * @param int $contractID ID сделки
+     * @since 1.0.5.5
+     * @return array массив со стендами
+     */
+    public static function getCatalogStands(int $contractID): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`id` as `standID`, `number`, `square`-IFNULL((SELECT SUM(`value`) FROM `#__prj_contract_items` WHERE `contractID` = {$contractID} AND `catalogID` = `standID`),0) as `sq`")
+            ->from("`#__prj_catalog`")
+            ->order("`number`");
+        $result = $db->setQuery($query)->loadObjectList();
+
+        $options = array();
+
+        foreach ($result as $item)
+        {
+            $title = sprintf("№%s (%s %s)", $item->number, $item->sq, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
+            $options[] = JHtml::_('select.option', $item->standID, $title);
+        }
+
+        return $options;
+    }
+
+    /**
+     * Возвращает список стендов в виде списка select
+     * @param string $prcID ID пункта прайса
+     * @param array $catalog массив со всеми стендами
+     * @param string $selected номер активного стенда для текущего пункта
+     * @since 1.0.5.5
+     * @return string
+     */
+    public static function getCatalogStandsHtml(string $prcID, array $catalog, string $selected):string
+    {
+        $options = array();
+
+        $options[] = JHtml::_('select.option', '', 'COM_PROJECTS_FILTER_SELECT_STAND_NUMBER');
+        $options = array_merge($options, $catalog);
+
+        $attribs = 'class="inputbox"';
+
+        return JHtml::_('select.genericlist', $options, "jform[price][{$prcID}][catalogID]", $attribs, 'value', 'text', $selected, null, true);
     }
 
     /**

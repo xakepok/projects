@@ -35,6 +35,15 @@
             >
             <option value="">COM_PROJECTS_FILTER_SELECT_PROJECT_INACTIVE</option>
         </field>
+        <field
+            name="projectactive"
+            type="Project"
+            label="COM_PROJECTS_FILTER_SELECT_PROJECT_ACTIVE"
+            description="COM_PROJECTS_FILTER_SELECT_PROJECT_ACTIVE"
+            onchange="this.form.submit();"
+            >
+            <option value="">COM_PROJECTS_FILTER_SELECT_PROJECT_ACTIVE</option>
+        </field>
     </fields>
     <fields name="list">
         <field
