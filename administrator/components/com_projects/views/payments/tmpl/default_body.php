@@ -12,25 +12,25 @@ foreach ($this->items['items'] as $i => $item) :
             <?php echo ++$ii; ?>
         </td>
         <td>
-            <?php echo $item['contract'];?>
-        </td>
-        <td>
             <?php echo $item['pp'];?>
         </td>
         <td>
-            <?php echo $item['score'];?>
+            <?php echo $item['amount'];?>
+        </td>
+        <td>
+            <?php echo $item['contract'];?>
         </td>
         <td>
             <?php echo $item['dat'];?>
+        </td>
+        <td>
+            <?php echo $item['score'];?>
         </td>
         <td>
             <?php echo $item['exp'];?>
         </td>
         <td>
             <?php echo $item['project'];?>
-        </td>
-        <td>
-            <?php echo $item['amount'];?>
         </td>
         <td>
             <?php echo $item['author'];?>

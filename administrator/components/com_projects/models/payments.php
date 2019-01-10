@@ -150,7 +150,7 @@ class ProjectsModelPayments extends ListModel
             $score = JText::sprintf('COM_PROJECTS_HEAD_SCORE_NUM_AMOUNT_FROM', $item->score, $item->score_amount, $item->currency, $item->score_dat);
             $arr['score'] = (!ProjectsHelper::canDo('core.accountant')) ? $score : JHtml::link($url, $score);
             $url = JRoute::_("index.php?option=com_projects&amp;task=payment.edit&amp;id={$item->id}");
-            $arr['pp'] = (!ProjectsHelper::canDo('core.accountant')) ? $item->pp : JHtml::link($url, $item->pp);
+            $arr['pp'] = (!ProjectsHelper::canDo('core.accountant')) ? JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_PP_TITLE', $item->pp) : JHtml::link($url, JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_PP_TITLE', $item->pp));
             $number = (!empty($item->number)) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number) : JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
             $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
             $arr['contract'] = JHtml::link($url,$number);
