@@ -15,6 +15,9 @@ foreach ($this->items['items'] as $i => $item) :
             <?php echo $item['number']; ?>
         </td>
         <td>
+            <?php echo $item['dat']; ?>
+        </td>
+        <td>
             <?php echo $this->items['stands'][$item['id']]; ?>
         </td>
         <td>
@@ -28,9 +31,6 @@ foreach ($this->items['items'] as $i => $item) :
         </td>
         <td>
             <?php echo $item['plan']; ?>
-        </td>
-        <td>
-            <?php echo $item['dat']; ?>
         </td>
         <?php if (ProjectsHelper::canDo('core.general')): ?>
             <td>
