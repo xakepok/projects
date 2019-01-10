@@ -147,7 +147,8 @@ class ProjectsModelTodos extends ListModel
             $arr['dat_open'] = $item->dat_open;
             $arr['expID'] = $item->expID;
             $arr['dat_close'] = $item->dat_close ?? JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_NOT_CLOSE');
-            $arr['task'] = $item->task;
+            $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$item->contract}");
+            $arr['task'] = JHtml::link($url, $item->task);
             $arr['result'] = ($arr['expired']) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : $item->result;
             $arr['open'] = $item->open;
             $arr['manager'] = $item->manager;
