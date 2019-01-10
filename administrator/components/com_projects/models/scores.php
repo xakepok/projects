@@ -114,7 +114,7 @@ class ProjectsModelScores extends ListModel
             $arr['doPayment'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=payment.add&amp;scoreID={$item->id}&amp;return={$return}"), JText::sprintf('COM_PROJECTS_ACTION_TODO_PAYMENT'));
             $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr['exp'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}"), $exp);
-            $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->projectID : JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}"), $item->project);
+            $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->project : JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}"), $item->project);
             $arr['amount'] = sprintf("%s %s", number_format($item->amount, 2, '.', " "), $item->currency);
             $arr['state'] = $item->state;
             $payments = $pm->getScorePayments($item->id);
