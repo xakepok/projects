@@ -188,26 +188,6 @@ class ProjectsHelper
     }
 
     /**
-     * Возвращает список стендов в виде списка select
-     * @param string $prcID ID пункта прайса
-     * @param array $catalog массив со всеми стендами
-     * @param string $selected номер активного стенда для текущего пункта
-     * @since 1.0.5.5
-     * @return string
-     */
-    public static function getCatalogStandsHtml(string $prcID, array $catalog, string $selected):string
-    {
-        $options = array();
-
-        $options[] = JHtml::_('select.option', '', 'COM_PROJECTS_FILTER_SELECT_STAND_NUMBER');
-        $options = array_merge($options, $catalog);
-
-        $attribs = 'class="inputbox"';
-
-        return JHtml::_('select.genericlist', $options, "jform[price][{$prcID}][catalogID]", $attribs, 'value', 'text', $selected, null, true);
-    }
-
-    /**
      * Возвращает валюту сделки
      * @param int $contractID ID сделки
      * @return string

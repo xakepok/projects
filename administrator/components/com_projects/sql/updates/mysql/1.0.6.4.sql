@@ -6,5 +6,12 @@ select `s`.`id`         AS `id`,
        `s`.`itemID`     as `itemID`,
        `s`.`show`       AS `show`
 from (`#__prj_stands` `s`
-            left join `#__prj_catalog` `c` on ((`c`.`id` = `s`.`catalogID`)))
+       left join `#__prj_catalog` `c` on ((`c`.`id` = `s`.`catalogID`)))
 where ((`s`.`catalogID` is not null) and (`s`.`itemID` is not null));
+alter table `#__prj_contract_items`
+  drop foreign key `#__prj_contract_items_ibfk_1`;
+alter table `#__prj_contract_items`
+  drop foreign key `#__prj_contract_items_ibfk_3`;
+drop index `catalogID` on `#__prj_contract_items`;
+alter table `#__prj_contract_items`
+  drop column `catalogID`;

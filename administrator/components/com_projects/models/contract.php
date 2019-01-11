@@ -418,7 +418,7 @@ class ProjectsModelContract extends AdminModel {
             {
                 $c = $a * (1 - $values[$item->id]['factor']);
             }
-            $arr['sum'] = round($a + $b - $c, 2);
+            $arr['sum'] = number_format((float) round($a + $b - $c, 2), 2, '.', ' ');
             if (!isset($result[$item->application][$item->section])) $result[$item->application][$item->section] = array();
             //if (!isset($result[$item->section])) $result[$item->section] = array();
             $result[$item->application][$item->section][] = $arr;
@@ -518,12 +518,10 @@ class ProjectsModelContract extends AdminModel {
                 if ($field == 'markup' && $value != null) $arr['markup'] = (float) (100 + $value) / 100;
                 if ($field == 'value' && $value != null) $arr['value'] = $value;
                 if ($field == 'value2' && $value != null) $arr['value2'] = $value;
-                if ($field == 'catalogID' && $value != null) $arr['catalogID'] = $value;
             }
             if (!isset($arr['markup'])) $arr['markup'] = NULL;
             if (!isset($arr['value2'])) $arr['value2'] = NULL;
             if (!isset($arr['factor'])) $arr['factor'] = NULL;
-            if (!isset($arr['catalogID'])) $arr['catalogID'] = NULL;
             if (!isset($arr['value'])) continue;
             if ($arr['value'] == 0 && $row->id != null)
             {
