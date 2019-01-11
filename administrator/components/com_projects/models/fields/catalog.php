@@ -22,7 +22,7 @@ class JFormFieldCatalog extends JFormFieldList
 
         foreach ($result as $item) {
             $title = sprintf("№%s (%s %s)", $item->number, $item->square, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
-            $arr = array('data-square' => $item->square);
+            $arr = array('data-square' => $item->square, 'data-num' => $item->number);
             $params = array('attr' => $arr, 'option.attr' => 'optionattr');
             $options[] = JHtml::_('select.option', $item->id, $title, $params);
         }

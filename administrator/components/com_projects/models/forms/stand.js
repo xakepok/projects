@@ -7,6 +7,7 @@ window.onload = function () {
     var url = new URL(url_string);
     var id = url.searchParams.get("id");
     if (id === undefined) setSquare();
+    copyNum();
 };
 function setSquare() {
     var field = document.getElementById("jform_catalogID");
@@ -27,4 +28,16 @@ function setImg() {
 function upper() {
     var field = document.querySelector("#jform_number");
     field.value = field.value.toUpperCase();
+}
+function copyNum() {
+    var field = document.querySelector('#jform_catalogID').options;
+    var num = document.querySelector("#jform_number").value;
+    var index = 0;
+    for (var i=0; i < field.length; i++)
+    {
+        var attrNum = field[i].getAttribute('data-num');
+        if (attrNum === num) index = i;
+    }
+    document.querySelector('#jform_catalogID').selectedIndex = index;
+    console.log('Transfer complete. Index: ', index);
 }

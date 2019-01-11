@@ -31,6 +31,20 @@
                 class="x2"
         />
         <field
+                name="tip"
+                type="list"
+                label="COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE"
+                description="COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_DESC"
+                class="x2"
+                required="true"
+                size="1"
+        >
+            <option value="0">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_0</option>
+            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_1</option>
+            <option value="2">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_2</option>
+            <option value="3">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_3</option>
+        </field>
+        <field
                 name="sq"
                 type="text"
                 label="COM_PROJECTS_HEAD_ITEM_HEAD_SQUARE"
@@ -39,9 +53,14 @@
                 class="x2"
         />
         <field
+                name="brk1"
+                type="spacer"
+                label=""
+                />
+        <field
                 name="number"
                 type="text"
-                label="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER"
+                label="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_OLD"
                 description="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_DESC"
                 hint="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_HINT"
                 autocomplete="off"
@@ -57,31 +76,6 @@
                 autocomplete="off"
                 class="x2"
         />
-        <field
-                name="tip"
-                type="list"
-                label="COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE"
-                description="COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_DESC"
-                class="x2"
-                required="true"
-                size="1"
-        >
-            <option value="0">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_0</option>
-            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_1</option>
-            <option value="2">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_2</option>
-            <option value="3">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_3</option>
-        </field>
-        <field
-                name="show"
-                type="radio"
-                class="btn-group btn-group-yesno"
-                default="1"
-                label="COM_PROJECTS_HEAD_CONTRACT_STAND_SHOW"
-                description="COM_PROJECTS_HEAD_CONTRACT_STAND_SHOW_DESC"
-        >
-            <option value="0">JNO</option>
-            <option value="1">JYES</option>
-        </field>
         <field
                 name="comment"
                 type="text"
@@ -117,5 +111,21 @@
                 default=""
                 onchange="setImg()"
         />
+        <field
+                name="brk2"
+                type="spacer"
+                label=""
+        />
+        <field
+                name="show"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                default="1"
+                label="COM_PROJECTS_HEAD_CONTRACT_STAND_SHOW"
+                description="COM_PROJECTS_HEAD_CONTRACT_STAND_SHOW_DESC"
+        >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
     </fieldset>
 </form>
