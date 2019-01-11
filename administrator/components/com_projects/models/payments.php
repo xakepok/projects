@@ -171,16 +171,16 @@ class ProjectsModelPayments extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', '', 'string');
-        $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor', '', 'string');
-        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project', '', 'string');
-        $score = $this->getUserStateFromRequest($this->context . '.filter.score', 'filter_score', '', 'string');
-        $currency = $this->getUserStateFromRequest($this->context . '.filter.currency', 'filter_currency');
-        $dat = $this->getUserStateFromRequest($this->context . '.filter.dat', 'filter_dat', '', 'string');
         $this->setState('filter.search', $search);
+        $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor', '', 'string');
         $this->setState('filter.exhibitor', $exhibitor);
+        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project', '', 'string');
         $this->setState('filter.project', $project);
+        $score = $this->getUserStateFromRequest($this->context . '.filter.score', 'filter_score', '', 'string');
         $this->setState('filter.score', $score);
+        $currency = $this->getUserStateFromRequest($this->context . '.filter.currency', 'filter_currency');
         $this->setState('filter.currency', $currency);
+        $dat = $this->getUserStateFromRequest($this->context . '.filter.dat', 'filter_dat', '', 'string');
         $this->setState('filter.dat', $dat);
         parent::populateState('`pm`.`dat`', 'desc');
     }
