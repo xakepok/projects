@@ -154,7 +154,7 @@ class ProjectsModelContracts extends ListModel
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             if ($format == 'html') $arr['plan'] = $link;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            $arr['stand'] = $item->stand;
+            $arr['stand'] = $item->stand ?? "<span style='color: red;'>!!!</span>";
             $amount_field = "amount_{$item->currency}";
             $debt_field = "debt_{$item->currency}";
             $amount = $item->$amount_field;

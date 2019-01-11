@@ -384,7 +384,7 @@ class ProjectsHelper
      */
     public static function getContractScores(int $contractID): array
     {
-        $db = JFactory::getDbo();
+        $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
             ->select("`id`, DATE_FORMAT(`dat`,'%d.%m.%Y') as `dat`, `number`, `amount`, `state`")
@@ -401,7 +401,7 @@ class ProjectsHelper
      */
     public static function getContractPayments(int $contractID): array
     {
-        $db = JFactory::getDbo();
+        $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
             ->select("DATE_FORMAT(`p`.`dat`,'%d.%m.%Y') as `dat`, `p`.`scoreID`, `p`.`pp`, `p`.`amount`")
