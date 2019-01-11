@@ -14,9 +14,6 @@ $sum = 0;
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEM'); ?>
             </th>
             <th style="width: 10%">
-                <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER'); ?>
-            </th>
-            <th style="width: 10%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT'); ?>
             </th>
             <th style="width: 10%">
@@ -36,14 +33,14 @@ $sum = 0;
         <tbody>
         <?php foreach ($this->price as $application => $sec) : ?>
             <tr>
-                <td colspan="8" class="center"
+                <td colspan="7" class="center"
                     style="font-weight: bold;"><?php echo ProjectsHelper::getApplication($application); ?></td>
             </tr>
             <?php foreach ($sec as $section => $arr) :
                 $subsum = 0;
                 ?>
                 <tr>
-                    <td colspan="8" class="center" style="font-weight: bold;"><?php echo $section; ?></td>
+                    <td colspan="7" class="center" style="font-weight: bold;"><?php echo $section; ?></td>
                 </tr>
                 <?php foreach ($arr as $i => $item) :
                 $sum += $item['sum'];
@@ -57,9 +54,6 @@ $sum = 0;
                     </td>
                     <td class="price_cost">
                         <?php echo $item['cost']; ?>
-                    </td>
-                    <td class="price_cost">
-                        <?php echo $item['stand']; ?>
                     </td>
                     <td>
                         <input

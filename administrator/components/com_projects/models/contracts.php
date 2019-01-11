@@ -130,6 +130,7 @@ class ProjectsModelContracts extends ListModel
         $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'debt' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'payments' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
         $ids = array();
         $format = JFactory::getApplication()->input->getString('format', 'html');
+        $badStands = ProjectsHelper::getStandHandNumber();
         $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contracts");
         foreach ($items as $item) {
             $ids[] = $item->id;
@@ -154,7 +155,8 @@ class ProjectsModelContracts extends ListModel
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             if ($format == 'html') $arr['plan'] = $link;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            $arr['stand'] = $item->stand ?? "<span style='color: red;'>!!!</span>";
+            $alarm = (!in_array($item->id, $badStands)) ? '' : "<span style='color: red;'>!!!</span>";
+            $arr['stand'] = $item->stand ?? $alarm;
             $amount_field = "amount_{$item->currency}";
             $debt_field = "debt_{$item->currency}";
             $amount = $item->$amount_field;

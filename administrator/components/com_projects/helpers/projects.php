@@ -39,16 +39,20 @@ class ProjectsHelper
     }
 
     /**
-     * Преобразует дату в нужный формат
-     * @param string $dat Строка с датой в любом формате
-     * @param string|null $format Необходимый формат
-     * @return string
-     * @since 1.0.5.5
+     * Возвращает массив со списком ID сделок, у которых номер стенда указан вручную
+     * @return array
+     * @since 1.0.6.0
      */
-    public static function setDate(string $dat, $format = "Y-m-d"): string
+    public static function getStandHandNumber(): array
     {
-        $d = JDate::getInstance($dat);
-        return $d->format($format);
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("DISTINCT `contractID`")
+            ->from("`#__prj_stands`")
+            ->where("`catalogID` IS NULL")
+            ->where("`itemID` IS NULL");
+        return $db->setQuery($query)->loadColumn() ?? array();
     }
 
     /**
