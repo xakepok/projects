@@ -1,4 +1,4 @@
-create or replace view #__prj_contract_stands as
+create or replace view `#__prj_contract_stands` as
 select `s`.`id`         AS `id`,
        `s`.`contractID` AS `contractID`,
        `c`.`number`     AS `number`,
