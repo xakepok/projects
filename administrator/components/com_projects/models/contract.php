@@ -348,10 +348,10 @@ class ProjectsModelContract extends AdminModel {
     private function getPriceItems(int $priceID, int $columnID, array $values, string $currency): array
     {
         $item = parent::getItem();
-        $activeColumn = ProjectsHelper::getActivePriceColumn($item->id);
         $db =& $this->getDbo();
-        $catalog = ProjectsHelper::getCatalogStands($item->id);
+        $activeColumn = ProjectsHelper::getActivePriceColumn($item->id);
         $squares = ProjectsHelper::getStandsSquare($item->id);
+        $stands = ProjectsHelper::getContractStands($item->id);
         $result = array();
         $query = $db->getQuery(true);
         $query
@@ -366,6 +366,7 @@ class ProjectsModelContract extends AdminModel {
             ->where("`p`.`id` = {$priceID}")
             ->order("`i`.`application`");
         $items = $db->setQuery($query)->loadObjectList();
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contract&layout=edit&id={$item->id}");
         foreach ($items as $item)
         {
             $arr = array();
@@ -391,7 +392,12 @@ class ProjectsModelContract extends AdminModel {
             $arr['is_sq'] = $item->is_sq;
             if ($item->is_sq)
             {
-                $arr['stand'] = ProjectsHelper::getCatalogStandsHtml($item->id, $catalog, $values[$item->id]['catalogID'] ?? '');
+                $sts = array();
+                foreach ($stands as $stand) {
+                    if ($stand->itemID != $item->id) continue;
+                    $sts[] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand->id}&amp;return={$return}"), $stand->number);
+                }
+                $arr['stand'] = implode(" / ", $sts);
             }
             $a = 0;
             $b = 0;
