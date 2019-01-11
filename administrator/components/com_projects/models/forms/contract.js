@@ -1,47 +1,4 @@
 'use strict';
-String.prototype.lpad = function (padding, length) {
-    var string = this;
-    while (string.length < length) {
-        string = padding + string;
-    }
-    return string;
-};
-
-Number.prototype.round = function(base) {
-    if (base == null || base < 0) {
-        return this;
-    }
-
-    var string = this.toString();
-    var point_index = string.indexOf(".");
-    if (point_index == -1) {
-        return this;
-    }
-    var symbol_index = point_index + 1 + base;
-    if (symbol_index >= string.length) {
-        return this;
-    }
-
-    var integer        = parseInt(string.substring(0, point_index), 10);
-    var fractional     = parseInt(string.substring(point_index + 1, point_index + 1 + base), 10) || 0;
-    var max_fractional = Math.pow(10, base);
-    var symbol         = parseInt(string.charAt(symbol_index), 10);
-    if (symbol >= 5) {
-        if (base == 0) {
-            integer ++;
-        } else {
-            if (fractional + 1 == max_fractional) {
-                integer ++;
-                fractional = 0;
-            } else {
-                fractional ++;
-            }
-        }
-    }
-
-    return new Number(parseFloat(integer + "." + (fractional.toString().lpad("0", base))));
-};
-
 window.onload = function () {
     setNumber();
 };
@@ -135,7 +92,7 @@ function getSum2(id, currency)
     subSumApp();
     var itg = calculate();
     //document.querySelector("#sum_amount").textContent = itg.toLocaleString('ru') + ' ' + currency;
-    document.querySelector("#sum_amountS").textContent = itg;
+    document.querySelector("#sum_amountS").textContent = itg.toLocaleString('ru');
 }
 function removeTr(id)
 {
@@ -188,14 +145,14 @@ function getSum(id) {
     field = document.querySelector("#markup_" + id);
     if (field !== null)
     {
-        b = (a * parseFloat((100 + parseInt(field.options[field.selectedIndex].value)) / 100) - a).round(2);
+        b = Math.round(a * parseFloat((100 + parseInt(field.options[field.selectedIndex].value)) / 100) - a);
     }
     field = document.querySelector("#factor_" + id);
     if (field !== null)
     {
-        c = (a * parseFloat(1 - (100 - parseInt(field.value)) / 100)).round(2);
+        c = Math.round(a * parseFloat(1 - (100 - parseInt(field.value)) / 100));
     }
-    return (a + b - c).round(2);
+    return Math.round(a + b - c);
 }
 function calculate() {
     var amounts = document.querySelectorAll("span[id^='subsumapp_']");

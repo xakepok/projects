@@ -38,9 +38,9 @@ $sum = 0;
             <?php foreach ($sec as $section => $arr) :
                 foreach ($arr as $i => $item):
                     $dsp = ($item['sum'] == 0) ? 'hidden' : '';
-                    $sum += $item['sum'];
+                    $sum += (float) $item['sum'];
                     $currency = $item['currency'];
-                    $subsum += $item['sum']; ?>
+                    $subsum += (float) $item['sum']; ?>
                     <tr id="summary_<?php echo $item['id']; ?>" class="app_<?php echo $application;?> <?php echo $dsp; ?>" data-app="<?php echo $application;?>">
                         <td>
                             <?php echo $item['title']; ?>
