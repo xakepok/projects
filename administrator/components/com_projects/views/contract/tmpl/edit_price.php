@@ -50,7 +50,7 @@ $sum = 0;
                 $subsum += $item['sum'];
                 ?>
                 <tr id="item_<?php echo $item['id']; ?>" class="section_<?php echo $item['section_id']; ?>"
-                    data-section="<?php echo $item['section_id']; ?>" data-app="<?php echo $application;?>">
+                    data-section="<?php echo $item['section_id']; ?>" data-app="<?php echo $application; ?>">
                     <td>
                         <span data-section="<?php echo $section; ?>"
                               id="label_<?php echo $item['id']; ?>"><?php echo $item['title']; ?></span>
@@ -62,20 +62,39 @@ $sum = 0;
                         <?php echo $item['stand']; ?>
                     </td>
                     <td>
-                        <input
-                                type="text"
-                                name="jform[price][<?php echo $item['id']; ?>][value]"
-                                id="price_<?php echo $item['id']; ?>"
-                                value="<?php echo $item['value']; ?>"
-                                data-cost="<?php echo $item['cost_clean']; ?>"
-                                class="input"
-                                placeholder=""
-                                autocomplete="off"
-                                onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
-                            <?php if ($item['fixed']) echo "disabled "; ?>
-                                style="width: 50px;"
-                                aria-invalid="false"/>&nbsp;
-                        <span><?php echo $item['unit']; ?></span>
+                        <?php if (!$item['is_sq']): ?>
+                            <input
+                                    type="text"
+                                    name="jform[price][<?php echo $item['id']; ?>][value]"
+                                    id="price_<?php echo $item['id']; ?>"
+                                    value="<?php echo $item['value']; ?>"
+                                    data-cost="<?php echo $item['cost_clean']; ?>"
+                                    class="input"
+                                    placeholder=""
+                                    autocomplete="off"
+                                    onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
+                                <?php if ($item['fixed']) echo "disabled "; ?>
+                                    style="width: 50px;"
+                                    aria-invalid="false"/>&nbsp;
+                            <span><?php echo $item['unit']; ?></span>
+                        <?php endif; ?>
+                        <?php if ($item['is_sq']): ?>
+                            <input
+                                    type="hidden"
+                                    name="jform[price][<?php echo $item['id']; ?>][value]"
+                                    id="price_<?php echo $item['id']; ?>"
+                                    value="<?php echo $item['value']; ?>"
+                                    data-cost="<?php echo $item['cost_clean']; ?>"
+                                    class="input"
+                                    placeholder=""
+                                    autocomplete="off"
+                                    onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
+                                <?php if ($item['fixed']) echo "disabled "; ?>
+                                    style="width: 50px;"
+                                    aria-invalid="false"/>
+                            <span><?php echo $item['value']; ?></span>
+                            <span><?php echo $item['unit']; ?></span>
+                        <?php endif; ?>
                     </td>
                     <td class="center">
                         <?php if ($item['isUnit2']): ?>
