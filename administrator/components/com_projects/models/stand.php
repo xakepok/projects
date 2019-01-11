@@ -77,11 +77,6 @@ class ProjectsModelStand extends AdminModel {
             $this->_createTodo($data);
         }
         $s = parent::save($data);
-        if ($data['show'] == '1')
-        {
-            $id = $data['id'] ?? $this->getTable()->getDbo()->insertid();
-            $this->dontShow($id, $data['contractID']);
-        }
         return $s;
     }
 
