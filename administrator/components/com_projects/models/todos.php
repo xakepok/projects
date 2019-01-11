@@ -13,7 +13,6 @@ class ProjectsModelTodos extends ListModel
                 't.dat_open',
                 't.dat_close',
                 'open',
-                'close',
                 'manager',
                 'project',
                 'exhibitor',
@@ -36,14 +35,13 @@ class ProjectsModelTodos extends ListModel
             ->select("DATE_FORMAT(`t`.`dat_open`,'%d.%m.%Y') as `dat_open`, DATE_FORMAT(`t`.`dat_close`,'%d.%m.%Y') as `dat_close`")
             ->select("`c`.`id` as `contract`, `c`.`number`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `e`.`id` as `expID`")
-            ->select("`u1`.`name` as `open`, `u2`.`name` as `close`, `u3`.`name` as `manager`")
+            ->select("`u1`.`name` as `open`, `u3`.`name` as `manager`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`, `p`.`id` as `projectID`")
             ->from("`#__prj_todos` as `t`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `t`.`contractID`")
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
             ->leftJoin("`#__users` as `u1` ON `u1`.`id` = `t`.`userOpen`")
-            ->leftJoin("`#__users` as `u2` ON `u2`.`id` = `t`.`userClose`")
             ->leftJoin("`#__users` as `u3` ON `u3`.`id` = `t`.`managerID`");
         /* Фильтр */
         $contractID = JFactory::getApplication()->input->getInt('contractID', 0);
@@ -151,7 +149,6 @@ class ProjectsModelTodos extends ListModel
             $arr['result'] = ($arr['expired']) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : $item->result;
             $arr['open'] = $item->open;
             $arr['manager'] = $item->manager;
-            $arr['close'] = ($arr['expired']) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : $item->close;
             $arr['state'] = $item->state;
             $arr['state_text'] = ($arr['expired']) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : ProjectsHelper::getTodoState($item->state);
             if (!$arr['expired']) $result_no_expire[] = $arr;
@@ -164,16 +161,16 @@ class ProjectsModelTodos extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
-        $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', '', 'string');
-        $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor', '', 'string');
-        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project', '', 'string');
-        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager', '', 'string');
-        $dat = $this->getUserStateFromRequest($this->context . '.filter.dat', 'filter_dat', '', 'string');
         $this->setState('filter.state', $published);
+        $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', '', 'string');
         $this->setState('filter.search', $search);
+        $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor', '', 'string');
         $this->setState('filter.exhibitor', $exhibitor);
+        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project', '', 'string');
         $this->setState('filter.project', $project);
+        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager', '', 'string');
         $this->setState('filter.manager', $manager);
+        $dat = $this->getUserStateFromRequest($this->context . '.filter.dat', 'filter_dat', '', 'string');
         $this->setState('filter.dat', $dat);
         parent::populateState('`t`.`dat`', 'desc');
     }

@@ -13,6 +13,9 @@ foreach ($this->items as $i => $item) :
             <?php echo ++$ii; ?>
         </td>
         <td>
+            <?php echo $item['dat_open']; ?>
+        </td>
+        <td>
             <?php echo $item['dat']; ?>
         </td>
         <td>
@@ -45,18 +48,12 @@ foreach ($this->items as $i => $item) :
             <?php endif; ?>
             <?php if ($item['state'] != '0') echo $item['result']; ?>
         </td>
+        <td>
+            <?php echo $item['open']; ?>
+        </td>
         <?php if ($this->isAdmin): ?>
             <td>
-                <?php echo $item['open']; ?>
-            </td>
-            <td>
                 <?php echo $item['manager']; ?>
-            </td>
-            <td class="resultTodoClose_<?php echo $item['id']; ?>">
-                <?php echo $item['close']; ?>
-            </td>
-            <td>
-                <?php echo $item['dat_open']; ?>
             </td>
             <td class="resultTodoDat_<?php echo $item['id']; ?>">
                 <?php echo $item['dat_close']; ?>
