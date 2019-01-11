@@ -56,6 +56,24 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает массив с площадями стендов по типам у указанной сделки
+     * @param int $contractID ID сделки
+     * @return array
+     * @since 1.0.6.4
+     */
+    public static function getStandsSquare(int $contractID): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`itemID`, SUM(`sq`) as `sq`")
+            ->from("`#__prj_contract_stands`")
+            ->group("`itemID`")
+            ->where("`contractID` = {$contractID}");
+        return $db->setQuery($query)->loadObjectList('itemID') ?? array();
+    }
+
+    /**
      * Загружает файл из формы в указанную директорию
      * @param string $field название поля из глобального массива $_FILES
      * @param string $folder наименование директории, куда загружать файл

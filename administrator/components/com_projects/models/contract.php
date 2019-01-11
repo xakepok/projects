@@ -351,6 +351,7 @@ class ProjectsModelContract extends AdminModel {
         $activeColumn = ProjectsHelper::getActivePriceColumn($item->id);
         $db =& $this->getDbo();
         $catalog = ProjectsHelper::getCatalogStands($item->id);
+        $squares = ProjectsHelper::getStandsSquare($item->id);
         $result = array();
         $query = $db->getQuery(true);
         $query
@@ -380,7 +381,7 @@ class ProjectsModelContract extends AdminModel {
             $arr['unit'] = ProjectsHelper::getUnit($item->unit);
             $arr['unit2'] = ProjectsHelper::getUnit($item->unit_2);
             $arr['isUnit2'] = $item->isUnit2;
-            $arr['value'] = $values[$item->id]['value'];
+            $arr['value'] = (!$item->is_sq) ? $values[$item->id]['value'] : $squares[$item->id]->sq;
             $arr['value2'] = $values[$item->id]['value2'];
             $arr['is_markup'] = $item->is_markup;
             $arr['markup'] = (float) ($values[$item->id]['markup'] != null) ? (float) $values[$item->id]['markup'] * 100 - 100 : 0;
