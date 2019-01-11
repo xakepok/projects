@@ -33,7 +33,7 @@ class ProjectsModelTodos extends ListModel
             ->select("`t`.`id`, `t`.`task`, `t`.`result`, `t`.`state`")
             ->select("DATE_FORMAT(`t`.`dat`,'%d.%m.%Y') as `date`")
             ->select("DATE_FORMAT(`t`.`dat_open`,'%d.%m.%Y') as `dat_open`, DATE_FORMAT(`t`.`dat_close`,'%d.%m.%Y') as `dat_close`")
-            ->select("`c`.`id` as `contract`, `c`.`number`")
+            ->select("`c`.`id` as `contract`, `c`.`number`, `c`.`status` as `contract_status`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `e`.`id` as `expID`")
             ->select("`u1`.`name` as `open`, `u3`.`name` as `manager`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`, `p`.`id` as `projectID`")
@@ -130,7 +130,7 @@ class ProjectsModelTodos extends ListModel
             $arr['expired'] = $this->isExpired($item->date, $item->state);
             $arr['id'] = $item->id;
             $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contract}&amp;return={$return}");
-            $c = (!$item->number) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_CONTRACT') : JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number);
+            $c = (!$item->number) ? ProjectsHelper::getExpStatus($item->contract_status) : JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number);
             $link = JHtml::link($url, $c);
             $arr['contract'] = $link;
             $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}");
