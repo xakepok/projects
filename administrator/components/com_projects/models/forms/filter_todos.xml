@@ -64,7 +64,7 @@
                 name="limit"
                 type="limitbox"
                 class="input-mini"
-                default="25"
+                default="0"
                 label="COM_PROJECTS_FILTER_SELECT_LIMIT"
                 description="COM_CONTENT_LIST_LIMIT_DESC"
                 onchange="this.form.submit();"
