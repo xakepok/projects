@@ -10,19 +10,19 @@ $sum = 0;
             <th>
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_TITLE'); ?>
             </th>
-            <th>
+            <th style="width: 3%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT'); ?>
             </th>
-            <th>
+            <th style="width: 8%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEM'); ?>
             </th>
-            <th>
+            <th style="width: 3%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_DISCOUNT'); ?>
             </th>
-            <th>
+            <th style="width: 3%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MARKUP'); ?>
             </th>
-            <th>
+            <th style="width: 8%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_AMOUNT'); ?>
             </th>
         </tr>
