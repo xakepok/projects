@@ -404,7 +404,7 @@ class ProjectsModelContract extends AdminModel {
             $c = 0;
             if ($values[$item->id]['value'])
             {
-                $a += $values[$item->id]['value'] * round($cost, 2);
+                $a += $values[$item->id]['value'] * $cost;
             }
             if ($values[$item->id]['value2'] != null)
             {
