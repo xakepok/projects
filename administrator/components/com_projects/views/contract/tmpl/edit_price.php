@@ -127,7 +127,7 @@ $sum = 0;
                                     autocomplete="off"
                                     onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
                                 <?php if ($item['fixed']) echo "disabled "; ?>
-                                    style="width: 30px;"
+                                    style="width: 40px;"
                                     aria-invalid="false"/>&nbsp;%
                         <?php endif; ?>
                     </td>

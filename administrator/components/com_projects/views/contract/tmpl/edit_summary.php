@@ -37,7 +37,7 @@ $sum = 0;
             </tr>
             <?php foreach ($sec as $section => $arr) :
                 foreach ($arr as $i => $item):
-                    $dsp = ($item['sum'] == 0) ? 'hidden' : '';
+                    $dsp = ($item['sum'] == 0 && $item['value'] == 0) ? 'hidden' : '';
                     $sum += (float) $item['sum'];
                     $currency = $item['currency'];
                     $subsum += (float) $item['sum']; ?>
