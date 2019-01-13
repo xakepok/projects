@@ -18,6 +18,9 @@ class ProjectsModelBuilding extends ListModel
                 'manager',
                 'standtype',
                 'standstatus',
+                's.status',
+                'exp_status',
+                'stand',
             );
         }
         parent::__construct($config);
@@ -28,17 +31,17 @@ class ProjectsModelBuilding extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select('`s`.`id` as `standID`, `s`.`number` as `stand`, IF(`s`.`freeze` IS NULL,0,1) as `freeze`, `s`.`tip`, `s`.`status`')
+            ->select('`s`.`id` as `standID`, `cat`.`number` as `stand`, `s`.`freeze`, IFNULL(`s`.`tip`,0) as `tip`, IFNULL(`s`.`status`,1) as `status`, `s`.`sq`')
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
-            ->select("`c`.`number` as `contract`, `c`.`id` as `contractID`")
+            ->select("`c`.`number` as `contract`, `c`.`id` as `contractID`, `c`.`status` as `exp_status`")
             ->select("`u`.`name` as `manager`")
-            ->select("IFNULL((SELECT SUM(`value`) FROM `#__prj_stat` WHERE `contractID` = `c`.`id` AND `is_sq`=1),0) as `sq`")
-            ->from("`#__prj_stands` as `s`")
+            ->from("`#__prj_catalog` as `cat`")
+            ->leftJoin("`#__prj_stands` as `s` ON `s`.`catalogID` = `cat`.`id`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
-            ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`")
-            ->where("`c`.`status` = 1")
-            ->where("`s`.`number` IS NOT NULL");
+            ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`");
+            //->where("`c`.`status` = 1");
+            //->where("`s`.`number` IS NOT NULL");
         /* Фильтр */
         $search = $this->getState('filter.search');
         if (!empty($search)) {
@@ -85,28 +88,25 @@ class ProjectsModelBuilding extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->exponentID}&amp;return={$return}");
             $exhibitor = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $link = JHtml::link($url, $exhibitor);
-            $arr['exhibitor'] = $link;
+            $arr['exhibitor'] = (!$item->sq == null) ?  $link : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
             $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$item->standID}&amp;return={$return}");
+            $arr['stand'] = (!$item->sq == null) ? JHtml::link($url, $item->stand) : $item->stand;
             $title = sprintf("%s (%s, %s)", $item->stand, ProjectsHelper::getStandType($item->tip), ProjectsHelper::getStandStatus($item->status));
             $stands[$item->contractID][] = JHtml::link($url, $title);
             $number = (!empty($item->contract)) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->contract) : JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
             $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
-            $arr['contract'] = JHtml::link($url,$number);
-            $arr['sq'] = sprintf("%s %s", $item->sq , JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
-            $arr['contractID'] = $item->contractID;
-            $arr['manager'] = $item->manager;
-            $arr['freeze'] = JText::sprintf(($item->freeze != 0) ? 'JYES' : 'JNO');
+            $arr['contract'] = (!$item->sq == null) ? JHtml::link($url,$number) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['sq'] = (!$item->sq == null) ? sprintf("%s %s", $item->sq , JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM')) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['contractID'] = (!$item->sq == null) ? $item->contractID : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['manager'] = (!$item->sq == null) ? $item->manager : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['status'] = (!$item->sq == null) ? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_BUSY') : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['exp_status'] = (!$item->sq == null) ? ProjectsHelper::getExpStatus($item->exp_status) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['freeze'] = $item->freeze ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['tip'] = (!$item->sq == null) ? ProjectsHelper::getStandType($item->tip) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['scheme'] = (!$item->sq == null) ? ProjectsHelper::getStandStatus($item->status) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
             $results[] = $arr;
         }
-        foreach ($results as $result)
-        {
-            if (!isset($itog[$result['contractID']]))
-            {
-                $itog[$result['contractID']] = $result;
-                $itog[$result['contractID']]['stands'] = implode(' / ', $stands[$result['contractID']]);
-            }
-        }
-        return $itog;
+        return $results;
     }
 
     /* Сортировка по умолчанию */

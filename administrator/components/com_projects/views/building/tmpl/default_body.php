@@ -8,19 +8,31 @@ foreach ($this->items as $i => $item) :?>
             <?php echo ++$ii; ?>
         </td>
         <td>
-            <?php echo $item['contract']; ?>
+            <?php echo $item['stand']; ?>
+        </td>
+        <td>
+            <?php echo $item['sq']; ?>
+        </td>
+        <td>
+            <?php echo $item['status']; ?>
         </td>
         <td>
             <?php echo $item['exhibitor']; ?>
         </td>
         <td>
+            <?php echo $item['exp_status']; ?>
+        </td>
+        <td>
+            <?php echo $item['tip']; ?>
+        </td>
+        <td>
+            <?php echo $item['scheme']; ?>
+        </td>
+        <td>
             <?php echo $item['manager']; ?>
         </td>
         <td>
-            <?php echo $item['stands']; ?>
-        </td>
-        <td>
-            <?php echo $item['sq']; ?>
+            <?php echo $item['contract']; ?>
         </td>
         <td>
             <?php echo $item['freeze']; ?>
