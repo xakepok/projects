@@ -100,11 +100,13 @@ class ProjectsHelper
     /**
      * Возвращает сумму договоров по проекту
      * @param int $projectID ID проекта
+     * @param array $statuses массив со статусами сделок, которые учитываются в договоре
      * @return array массив с 3 валютами
      * @since 1.0.4.3
      */
-    public static function getProjectAmount(int $projectID): array
+    public static function getProjectAmount(int $projectID, array $statuses = array(1,2,3,4)): array
     {
+        $statuses = implode(', ', $statuses);
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
@@ -112,7 +114,7 @@ class ProjectsHelper
             ->from("`#__prj_contract_amounts` as `a`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `a`.`contractID`")
             ->where("`c`.`prjID` = {$projectID}")
-            ->where("`c`.`status` = 1");
+            ->where("`c`.`status` IN ({$statuses})");
         $result = $db->setQuery($query)->loadAssocList();
         return $result[0];
     }
@@ -120,11 +122,13 @@ class ProjectsHelper
     /**
      * Возвращает сумму всех платежей по проекту
      * @param int $projectID ID проекта
+     * @param array $statuses массив со статусами сделок, которые учитываются в договоре
      * @return array сумма всех платежей в трёх валютах
      * @since 1.0.4.3
      */
-    public static function getProjectPayments(int $projectID): array
+    public static function getProjectPayments(int $projectID, array $statuses = array(1,2,3,4)): array
     {
+        $statuses = implode(', ', $statuses);
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
@@ -132,7 +136,7 @@ class ProjectsHelper
             ->from("`#__prj_contract_payments` as `p`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `p`.`contractID`")
             ->where("`c`.`prjID` = {$projectID}")
-            ->where("`c`.`status` = 1");
+            ->where("`c`.`status` IN ({$statuses})");
         $payments = $db->setQuery($query)->loadObjectList();
         $result = array('rub' => 0, 'usd' => 0, 'eur' => 0);
         foreach ($payments as $payment) {

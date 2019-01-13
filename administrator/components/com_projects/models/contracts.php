@@ -162,25 +162,28 @@ class ProjectsModelContracts extends ListModel
             $amount = $item->$amount_field;
             $payments = $item->payments;
             $debt = $item->$debt_field;
-            $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", number_format($amount, 2, '.', " "), $item->currency);
+            $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", number_format($amount, 2, ',', " "), $item->currency);
             $arr['amount_only'] = $amount; //Только цена
             $paid = (float) $amount - (float) $debt;
-            $arr['paid'] = sprintf(("%s %s"), number_format($paid, 2, '.', " "), $item->currency); //Только цена
-            $arr['debt'] = ($format != 'html') ? $debt : sprintf("%s %s", number_format($debt, 2, '.', " "), $item->currency);
+            $arr['paid'] = sprintf(("%s %s"), number_format($paid, 2, ',', " "), $item->currency); //Только цена
+            $arr['debt'] = ($format != 'html') ? $debt : sprintf("%s %s", number_format($debt, 2, ',', " "), $item->currency);
             $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}&amp;return={$return}");
             if (ProjectsHelper::canDo('core.accountant') && $debt > 0) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE')));
             if ($format != 'html') $arr['debt'] = $debt;
 
             $result['items'][] = $arr;
-            $result['amount'][$item->currency] += $amount;
-            $result['debt'][$item->currency] += $debt;
-            $result['payments'][$item->currency] += $payments;
+            if ($item->status != 0) {
+                $result['amount'][$item->currency] += $amount;
+                $result['debt'][$item->currency] += $debt;
+                $result['payments'][$item->currency] += $payments;
+            }
         }
         if (is_numeric($this->state->get('filter.project')))
         {
             $project = $this->state->get('filter.project');
-            $result['amount']['total'] = ProjectsHelper::getProjectAmount($project);
-            $result['payments']['total'] = ProjectsHelper::getProjectPayments($project);
+            $statuses = $this->state->get('filter.status') ?? array(1, 2, 3, 4);
+            $result['amount']['total'] = ProjectsHelper::getProjectAmount($project, $statuses);
+            $result['payments']['total'] = ProjectsHelper::getProjectPayments($project, $statuses);
             $result['debt']['total']['rub'] = $result['amount']['total']['rub'] - $result['payments']['total']['rub'];
             $result['debt']['total']['usd'] = $result['amount']['total']['usd'] - $result['payments']['total']['usd'];
             $result['debt']['total']['eur'] = $result['amount']['total']['eur'] - $result['payments']['total']['eur'];
