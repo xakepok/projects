@@ -58,7 +58,8 @@ $sum = 0;
                             <span id="sum_markup_<?php echo $item['id']; ?>"><?php echo $item['markup']; ?></span>%
                         </td>
                         <td>
-                            <span id="sumS_<?php echo $item['id']; ?>"><?php echo $item['sum']; ?></span>
+                            <span id="sumS_<?php echo $item['id']; ?>" style="display: none;"><?php echo $item['sum']; ?></span>
+                            <span id="sumSV_<?php echo $item['id']; ?>"><?php echo $item['sum_showed']; ?></span>
                             <span id="currencyS_<?php echo $item['id']; ?>"><?php echo $currency; ?></span>
                         </td>
                     </tr>
@@ -69,7 +70,8 @@ $sum = 0;
                 <td colspan="5"
                     style="text-align: right; font-weight: bold;"><?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_SUBSUM'); ?></td>
                 <td>
-                    <span id="subsumapp_<?php echo $application;?>"><?php echo $subsum; ?></span>
+                    <span id="subsumapp_<?php echo $application;?>" style="display: none;"><?php echo $subsum; ?></span>
+                    <span id="subsumappV_<?php echo $application;?>"><?php echo number_format($subsum, 2, '.', ' '); ?></span>
                     <?php echo $currency; ?>
                 </td>
             </tr>
@@ -79,8 +81,8 @@ $sum = 0;
             <tr>
                 <td colspan="6" style="text-align: right; font-weight: bold;">
                     <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_SUM'); ?>:&nbsp;
-                    <span
-                            id="sum_amountS"><?php echo $sum; ?></span>
+                    <span id="sum_amountS" style="display: none;"><?php echo $sum;?></span>
+                    <span id="sum_amountSV"><?php echo number_format($sum, 2, '.', ' ');?></span>
                     <?php echo $currency; ?>
                 </td>
             </tr>
