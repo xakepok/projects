@@ -154,7 +154,7 @@ $sum = 0;
                     </td>
                     <td>
                     <span class="amounts" id="sum_<?php echo $item['id']; ?>" style="display: none;"><?php echo $item['sum']; ?></span>&nbsp
-                    <span class="amounts" id="sumV_<?php echo $item['id']; ?>"><?php echo number_format($item['sum'], 2, '.', ' '); ?></span>
+                    <span class="amounts" id="sumV_<?php echo $item['id']; ?>"><?php echo number_format($item['sum'], 2, ',', ' '); ?></span>
                         <span id="currency_<?php echo $item['id']; ?>"><?php echo $item['currency']; ?></span>
                     </td>
                 </tr>

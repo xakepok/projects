@@ -71,7 +71,7 @@ $sum = 0;
                     style="text-align: right; font-weight: bold;"><?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_SUBSUM'); ?></td>
                 <td>
                     <span id="subsumapp_<?php echo $application;?>" style="display: none;"><?php echo $subsum; ?></span>
-                    <span id="subsumappV_<?php echo $application;?>"><?php echo number_format($subsum, 2, '.', ' '); ?></span>
+                    <span id="subsumappV_<?php echo $application;?>"><?php echo number_format($subsum, 2, ',', ' '); ?></span>
                     <?php echo $currency; ?>
                 </td>
             </tr>
@@ -82,7 +82,7 @@ $sum = 0;
                 <td colspan="6" style="text-align: right; font-weight: bold;">
                     <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_SUM'); ?>:&nbsp;
                     <span id="sum_amountS" style="display: none;"><?php echo $sum;?></span>
-                    <span id="sum_amountSV"><?php echo number_format($sum, 2, '.', ' ');?></span>
+                    <span id="sum_amountSV"><?php echo number_format($sum, 2, ',', ' ');?></span>
                     <?php echo $currency; ?>
                 </td>
             </tr>

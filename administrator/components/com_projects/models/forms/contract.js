@@ -77,8 +77,12 @@ function getSum2(id, currency)
     if (sum !== 0 && sum !== null && sum !== undefined && !isNaN(sum) && sum !== '')
     {
         span.textContent = sum;
+        var spanV = document.querySelector('#sumV_'+id);
+        spanV.textContent = parseFloat(span.textContent).toLocaleString('ru', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         document.querySelector("#currency_"+id).textContent = currency;
         spanS.textContent = sum;
+        var spanSV = document.querySelector('#sumSV_'+id);
+        spanSV.textContent = parseFloat(spanS.textContent).toLocaleString('ru', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         document.querySelector("#currencyS_"+id).textContent = currency;
         document.querySelector("#sum_cnt_"+id).textContent = cnt;
     }
@@ -91,8 +95,8 @@ function getSum2(id, currency)
     //subSum();
     subSumApp();
     var itg = calculate();
-    //document.querySelector("#sum_amount").textContent = itg.toLocaleString('ru') + ' ' + currency;
-    document.querySelector("#sum_amountS").textContent = itg.toLocaleString('ru');
+    document.querySelector("#sum_amountS").textContent = itg;
+    document.querySelector("#sum_amountSV").textContent = parseFloat(itg).toLocaleString('ru', {minimumFractionDigits: 2, maximumFractionDigits: 2});;
 }
 function removeTr(id)
 {
@@ -140,19 +144,19 @@ function getSum(id) {
     field = document.querySelector("#value2_" + id);
     if (field !== null)
     {
-        a *= parseInt(field.value);
+        a *= parseFloat(field.value);
     }
     field = document.querySelector("#markup_" + id);
     if (field !== null)
     {
-        b = Math.round(a * parseFloat((100 + parseInt(field.options[field.selectedIndex].value)) / 100) - a);
+        b = parseFloat(a * parseFloat((100 + parseInt(field.options[field.selectedIndex].value)) / 100) - a);
     }
     field = document.querySelector("#factor_" + id);
     if (field !== null)
     {
-        c = Math.round(a * parseFloat(1 - (100 - parseInt(field.value)) / 100));
+        c = parseFloat(a * parseFloat(1 - (100 - parseInt(field.value)) / 100));
     }
-    return Math.round(a + b - c);
+    return parseFloat(a + b - c).toFixed(2);
 }
 function calculate() {
     var amounts = document.querySelectorAll("span[id^='subsumapp_']");
@@ -161,7 +165,7 @@ function calculate() {
     {
         if (amounts[i].textContent !== "0") sum = sum + parseFloat(amounts[i].textContent);
     }
-    return sum;
+    return parseFloat(sum).toFixed(2);
 }
 function subSum() {
     var trs = document.querySelectorAll("tr[class^='section_']");
@@ -192,6 +196,7 @@ function subSumApp() {
         {
             sum[id] = sum[id] + parseFloat(sps[j].textContent);
             document.querySelector("#subsumapp_"+id).textContent = sum[id];
+            document.querySelector("#subsumappV_"+id).textContent = parseFloat(sum[id]).toLocaleString('ru', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         }
     }
 }

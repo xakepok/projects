@@ -376,7 +376,7 @@ class ProjectsModelContract extends AdminModel {
             $pc = ($activeColumn != $values[$item->id]['columnID'] && !empty($values[$item->id]['columnID'])) ? $values[$item->id]['columnID'] : $activeColumn;
             $pc = "column_{$pc}";
             $cost = $item->price * $item->$pc;
-            $arr['cost'] = sprintf("%s %s", number_format($cost, 2, '.', " "), $currency);
+            $arr['cost'] = sprintf("%s %s", number_format($cost, 2, ',', " "), $currency);
             $arr['currency'] = $currency;
             $arr['cost_clean'] = $cost;
             $arr['unit'] = ProjectsHelper::getUnit($item->unit);
@@ -419,7 +419,7 @@ class ProjectsModelContract extends AdminModel {
                 $c = $a * (1 - $values[$item->id]['factor']);
             }
             $arr['sum'] = (float) round($a + $b - $c, 2);
-            $arr['sum_showed'] = number_format($arr['sum'], 2, '.', ' ');
+            $arr['sum_showed'] = number_format($arr['sum'], 2, ',', ' ');
             if (!isset($result[$item->application][$item->section])) $result[$item->application][$item->section] = array();
             //if (!isset($result[$item->section])) $result[$item->section] = array();
             $result[$item->application][$item->section][] = $arr;
