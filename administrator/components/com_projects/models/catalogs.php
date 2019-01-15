@@ -41,6 +41,11 @@ class ProjectsModelCatalogs extends ListModel
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`cat`.`number` LIKE ' . $search);
         }
+        // Фильтруем по каталогу стендов.
+        $catalog = $this->getState('filter.catalog');
+        if (is_numeric($catalog)) {
+            $query->where('`cat`.`titleID` = ' . (int) $catalog);
+        }
 
         /* Сортировка */
         $orderCol  = $this->state->get('list.ordering', '`cat`.`number`');
