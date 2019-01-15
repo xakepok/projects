@@ -96,6 +96,7 @@
             <option value="0">COM_PROJECTS_HEAD_CONTRACT_STATUS_0</option>
             <option value="7">COM_PROJECTS_HEAD_CONTRACT_STATUS_7</option>
             <option value="8">COM_PROJECTS_HEAD_CONTRACT_STATUS_8</option>
+            <option value="9">COM_PROJECTS_HEAD_CONTRACT_STATUS_9</option>
         </field>
         <field
                 name="number"
