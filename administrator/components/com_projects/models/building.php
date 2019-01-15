@@ -86,7 +86,7 @@ class ProjectsModelBuilding extends ListModel
         $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=building");
         foreach ($items as $item) {
             $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->exponentID}&amp;return={$return}");
-            $exhibitor = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+            $exhibitor = ($item->exponentID != null) ? ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en) : '';
             $link = JHtml::link($url, $exhibitor);
             $arr['exhibitor'] = (!$item->sq == null) ?  $link : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
             $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$item->standID}&amp;return={$return}");
@@ -95,15 +95,15 @@ class ProjectsModelBuilding extends ListModel
             $stands[$item->contractID][] = JHtml::link($url, $title);
             $number = (!empty($item->contract)) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->contract) : JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
             $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
-            $arr['contract'] = (!$item->sq == null) ? JHtml::link($url,$number) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['contract'] = (!$item->exponentID == null) ? JHtml::link($url,$number) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
             $arr['sq'] = (!$item->sq == null) ? sprintf("%s %s", $item->sq , JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM')) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
-            $arr['contractID'] = (!$item->sq == null) ? $item->contractID : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
-            $arr['manager'] = (!$item->sq == null) ? $item->manager : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
-            $arr['status'] = (!$item->sq == null) ? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_BUSY') : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
-            $arr['exp_status'] = (!$item->sq == null) ? ProjectsHelper::getExpStatus($item->exp_status) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['contractID'] = (!$item->exponentID == null) ? $item->contractID : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['manager'] = (!$item->exponentID == null) ? $item->manager : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['status'] = (!$item->exponentID == null) ? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_BUSY') : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE_OK');
+            $arr['exp_status'] = (!$item->exponentID == null) ? ProjectsHelper::getExpStatus($item->exp_status) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
             $arr['freeze'] = $item->freeze ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
-            $arr['tip'] = (!$item->sq == null) ? ProjectsHelper::getStandType($item->tip) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
-            $arr['scheme'] = (!$item->sq == null) ? ProjectsHelper::getStandStatus($item->status) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['tip'] = (!$item->exponentID == null) ? ProjectsHelper::getStandType($item->tip) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            $arr['scheme'] = (!$item->exponentID == null) ? ProjectsHelper::getStandStatus($item->status) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
             $results[] = $arr;
         }
         return $results;

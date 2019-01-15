@@ -59,15 +59,6 @@
             <option value="4">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_4</option>
         </field>
         <field
-                name="number"
-                type="text"
-                label="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_OLD"
-                description="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_DESC"
-                hint="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_HINT"
-                autocomplete="off"
-                class="x2"
-        />
-        <field
                 name="freeze"
                 type="text"
                 label="COM_PROJECTS_HEAD_CONTRACT_STAND_FREEZE"
@@ -78,7 +69,8 @@
         />
         <field
                 name="comment"
-                type="text"
+                type="textarea"
+                rows="5"
                 label="COM_PROJECTS_HEAD_CONTRACT_STAND_COMMENT"
                 description="COM_PROJECTS_HEAD_CONTRACT_STAND_COMMENT_DESC"
                 autocomplete="off"
