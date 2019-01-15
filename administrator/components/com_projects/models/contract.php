@@ -382,6 +382,7 @@ class ProjectsModelContract extends AdminModel {
             $arr['unit'] = ProjectsHelper::getUnit($item->unit);
             $arr['unit2'] = ProjectsHelper::getUnit($item->unit_2);
             $arr['isUnit2'] = $item->isUnit2;
+
             $arr['value'] = (!$item->is_sq) ? $values[$item->id]['value'] : $squares[$item->id]->sq;
             $arr['value2'] = $values[$item->id]['value2'];
             $arr['is_markup'] = $item->is_markup;
@@ -398,12 +399,14 @@ class ProjectsModelContract extends AdminModel {
                     $sts[] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand->id}&amp;return={$return}"), $stand->number);
                 }
                 $arr['stand'] = implode(" / ", $sts);
+                if (empty($arr['stand'])) $arr['value'] = 0;
             }
             $a = 0;
             $b = 0;
             $c = 0;
             if ($values[$item->id]['value'])
             {
+                if (empty($arr['stand']) && $item->is_sq) $values[$item->id]['value'] = 0;
                 $a += $values[$item->id]['value'] * $cost;
             }
             if ($values[$item->id]['value2'] != null)

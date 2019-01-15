@@ -2,7 +2,10 @@
 window.onload = function () {
     setNumber();
 };
-
+function setNull(id, currency) {
+    document.querySelector("#price_" + id).value = 0;
+    getSum2(id, currency);
+}
 function removeStand(standID) {
     fetch('/administrator/index.php?option=com_projects&task=contracts.removeStand&id=' + standID)
         .then(function (response) {
