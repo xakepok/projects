@@ -20,6 +20,9 @@ foreach ($this->items as $i => $item) :?>
             <?php echo $item['exhibitor']; ?>
         </td>
         <td>
+            <?php echo $item['manager']; ?>
+        </td>
+        <td>
             <?php echo $item['exp_status']; ?>
         </td>
         <td>
@@ -27,9 +30,6 @@ foreach ($this->items as $i => $item) :?>
         </td>
         <td>
             <?php echo $item['scheme']; ?>
-        </td>
-        <td>
-            <?php echo $item['manager']; ?>
         </td>
         <td>
             <?php echo $item['contract']; ?>
