@@ -13,7 +13,7 @@ class JFormFieldCatalog extends JFormFieldList
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`id`, `number`, `square`")
+            ->select("`id` as `standID`, `number`, `square`")
             ->from("`#__prj_catalog`")
             ->order("`number`");
         $session = JFactory::getSession();
@@ -21,9 +21,11 @@ class JFormFieldCatalog extends JFormFieldList
         if (($view == 'stand') && $session->get('contractID') != null)
         {
             $contractID = $session->get('contractID');
+            $query->select("(SELECT IFNULL(SUM(`sq`),0) FROM `#__prj_contract_stands` WHERE `id` = `standID`) as `busy`");
             $projectID = ProjectsHelper::getContractProject($contractID);
             $catalogID = ProjectsHelper::getProjectCatalog($projectID);
             $query->where("`titleID` = {$catalogID}");
+            $query->select("(SELECT `square`-`busy`) as `free`");;
             $session->clear('contractID');
         }
         $result = $db->setQuery($query)->loadObjectList();
@@ -31,10 +33,11 @@ class JFormFieldCatalog extends JFormFieldList
         $options = array();
 
         foreach ($result as $item) {
-            $title = sprintf("№%s (%s %s)", $item->number, $item->square, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
+            if ($item->free == 0) continue;
+            $title = sprintf("№%s (%s %s)", $item->number, $item->free, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
             $arr = array('data-square' => $item->square, 'data-num' => $item->number);
             $params = array('attr' => $arr, 'option.attr' => 'optionattr');
-            $options[] = JHtml::_('select.option', $item->id, $title, $params);
+            $options[] = JHtml::_('select.option', $item->standID, $title, $params);
         }
 
         if (!$this->loadExternally) {
