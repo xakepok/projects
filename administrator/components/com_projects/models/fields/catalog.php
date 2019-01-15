@@ -16,6 +16,16 @@ class JFormFieldCatalog extends JFormFieldList
             ->select("`id`, `number`, `square`")
             ->from("`#__prj_catalog`")
             ->order("`number`");
+        $session = JFactory::getSession();
+        $view = JFactory::getApplication()->input->getString('view', '');
+        if (($view == 'stand') && $session->get('contractID') != null)
+        {
+            $contractID = $session->get('contractID');
+            $projectID = ProjectsHelper::getContractProject($contractID);
+            $catalogID = ProjectsHelper::getProjectCatalog($projectID);
+            $query->where("`titleID` = {$catalogID}");
+            $session->clear('contractID');
+        }
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();

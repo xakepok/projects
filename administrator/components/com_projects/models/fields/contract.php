@@ -31,7 +31,7 @@ class JFormFieldContract extends JFormFieldList
         {
             $contractID = $session->get('contractID');
             $query->where("`c`.`id` = {$contractID}");
-            $session->clear('contractID');
+            if ($view != 'stand') $session->clear('contractID');
         }
         if ($view == 'score')
         {

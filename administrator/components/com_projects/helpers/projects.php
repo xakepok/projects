@@ -309,6 +309,23 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает ID каталога со стендами для указанного проекта
+     * @param int $projectID
+     * @return int
+     * @since 1.0.7.1
+     */
+    public static function getProjectCatalog(int $projectID): int
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`catalogID`")
+            ->from("`#__prj_projects`")
+            ->where("`id` = {$projectID}");
+        return $db->setQuery($query)->loadResult();
+    }
+
+    /**
      * Возвращает ID прайс-листа для указанного проекта
      * @param int $projectID
      * @return int
