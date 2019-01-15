@@ -70,6 +70,13 @@
                 class="input-xlarge"
         />
         <field
+                name="catalogID"
+                type="Cattitle"
+                label="COM_PROJECTS_BLANK_CATTITLE"
+                description="COM_PROJECTS_BLANK_CATTITLE"
+                class="input-xlarge"
+        />
+        <field
                 name="date_start"
                 type="calendar"
                 label="COM_PROJECTS_HEAD_DATE_START"

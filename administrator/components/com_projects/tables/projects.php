@@ -11,6 +11,7 @@ class TableProjectsProjects extends Table
     var $managerID = null;
     var $groupID = null;
     var $priceID = null;
+    var $catalogID = null;
     var $columnID = null;
     var $date_start = null;
     var $date_end = null;
