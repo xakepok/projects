@@ -11,6 +11,7 @@ defined('_JEXEC') or die;
 class TableProjectsCatalog extends Table
 {
     var $id = null;
+    var $titleID = null;
     var $number = null;
     var $square = null;
 

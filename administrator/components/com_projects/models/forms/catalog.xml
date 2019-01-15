@@ -6,6 +6,14 @@
                 type="hidden"
         />
         <field
+                name="titleID"
+                type="Cattitle"
+                label="COM_PROJECTS_BLANK_CATTITLE"
+                description="COM_PROJECTS_BLANK_CATTITLE"
+                class="x2"
+                required="true"
+        />
+        <field
                 name="number"
                 type="text"
                 label="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER"

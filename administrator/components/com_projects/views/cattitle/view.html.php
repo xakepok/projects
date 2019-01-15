@@ -18,7 +18,7 @@ class ProjectsViewCattitle extends HtmlView {
 
     protected function addToolbar() {
         //JFactory::getApplication()->input->set('hidemainmenu', true);
-        $title = $this->item->title ?? JText::sprintf('COM_PROJECTS_TITLE_EDIT_STAND_INTO_CATALOG');
+        $title = $this->item->title ?? JText::sprintf('COM_PROJECTS_ACTION_ADD_CAT');
 
         JToolbarHelper::title($title, '');
 	    JToolBarHelper::apply('cattitle.apply', 'JTOOLBAR_APPLY');
