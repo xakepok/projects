@@ -14,6 +14,9 @@ foreach ($this->items as $i => $item) :?>
             <?php echo $item['number'];?>
         </td>
         <td>
+            <?php echo $item['catalog'];?>
+        </td>
+        <td>
             <?php echo $item['square'];?>
         </td>
     </tr>

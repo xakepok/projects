@@ -11,6 +11,7 @@ class ProjectsModelCatalogs extends ListModel
             $config['filter_fields'] = array(
                 'number',
                 'square',
+                'catalog',
                 'unit',
                 'search',
             );
@@ -29,6 +30,8 @@ class ProjectsModelCatalogs extends ListModel
         $query = $db->getQuery(true);
         $query
             ->select("`cat`.`id`, `cat`.`number`, `cat`.`square`")
+            ->select("`t`.`title` as `catalog`, `t`.`id` as `catalogID`")
+            ->leftJoin("`#__prj_catalog_titles` as `t` ON `t`.`id` = `cat`.`titleID`")
             ->from("`#__prj_catalog` as `cat`");
 
         /* Фильтр */
@@ -51,11 +54,15 @@ class ProjectsModelCatalogs extends ListModel
     {
         $items = parent::getItems();
         $result = array();
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=catalogs");
         foreach ($items as $item) {
             $arr['id'] = $item->id;
             $url = JRoute::_("index.php?option=com_projects&amp;task=catalog.edit&amp;&id={$item->id}");
             $link = JHtml::link($url, $item->number);
             $arr['number'] = (!ProjectsHelper::canDo('core.general')) ? $item->price : $link;
+            $url = JRoute::_("index.php?option=com_projects&amp;task=cattitle.edit&amp;&id={$item->catalogID}&amp;return={$return}");
+            $link = JHtml::link($url, $item->catalog);
+            $arr['catalog'] = (!ProjectsHelper::canDo('core.general')) ? $item->catalog : $link;
             $title = ($item->unit != null) ? ProjectsHelper::getUnit($item->unit) : '';
             $arr['square'] = sprintf("%s %s", $item->square, $title);
             $result[] = $arr;
