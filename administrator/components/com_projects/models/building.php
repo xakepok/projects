@@ -40,8 +40,6 @@ class ProjectsModelBuilding extends ListModel
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
             ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`");
-            //->where("`c`.`status` = 1");
-            //->where("`s`.`number` IS NOT NULL");
         /* Фильтр */
         $search = $this->getState('filter.search');
         if (!empty($search)) {
@@ -70,7 +68,7 @@ class ProjectsModelBuilding extends ListModel
         }
 
         /* Сортировка */
-        $orderCol  = $this->state->get('list.ordering', '`title_ru_short`');
+        $orderCol  = $this->state->get('list.ordering', '`stand`');
         $orderDirn = $this->state->get('list.direction', 'asc');
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
@@ -113,16 +111,16 @@ class ProjectsModelBuilding extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');
-        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
-        $standtype = $this->getUserStateFromRequest($this->context . '.filter.standtype', 'filter_standtype');
-        $standstatus = $this->getUserStateFromRequest($this->context . '.filter.standstatus', 'filter_standstatus');
         $this->setState('filter.search', $search);
+        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');
         $this->setState('filter.project', $project);
+        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
         $this->setState('filter.manager', $manager);
+        $standtype = $this->getUserStateFromRequest($this->context . '.filter.standtype', 'filter_standtype');
         $this->setState('filter.standtype', $standtype);
+        $standstatus = $this->getUserStateFromRequest($this->context . '.filter.standstatus', 'filter_standstatus');
         $this->setState('filter.standstatus', $standstatus);
-        parent::populateState('`title_ru_short`', 'asc');
+        parent::populateState('`stand`', 'asc');
     }
 
     protected function getStoreId($id = '')
