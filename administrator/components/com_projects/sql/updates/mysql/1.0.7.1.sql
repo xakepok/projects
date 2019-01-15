@@ -23,3 +23,14 @@ alter table `#__prj_catalog`
   add constraint `#__prj_catalog_#__prj_catalog_titles_id_fk`
     foreign key (titleID) references `#__prj_catalog_titles` (id)
       on update cascade on delete cascade;
+
+alter table `#__prj_projects`
+  add `catalogID` int default 1 not null comment 'ID каталога стендов' after priceID;
+
+create index `#__prj_projects_catalogID_index`
+  on `#__prj_projects` (catalogID);
+
+alter table `#__prj_projects`
+  add constraint `#__prj_projects_#__prj_catalog_titles_id_fk`
+    foreign key (catalogID) references `#__prj_catalog_titles` (id);
+
