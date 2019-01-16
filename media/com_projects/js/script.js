@@ -48,7 +48,7 @@ function updateTodo(id) {
             td.textContent = result;
             td = document.querySelector('.resultTodoDat_' + id);
             td.textContent = text.data.dat;
-ß            td = document.querySelector('.resultTodoState_' + id);
+            td = document.querySelector('.resultTodoState_' + id);
             td.textContent = 'Выполнена';
         })
         .catch(function (error) {
