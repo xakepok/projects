@@ -80,12 +80,15 @@ class ProjectsModelCatalogs extends ListModel
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $this->setState('filter.search', $search);
+        $catalog = $this->getUserStateFromRequest($this->context . '.filter.catalog', 'filter_catalog');
+        $this->setState('filter.catalog', $catalog);
         parent::populateState('`cat`.`number`', 'asc');
     }
 
     protected function getStoreId($id = '')
     {
         $id .= ':' . $this->getState('filter.search');
+        $id .= ':' . $this->getState('filter.catalog');
         return parent::getStoreId($id);
     }
 }
