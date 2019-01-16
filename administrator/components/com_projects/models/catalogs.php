@@ -12,6 +12,7 @@ class ProjectsModelCatalogs extends ListModel
                 'number',
                 'square',
                 'catalog',
+                'cattitle',
                 'unit',
                 'search',
             );
@@ -31,8 +32,8 @@ class ProjectsModelCatalogs extends ListModel
         $query
             ->select("`cat`.`id`, `cat`.`number`, `cat`.`square`")
             ->select("`t`.`title` as `catalog`, `t`.`id` as `catalogID`")
-            ->leftJoin("`#__prj_catalog_titles` as `t` ON `t`.`id` = `cat`.`titleID`")
-            ->from("`#__prj_catalog` as `cat`");
+            ->from("`#__prj_catalog` as `cat`")
+            ->leftJoin("`#__prj_catalog_titles` as `t` ON `t`.`id` = `cat`.`titleID`");
 
         /* Фильтр */
         $search = $this->getState('filter.search');
@@ -42,9 +43,9 @@ class ProjectsModelCatalogs extends ListModel
             $query->where('`cat`.`number` LIKE ' . $search);
         }
         // Фильтруем по каталогу стендов.
-        $catalog = $this->getState('filter.catalog');
-        if (is_numeric($catalog)) {
-            $query->where('`cat`.`titleID` = ' . (int) $catalog);
+        $cattitle = $this->getState('filter.cattitle');
+        if (is_numeric($cattitle)) {
+            $query->where('`cat`.`titleID` = ' . (int) $cattitle);
         }
 
         /* Сортировка */
@@ -80,15 +81,15 @@ class ProjectsModelCatalogs extends ListModel
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $this->setState('filter.search', $search);
-        $catalog = $this->getUserStateFromRequest($this->context . '.filter.catalog', 'filter_catalog');
-        $this->setState('filter.catalog', $catalog);
+        $cattitle = $this->getUserStateFromRequest($this->context . '.filter.cattitle', 'filter_cattitle');
+        $this->setState('filter.cattitle', $cattitle);
         parent::populateState('`cat`.`number`', 'asc');
     }
 
     protected function getStoreId($id = '')
     {
         $id .= ':' . $this->getState('filter.search');
-        $id .= ':' . $this->getState('filter.catalog');
+        $id .= ':' . $this->getState('filter.cattitle');
         return parent::getStoreId($id);
     }
 }
