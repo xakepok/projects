@@ -120,7 +120,7 @@ class ProjectsModelSection extends AdminModel
         $query = $db->getQuery(true);
         $query
             ->insert("#__prc_items")
-            ->columns(array('sectionID', 'unit', 'unit_2', 'title_ru', 'title_en', 'price_rub', 'price_usd', 'price_eur', 'state'));
+            ->columns(array('sectionID', 'unit', 'unit_2', 'title_ru', 'title_en', 'price_rub', 'price_usd', 'price_eur', 'column_1', 'column_2', 'column_3', 'is_factor', 'is_markup', 'in_stat', 'is_sq', 'state'));
         foreach ($items as $item) {
             if (empty($item)) continue;
             $arr = array(
@@ -132,7 +132,14 @@ class ProjectsModelSection extends AdminModel
                 $db->quote($item->price_rub),
                 $db->quote($item->price_usd),
                 $db->quote($item->price_eur),
-                $db->quote($item->state)
+                $db->quote($item->column_1),
+                $db->quote($item->column_2),
+                $db->quote($item->column_3),
+                $db->quote($item->is_factor),
+                $db->quote($item->is_markup),
+                $db->quote($item->in_stat),
+                $db->quote($item->is_sq),
+                $db->quote($item->state),
             );
             $values = implode(', ', $arr);
             $query->values($values);
