@@ -17,6 +17,7 @@ class ProjectsModelBuilding extends ListModel
                 'sq',
                 'manager',
                 'standtype',
+                'standstate',
                 'standstatus',
                 's.status',
                 'exp_status',
@@ -44,7 +45,7 @@ class ProjectsModelBuilding extends ListModel
         $search = $this->getState('filter.search');
         if (!empty($search)) {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-            $query->where('(`title_ru_full` LIKE ' . $search . 'OR `title_ru_short` LIKE ' . $search . 'OR `title_en` LIKE ' . $search . ')');
+            $query->where('`cat`.`number` LIKE ' . $search);
         }
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
@@ -61,10 +62,16 @@ class ProjectsModelBuilding extends ListModel
         if (is_numeric($standtype)) {
             $query->where('`s`.`tip` = ' . (int)$standtype);
         }
+        // Фильтруем по текущему состоянию стенда стенда.
+        $standstate = $this->getState('filter.standstate');
+        if (is_numeric($standstate)) {
+            $query->where('`s`.`status` = ' . (int)$standstate);
+        }
         // Фильтруем по статусу стенда.
         $standstatus = $this->getState('filter.standstatus');
         if (is_numeric($standstatus)) {
-            $query->where('`s`.`status` = ' . (int)$standstatus);
+            if ($standstatus == 0) $query->where('`e`.`id` IS NULL');
+            if ($standstatus == 1) $query->where('`e`.`id` IS NOT NULL');
         }
 
         /* Сортировка */
@@ -121,6 +128,8 @@ class ProjectsModelBuilding extends ListModel
         $this->setState('filter.manager', $manager);
         $standtype = $this->getUserStateFromRequest($this->context . '.filter.standtype', 'filter_standtype');
         $this->setState('filter.standtype', $standtype);
+        $standstate = $this->getUserStateFromRequest($this->context . '.filter.standstate', 'filter_standstate');
+        $this->setState('filter.standstate', $standstate);
         $standstatus = $this->getUserStateFromRequest($this->context . '.filter.standstatus', 'filter_standstatus');
         $this->setState('filter.standstatus', $standstatus);
         parent::populateState('`stand`', 'asc');
