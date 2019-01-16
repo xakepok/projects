@@ -38,14 +38,14 @@
 	<files folder="components/com_projects">
 		<filename>projects.php</filename>
 		<filename>controller.php</filename>
-		<folder>controllers</folder>
+		<folder>controllers</folder>W∑
 		<folder>language</folder>
 		<folder>layouts</folder>
 		<folder>models</folder>
 		<folder>views</folder>
 	</files>
 
-	<!-- Back-end files -->
+	<!-- Back-end files -->∑
 	<administration>
 		<!-- Menu entries -->
 		<menu view="projects">COM_PROJECTS</menu>
