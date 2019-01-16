@@ -17,6 +17,7 @@ class ProjectsModelPayments extends ListModel
                 'author',
                 'exhibitor',
                 'project',
+                'manager',
                 'search',
                 'currency',
                 'dat',
@@ -66,6 +67,11 @@ class ProjectsModelPayments extends ListModel
         if (is_numeric($score))
         {
             $query->where('`pm`.`scoreID` = ' . (int) $score);
+        }
+        // Фильтруем по менеджеру.
+        $manager = $this->getState('filter.manager');
+        if (is_numeric($manager)) {
+            $query->where('`c`.`managerID` = ' . (int)$manager);
         }
         // Фильтруем по дате.
         $dat = $this->getState('filter.dat');
@@ -182,6 +188,8 @@ class ProjectsModelPayments extends ListModel
         $this->setState('filter.currency', $currency);
         $dat = $this->getUserStateFromRequest($this->context . '.filter.dat', 'filter_dat', '', 'string');
         $this->setState('filter.dat', $dat);
+        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
+        $this->setState('filter.manager', $manager);
         parent::populateState('`pm`.`dat`', 'desc');
     }
 
@@ -193,6 +201,7 @@ class ProjectsModelPayments extends ListModel
         $id .= ':' . $this->getState('filter.score');
         $id .= ':' . $this->getState('filter.currency');
         $id .= ':' . $this->getState('filter.dat');
+        $id .= ':' . $this->getState('filter.manager');
         return parent::getStoreId($id);
     }
 }

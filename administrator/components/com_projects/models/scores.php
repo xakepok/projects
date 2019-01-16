@@ -17,6 +17,7 @@ class ProjectsModelScores extends ListModel
                 'amount',
                 'currency',
                 'state',
+                'manager',
                 'search',
                 'exhibitor',
                 's.state',
@@ -59,6 +60,11 @@ class ProjectsModelScores extends ListModel
         elseif ($published === '')
         {
             $query->where('(`s`.`state` = 0 OR `s`.`state` = 1)');
+        }
+        // Фильтруем по менеджеру.
+        $manager = $this->getState('filter.manager');
+        if (is_numeric($manager)) {
+            $query->where('`c`.`managerID` = ' . (int)$manager);
         }
         // Фильтруем по валюте.
         $currency = $this->getState('filter.currency');
@@ -145,6 +151,8 @@ class ProjectsModelScores extends ListModel
         $this->setState('filter.project', $project);
         $currency = $this->getUserStateFromRequest($this->context . '.filter.currency', 'filter_currency');
         $this->setState('filter.currency', $currency);
+        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
+        $this->setState('filter.manager', $manager);
         parent::populateState('`s`.`id`', 'desc');
     }
 
@@ -155,6 +163,7 @@ class ProjectsModelScores extends ListModel
         $id .= ':' . $this->getState('filter.exhibitor');
         $id .= ':' . $this->getState('filter.project');
         $id .= ':' . $this->getState('filter.currency');
+        $id .= ':' . $this->getState('filter.manager');
         return parent::getStoreId($id);
     }
 }
