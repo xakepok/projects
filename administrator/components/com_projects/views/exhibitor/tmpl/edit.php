@@ -63,7 +63,7 @@ if ($return != null) {
                         <?php echo $this->loadTemplate('acts'); ?>
                     </div>
                     <div class="span6">
-
+                        <?php echo $this->loadTemplate('acts_exists'); ?>
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
