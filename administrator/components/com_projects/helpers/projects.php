@@ -14,7 +14,6 @@ class ProjectsHelper
         {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS'), 'index.php?option=com_projects&amp;view=projects', $vName == 'projects');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PLANS'), 'index.php?option=com_projects&amp;view=plans', $vName == 'plans');
-            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_BUILDING'), 'index.php?option=com_projects&amp;view=building', $vName == 'building');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CATTITLES'), 'index.php?option=com_projects&amp;view=cattitles', $vName == 'cattitles');
         }
         if (self::canDo('core.manager') || self::canDo('core.accountant'))
@@ -22,6 +21,7 @@ class ProjectsHelper
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CONTRACTS'), 'index.php?option=com_projects&amp;view=contracts', $vName == 'contracts');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_TODOS'), 'index.php?option=com_projects&amp;view=todos', $vName == 'todos');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_EXHIBITORS'), 'index.php?option=com_projects&amp;view=exhibitors', $vName == 'exhibitors');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_BUILDING'), 'index.php?option=com_projects&amp;view=building', $vName == 'building');
         }
         if (self::canDo('core.accountant'))
         {

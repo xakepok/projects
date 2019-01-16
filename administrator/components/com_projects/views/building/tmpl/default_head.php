@@ -28,9 +28,11 @@ $listDirn = $this->escape($this->state->get('list.direction'));
     <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE', 's.tip', $listDirn, $listOrder); ?>
     </th>
+    <?php if (ProjectsHelper::canDo('core.general')) :?>
     <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_STAND_SCHEME', 'scheme', $listDirn, $listOrder); ?>
     </th>
+    <?php endif;?>
     <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_CONTRACT_DESC', 'contract', $listDirn, $listOrder); ?>
     </th>

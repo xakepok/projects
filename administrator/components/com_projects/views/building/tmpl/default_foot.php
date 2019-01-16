@@ -1,7 +1,8 @@
 <?php
 // Запрет прямого доступа.
 defined('_JEXEC') or die;
+$colspan = (ProjectsHelper::canDo('core.general')) ? 10 : 9;
 ?>
 <tr>
-    <td colspan="10" class="pagination-centered"><?php echo $this->pagination->getListFooter(); ?></td>
+    <td colspan="<?php echo $colspan;?>" class="pagination-centered"><?php echo $this->pagination->getListFooter(); ?></td>
 </tr>

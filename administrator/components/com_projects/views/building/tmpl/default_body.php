@@ -3,7 +3,7 @@
 defined('_JEXEC') or die;
 $ii = JFactory::getApplication()->input->getInt('limitstart', 0);
 foreach ($this->items as $i => $item) :?>
-    <tr class="row0<?php if ($item['expired']) echo ' expired';?>">
+    <tr class="row0<?php if ($item['expired']) echo ' expired'; ?>">
         <td>
             <?php echo ++$ii; ?>
         </td>
@@ -28,9 +28,11 @@ foreach ($this->items as $i => $item) :?>
         <td>
             <?php echo $item['tip']; ?>
         </td>
-        <td>
-            <?php echo $item['scheme']; ?>
-        </td>
+        <?php if (ProjectsHelper::canDo('core.general')) : ?>
+            <td>
+                <?php echo $item['scheme']; ?>
+            </td>
+        <? endif; ?>
         <td>
             <?php echo $item['contract']; ?>
         </td>
