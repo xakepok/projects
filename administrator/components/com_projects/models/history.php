@@ -29,9 +29,50 @@ class ProjectsModelHistory extends AdminModel {
 
     /**
      * Возвращает историю работы с экспонентом в сделках
+     * @param int $exhibitorID ID экспонента
+     * @return array
+     * @since 1.0.8.1
+     */
+    public function getHistory(int $exhibitorID): array
+    {
+        $result = array('process' => array(), 'complete' => array());
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`c`.`id` as `contractID`, `c`.`number`, `c`.`dat`, `c`.`status`")
+            ->select("`p`.`id` as `projectID`, `p`.`title` as `project`")
+            ->select("`u`.`name` as `manager`")
+            ->select("IF(`p`.`date_end`>CURRENT_TIMESTAMP(),'1','0') as `is_active`")
+            ->from("`#__prj_contracts` as `c`")
+            ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
+            ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`")
+            ->where("`c`.`expID` = {$exhibitorID}");
+        $items = $db->setQuery($query)->loadObjectList();
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&task=exhibitor.edit&id={$exhibitorID}");
+        foreach ($items as $item) {
+            $arr = array();
+            $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}");
+            $arr['project'] = (ProjectsHelper::canDo('core.general')) ? JHtml::link($url, $item->project) : $item->project;
+            $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$item->contractID}");
+            $arr['todos'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_BLANK_TODOS'));
+            $arr['manager'] = $item->manager;
+            $arr['status'] = ProjectsHelper::getExpStatus($item->status);
+            if ($item->status == '1' && !empty($item->number)) $arr['status'] .= " №{$item->number}";
+            if ($item->status == '1' && empty($item->number)) $arr['status'] = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
+            $url_contract = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
+            $arr['status'] = JHtml::link($url_contract, $arr['status']);
+            $result[(!$item->is_active) ? 'complete' : 'process'][] = $arr;
+        }
+        return $result;
+    }
+
+    /**
+     * Возвращает историю работы с экспонентом в сделках
      * @param int $expID ID экспонента
      * @return array
      * @since 1.2.6
+     * @deprecated
+     * Не используется более с версии 1.0.8.1
      */
     public function getExpHistory(int $expID): array
     {
@@ -84,7 +125,7 @@ class ProjectsModelHistory extends AdminModel {
                 }
             }
         }
-        $result = $this->checkDuplicate($result);
+        //$result = $this->checkDuplicate($result);
         return $result;
     }
 

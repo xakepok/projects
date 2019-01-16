@@ -2,7 +2,7 @@
 defined('_JEXEC') or die;
 ?>
 <div class="center"><h4><?php echo JText::sprintf('COM_PROJECTS_BLANK_SUCCESS_PROJECTS');?></h4></div>
-<table class="history">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>

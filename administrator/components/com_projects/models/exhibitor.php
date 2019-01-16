@@ -119,7 +119,7 @@ class ProjectsModelExhibitor extends AdminModel
         $expID = JFactory::getApplication()->input->getInt('id', 0);
         if ($expID == 0) return array();
         $model = AdminModel::getInstance('History', 'ProjectsModel');
-        $history = $model->getExpHistory($expID);
+        $history = $model->getHistory($expID);
         return $history;
     }
 

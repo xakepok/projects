@@ -12,8 +12,7 @@ HTMLHelper::_('script', 'com_projects/jquery.maskedinput.min.js', array('version
 HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto', 'relative' => true));
 $action = JRoute::_('index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id=' . (int)$this->item->id);
 $return = JFactory::getApplication()->input->get('return', null);
-if ($return != null)
-{
+if ($return != null) {
     $action .= "&amp;return={$return}";
 }
 ?>
@@ -45,6 +44,9 @@ if ($return != null)
                     </div>
                     <div class="span4">
                         <?php echo $this->loadTemplate('bank'); ?>
+                        <?php if ($this->item->id != null): ?>
+                            <?php echo $this->loadTemplate('history_active'); ?>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
