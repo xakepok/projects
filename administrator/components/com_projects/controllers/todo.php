@@ -12,10 +12,12 @@ class ProjectsControllerTodo extends FormController {
     public function add()
     {
         $contractID = $this->input->getInt('contractID', 0);
-        if ($contractID != 0)
+        $session = JFactory::getSession();
+        $createTodoFor = $session->get('createTodoFor', null);
+        if ($contractID != 0 || $createTodoFor != null)
         {
-            $session = JFactory::getSession();
-            $session->set('contractID', $contractID);
+            $cid = $createTodoFor ?? $contractID;
+            $session->set('contractID', $cid);
         }
         return parent::add();
     }

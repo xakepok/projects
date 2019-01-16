@@ -54,6 +54,10 @@ class ProjectsModelTodo extends AdminModel {
         if ($id != 0 && (!$user->authorise('core.edit.state', $this->option . '.todo.' . (int) $id))
             || ($id == 0 && !$user->authorise('core.edit.state', $this->option)))
             $form->setFieldAttribute('state', 'disabled', 'true');
+        if ($id == 0 && !ProjectsHelper::canDo('core.general'))
+        {
+            $form->setValue('managerID', JFactory::getUser()->id);
+        }
 
         return $form;
     }

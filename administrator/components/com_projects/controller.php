@@ -22,6 +22,20 @@ class ProjectsController extends BaseController
 {
     public function display($cachable = false, $urlparams = array())
     {
+        $view = $this->input->getString('view');
+        if ($view == 'todos')
+        {
+            $contractID = $this->input->getInt('contractID', 0);
+            $session = JFactory::getSession();
+            if ($contractID != 0)
+            {
+                $session->set('createTodoFor', $contractID);
+            }
+            else
+            {
+                $session->clear('createTodoFor');
+            }
+        }
         return parent::display($cachable, $urlparams);
     }
 }

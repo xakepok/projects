@@ -12,7 +12,7 @@
                 description="COM_PROJECTS_HEAD_TODO_CONTRACT_DESC"
                 autocomplete="off"
                 required="true"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="managerID"
@@ -21,17 +21,17 @@
                 description="COM_PROJECTS_HEAD_TODO_MANAGER_DESC"
                 required="true"
                 onchange="getTodosCountOnDate()"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="state"
                 type="list"
                 label="COM_PROJECTS_HEAD_TODO_STATE"
                 description="COM_PROJECTS_HEAD_TODO_STATE_DESC"
-                class="inputbox"
                 required="true"
                 size="1"
                 default="0"
+                class="x2"
         >
             <option value="1">COM_PROJECTS_HEAD_TODO_STATE_1</option>
             <option value="0">COM_PROJECTS_HEAD_TODO_STATE_0</option>
@@ -44,26 +44,28 @@
                 autocomplete="off"
                 required="true"
                 onchange="getTodosCountOnDate()"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="task"
-                type="text"
+                type="textarea"
+                rows="5"
                 label="COM_PROJECTS_HEAD_TODO_TASK"
                 description="COM_PROJECTS_HEAD_TODO_TASK_DESC"
                 hint="COM_PROJECTS_HEAD_TODO_TASK_HINT"
                 autocomplete="off"
                 required="true"
-                class="input-xlarge"
+                class="x2"
         />
         <field
                 name="result"
-                type="text"
+                type="textarea"
+                rows="5"
                 label="COM_PROJECTS_HEAD_TODO_RESULT"
                 description="COM_PROJECTS_HEAD_TODO_RESULT_DESC"
                 hint="COM_PROJECTS_HEAD_TODO_RESULT_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="x2"
         />
     </fieldset>
 </form>

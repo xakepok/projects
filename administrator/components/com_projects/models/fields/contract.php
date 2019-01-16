@@ -53,7 +53,12 @@ class JFormFieldContract extends JFormFieldList
             }
             else
             {
-                $name = JText::sprintf('COM_PROJECTS_FILTER_CONTRACT_FIELD', $item->id, $item->project, $exp);
+                if ($item->number != null) {
+                    $name = JText::sprintf('COM_PROJECTS_FILTER_CONTRACT_DOGOVOR_FIELD', $item->number, $item->dat, $exp);
+                }
+                else {
+                    $name = JText::sprintf('COM_PROJECTS_FILTER_CONTRACT_FIELD', $item->id, $item->project, $exp);
+                }
             }
             $options[] = JHtml::_('select.option', $item->id, $name);
         }
