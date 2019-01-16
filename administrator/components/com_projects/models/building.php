@@ -106,6 +106,7 @@ class ProjectsModelBuilding extends ListModel
             }
             $results[] = $arr;
         }
+
         return $results;
     }
 

@@ -32,7 +32,7 @@ foreach ($this->items as $i => $item) :?>
             <td>
                 <?php echo $item['scheme']; ?>
             </td>
-        <? endif; ?>
+        <?php endif; ?>
         <td>
             <?php echo $item['contract']; ?>
         </td>
