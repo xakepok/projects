@@ -10,26 +10,28 @@ class ProjectsHelper
 {
     public function addSubmenu($vName)
     {
-        if (self::canDo('core.general'))
-        {
+        $view = JFactory::getApplication()->input->getString('view');
+        if ($view == 'contracts' || $view == 'todos') {
+
+            $session = JFactory::getSession();
+            JHtmlSidebar::addFilter(JText::_('COM_PROJECTS_HEAD_EXP_HISTORY_PROJECT'), 'set_active_project', JHtml::_('select.options', ProjectsHtmlFilters::projectOptions(), 'value', 'text', $session->get('active_project')));
+        }
+        if (self::canDo('core.general')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS'), 'index.php?option=com_projects&amp;view=projects', $vName == 'projects');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PLANS'), 'index.php?option=com_projects&amp;view=plans', $vName == 'plans');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CATTITLES'), 'index.php?option=com_projects&amp;view=cattitles', $vName == 'cattitles');
         }
-        if (self::canDo('core.manager') || self::canDo('core.accountant'))
-        {
+        if (self::canDo('core.manager') || self::canDo('core.accountant')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CONTRACTS'), 'index.php?option=com_projects&amp;view=contracts', $vName == 'contracts');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_TODOS'), 'index.php?option=com_projects&amp;view=todos', $vName == 'todos');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_EXHIBITORS'), 'index.php?option=com_projects&amp;view=exhibitors', $vName == 'exhibitors');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_BUILDING'), 'index.php?option=com_projects&amp;view=building', $vName == 'building');
         }
-        if (self::canDo('core.accountant'))
-        {
+        if (self::canDo('core.accountant')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_SCORES'), 'index.php?option=com_projects&amp;view=scores', $vName == 'scores');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PAYMENTS'), 'index.php?option=com_projects&amp;view=payments', $vName == 'payments');
         }
-        if (self::canDo('core.general'))
-        {
+        if (self::canDo('core.general')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CATALOG'), 'index.php?option=com_projects&amp;view=catalogs', $vName == 'catalogs');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_STAT'), 'index.php?option=com_projects&amp;view=stat', $vName == 'stat');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PRICES'), 'index.php?option=com_projects&amp;view=prices', $vName == 'prices');
@@ -86,15 +88,13 @@ class ProjectsHelper
      */
     public static function uploadFile(string $field, string $folder, int $id): string
     {
-        $path = JPATH_ROOT."/images/{$folder}/{$id}";
+        $path = JPATH_ROOT . "/images/{$folder}/{$id}";
         $name = File::makeSafe($_FILES['jform']['name'][$field]);
         $tmp = $_FILES['jform']['tmp_name'][$field];
         Folder::create($path);
-        if (!empty($tmp) && !empty($name))
-        {
-            if (File::upload($tmp, $path."/".$name))
-            {
-                chmod($path."/".$name, 0777);
+        if (!empty($tmp) && !empty($name)) {
+            if (File::upload($tmp, $path . "/" . $name)) {
+                chmod($path . "/" . $name, 0777);
             }
         }
         return $name;
@@ -107,7 +107,7 @@ class ProjectsHelper
      * @return array массив с 3 валютами
      * @since 1.0.4.3
      */
-    public static function getProjectAmount(int $projectID, array $statuses = array(1,2,3,4)): array
+    public static function getProjectAmount(int $projectID, array $statuses = array(1, 2, 3, 4)): array
     {
         $statuses = implode(', ', $statuses);
         $db =& JFactory::getDbo();
@@ -129,7 +129,7 @@ class ProjectsHelper
      * @return array сумма всех платежей в трёх валютах
      * @since 1.0.4.3
      */
-    public static function getProjectPayments(int $projectID, array $statuses = array(1,2,3,4)): array
+    public static function getProjectPayments(int $projectID, array $statuses = array(1, 2, 3, 4)): array
     {
         $statuses = implode(', ', $statuses);
         $db =& JFactory::getDbo();
@@ -164,7 +164,7 @@ class ProjectsHelper
             ->from("`#__prj_contract_amounts`")
             ->where("`contractID` = {$contractID}");
 
-        return (float) 0 + $db->setQuery($query)->loadResult();
+        return (float)0 + $db->setQuery($query)->loadResult();
     }
 
     /**
@@ -185,8 +185,7 @@ class ProjectsHelper
 
         $options = array();
 
-        foreach ($result as $item)
-        {
+        foreach ($result as $item) {
             $title = sprintf("№%s (%s %s)", $item->number, $item->sq, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
             $options[] = JHtml::_('select.option', $item->standID, $title);
         }
@@ -203,7 +202,7 @@ class ProjectsHelper
      */
     public static function getCurrency(float $amount, string $currency): string
     {
-        return sprintf("%s %s", number_format($amount, '2', ',', ' '), JText::sprintf("COM_PROJECTS_HEAD_ITEM_PRICE_SMALL_".mb_strtoupper($currency)));
+        return sprintf("%s %s", number_format($amount, '2', ',', ' '), JText::sprintf("COM_PROJECTS_HEAD_ITEM_PRICE_SMALL_" . mb_strtoupper($currency)));
     }
 
     /**
@@ -298,7 +297,7 @@ class ProjectsHelper
             ->where("`scoreID` IN ({$ids})");
         $payments = $db->setQuery($query)->loadObjectList();
         foreach ($payments as $payment) {
-            if ($result[$payment->scoreID]) $result[$payment->scoreID] = (float) 0;
+            if ($result[$payment->scoreID]) $result[$payment->scoreID] = (float)0;
             $result[$payment->scoreID] += $payment->amount;
         }
         return $result;
@@ -516,7 +515,7 @@ class ProjectsHelper
 
     /**
      * Проверяет возможность использовать указанный номер в договоре
-     * @param   int $number   Номер договора
+     * @param   int $number Номер договора
      * @return boolean
      * @since 1.2.2
      */
