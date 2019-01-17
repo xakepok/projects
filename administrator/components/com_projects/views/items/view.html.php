@@ -43,7 +43,7 @@ class ProjectsViewItems extends HtmlView
         }
         if (ProjectsHelper::canDo('core.general'))
         {
-            JToolbarHelper::deleteList('', 'sections.delete');
+            JToolbarHelper::deleteList('', 'items.delete');
         }
         if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
         {
