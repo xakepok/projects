@@ -34,6 +34,18 @@ class JFormFieldItem extends JFormFieldList
         if ($view == 'catalogs' || $view == 'catalog' || $view == 'stand')
         {
             $query->where("`i`.`is_sq` = 1");
+            if ($view == 'stand') {
+                $session = JFactory::getSession();
+                if ($session->get('contractID')) {
+                    $contractID = $session->get('contractID');
+                    $projectID = ProjectsHelper::getContractProject($contractID);
+                    $priceID = ProjectsHelper::getProjectPrice($projectID);
+                    $query
+                        ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
+                        ->where("`s`.`priceID` = {$priceID}");
+                    $session->clear('contractID');
+                }
+            }
         }
         $result = $db->setQuery($query)->loadObjectList();
 

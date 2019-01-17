@@ -25,7 +25,7 @@ class JFormFieldCatalog extends JFormFieldList
             $catalogID = ProjectsHelper::getProjectCatalog($projectID);
             $query->where("`cat`.`titleID` = {$catalogID}");
             $query->where("`cat`.`id` NOT IN (SELECT `c`.`catalogID` FROM `#__prj_contract_stands` as `c` LEFT JOIN `#__prj_contracts` AS `con` ON `con`.`id` = `c`.`contractID` WHERE `con`.`prjID` = {$projectID} AND `con`.`status` != 0)");
-            $session->clear('contractID');
+            if ($view != 'stand') $session->clear('contractID');
         }
         $result = $db->setQuery($query)->loadObjectList();
 
