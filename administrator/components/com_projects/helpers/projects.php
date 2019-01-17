@@ -43,6 +43,8 @@ class ProjectsHelper
      * Возвращает массив со списком ID сделок, у которых номер стенда указан вручную
      * @return array
      * @since 1.0.6.0
+     * @deprecated
+     * Не используется с 1.0.8.6
      */
     public static function getStandHandNumber(): array
     {
@@ -190,6 +192,18 @@ class ProjectsHelper
         }
 
         return $options;
+    }
+
+    /**
+     * Возвращает сумму вместе с валютой
+     * @param float $amount Сумма
+     * @param string $currency Валюта
+     * @return string
+     * @since 1.0.8.6
+     */
+    public static function getCurrency(float $amount, string $currency): string
+    {
+        return sprintf("%s %s", number_format($amount, '2', ',', ' '), JText::sprintf("COM_PROJECTS_HEAD_ITEM_PRICE_SMALL_".mb_strtoupper($currency)));
     }
 
     /**
@@ -453,7 +467,7 @@ class ProjectsHelper
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`s`.`id`, `s`.`tip`, `s`.`sq`, `s`.`freeze`, `s`.`comment`, `s`.`status`, `s`.`scheme`, `s`.`itemID`")
+            ->select("`s`.`id`, `s`.`tip`, `c`.`square` as `sq`, `s`.`freeze`, `s`.`comment`, `s`.`status`, `s`.`scheme`, `s`.`itemID`")
             ->select("`c`.`number`")
             ->select("`i`.`title_ru` as `item`")
             ->from("`#__prj_stands` as `s`")

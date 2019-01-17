@@ -130,7 +130,6 @@ class ProjectsModelContracts extends ListModel
         $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'debt' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'payments' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
         $ids = array();
         $format = JFactory::getApplication()->input->getString('format', 'html');
-        $badStands = ProjectsHelper::getStandHandNumber();
         $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contracts");
         foreach ($items as $item) {
             $ids[] = $item->id;
@@ -139,8 +138,8 @@ class ProjectsModelContracts extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}&amp;return={$return}");
             $arr['project'] = ($format != 'html' || !ProjectsHelper::canDo('core.manager')) ? $item->project : JHtml::link($url, $item->project);
             $arr['currency'] = $item->currency;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id={$item->id}");
-            if ($format == 'html') $arr['edit_link'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_GO_CONTRACT'));
+            $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->id}");
+            if ($format == 'html') $arr['edit_link'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_GO'));
             $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$item->id}");
             $link = JHtml::link($url, $item->plan);
             if ($format == 'html') $arr['todo'] = $link;
@@ -155,18 +154,17 @@ class ProjectsModelContracts extends ListModel
             $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
             if ($format == 'html') $arr['plan'] = $link;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
-            $alarm = (!in_array($item->id, $badStands)) ? '' : "<span style='color: red;'>!!!</span>";
-            $arr['stand'] = $item->stand ?? $alarm;
+            $arr['stand'] = implode(" ", $this->getStandsForContract($item->id));
             $amount_field = "amount_{$item->currency}";
             $debt_field = "debt_{$item->currency}";
             $amount = $item->$amount_field;
             $payments = $item->payments;
             $debt = $item->$debt_field;
-            $arr['amount'] = ($format != 'html') ? $amount : sprintf("%s %s", number_format($amount, 2, ',', " "), $item->currency);
+            $arr['amount'] = ($format != 'html') ? $amount : ProjectsHelper::getCurrency((float) $amount, (string) $item->currency);
             $arr['amount_only'] = $amount; //Только цена
             $paid = (float) $amount - (float) $debt;
-            $arr['paid'] = sprintf(("%s %s"), number_format($paid, 2, ',', " "), $item->currency); //Только цена
-            $arr['debt'] = ($format != 'html') ? $debt : sprintf("%s %s", number_format($debt, 2, ',', " "), $item->currency);
+            $arr['paid'] = ProjectsHelper::getCurrency((float) $paid, (string) $item->currency);
+            $arr['debt'] = ($format != 'html') ? $debt : ProjectsHelper::getCurrency((float) $debt, (string) $item->currency);
             $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}&amp;return={$return}");
             if (ProjectsHelper::canDo('core.accountant') && $debt > 0) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE')));
             if ($format != 'html') $arr['debt'] = $debt;
@@ -222,10 +220,29 @@ class ProjectsModelContracts extends ListModel
     }
 
     /**
+     * Возвращает стенды сделки
+     * @param int $contractID ID сделки
+     * @return array
+     * @since 1.0.8.6
+     */
+    private function getStandsForContract(int $contractID): array
+    {
+        $stands = ProjectsHelper::getContractStands($contractID);
+        $result = array();
+        foreach ($stands as $stand) {
+            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand->id}");
+            $result[] = JHtml::link($url, $stand->number);
+        }
+        return $result;
+    }
+
+    /**
      * Возвращает массив с номерами стендов по сделкам
      * @param array $ids Массив с ID сделок
      * @return array
      * @since 1.3.0.2
+     * @deprecated
+     * Не используется с 1.0.8.6
      */
     private function getStands(array $ids): array
     {
