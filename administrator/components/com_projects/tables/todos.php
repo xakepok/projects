@@ -11,6 +11,7 @@ defined('_JEXEC') or die;
 class TableProjectsTodos extends Table
 {
     var $id = null;
+    var $is_notify = null;
     var $dat = null;
     var $dat_open = null;
     var $dat_close = null;

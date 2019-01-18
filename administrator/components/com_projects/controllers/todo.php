@@ -1,6 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\MVC\Model\AdminModel;
 
 class ProjectsControllerTodo extends FormController {
 
@@ -20,5 +21,15 @@ class ProjectsControllerTodo extends FormController {
             $session->set('contractID', $cid);
         }
         return parent::add();
+    }
+
+    public function cancel($key = null)
+    {
+        $layout = JFactory::getApplication()->input->getCmd('layout', 'default');
+        if ($layout == 'notify') {
+            $model = AdminModel::getInstance('Todo', 'ProjectsModel');
+            $model->close();
+        }
+        return parent::cancel($key);
     }
 }

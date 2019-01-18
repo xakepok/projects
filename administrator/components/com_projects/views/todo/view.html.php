@@ -19,11 +19,12 @@ class ProjectsViewTodo extends HtmlView {
 
     protected function addToolbar() {
         //JFactory::getApplication()->input->set('hidemainmenu', true);
+        $layout = JFactory::getApplication()->input->getCmd('layout', 'default');
         $title = $this->setTitle();
 
         JToolbarHelper::title($title, '');
-	    JToolBarHelper::apply('todo.apply', 'JTOOLBAR_APPLY');
-        JToolbarHelper::save('todo.save', 'JTOOLBAR_SAVE');
+        if ($layout == 'edit') JToolBarHelper::apply('todo.apply', 'JTOOLBAR_APPLY');
+        if ($layout == 'edit') JToolbarHelper::save('todo.save', 'JTOOLBAR_SAVE');
         JToolbarHelper::cancel('todo.cancel', 'JTOOLBAR_CLOSE');
     }
 

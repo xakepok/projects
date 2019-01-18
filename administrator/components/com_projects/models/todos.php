@@ -42,6 +42,7 @@ class ProjectsModelTodos extends ListModel
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
             ->leftJoin("`#__users` as `u1` ON `u1`.`id` = `t`.`userOpen`")
+            ->where("`t`.`is_notify` = 0")
             ->leftJoin("`#__users` as `u3` ON `u3`.`id` = `t`.`managerID`");
         /* Фильтр */
         $contractID = JFactory::getApplication()->input->getInt('contractID', 0);

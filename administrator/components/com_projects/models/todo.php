@@ -90,15 +90,16 @@ class ProjectsModelTodo extends AdminModel {
 
     /**
      * Закрывает задачу. Используется для асинхронного запроса из вьюшки со сделкой
+     * @param bool $notify Закрыть уведомление
      * @since 1.2.9.6
      * @return boolean
      * @throws
      */
-    public function close()
+    public function close(bool $notify = false)
     {
         $data['userClose'] = JFactory::getUser()->id;
         $data['dat_close'] = date("Y-m-d H:i:s");
-        $data['result'] = JFactory::getDbo()->escape(JFactory::getApplication()->input->getString('result'));
+        $data['result'] = (!$notify) ? JFactory::getDbo()->escape(JFactory::getApplication()->input->getString('result')) : NULL;
         $data['id'] = JFactory::getDbo()->escape(JFactory::getApplication()->input->getInt('id', 0));
         $data['state'] = '1';
         if ($data['id'] == 0) return false;
