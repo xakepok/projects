@@ -1,5 +1,4 @@
 <?php
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 
@@ -44,13 +43,17 @@ class ProjectsViewTodos extends HtmlView
         {
             JToolbarHelper::editList('todo.edit');
         }
-        if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
+        if (ProjectsHelper::canDo('projects.todos.delete'))
+        {
+            JToolbarHelper::deleteList('COM_PROJECT_QUEST_REMOVE_TODOS', 'todos.delete');
+        }
+        if (ProjectsHelper::canDo('core.edit.state'))
         {
             JToolbarHelper::divider();
             JToolbarHelper::publish('todos.publish', 'COM_PROJECTS_ACTION_TASK_DOES', true);
             JToolbarHelper::unpublish('todos.unpublish', 'COM_PROJECTS_ACTION_TASK_DOSE_DOES', true);
         }
-		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
+		if (ProjectsHelper::canDo('core.admin'))
 		{
 			JToolBarHelper::preferences('com_projects');
 		}
