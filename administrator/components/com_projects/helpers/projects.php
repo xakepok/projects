@@ -11,6 +11,11 @@ class ProjectsHelper
     public function addSubmenu($vName)
     {
         $view = JFactory::getApplication()->input->getString('view');
+        $notify = self::getNotifies();
+        if ($notify > 0)
+        {
+            JHtmlSidebar::addEntry(Text::sprintf('COM_PROJECTS_MENU_NOTIFY', $notify), 'index.php?option=com_projects&amp;view=todos&amp;notify=1', $vName == 'todos');
+        }
         if (in_array($view, array('contracts', 'todos', 'building', 'stat'))) {
             JHtmlSidebar::addFilter(JText::_('COM_PROJECTS_FILTER_SELECT_ACTIVE_PROJECT'), 'set_active_project', JHtml::_('select.options', ProjectsHtmlFilters::projectOptions(), 'value', 'text', self::getActiveProject()));
         }
@@ -37,6 +42,23 @@ class ProjectsHelper
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ITEMS'), 'index.php?option=com_projects&amp;view=items', $vName == 'items');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ACTIVITIES'), 'index.php?option=com_projects&amp;view=activities', $vName == 'activities');
         }
+    }
+
+    /**
+     * Возвращает количество непрочитанных уведомлений
+     * @since 1.0.9.3
+     * @return int
+     */
+    public static function getNotifies(): int
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("IFNULL(COUNT(`id`),0)")
+            ->from("`#__prj_todos`")
+            ->where("`is_notify`")
+            ->where("`state` = 0");
+        return $db->setQuery($query)->loadResult();
     }
 
     /**

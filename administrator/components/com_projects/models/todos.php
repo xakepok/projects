@@ -37,12 +37,12 @@ class ProjectsModelTodos extends ListModel
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `e`.`id` as `expID`")
             ->select("`u1`.`name` as `open`, `u3`.`name` as `manager`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`, `p`.`id` as `projectID`")
+            ->select("`t`.`is_notify`")
             ->from("`#__prj_todos` as `t`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `t`.`contractID`")
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
             ->leftJoin("`#__users` as `u1` ON `u1`.`id` = `t`.`userOpen`")
-            ->where("`t`.`is_notify` = 0")
             ->leftJoin("`#__users` as `u3` ON `u3`.`id` = `t`.`managerID`");
         /* Фильтр */
         $contractID = JFactory::getApplication()->input->getInt('contractID', 0);
@@ -52,15 +52,21 @@ class ProjectsModelTodos extends ListModel
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . 'OR `p`.`title_ru` LIKE ' . $search);
         }
-        // Фильтруем по состоянию.
-        $published = $this->getState('filter.state');
-        if (is_numeric($published))
-        {
-            $query->where('`t`.`state` = ' . (int) $published);
+        // Показываем уведомления
+        $notify = JFactory::getApplication()->input->getInt('notify', 0);
+        $query->where("`is_notify` = {$notify}");
+        if ($notify == 0) {
+            // Фильтруем по состоянию.
+            $published = $this->getState('filter.state');
+            if (is_numeric($published)) {
+                $query->where('`t`.`state` = ' . (int)$published);
+            } elseif ($published === '') {
+                $query->where('(`t`.`state` = 0 OR `t`.`state` = 1)');
+            }
         }
-        elseif ($published === '')
+        else
         {
-            $query->where('(`t`.`state` = 0 OR `t`.`state` = 1)');
+            $query->where("`t`.`state` = 0");
         }
         // Фильтруем по менеджеру.
         $manager = $this->getState('filter.manager');
@@ -82,7 +88,7 @@ class ProjectsModelTodos extends ListModel
         }
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
-        if (empty($project)) $project = ProjectsHelper::getActiveProject();
+        if (empty($project) && $notify == 0) $project = ProjectsHelper::getActiveProject();
         if (is_numeric($project))
         {
             $query->where('`c`.`prjID` = ' . (int) $project);
@@ -140,7 +146,8 @@ class ProjectsModelTodos extends ListModel
             $exhibitor = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}");
             $arr['exp'] = JHtml::link($url, $exhibitor);
-            $url = JRoute::_("index.php?option=com_projects&amp;task=todo.edit&amp;id={$item->id}");
+            $layout = (!$item->is_notyfy) ? 'edit' : 'notify';
+            $url = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;layout={$layout}&amp;id={$item->id}");
             $link = JHtml::link($url, $item->date);
             $arr['dat'] = $link;
             $arr['dat_open'] = $item->dat_open;
