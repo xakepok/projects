@@ -11,7 +11,7 @@ class ProjectsHelper
     public function addSubmenu($vName)
     {
         $view = JFactory::getApplication()->input->getString('view');
-        if (in_array($view, array('contracts', 'todos', 'building'))) {
+        if (in_array($view, array('contracts', 'todos', 'building', 'stat'))) {
             JHtmlSidebar::addFilter(JText::_('COM_PROJECTS_FILTER_SELECT_ACTIVE_PROJECT'), 'set_active_project', JHtml::_('select.options', ProjectsHtmlFilters::projectOptions(), 'value', 'text', self::getActiveProject()));
         }
         if (self::canDo('core.general')) {

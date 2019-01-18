@@ -65,6 +65,7 @@ class ProjectsModelStat extends ListModel
         }
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
+        if (empty($project)) $project = ProjectsHelper::getActiveProject();
         if (is_numeric($project)) {
             $query->where('`c`.`prjID` = ' . (int) $project);
             $session = JFactory::getSession();
@@ -113,9 +114,9 @@ class ProjectsModelStat extends ListModel
             $arr['unit_2'] = '';
             $arr['value'] = $item->value;
             $currency = "price_" . $item->currency;
-            $arr['price'][$item->currency] = (!$xls) ? sprintf("%s %s", number_format($item->$currency, 0, ".", " "), $item->currency) : $item->$currency;
+            $arr['price'][$item->currency] = (!$xls) ? sprintf("%s %s", number_format($item->$currency, 2, ",", " "), $item->currency) : $item->$currency;
             $currency = "amount_" . $item->currency;
-            $arr['amount'][$item->currency] = (!$xls) ? sprintf("%s %s", number_format($item->$currency, 0, ".", " "), $item->currency) : $item->$currency;
+            $arr['amount'][$item->currency] = (!$xls) ? sprintf("%s %s", number_format($item->$currency, 2, ",", " "), $item->currency) : $item->$currency;
             $result['items'][] = $arr;
         }
         return $result;

@@ -10,10 +10,13 @@ HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto',
 HTMLHelper::_('script', 'com_projects/script.js', array('version' => 'auto', 'relative' => true));
 $itemID = JFactory::getApplication()->input->getInt('itemID', 0);
 $action = JRoute::_(($itemID != 0) ? "index.php?option=com_projects&amp;view=stat&amp;itemID={$itemID}" : "index.php?option=com_projects&amp;view=stat");
+$return = base64_encode(JUri::base() . "index.php?option=com_projects&view=todos");
 ?>
 <div class="row-fluid">
     <div id="j-sidebar-container" class="span2">
-        <?php echo $this->sidebar; ?>
+        <form action="<?php echo JRoute::_("index.php?return={$return}"); ?>" method="post">
+            <?php echo $this->sidebar; ?>
+        </form>
     </div>
     <div id="j-main-container" class="span10 j-toggle-main">
         <div>

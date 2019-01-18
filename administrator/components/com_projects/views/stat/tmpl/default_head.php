@@ -31,13 +31,13 @@ $listDirn = $this->escape($this->state->get('list.direction'));
     <th width="5%">
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT'); ?>
     </th>
-    <th width="5%">
+    <th width="7%">
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_ITEM_PRICE_RUB_SHORT', 'price_rub', $listDirn, $listOrder); ?>
     </th>
-    <th width="5%">
+    <th width="7%">
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_ITEM_PRICE_USD_SHORT', 'price_usd', $listDirn, $listOrder); ?>
     </th>
-    <th width="5%">
+    <th width="7%">
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_ITEM_PRICE_EUR_SHORT', 'price_eur', $listDirn, $listOrder); ?>
     </th>
     <th width="3%">
