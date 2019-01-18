@@ -195,7 +195,6 @@ class ProjectsModelContracts extends ListModel
     /* Сортировка по умолчанию */
     protected function populateState($ordering = null, $direction = null)
     {
-        $session = JFactory::getSession();
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $this->setState('filter.search', $search);
         $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');

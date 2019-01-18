@@ -26,6 +26,7 @@ class ProjectsModelStat extends ListModel
                 'amount_eur',
                 'value',
                 'item',
+                'status'
             );
         }
         parent::__construct($config);
@@ -44,7 +45,7 @@ class ProjectsModelStat extends ListModel
             ->from("`#__prj_stat` as `s`")
             ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `s`.`itemID`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
-            ->where("`i`.`in_stat` = 1");
+            ->where("`s`.`value` > 0");
 
         if ($this->itemID != 0) {
             $query
@@ -71,11 +72,20 @@ class ProjectsModelStat extends ListModel
             $session = JFactory::getSession();
             $session->set('projectID', $project);
         }
-        // Фильтруем по пункту прайса
-        $item = $this->getState('filter.item');
-        if (!empty($item)) {
-            $item = implode(", ", $item);
-            $query->where("`i`.`id` IN ({$item})");
+        // Фильтруем по статусу.
+        $status = $this->getState('filter.status');
+        if (is_array($status)) {
+            if (!empty($status)) {
+                $statuses = implode(', ', $status);
+                if ($status[0] != '0') {
+                    $query->where("`c`.`status` IN ({$statuses})");
+                }
+                else
+                {
+                    $this->state->set('filter.status', '');
+                    $query->where("`c`.`status` IS NOT NULL");
+                }
+            }
         }
 
         /* Сортировка */
@@ -91,9 +101,11 @@ class ProjectsModelStat extends ListModel
         $items = parent::getItems();
         $result = array();
         $result['amount'] = array('rub' => 0, 'usd' => 0, 'eur' => 0);
+        $result['sum'] = array('rub' => 0, 'usd' => 0, 'eur' => 0);
         $result['items'] = array();
         $xls = (JFactory::getApplication()->input->getString('task') == 'exportxls');
         foreach ($items as $item) {
+            $arr = array();
             if ($this->itemID != 0) {
                 $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=stat&itemID={$this->itemID}");
                 $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}");
@@ -114,10 +126,11 @@ class ProjectsModelStat extends ListModel
             $arr['unit_2'] = '';
             $arr['value'] = $item->value;
             $currency = "price_" . $item->currency;
-            $arr['price'][$item->currency] = (!$xls) ? sprintf("%s %s", number_format($item->$currency, 2, ",", " "), $item->currency) : $item->$currency;
+            $arr['price'][$item->currency] = (!$xls) ? ProjectsHelper::getCurrency((float) $item->$currency, $item->currency) : $item->$currency;
             $currency = "amount_" . $item->currency;
-            $arr['amount'][$item->currency] = (!$xls) ? sprintf("%s %s", number_format($item->$currency, 2, ",", " "), $item->currency) : $item->$currency;
+            $arr['amount'][$item->currency] = (!$xls) ? ProjectsHelper::getCurrency((float) $item->$currency, $item->currency) : $item->$currency;
             $result['items'][] = $arr;
+            $result['amount'][$item->currency] += $item->$currency;
         }
         return $result;
     }
@@ -229,11 +242,11 @@ class ProjectsModelStat extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');
-        $item = $this->getUserStateFromRequest($this->context . '.filter.item', 'filter_item');
         $this->setState('filter.search', $search);
+        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');
         $this->setState('filter.project', $project);
-        $this->setState('filter.item', $item);
+        $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status');
+        $this->setState('filter.status', $status);
         parent::populateState('`i`.`title_ru`', 'asc');
     }
 
@@ -241,7 +254,7 @@ class ProjectsModelStat extends ListModel
     {
         $id .= ':' . $this->getState('filter.search');
         $id .= ':' . $this->getState('filter.project');
-        $id .= ':' . $this->getState('filter.item');
+        $id .= ':' . $this->getState('filter.status');
         return parent::getStoreId($id);
     }
 }

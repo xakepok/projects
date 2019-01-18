@@ -34,7 +34,7 @@ $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=todos
                 <thead><?php echo $this->loadTemplate('head'); ?></thead>
                 <tbody><?php echo $this->loadTemplate('body'); ?></tbody>
                 <tfoot><?php echo $this->loadTemplate('foot'); ?></tfoot>
-                <?php //echo $this->loadTemplate('amount'); ?>
+                <?php echo $this->loadTemplate('amount'); ?>
             </table>
             <div>
                 <input type="hidden" name="task" value=""/>

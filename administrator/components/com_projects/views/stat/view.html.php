@@ -20,10 +20,6 @@ class ProjectsViewStat extends HtmlView
         $this->activeFilters = $this->get('ActiveFilters');
         $this->itemID = $this->get('ItemID');
 
-        if (JFactory::getApplication()->input->get('itemID', 0) != 0) {
-            $this->filterForm->removeField('item', 'filter');
-        }
-
 		// Show the toolbar
 		$this->toolbar();
 
