@@ -10,7 +10,9 @@ HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto',
 HTMLHelper::_('script', 'com_projects/script.js', array('version' => 'auto', 'relative' => true));
 $itemID = JFactory::getApplication()->input->getInt('itemID', 0);
 $action = JRoute::_(($itemID != 0) ? "index.php?option=com_projects&amp;view=stat&amp;itemID={$itemID}" : "index.php?option=com_projects&amp;view=stat");
-$return = base64_encode(JUri::base() . "index.php?option=com_projects&view=todos");
+$ret = "index.php?option=com_projects&view=stat";
+if ($itemID > 0) $ret .= "&itemID={$itemID}";
+$return = base64_encode(JUri::base() . $ret);
 ?>
 <div class="row-fluid">
     <div id="j-sidebar-container" class="span2">
