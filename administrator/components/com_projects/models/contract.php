@@ -151,6 +151,11 @@ class ProjectsModelContract extends AdminModel {
             }
             $form->removeField('dat');
             $form->removeField('children');
+            $session = JFactory::getSession();
+            $activeProject = $session->get('active_project');
+            if (is_numeric($activeProject)) {
+                $form->setFieldAttribute('prjID', 'default', $activeProject);
+            }
         }
         if ($id != 0)
         {
