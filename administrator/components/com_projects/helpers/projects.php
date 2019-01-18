@@ -11,10 +11,8 @@ class ProjectsHelper
     public function addSubmenu($vName)
     {
         $view = JFactory::getApplication()->input->getString('view');
-        if ($view == 'contracts' || $view == 'todos') {
-
-            $session = JFactory::getSession();
-            JHtmlSidebar::addFilter(JText::_('COM_PROJECTS_HEAD_EXP_HISTORY_PROJECT'), 'set_active_project', JHtml::_('select.options', ProjectsHtmlFilters::projectOptions(), 'value', 'text', $session->get('active_project')));
+        if (in_array($view, array('contracts', 'todos', 'building'))) {
+            JHtmlSidebar::addFilter(JText::_('COM_PROJECTS_FILTER_SELECT_ACTIVE_PROJECT'), 'set_active_project', JHtml::_('select.options', ProjectsHtmlFilters::projectOptions(), 'value', 'text', self::getActiveProject()));
         }
         if (self::canDo('core.general')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS'), 'index.php?option=com_projects&amp;view=projects', $vName == 'projects');
@@ -39,6 +37,19 @@ class ProjectsHelper
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ITEMS'), 'index.php?option=com_projects&amp;view=items', $vName == 'items');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ACTIVITIES'), 'index.php?option=com_projects&amp;view=activities', $vName == 'activities');
         }
+    }
+
+    /**
+     * Возвращает активный проект из глобальной настройки
+     * @param string $default возвращаемое значение по умолчанию, если проект не выбран
+     * @return mixed
+     * @since 1.0.8.9
+     */
+    public static function getActiveProject(string $default = '')
+    {
+        $session = JFactory::getSession();
+        $project = $session->get('active_project', '');
+        return ($project != 0) ? $project : $default;
     }
 
     /**

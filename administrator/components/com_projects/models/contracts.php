@@ -36,7 +36,6 @@ class ProjectsModelContracts extends ListModel
 
     protected function _getListQuery()
     {
-        $session = JFactory::getSession();
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
@@ -64,7 +63,7 @@ class ProjectsModelContracts extends ListModel
         }
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
-        if (empty($project)) $project = $session->get('active_project');
+        if (empty($project)) $project = ProjectsHelper::getActiveProject();
         if (is_numeric($project)) {
             $query->where('`c`.`prjID` = ' . (int)$project);
         }
@@ -199,7 +198,7 @@ class ProjectsModelContracts extends ListModel
         $session = JFactory::getSession();
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $this->setState('filter.search', $search);
-        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project', $session->get('active_project'));
+        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');
         $this->setState('filter.project', $project);
         $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor');
         $this->setState('filter.exhibitor', $exhibitor);
