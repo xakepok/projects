@@ -52,11 +52,13 @@ class ProjectsHelper
     public static function getNotifies(): int
     {
         $db =& JFactory::getDbo();
+        $userID = JFactory::getUser()->id;
         $query = $db->getQuery(true);
         $query
             ->select("IFNULL(COUNT(`id`),0)")
             ->from("`#__prj_todos`")
-            ->where("`is_notify`")
+            ->where("`is_notify` = 1")
+            ->where("`managerID` = {$userID}")
             ->where("`state` = 0");
         return $db->setQuery($query)->loadResult();
     }

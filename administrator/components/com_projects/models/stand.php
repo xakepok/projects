@@ -31,6 +31,22 @@ class ProjectsModelStand extends AdminModel {
 
     public function delete(&$pks)
     {
+        $item = parent::getItem($pks);
+        $data['contractID'] = $item->contractID;
+        $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
+        $contract = $cm->getItem($item->contractID);
+        $sm = AdminModel::getInstance('Catalog', 'ProjectsModel');
+        $stand = $sm->getItem($item->catalogID);
+        if ($contract->number != null)
+        {
+            $data['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_DG_REMOVE', $contract->number, $stand->number);
+        }
+        else
+        {
+            $data['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_SD_REMOVE', $contract->id, $stand->number);
+        }
+        $data['managerID'] = 400;
+        $this->_createTodo($data, true);
         return parent::delete($pks);
     }
 
@@ -71,6 +87,43 @@ class ProjectsModelStand extends AdminModel {
 
     public function save($data)
     {
+        if ($data['id'] == null)
+        {
+            $arr['contractID'] = $data['contractID'];
+            $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
+            $contract = $cm->getItem($data['contractID']);
+            $sm = AdminModel::getInstance('Catalog', 'ProjectsModel');
+            $stand = $sm->getItem($data['catalogID']);
+            if ($contract->number != null)
+            {
+                $arr['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_DG_ADDED', $contract->number, $stand->number);
+            }
+            else
+            {
+                $arr['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_SD_ADDED', $contract->id, $stand->number);
+            }
+            $arr['managerID'] = 400;
+            $this->_createTodo($arr, true);
+        }
+        if ($data['id'] != null) {
+            $item = parent::getItem($data['id']);
+            $arr['contractID'] = $data['contractID'];
+            $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
+            $contract = $cm->getItem($data['contractID']);
+            $sm = AdminModel::getInstance('Catalog', 'ProjectsModel');
+            $stand_old = $sm->getItem($item->catalogID);
+            $stand_new = $sm->getItem($data['catalogID']);
+            if ($contract->number != null)
+            {
+                $arr['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_DG_EDITED', $contract->number, $stand_old->number, $stand_new->number);
+            }
+            else
+            {
+                $arr['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_SD_EDITED', $contract->id, $stand_old->number, $stand_new->number);
+            }
+            $arr['managerID'] = 400;
+            $this->_createTodo($arr, true);
+        }
         if ($data['scheme'] == '-1') $data['scheme'] = NULL;
         if ($data['status'] == '3')
         {
@@ -132,19 +185,32 @@ class ProjectsModelStand extends AdminModel {
     /**
      * Создаёт задание в планировщике для утверждения отрисовки стенда
      * @param array $data Массив с добавляемыми данными
+     * @param bool $is_notify Создание уведомления
      * @return bool
      * @throws Exception
      * @since 1.3.0.9
      */
-    protected function _createTodo(array $data): bool
+    protected function _createTodo(array $data, bool $is_notify = false): bool
     {
-        $cdata = $this->__getContractData($data['contractID']);
         $arr = array();
         $arr['id'] = NULL;
+        $arr['is_notify'] = (int) $is_notify;
         $arr['dat'] = date('Y-m-d', strtotime(' +1 weekdays'));
         $arr['contractID'] = $data['contractID'];
-        $arr['managerID'] = $cdata->managerID;
-        $arr['task'] = JText::sprintf('COM_PROJECT_TASK_ACCEPT_SCHEME', $data['number'], $cdata->number);
+
+        $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
+        $contract = $cm->getItem($data['contractID']);
+        $arr['managerID'] = $data['managerID'] ?? $contract->managerID;
+        $sm = AdminModel::getInstance('Catalog', 'ProjectsModel');
+        $stand = $sm->getItem($data['catalogID']);
+        if ($contract->number != null)
+        {
+            $arr['task'] = $data['task'] ?? JText::sprintf('COM_PROJECT_TASK_ACCEPT_SCHEME', $stand->number, $contract->number);
+        }
+        else
+        {
+            $arr['task'] = $data['task'] ?? JText::sprintf('COM_PROJECT_TASK_ACCEPT_SCHEME_SD', $stand->number, $contract->id);
+        }
         $arr['user_open'] = JFactory::getUser()->id;
         $arr['state'] = 0;
         $model = AdminModel::getInstance('Todo', 'ProjectsModel');
@@ -152,22 +218,4 @@ class ProjectsModelStand extends AdminModel {
         $table->bind($arr);
         return $model->save($arr);
     }
-
-    /**
-     * Возвращает данные из договора для занесения в планировщик
-     * @param int $contractID ID договора
-     * @return object
-     * @since 1.3.0.9
-     */
-    private function __getContractData(int $contractID): object
-    {
-        $db =& $this->getDbo();
-        $query = $db->getQuery(true);
-        $query
-            ->select("`managerID`, `number`")
-            ->from("`#__prj_contracts`")
-            ->where("`id` = {$contractID}");
-        return $db->setQuery($query, 0, 1)->loadObject();
-    }
-
 }
