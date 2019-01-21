@@ -76,7 +76,7 @@
                 description="COM_PROJECTS_HEAD_PERSON_COMMENT_DESC"
                 hint="COM_PROJECTS_HEAD_PERSON_COMMENT_HINT"
                 autocomplete="off"
-                class="input-xlarge"
+                class="person-field"
                 rows="5"
         />
     </fieldset>

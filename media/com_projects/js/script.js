@@ -61,6 +61,7 @@ function showCard(id) {
             return response.json();
         })
         .then(function (text) {
+            document.querySelector(".modal-body").style.maxHeight = '2048px';
             var title = document.querySelector('#modalExpCardTitle');
             title.textContent = text.data.info.title;
             var myNode = document.querySelector('#cardValues');
@@ -148,7 +149,14 @@ function showCard(id) {
                         myNode.appendChild(document.createTextNode('Электронная почта: '));
                         myNode.appendChild(url);
                     }
-                    myNode.appendChild(document.createElement('hr'));
+                    if (text.data.persons[i].comment != null) {
+                        var comment = document.createElement('p');
+                        comment.textContent = 'Комментарий: ' + text.data.persons[i].comment;
+                        myNode.appendChild(comment);
+                    }
+                    var hr = document.createElement('hr');
+                    hr.style.width = '80%';
+                    myNode.appendChild(hr);
                 }
             }
         })
