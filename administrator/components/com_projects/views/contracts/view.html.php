@@ -42,7 +42,7 @@ class ProjectsViewContracts extends HtmlView
         {
             JToolbarHelper::editList('contract.edit');
         }
-        if (ProjectsHelper::canDo('core.general'))
+        if (ProjectsHelper::canDo('projects.contracts.delete'))
         {
             JToolbarHelper::deleteList('COM_PROJECT_QUEST_REMOVE_CONTRACT', 'contracts.delete');
         }

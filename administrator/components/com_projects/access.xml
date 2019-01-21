@@ -18,5 +18,6 @@
 		<action name="projects.exec.edit" title="COM_PROJECTS_ACCESS_EXEC" description="COM_PROJECTS_ACCESS_EXEC_DESC" />
 		<action name="projects.contract.allow" title="COM_PROJECTS_ACCESS_ALLOW_CONTRACT" description="COM_PROJECTS_ACCESS_ALLOW_CONTRACT_DESC" />
 		<action name="projects.todos.delete" title="COM_PROJECTS_ACCESS_TODOS_DELETE" description="COM_PROJECTS_ACCESS_TODOS_DELETE_DESC" />
+		<action name="projects.contracts.delete" title="COM_PROJECTS_ACCESS_CONTRACTS_DELETE" description="COM_PROJECTS_ACCESS_CONTRACTS_DELETE_DESC" />
 	</section>
 </access>
