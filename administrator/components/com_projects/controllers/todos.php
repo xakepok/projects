@@ -35,4 +35,14 @@ class ProjectsControllerTodos extends AdminController
         echo new JsonResponse(array("user" => $user, "dat" => $dat));
         jexit();
     }
+
+    public function removeTodo()
+    {
+        $id = $this->input->getInt('id', 0);
+        if ($id <= 0) jexit();
+        $model = $this->getModel();
+        $model->delete($id);
+        echo new JsonResponse(array('result' => 'ok'));
+        jexit();
+    }
 }

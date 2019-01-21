@@ -19,6 +19,11 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO'));
         <th>
             <?php echo JText::sprintf('COM_PROJECTS_HEAD_TODO_RESULT'); ?>
         </th>
+        <?php if (ProjectsHelper::canDo('projects.todos.delete')): ?>
+            <th>
+                <?php echo JText::sprintf('COM_PROJECTS_TITLE_REMOVE_TODO'); ?>
+            </th>
+        <?php endif; ?>
     </tr>
     </thead>
     <tbody>
@@ -26,8 +31,8 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO'));
         ?>
         <form action="<?php echo $todo['action']; ?>" method="post"
               id="form_task_<?php echo $todo['id']; ?>">
-            <tr>
-                <td style="color:<?php echo ($todo['expired']) ? 'red' : 'black';?>">
+            <tr id="rmTodo_<?php echo $todo['id']; ?>">
+                <td style="color:<?php echo ($todo['expired']) ? 'red' : 'black'; ?>">
                     <?php echo $todo['dat']; ?>
                 </td>
                 <td>
@@ -35,19 +40,26 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO'));
                 </td>
                 <td class="resultTodo_<?php echo $todo['id']; ?>">
                     <?php if ($todo['state'] != 1): ?>
-                    <div class="clearfix">
-                        <div class="js-stools-container-bar">
-                            <div class="btn-wrapper input-append">
-                                <input type="text" value="" name="result_<?php echo $todo['id']; ?>" style="width: 280px;" />
-                                <button class="btn btn-small button-publish" style="height: 28px" onclick="closeTask(<?php echo $todo['id']; ?>); return false;"><?php echo JText::sprintf('JYES');?></button>
+                        <div class="clearfix">
+                            <div class="js-stools-container-bar">
+                                <div class="btn-wrapper input-append">
+                                    <input type="text" value="" name="result_<?php echo $todo['id']; ?>"
+                                           style="width: 280px;"/>
+                                    <button class="btn btn-small button-publish" style="height: 28px"
+                                            onclick="closeTask(<?php echo $todo['id']; ?>); return false;"><?php echo JText::sprintf('JYES'); ?></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <?php endif;?>
+                    <?php endif; ?>
                     <?php if ($todo['state'] == 1): ?>
-                        <?php echo $todo['dat'], ": ", $todo['user'], " ", $todo['result'];?>
-                    <?php endif;?>
+                        <?php echo $todo['dat'], ": ", $todo['user'], " ", $todo['result']; ?>
+                    <?php endif; ?>
                 </td>
+                <?php if (ProjectsHelper::canDo('projects.todos.delete')): ?>
+                    <td>
+                        <button onclick="removeTodo(<?php echo $todo['id']; ?>); return false;"><?php echo JText::sprintf('COM_PROJECTS_TITLE_REMOVE_TODO'); ?></button>
+                    </td>
+                <?php endif; ?>
             </tr>
         </form>
     <?php endforeach; ?>

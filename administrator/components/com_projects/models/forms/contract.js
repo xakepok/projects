@@ -6,6 +6,19 @@ function setNull(id, currency) {
     document.querySelector("#price_" + id).value = 0;
     getSum2(id, currency);
 }
+function removeTodo(id) {
+    if (id < 1) return false;
+    fetch('/administrator/index.php?option=com_projects&task=todos.removeTodo&id=' + id)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (text) {
+            document.querySelector('#rmTodo_' + id).remove();
+        })
+        .catch(function (error) {
+            console.log('Request failed', error);
+        });
+}
 function removeStand(standID) {
     fetch('/administrator/index.php?option=com_projects&task=contracts.removeStand&id=' + standID)
         .then(function (response) {
