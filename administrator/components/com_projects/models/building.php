@@ -51,7 +51,8 @@ class ProjectsModelBuilding extends ListModel
         $project = $this->getState('filter.project');
         if (empty($project)) $project = ProjectsHelper::getActiveProject();
         if (is_numeric($project)) {
-            $query->where('`c`.`prjID` = ' . (int)$project);
+            $catalog = ProjectsHelper::getProjectCatalog($project);
+            $query->where('`cat`.`titleID` = ' . (int)$catalog);
         }
         // Фильтруем по менеджеру.
         $manager = $this->getState('filter.manager');
