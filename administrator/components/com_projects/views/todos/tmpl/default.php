@@ -21,9 +21,9 @@ $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=todos
                   name="adminForm" id="adminForm">
                 <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
                 <table class="table table-striped">
-                    <thead><?php echo $this->loadTemplate('head'); ?></thead>
-                    <tbody><?php echo $this->loadTemplate('body'); ?></tbody>
-                    <tfoot><?php echo $this->loadTemplate('foot'); ?></tfoot>
+                    <thead><?php echo (!$this->isNotify) ? $this->loadTemplate('head') : $this->loadTemplate('head_notify'); ?></thead>
+                    <tbody><?php echo (!$this->isNotify) ? $this->loadTemplate('body') : $this->loadTemplate('body_notify'); ?></tbody>
+                    <tfoot><?php echo (!$this->isNotify) ? $this->loadTemplate('foot') : $this->loadTemplate('foot_notify'); ?></tfoot>
                 </table>
                 <div>
                     <input type="hidden" name="task" value=""/>

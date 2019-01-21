@@ -25,7 +25,7 @@ class ProjectsViewTodo extends HtmlView {
         JToolbarHelper::title($title, '');
         if ($layout == 'edit') JToolBarHelper::apply('todo.apply', 'JTOOLBAR_APPLY');
         if ($layout == 'edit') JToolbarHelper::save('todo.save', 'JTOOLBAR_SAVE');
-        JToolbarHelper::cancel('todo.cancel', 'JTOOLBAR_CLOSE');
+        JToolbarHelper::cancel('todo.cancel', ($layout != 'edit') ? 'COM_PROJECTS_ACTION_CLOSE_AND_READ' : 'JTOOLBAR_CLOSE');
     }
 
     protected function setTitle(): string

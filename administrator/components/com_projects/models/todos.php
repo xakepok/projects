@@ -146,19 +146,22 @@ class ProjectsModelTodos extends ListModel
             $exhibitor = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}");
             $arr['exp'] = JHtml::link($url, $exhibitor);
-            $layout = (!$item->is_notyfy) ? 'edit' : 'notify';
-            $url = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;layout={$layout}&amp;id={$item->id}");
-            $link = JHtml::link($url, $item->date);
+            $layout = (!$item->is_notify) ? 'edit' : 'notify';
+            $url_todo = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;layout={$layout}&amp;id={$item->id}");
+            $link = JHtml::link($url_todo, $item->date);
             $arr['dat'] = $link;
             $arr['dat_open'] = $item->dat_open;
             $arr['expID'] = $item->expID;
             $arr['dat_close'] = $item->dat_close ?? JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_NOT_CLOSE');
             $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$item->contract}");
-            $arr['task'] = JHtml::link($url, $item->task);
+            $arr['task'] = JHtml::link((!$item->is_notify) ? $url : $url_todo, $item->task);
             $arr['result'] = ($arr['expired']) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : $item->result;
             $arr['open'] = $item->open;
             $arr['manager'] = $item->manager;
             $arr['state'] = $item->state;
+            if ($item->is_notify) {
+                $arr['close_notify'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=todos.publish&amp;id={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_CLOSE_AND_READ'));
+            }
             $arr['state_text'] = ($arr['expired']) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : ProjectsHelper::getTodoState($item->state);
             if (!$arr['expired']) $result_no_expire[] = $arr;
             if ($arr['expired']) $result_expire[] = $arr;

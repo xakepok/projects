@@ -8,7 +8,7 @@ class ProjectsViewTodos extends HtmlView
 {
 	protected $helper;
 	protected $sidebar = '';
-	public $items, $pagination, $uid, $state, $links, $isAdmin, $filterForm, $activeFilters;
+	public $items, $pagination, $uid, $state, $links, $isAdmin, $filterForm, $activeFilters, $isNotify;
 
 	public function display($tpl = null)
 	{
@@ -18,6 +18,7 @@ class ProjectsViewTodos extends HtmlView
 	    $this->isAdmin = ProjectsHelper::canDo('core.general');
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
+        $this->isNotify = JFactory::getApplication()->input->get('notify', 0);
 
 		// Show the toolbar
 		$this->toolbar();
