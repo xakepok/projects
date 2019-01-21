@@ -101,7 +101,7 @@ function showCard(id) {
                 url.innerText = text.data.info.email;
                 email.appendChild(url);
                 myNode.appendChild(document.createTextNode('Электронная почта: '));
-                myNode.appendChild(url);
+                myNode.appendChild(email);
             }
             if (text.data.info.site != null) {
                 var site = document.createElement('p');
@@ -110,7 +110,7 @@ function showCard(id) {
                 url1.innerText = text.data.info.site;
                 site.appendChild(url1);
                 myNode.appendChild(document.createTextNode('Веб-сайт: '));
-                myNode.appendChild(url1);
+                myNode.appendChild(site);
             }
             myNode = document.querySelector('#contactsValues');
             while (myNode.firstChild) {

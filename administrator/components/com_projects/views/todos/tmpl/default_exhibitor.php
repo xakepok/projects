@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
     <div class="modal-body" style="padding: 35px;">
         <p style="font-weight: bold; font-size: 1.3em;" id="modalExpCardTitle"></p>
         <p id="cardValues"></p>
-        <hr>
+        <hr style="width: 80%;">
         <p style="font-weight: bold; font-size: 1.3em;" id="modalExpContacts"><?php echo JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_NAME');?></p>
         <p id="contactsValues"></p>
     </div>
