@@ -227,7 +227,7 @@ class ProjectsModelContracts extends ListModel
      * @return array
      * @since 1.0.8.6
      */
-    private function getStandsForContract(int $contractID): array
+    public function getStandsForContract(int $contractID): array
     {
         $stands = ProjectsHelper::getContractStands($contractID);
         $result = array();

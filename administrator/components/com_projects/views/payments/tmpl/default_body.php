@@ -12,6 +12,9 @@ foreach ($this->items['items'] as $i => $item) :
             <?php echo ++$ii; ?>
         </td>
         <td>
+            <?php echo $item['stands'];?>
+        </td>
+        <td>
             <?php echo $item['pp'];?>
         </td>
         <td>

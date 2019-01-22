@@ -3,7 +3,7 @@
 defined('_JEXEC') or die;
 ?>
 <tr>
-    <td colspan="3" style="text-align: right;">
+    <td colspan="4" style="text-align: right;">
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_RUB');?>
     </td>
     <td colspan="7">
@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
     </td>
 </tr>
 <tr>
-    <td colspan="3" style="text-align: right;">
+    <td colspan="4" style="text-align: right;">
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_USD');?>
     </td>
     <td colspan="7">
@@ -19,7 +19,7 @@ defined('_JEXEC') or die;
     </td>
 </tr>
 <tr>
-    <td colspan="3" style="text-align: right;">
+    <td colspan="4" style="text-align: right;">
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_EUR');?>
     </td>
     <td colspan="7">

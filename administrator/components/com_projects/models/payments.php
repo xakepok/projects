@@ -148,6 +148,7 @@ class ProjectsModelPayments extends ListModel
         $items = parent::getItems();
         $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
         $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=payments");
+        $contracts = ListModel::getInstance('Contracts', 'ProjectsModel');
         foreach ($items as $item) {
             $exponentName = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr = array();
@@ -167,6 +168,7 @@ class ProjectsModelPayments extends ListModel
             $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->project : JHtml::link($url, $item->project);
             $arr['amount'] = number_format($item->amount, 2, '.', " ")."&nbsp;".$item->currency;
             $arr['author'] = $item->author;
+            $arr['stands'] = implode(' ', $contracts->getStandsForContract($item->contractID));
             $result['items'][] = $arr;
             $result['amount'][$item->currency] += $item->amount;
         }
