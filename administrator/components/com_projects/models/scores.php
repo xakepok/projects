@@ -135,7 +135,7 @@ class ProjectsModelScores extends ListModel
             $result['items'][] = $arr;
             $result['amount'][$item->currency] += $item->amount;
             $result['payments'][$item->currency] += $item->payments;
-            $result['debt'][$item->currency] += $item->debt;
+            $result['debt'][$item->currency] += ($item->debt < 0) ? 0 : $item->debt;
         }
         return $result;
     }

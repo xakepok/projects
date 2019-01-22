@@ -166,7 +166,7 @@ class ProjectsModelPayments extends ListModel
             $arr['exp'] = JHtml::link($url, $exponentName);
             $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}");
             $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->project : JHtml::link($url, $item->project);
-            $arr['amount'] = number_format($item->amount, 2, '.', " ")."&nbsp;".$item->currency;
+            $arr['amount'] = ProjectsHelper::getCurrency((float) $item->amount, $item->currency);
             $arr['author'] = $item->author;
             $arr['stands'] = implode(' ', $contracts->getStandsForContract($item->contractID));
             $result['items'][] = $arr;
