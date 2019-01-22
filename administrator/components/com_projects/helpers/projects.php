@@ -544,6 +544,7 @@ class ProjectsHelper
             ->from("`#__prj_todos` as `t`")
             ->leftJoin("`#__users` as `u` ON `u`.`id` = IF(`t`.`state`!=0,`t`.`userClose`,`t`.`managerID`)")
             ->where("`t`.`contractID` = {$contractID}")
+            ->where("`t`.`is_notify` != 1")
             ->order("`t`.`state` asc");
         return $db->setQuery($query)->loadObjectList();
     }
