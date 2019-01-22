@@ -21,6 +21,7 @@ class ProjectsModelBuilding extends ListModel
                 'standstatus',
                 's.status',
                 'exp_status',
+                'exhibitor',
                 'stand',
             );
         }
@@ -46,6 +47,11 @@ class ProjectsModelBuilding extends ListModel
         if (!empty($search)) {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`cat`.`number` LIKE ' . $search);
+        }
+        // Фильтруем по экспоненту.
+        $exhibitor = $this->getState('filter.exhibitor');
+        if (is_numeric($exhibitor)) {
+            $query->where('`c`.`expID` = ' . (int)$exhibitor);
         }
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
@@ -124,6 +130,8 @@ class ProjectsModelBuilding extends ListModel
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $this->setState('filter.search', $search);
+        $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor');
+        $this->setState('filter.exhibitor', $exhibitor);
         $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');
         $this->setState('filter.project', $project);
         $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
@@ -140,6 +148,7 @@ class ProjectsModelBuilding extends ListModel
     protected function getStoreId($id = '')
     {
         $id .= ':' . $this->getState('filter.search');
+        $id .= ':' . $this->getState('filter.exhibitor');
         $id .= ':' . $this->getState('filter.project');
         $id .= ':' . $this->getState('filter.manager');
         $id .= ':' . $this->getState('filter.standtype');

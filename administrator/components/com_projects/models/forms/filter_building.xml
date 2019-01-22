@@ -30,6 +30,15 @@
             <option value="">COM_PROJECTS_FILTER_SELECT_MANAGER</option>
         </field>
         <field
+                name="exhibitor"
+                type="Exhibitor"
+                label="COM_PROJECTS_FILTER_SELECT_EXHIBITOR"
+                description="COM_PROJECTS_FILTER_SELECT_EXHIBITOR"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_EXHIBITOR</option>
+        </field>
+        <field
                 name="standtype"
                 label="COM_PROJECTS_FILTER_SELECT_STAND_TYPE"
                 description="COM_PROJECTS_FILTER_SELECT_STAND_TYPE"
