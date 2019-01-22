@@ -3,26 +3,26 @@
 defined('_JEXEC') or die;
 ?>
 <tr>
-    <td colspan="8" style="text-align: right;">
+    <td colspan="3" style="text-align: right;">
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_RUB');?>
     </td>
-    <td colspan="2">
-        <?php echo number_format($this->items['amount']['rub'], 2, '.', " ");?>
+    <td colspan="7">
+        <?php echo ProjectsHelper::getCurrency($this->items['amount']['rub'], 'rub');?>
     </td>
 </tr>
 <tr>
-    <td colspan="8" style="text-align: right;">
+    <td colspan="3" style="text-align: right;">
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_USD');?>
     </td>
-    <td colspan="2">
-        <?php echo number_format($this->items['amount']['usd'], 2, '.', " ");?>
+    <td colspan="7">
+        <?php echo ProjectsHelper::getCurrency($this->items['amount']['usd'], 'usd');?>
     </td>
 </tr>
 <tr>
-    <td colspan="8" style="text-align: right;">
+    <td colspan="3" style="text-align: right;">
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_EUR');?>
     </td>
-    <td colspan="2">
-        <?php echo number_format($this->items['amount']['eur'], 2, '.', " ");?>
+    <td colspan="7">
+        <?php echo ProjectsHelper::getCurrency($this->items['amount']['eur'], 'eur');?>
     </td>
 </tr>
