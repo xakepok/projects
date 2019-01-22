@@ -4,7 +4,7 @@ defined('_JEXEC') or die;
 $ii = JFactory::getApplication()->input->getInt('limitstart', 0);
 foreach ($this->items['items'] as $i => $item) :
     ?>
-    <tr class="row0" style="color: <?php echo ($item['plan'] < 1) ? 'red' : 'black'; ?>">
+    <tr class="row0">
         <td class="center">
             <?php echo JHtml::_('grid.id', $i, $item['id']); ?>
         </td>
@@ -46,7 +46,7 @@ foreach ($this->items['items'] as $i => $item) :
         <td>
             <?php echo $item['paid']; ?>
         </td>
-        <td>
+        <td style="color: <?php echo $item['color'];?>">
             <?php echo $item['debt']; ?>
         </td>
     </tr>

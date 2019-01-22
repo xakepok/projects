@@ -131,7 +131,7 @@ class ProjectsModelScores extends ListModel
             $arr['state_text'] = ProjectsHelper::getScoreState($item->state);
             if (($item->debt > 0) && ($item->debt < $item->amount)) $arr['state_text'] = JText::sprintf('COM_PROJECTS_HEAD_SCORE_STATE_2');
             if ($item->debt < 0) $arr['state_text'] = JText::sprintf('COM_PROJECTS_HEAD_SCORE_STATE_3');
-            $arr['color'] = ($arr['debt'] < 0) ? 'red' : 'black';
+            $arr['color'] = ($arr['debt'] != 0) ? 'red' : 'green';
             $result['items'][] = $arr;
             $result['amount'][$item->currency] += $item->amount;
             $result['payments'][$item->currency] += $item->payments;

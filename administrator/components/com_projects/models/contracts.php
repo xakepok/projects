@@ -168,7 +168,9 @@ class ProjectsModelContracts extends ListModel
             $arr['paid'] = ProjectsHelper::getCurrency((float) $paid, (string) $item->currency);
             $arr['debt'] = ($format != 'html') ? $debt : ProjectsHelper::getCurrency((float) $debt, (string) $item->currency);
             $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}&amp;return={$return}");
-            if (ProjectsHelper::canDo('core.accountant') && $debt > 0) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE')));
+            $color = ($debt != 0) ? 'red' : 'green';
+            $arr['color'] = $color;
+            if (ProjectsHelper::canDo('core.accountant') && $debt != 0) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE'), 'style' => "color: {$color}"));
             if ($format != 'html') $arr['debt'] = $debt;
 
             $result['items'][] = $arr;
