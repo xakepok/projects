@@ -40,7 +40,7 @@ $listDirn = $this->escape($this->state->get('list.direction'));
     <th width="7%">
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_ITEM_PRICE_EUR_SHORT', 'price_eur', $listDirn, $listOrder); ?>
     </th>
-    <th width="3%">
+    <th width="7%">
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT_SHORT', 'value', $listDirn, $listOrder); ?>
     </th>
     <th width="7%">

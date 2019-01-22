@@ -102,6 +102,7 @@ class ProjectsModelStat extends ListModel
         $result = array();
         $result['amount'] = array('rub' => 0, 'usd' => 0, 'eur' => 0);
         $result['sum'] = array('rub' => 0, 'usd' => 0, 'eur' => 0);
+        if ($this->itemID != 0) $result['cnt'] = 0;
         $result['items'] = array();
         $xls = (JFactory::getApplication()->input->getString('task') == 'exportxls');
         foreach ($items as $item) {
@@ -116,6 +117,7 @@ class ProjectsModelStat extends ListModel
                 $arr['contract'] = (!$xls) ? JHtml::link($url, $title) : $title;
                 $stands = $this->getStands($item->contractID);
                 $arr['stands'] = implode(' ', $stands);
+                $result['cnt'] += $item->value;
             } else {
                 $url = JRoute::_("index.php?option=com_projects&amp;view=stat&amp;itemID={$item->itemID}");
                 $options = array('class' => 'small');
