@@ -59,7 +59,7 @@ class ProjectsModelContracts extends ListModel
         if (!empty($search))
         {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-            $query->where('`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . 'OR `p`.`title_ru` LIKE ' . $search);
+            $query->where('(`e`.`title_ru_full` LIKE ' . $search . ' OR `e`.`title_ru_short` LIKE ' . $search . ' OR `e`.`title_en` LIKE ' . $search . ' OR `p`.`title_ru` LIKE ' . $search . ')');
         }
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
@@ -75,6 +75,7 @@ class ProjectsModelContracts extends ListModel
         }
         // Фильтруем по менеджеру.
         $manager = $this->getState('filter.manager');
+        //exit(var_dump($manager));
         if (is_numeric($manager)) {
             $query->where('`c`.`managerID` = ' . (int)$manager);
         }

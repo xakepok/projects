@@ -53,7 +53,7 @@ class ProjectsModelScores extends ListModel
         if (!empty($search))
         {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-            $query->where('`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search);
+            $query->where('(`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . ')');
         }
         // Фильтруем по состоянию оплаты.
         $published = $this->getState('filter.state');
