@@ -113,16 +113,15 @@ class ProjectsModelStand extends AdminModel {
             $sm = AdminModel::getInstance('Catalog', 'ProjectsModel');
             $stand_old = $sm->getItem($item->catalogID);
             $stand_new = $sm->getItem($data['catalogID']);
-            if ($contract->number != null)
-            {
-                $arr['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_DG_EDITED', $contract->number, $stand_old->number, $stand_new->number);
+            if ($stand_old->id != $stand_new->id) {
+                if ($contract->number != null) {
+                    $arr['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_DG_EDITED', $contract->number, $stand_old->number, $stand_new->number);
+                } else {
+                    $arr['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_SD_EDITED', $contract->id, $stand_old->number, $stand_new->number);
+                }
+                $arr['managerID'] = 400;
+                $this->_createTodo($arr, true);
             }
-            else
-            {
-                $arr['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_SD_EDITED', $contract->id, $stand_old->number, $stand_new->number);
-            }
-            $arr['managerID'] = 400;
-            $this->_createTodo($arr, true);
         }
         if ($data['scheme'] == '-1') $data['scheme'] = NULL;
         if ($data['status'] == '3')
