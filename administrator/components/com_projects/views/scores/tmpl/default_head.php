@@ -2,6 +2,7 @@
 defined('_JEXEC') or die;
 $listOrder    = $this->escape($this->state->get('list.ordering'));
 $listDirn    = $this->escape($this->state->get('list.direction'));
+$currency = $this->state->get('filter.currency');
 ?>
 <tr>
     <th width="1%" class="hidden-phone">
@@ -27,15 +28,18 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
     </th>
     <th>
         <?php
-        $currency = $this->state->get('filter.currency');
         echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_AMOUNT', 'amount', $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_SCORE_AMOUNT');
         ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_PAYMENT'); ?>
+        <?php
+        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_PAYMENT', 'payments', $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_SCORE_PAYMENT');
+        ?>
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_DEBT'); ?>
+        <?php
+        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_DEBT', 'debt', $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_SCORE_DEBT');
+        ?>
     </th>
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_MENU_PAYMENTS'); ?>

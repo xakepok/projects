@@ -20,6 +20,8 @@ class ProjectsModelScores extends ListModel
                 'manager',
                 'search',
                 'exhibitor',
+                'payments',
+                'debt',
                 's.state',
             );
         }
@@ -35,7 +37,9 @@ class ProjectsModelScores extends ListModel
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `e`.`id` as `expID`")
             ->select("`c`.`currency`, `c`.`number` as `number_contract`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`, `p`.`id` as `projectID`")
+            ->select("IFNULL(`pay`.`payments`,0) as `payments`, `s`.`amount`-IFNULL(`pay`.`payments`,0) as `debt`")
             ->from("`#__prj_scores` as `s`")
+            ->leftJoin("`#__prj_score_payments` as `pay` ON `pay`.`scoreID` = `s`.`id`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`");
@@ -104,7 +108,6 @@ class ProjectsModelScores extends ListModel
     {
         $items = parent::getItems();
         $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'debt' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
-        $pm = ListModel::getInstance('Payments', 'ProjectsModel');
         $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=scores");
         foreach ($items as $item)
         {
@@ -121,19 +124,18 @@ class ProjectsModelScores extends ListModel
             $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr['exp'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}"), $exp);
             $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->project : JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}"), $item->project);
-            $arr['amount'] = sprintf("%s %s", number_format($item->amount, 2, '.', " "), $item->currency);
+            $arr['amount'] = ProjectsHelper::getCurrency((float) ($item->amount), $item->currency);
             $arr['state'] = $item->state;
-            $payments = $pm->getScorePayments($item->id);
-            $debt = $item->amount - $payments;
-            $arr['payments'] = sprintf("%s %s", number_format($payments, 2, '.', " "), $item->currency);
-            $arr['debt'] = sprintf("%s %s", number_format($debt, 2, '.', " "), $item->currency);
+            $arr['payments'] = ProjectsHelper::getCurrency((float) $item->payments, $item->currency);
+            $arr['debt'] = ProjectsHelper::getCurrency((float) $item->debt, $item->currency);
             $arr['state_text'] = ProjectsHelper::getScoreState($item->state);
-            if ($debt > 0 && $debt < $item->amount) $arr['state_text'] = JText::sprintf('COM_PROJECTS_HEAD_SCORE_STATE_2');
+            if (($item->debt > 0) && ($item->debt < $item->amount)) $arr['state_text'] = JText::sprintf('COM_PROJECTS_HEAD_SCORE_STATE_2');
+            if ($item->debt < 0) $arr['state_text'] = JText::sprintf('COM_PROJECTS_HEAD_SCORE_STATE_3');
             $arr['color'] = ($arr['debt'] < 0) ? 'red' : 'black';
             $result['items'][] = $arr;
             $result['amount'][$item->currency] += $item->amount;
-            $result['payments'][$item->currency] += $payments;
-            $result['debt'][$item->currency] += $debt;
+            $result['payments'][$item->currency] += $item->payments;
+            $result['debt'][$item->currency] += $item->debt;
         }
         return $result;
     }
