@@ -138,7 +138,7 @@ class ProjectsModelTodos extends ListModel
             $arr['expired'] = $this->isExpired($item->date, $item->state);
             $arr['id'] = $item->id;
             $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contract}&amp;return={$return}");
-            $c = (!$item->number) ? ProjectsHelper::getExpStatus($item->contract_status) : JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number);
+            $c = ($item->contract_status != '1') ? ProjectsHelper::getExpStatus($item->contract_status) : JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number);
             $link = JHtml::link($url, $c);
             $arr['contract'] = $link;
             $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}");
