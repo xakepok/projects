@@ -20,10 +20,35 @@ class ProjectsModelPayment extends AdminModel {
         $data['created_by'] = JFactory::getUser()->id;
         $dat = new DateTime($data['dat']);
         $data['dat'] = $dat->format("Y-m-d");
-        $model = AdminModel::getInstance('Score', 'ProjectsModel');
+        $sm = AdminModel::getInstance('Score', 'ProjectsModel');
         $result = parent::save($data);
-        $model->checkState($data['scoreID']);
+        if ($data['id'] == null)
+        {
+            $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
+            $arr = array();
+            $score = $sm->getItem($data['scoreID']);
+            $contract = $cm->getItem($score->contractID);
+            $arr['contractID'] = $contract->id;
+            $arr['managerID'] = $contract->managerID;
+            $arr['task'] = JText::sprintf('COM_PROJECT_TASK_NEW_PAYMENT', $contract->number, ProjectsHelper::getCurrency((float) $data['amount'], $contract->currency));
+            $this->notifyManager($arr);
+        }
+        $sm->checkState($data['scoreID']);
         return $result;
+    }
+
+    /**
+     * Отправляет уведомление менеджеру сделки о проведении платежа по ней
+     * @param array $data Массив с данными о уведомлении
+     * @since 1.0.9.5
+     */
+    public function notifyManager(array $data): void
+    {
+        $todo = AdminModel::getInstance('Todo', 'ProjectsModel');
+        $data['is_notify'] = 1;
+        $data['state'] = '0';
+        $arr['dat'] = date('Y-m-d');
+        $todo->save($data);
     }
 
     public function getForm($data = array(), $loadData = true)
