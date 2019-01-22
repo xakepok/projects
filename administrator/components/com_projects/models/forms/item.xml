@@ -68,6 +68,7 @@
             <option value="view">COM_PROJECTS_HEAD_ITEM_UNIT_VIEW</option>
             <option value="1pd">COM_PROJECTS_HEAD_ITEM_UNIT_1PD</option>
             <option value="ppl">COM_PROJECTS_HEAD_ITEM_UNIT_PPL</option>
+            <option value="zvqm">COM_PROJECTS_HEAD_ITEM_UNIT_ZVQM</option>
         </field>
         <field
                 name="unit_2"
@@ -94,6 +95,7 @@
             <option value="view">COM_PROJECTS_HEAD_ITEM_UNIT_VIEW</option>
             <option value="1pd">COM_PROJECTS_HEAD_ITEM_UNIT_1PD</option>
             <option value="ppl">COM_PROJECTS_HEAD_ITEM_UNIT_PPL</option>
+            <option value="zvqm">COM_PROJECTS_HEAD_ITEM_UNIT_ZVQM</option>
         </field>
         <field
                 name="is_sq"
