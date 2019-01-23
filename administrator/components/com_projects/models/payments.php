@@ -58,6 +58,7 @@ class ProjectsModelPayments extends ListModel
         }
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
+        if (empty($project)) $project = ProjectsHelper::getActiveProject();
         if (is_numeric($project))
         {
             $query->where('`c`.`prjID` = ' . (int) $project);

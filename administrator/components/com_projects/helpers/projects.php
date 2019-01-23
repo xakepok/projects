@@ -16,7 +16,7 @@ class ProjectsHelper
         {
             JHtmlSidebar::addEntry(Text::sprintf('COM_PROJECTS_MENU_NOTIFY', $notify), 'index.php?option=com_projects&amp;view=todos&amp;notify=1', $vName == 'todos');
         }
-        if (in_array($view, array('contracts', 'todos', 'building', 'stat', 'scores'))) {
+        if (in_array($view, array('contracts', 'todos', 'building', 'stat', 'scores', 'payments', 'catalogs'))) {
             JHtmlSidebar::addFilter(JText::_('COM_PROJECTS_FILTER_SELECT_ACTIVE_PROJECT'), 'set_active_project', JHtml::_('select.options', ProjectsHtmlFilters::projectOptions(), 'value', 'text', self::getActiveProject()));
         }
         if (self::canDo('core.general')) {

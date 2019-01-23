@@ -47,6 +47,12 @@ class ProjectsModelCatalogs extends ListModel
         if (is_numeric($cattitle)) {
             $query->where('`cat`.`titleID` = ' . (int) $cattitle);
         }
+        //Фильтр по глобальному проекту
+        $project = ProjectsHelper::getActiveProject();
+        if (is_numeric($project)) {
+            $cid = ProjectsHelper::getProjectCatalog($project);
+            $query->where('`cat`.`titleID` = ' . (int)$cid);
+        }
 
         /* Сортировка */
         $orderCol  = $this->state->get('list.ordering', '`cat`.`number`');
