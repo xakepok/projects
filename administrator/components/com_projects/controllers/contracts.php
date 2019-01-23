@@ -43,12 +43,12 @@ class ProjectsControllerContracts extends AdminController
     public function getNumber()
     {
         $app = JFactory::getApplication();
-        $number = ProjectsHelper::getContractNumber();
         $ids = $this->input->get('cid');
         $model = $this->getModel();
         foreach ($ids as $id)
         {
             $item = $model->getItem($id);
+            $number = ProjectsHelper::getContractNumber($item->prjID);
             if ($item->status != 1)
             {
                 $app->enqueueMessage(JText::sprintf('COM_PROJECTS_ERROR_CONTRACT_IS_NOT_DOGOVOR'), 'error');

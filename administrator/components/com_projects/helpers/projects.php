@@ -443,16 +443,18 @@ class ProjectsHelper
 
     /**
      * Возвращает следующий по очереди номер договора
+     * @param int $projectID ID сделки
      * @return int
-     * @since 1.2.2
+     * @since 1.0.9.8
      */
-    public static function getContractNumber(): int
+    public static function getContractNumber(int $projectID): int
     {
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
             ->select("IFNULL(MAX(`number`)+1,1)")
             ->from("`#__prj_contracts`")
+            ->where("`prjID` = {$projectID}")
             ->where("`number` IS NOT NULL");
         return $db->setQuery($query)->loadResult();
     }
