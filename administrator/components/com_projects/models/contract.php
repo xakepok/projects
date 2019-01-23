@@ -202,6 +202,10 @@ class ProjectsModelContract extends AdminModel {
             $dat = JDate::getInstance($data['dat']);
             $data['dat'] = $dat->format("Y-m-d");
         }
+        if ($data['dat'] == null && $data['status'] == '1')
+        {
+            $data['dat'] = date("Y-m-d");
+        }
         $s1 = parent::save($data);
         if ($data['id'] == null) $data['id'] = $this->_db->insertid();
         if (!empty($data['children'])) $this->setCoExp($data['children'], $data['expID'], $data['prjID']);
