@@ -9,11 +9,11 @@ class ProjectsModelItems extends ListModel
         if (empty($config['filter_fields']))
         {
             $config['filter_fields'] = array(
-                '`id`', '`id`',
-                '`title_ru`', '`title_ru`',
-                '`title_en`', '`title_en`',
-                '`section`', '`section`',
-                '`price`', '`price`',
+                'id',
+                'title_ru',
+                'section',
+                'price',
+                'search',
             );
         }
         parent::__construct($config);
@@ -41,7 +41,7 @@ class ProjectsModelItems extends ListModel
         if (!empty($search))
         {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-            $query->where('`i`.`title_ru` LIKE ' . $search. ' OR `i`.`title_en` LIKE ' . $search);
+            $query->where('(`i`.`title_ru` LIKE ' . $search. ' OR `i`.`title_en` LIKE ' . $search . ')');
         }
         // Фильтруем по прайсу.
         $price = $this->getState('filter.price');
@@ -87,10 +87,10 @@ class ProjectsModelItems extends ListModel
     protected function populateState($ordering = null, $direction = null)
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-        $price = $this->getUserStateFromRequest($this->context . '.filter.price', 'filter_price', '', 'string');
-        $section = $this->getUserStateFromRequest($this->context . '.filter.section', 'filter_section', '', 'string');
         $this->setState('filter.search', $search);
+        $price = $this->getUserStateFromRequest($this->context . '.filter.price', 'filter_price', '', 'string');
         $this->setState('filter.price', $price);
+        $section = $this->getUserStateFromRequest($this->context . '.filter.section', 'filter_section', '', 'string');
         $this->setState('filter.section', $section);
         parent::populateState('`i`.`id`', 'asc');
     }
