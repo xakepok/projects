@@ -420,7 +420,7 @@ class ProjectsModelContract extends AdminModel {
             }
             if ($values[$item->id]['value2'] != null)
             {
-                $a *= $a * $values[$item->id]['value2'];
+                $a *= $values[$item->id]['value2'];
             }
             if ($values[$item->id]['markup'] != null)
             {
