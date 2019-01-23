@@ -17,7 +17,7 @@ class ProjectsControllerTodo extends FormController {
         $createTodoFor = $session->get('createTodoFor', null);
         if ($contractID != 0 || $createTodoFor != null)
         {
-            $cid = $contractID ?? $createTodoFor;
+            $cid = ($contractID != 0) ? $contractID : $createTodoFor;
             $session->set('contractID', $cid);
         }
         return parent::add();
