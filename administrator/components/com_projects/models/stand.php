@@ -47,6 +47,25 @@ class ProjectsModelStand extends AdminModel {
         }
         $data['managerID'] = 400;
         $this->_createTodo($data, true);
+        $items_model = AdminModel::getInstance('Ctritem', 'ProjectsModel');
+        $ctritem = $items_model->getItem(array('itemID' => $item->itemID));
+        $nv = array();
+        $nv['id'] = $ctritem->id ?? null;
+        $nv['contractID'] = $data['contractID'];
+        $nv['itemID'] = $data['itemID'];
+        $nv['columnID'] = ProjectsHelper::getActivePriceColumn($contract->id);
+        $nv['factor'] = $ctritem->factor ?? 1;
+        $nv['markup'] = $ctritem->markup ?? 1;
+        $nv['value2'] = $ctritem->value2 ?? null;
+        $nv['fixed'] = $ctritem->fixed ?? null;
+        $nv['value'] = $ctritem->value - $stand->square;
+        if ($nv['value'] > 0) {
+            $items_model->save($nv);
+        }
+        else
+        {
+            $items_model->delete($ctritem->id);
+        }
         return parent::delete($pks);
     }
 
@@ -104,6 +123,19 @@ class ProjectsModelStand extends AdminModel {
             }
             $arr['managerID'] = 400;
             $this->_createTodo($arr, true);
+            $items = AdminModel::getInstance('Ctritem', 'ProjectsModel');
+            $item = $items->getItem(array('itemID' => $data['itemID'], 'contractID' => $data['contractID']));
+            $nv = array();
+            $nv['id'] = $item->id ?? null;
+            $nv['contractID'] = $data['contractID'];
+            $nv['itemID'] = $data['itemID'];
+            $nv['columnID'] = ProjectsHelper::getActivePriceColumn($contract->id);
+            $nv['factor'] = $item->factor ?? 1;
+            $nv['markup'] = $item->markup ?? 1;
+            $nv['value2'] = $item->value2 ?? null;
+            $nv['fixed'] = $item->fixed ?? null;
+            $nv['value'] = ($item->id != null) ? $item->value + $stand->square : $stand->square;
+            $items->save($nv);
         }
         if ($data['id'] != null) {
             $item = parent::getItem($data['id']);
@@ -121,6 +153,40 @@ class ProjectsModelStand extends AdminModel {
                 }
                 $arr['managerID'] = 400;
                 $this->_createTodo($arr, true);
+            }
+            $items_model = AdminModel::getInstance('Ctritem', 'ProjectsModel');
+            $nv = array();
+            if ($item->itemID == $data['itemID'] && $stand_old->id != $stand_new->id) //Если пункт прайс-листа не меняется, а меняется стенд
+            {
+                $ctritem = $items_model->getItem(array('itemID' => $data['itemID'], 'contractID' => $data['contractID']));
+                $nv['id'] = $ctritem->id;
+                $nv['value'] = $ctritem->value - $stand_old->square + $stand_new->square;
+                $items_model->save($nv);
+            }
+            if ($item->itemID != $data['itemID'] && $stand_old->id == $stand_new->id) //Если пункт прайс-листа меняется, но не меняется стенд
+            {
+                $ctritem = $items_model->getItem(array('itemID' => $item->itemID, 'contractID' => $data['contractID']));
+                $nv['id'] = $ctritem->id;
+                $nv['value'] = $ctritem->value - $stand_old->square;
+                if ($nv['value'] > 0) {
+                    $items_model->save($nv);
+                }
+                else
+                {
+                    $items_model->delete($ctritem->id);
+                }
+                $ctritem = $items_model->getItem(array('itemID' => $data['itemID'], 'contractID' => $data['contractID']));
+                $nv = array();
+                $nv['id'] = $ctritem->id ?? null;
+                $nv['contractID'] = $data['contractID'];
+                $nv['itemID'] = $data['itemID'];
+                $nv['columnID'] = ProjectsHelper::getActivePriceColumn($data['contractID']);
+                $nv['factor'] = $ctritem->factor ?? 1;
+                $nv['markup'] = $ctritem->markup ?? 1;
+                $nv['value2'] = $ctritem->value2 ?? null;
+                $nv['fixed'] = $ctritem->fixed ?? null;
+                $nv['value'] = ($ctritem->id != null) ? $ctritem->value + $stand_new->square : $stand_new->square;
+                $items_model->save($nv);
             }
         }
         if ($data['scheme'] == '-1') $data['scheme'] = NULL;

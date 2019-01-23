@@ -20,6 +20,7 @@ function removeTodo(id) {
         });
 }
 function removeStand(standID) {
+    if (!confirm('Удалить стенд? Проверьте введённые данные, после удаления стенда страница перезагрузится. Нажмите ДА или ОК, если вы сохранили данные или НЕТ или ОТМЕНА, если вы не сохранили данные')) return;
     fetch('/administrator/index.php?option=com_projects&task=contracts.removeStand&id=' + standID)
         .then(function (response) {
             return response.json();
@@ -32,6 +33,7 @@ function removeStand(standID) {
             else
             {
                 document.querySelector('#row_stand_' + standID).remove();
+                location.reload();
             }
         })
         .catch(function (error) {

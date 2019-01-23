@@ -339,10 +339,12 @@ class ProjectsModelContract extends AdminModel {
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("*")
-            ->from("`#__prj_contract_items`")
-            ->where("`contractID` = {$contractID}");
-        return $db->setQuery($query)->loadAssocList('itemID');
+            ->select("`ci`.*")
+            ->from("`#__prj_contract_items` as `ci`")
+            ->leftJoin("`#__prc_items` as `i` on `i`.`id` = `ci`.`itemID`")
+            ->where("`ci`.`contractID` = {$contractID}");
+        $items = $db->setQuery($query)->loadAssocList('itemID');
+        return $items;
     }
 
     /**
@@ -357,6 +359,7 @@ class ProjectsModelContract extends AdminModel {
     private function getPriceItems(int $priceID, int $columnID, array $values, string $currency): array
     {
         $item = parent::getItem();
+        $contractID = $item->id;
         $db =& $this->getDbo();
         $activeColumn = ProjectsHelper::getActivePriceColumn($item->id);
         $squares = ProjectsHelper::getStandsSquare($item->id);
@@ -392,7 +395,8 @@ class ProjectsModelContract extends AdminModel {
             $arr['unit2'] = ProjectsHelper::getUnit($item->unit_2);
             $arr['isUnit2'] = $item->isUnit2;
 
-            $arr['value'] = (!$item->is_sq) ? $values[$item->id]['value'] : $squares[$item->id]->sq;
+            //$arr['value'] = (!$item->is_sq) ? $values[$item->id]['value'] : $squares[$item->id]->sq;
+            $arr['value'] = $values[$item->id]['value'];
             $arr['value2'] = $values[$item->id]['value2'];
             $arr['is_markup'] = $item->is_markup;
             $arr['markup'] = (float) ($values[$item->id]['markup'] != null) ? (float) $values[$item->id]['markup'] * 100 - 100 : 0;
@@ -405,7 +409,7 @@ class ProjectsModelContract extends AdminModel {
                 $sts = array();
                 foreach ($stands as $stand) {
                     if ($stand->itemID != $item->id) continue;
-                    $sts[] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand->id}&amp;return={$return}"), $stand->number);
+                    $sts[] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;contractID={$contractID}&amp;task=stand.edit&amp;id={$stand->id}&amp;return={$return}"), $stand->number);
                 }
                 $arr['stand'] = implode(" / ", $sts);
                 if (empty($arr['stand'])) $arr['value'] = 0;
@@ -415,7 +419,7 @@ class ProjectsModelContract extends AdminModel {
             $c = 0;
             if ($values[$item->id]['value'])
             {
-                if (empty($arr['stand']) && $item->is_sq) $values[$item->id]['value'] = 0;
+                //if (empty($arr['stand']) && $item->is_sq) $values[$item->id]['value'] = 0;
                 $a += $values[$item->id]['value'] * $cost;
             }
             if ($values[$item->id]['value2'] != null)
@@ -536,9 +540,10 @@ class ProjectsModelContract extends AdminModel {
             if (!isset($arr['value2'])) $arr['value2'] = NULL;
             if (!isset($arr['factor'])) $arr['factor'] = NULL;
             if (!isset($arr['value'])) continue;
-            if ($arr['value'] == 0 && $row->id != null)
+            if ($arr['value'] == 0)
             {
-                $model->delete($row->id);
+                if ($row->id != null) $model->delete($row->id);
+                if ($row->id == null) continue;
             }
 
             if (!$table->bind($arr))
