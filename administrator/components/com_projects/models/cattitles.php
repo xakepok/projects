@@ -36,6 +36,12 @@ class ProjectsModelCattitles extends ListModel
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`cat`.`title` LIKE ' . $search);
         }
+        //Фильтр по глобальному проекту
+        $project = ProjectsHelper::getActiveProject();
+        if (is_numeric($project)) {
+            $cid = ProjectsHelper::getProjectCatalog($project);
+            $query->where('`cat`.`id` = ' . (int)$cid);
+        }
 
         /* Сортировка */
         $orderCol  = $this->state->get('list.ordering', '`cat`.`title`');
