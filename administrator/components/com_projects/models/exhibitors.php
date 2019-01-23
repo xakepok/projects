@@ -68,6 +68,11 @@ class ProjectsModelExhibitors extends ListModel
         if (is_numeric($projectactive)) {
             $query->where("`e`.`id` IN (SELECT DISTINCT `expID` FROM `#__prj_contracts` WHERE `prjID` = {$projectactive})");
         }
+        //Фильтр по глобальному проекту
+        $project = ProjectsHelper::getActiveProject();
+        if (is_numeric($project)) {
+            $query->where("`e`.`id` IN (SELECT DISTINCT `expID` FROM `#__prj_contracts` WHERE `prjID` = {$project})");
+        }
         // Фильтруем по видам деятельности.
         $act = $this->getState('filter.activity');
         if (is_numeric($act)) {
