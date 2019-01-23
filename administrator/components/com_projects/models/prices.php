@@ -9,8 +9,10 @@ class ProjectsModelPrices extends ListModel
         if (empty($config['filter_fields']))
         {
             $config['filter_fields'] = array(
-                '`id`', '`id`',
-                '`title`', '`title`',
+                'id',
+                'title',
+                'project',
+                'search',
             );
         }
         parent::__construct($config);
@@ -31,8 +33,9 @@ class ProjectsModelPrices extends ListModel
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`title` LIKE ' . $search);
         }
-        //Фильтр по глобальному проекту
-        $project = ProjectsHelper::getActiveProject();
+        //Фильтр по проекту
+        $project = $this->getState('filter.project');
+        if (empty($project)) $project = ProjectsHelper::getActiveProject();
         if (is_numeric($project)) {
             $prciceID = ProjectsHelper::getProjectPrice($project);
             $query->where("`id` = {$prciceID}");
@@ -66,6 +69,8 @@ class ProjectsModelPrices extends ListModel
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $this->setState('filter.search', $search);
+        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');
+        $this->setState('filter.project', $project);
         parent::populateState('`title`', 'asc');
     }
 

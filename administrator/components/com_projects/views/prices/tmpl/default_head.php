@@ -11,9 +11,9 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         №
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TITLE', '`title`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TITLE', 'title', $listDirn, $listOrder); ?>
     </th>
     <th width="1%">
-        <?php echo JHtml::_('grid.sort', 'ID', '`id`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'ID', 'id', $listDirn, $listOrder); ?>
     </th>
 </tr>
