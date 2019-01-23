@@ -14,10 +14,13 @@ foreach ($this->items as $i => $item) :?>
             <?php echo $item['title'];?>
         </td>
         <td>
-            <?php echo $item['unit'];?>
+            <?php echo $item['section'];?>
         </td>
         <td>
-            <?php echo $item['unit_2'];?>
+            <?php echo $item['price'];?>
+        </td>
+        <td>
+            <?php echo $item['unit'];?>
         </td>
         <td>
             <?php echo $item['id']; ?>

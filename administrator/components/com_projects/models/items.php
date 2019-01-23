@@ -10,7 +10,7 @@ class ProjectsModelItems extends ListModel
         {
             $config['filter_fields'] = array(
                 'id',
-                'title_ru',
+                'i.title_ru',
                 'section',
                 'price',
                 'search',
@@ -33,8 +33,7 @@ class ProjectsModelItems extends ListModel
             ->select("`p`.`title` as `price`, `s`.`title` as `section`")
             ->from('`#__prc_items` as `i`')
             ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
-            ->leftJoin("`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`")
-            ->order("`i`.`id`");
+            ->leftJoin("`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`");
 
         /* Фильтр */
         $search = $this->getState('filter.search');
@@ -92,7 +91,7 @@ class ProjectsModelItems extends ListModel
         $this->setState('filter.price', $price);
         $section = $this->getUserStateFromRequest($this->context . '.filter.section', 'filter_section', '', 'string');
         $this->setState('filter.section', $section);
-        parent::populateState('`i`.`id`', 'asc');
+        parent::populateState('`i`.`title_ru`', 'asc');
     }
 
     protected function getStoreId($id = '')

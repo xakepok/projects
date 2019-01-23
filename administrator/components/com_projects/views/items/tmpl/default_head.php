@@ -11,13 +11,16 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         №
     </th>
     <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_TITLE'); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TITLE', 'i.title_ru', $listDirn, $listOrder); ?>
+    </th>
+    <th>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_ITEM_SECTION', 'section', $listDirn, $listOrder); ?>
+    </th>
+    <th>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PRICE_LIST', 'price', $listDirn, $listOrder); ?>
     </th>
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT'); ?>
-    </th>
-    <th>
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_2'); ?>
     </th>
     <th width="1%">
         <?php echo JHtml::_('grid.sort', 'ID', '`id`', $listDirn, $listOrder); ?>
