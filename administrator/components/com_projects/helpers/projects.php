@@ -16,7 +16,7 @@ class ProjectsHelper
         {
             JHtmlSidebar::addEntry(Text::sprintf('COM_PROJECTS_MENU_NOTIFY', $notify), 'index.php?option=com_projects&amp;view=todos&amp;notify=1', $vName == 'todos');
         }
-        if (in_array($view, array('contracts', 'todos', 'building', 'stat', 'scores', 'payments', 'catalogs', 'cattitles', 'exhibitors'))) {
+        if (in_array($view, array('contracts', 'todos', 'building', 'stat', 'scores', 'payments', 'catalogs', 'cattitles', 'exhibitors', 'prices'))) {
             JHtmlSidebar::addFilter(JText::_('COM_PROJECTS_FILTER_SELECT_ACTIVE_PROJECT'), 'set_active_project', JHtml::_('select.options', ProjectsHtmlFilters::projectOptions(), 'value', 'text', self::getActiveProject()));
         }
         if (self::canDo('core.general')) {
@@ -384,7 +384,7 @@ class ProjectsHelper
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`priceID`")
+            ->select("IFNULL(`priceID`,0)")
             ->from("`#__prj_projects`")
             ->where("`id` = {$projectID}");
         return $db->setQuery($query)->loadResult();
@@ -401,8 +401,7 @@ class ProjectsHelper
         return JText::sprintf("COM_PROJECTS_HEAD_SCORE_STATE_{$state}");
     }
 
-    /**
-     * Возвращает текстовый статус задачи из планировщика
+    /**     * Возвращает текстовый статус задачи из планировщика
      * @param int $state
      * @return string
      * @since 1.2.3

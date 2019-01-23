@@ -31,6 +31,12 @@ class ProjectsModelPrices extends ListModel
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('`title` LIKE ' . $search);
         }
+        //Фильтр по глобальному проекту
+        $project = ProjectsHelper::getActiveProject();
+        if (is_numeric($project)) {
+            $prciceID = ProjectsHelper::getProjectPrice($project);
+            $query->where("`id` = {$prciceID}");
+        }
 
         /* Сортировка */
         $orderCol  = $this->state->get('list.ordering', '`title`');
