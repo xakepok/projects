@@ -153,6 +153,11 @@ class ProjectsHelper
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `a`.`contractID`")
             ->where("`c`.`prjID` = {$projectID}")
             ->where("`c`.`status` IN ({$statuses})");
+        if (!ProjectsHelper::canDo('projects.contracts.totalamount'))
+        {
+            $userID = JFactory::getUser()->id;
+            $query->where("`c`.`managerID` = {$userID}");
+        }
         $result = $db->setQuery($query)->loadAssocList();
         return $result[0];
     }
@@ -175,6 +180,11 @@ class ProjectsHelper
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `p`.`contractID`")
             ->where("`c`.`prjID` = {$projectID}")
             ->where("`c`.`status` IN ({$statuses})");
+        if (!ProjectsHelper::canDo('projects.contracts.totalamount'))
+        {
+            $userID = JFactory::getUser()->id;
+            $query->where("`c`.`managerID` = {$userID}");
+        }
         $payments = $db->setQuery($query)->loadObjectList();
         $result = array('rub' => 0, 'usd' => 0, 'eur' => 0);
         foreach ($payments as $payment) {
