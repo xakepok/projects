@@ -38,7 +38,12 @@ class ProjectsModelSections extends ListModel
         if (is_numeric($price)) {
             $query->where('`s`.`priceID` = ' . (int)$price);
         }
-
+        //Фильтр по проекту
+        $project = ProjectsHelper::getActiveProject();
+        if (is_numeric($project)) {
+            $prciceID = ProjectsHelper::getProjectPrice($project);
+            $query->where("`s`.`priceID` = {$prciceID}");
+        }
 
         /* Сортировка */
         $orderCol = $this->state->get('list.ordering', '`s`.`title`');
