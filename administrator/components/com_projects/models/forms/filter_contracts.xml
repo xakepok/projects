@@ -55,8 +55,6 @@
                 type="list"
                 label="COM_PROJECTS_FILTER_SELECT_STATUS"
                 description="COM_PROJECTS_FILTER_SELECT_STATUS"
-                hint="COM_PROJECTS_FILTER_SELECT_STATUS"
-                title="COM_PROJECTS_FILTER_SELECT_STATUS"
                 multiple="true"
                 onchange="this.form.submit();"
         >

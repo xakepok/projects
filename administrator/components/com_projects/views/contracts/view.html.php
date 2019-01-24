@@ -18,7 +18,7 @@ class ProjectsViewContracts extends HtmlView
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
 
-		// Show the toolbar
+        // Show the toolbar
 		$this->toolbar();
 
 		// Show the sidebar
