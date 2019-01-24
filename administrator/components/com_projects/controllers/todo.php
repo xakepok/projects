@@ -13,12 +13,17 @@ class ProjectsControllerTodo extends FormController {
     public function add()
     {
         $contractID = $this->input->getInt('contractID', 0);
+        $return_from_url = $this->input->getString('return', null);
         $session = JFactory::getSession();
         $createTodoFor = $session->get('createTodoFor', null);
         if ($contractID != 0 || $createTodoFor != null)
         {
             $cid = ($contractID != 0) ? $contractID : $createTodoFor;
             $session->set('contractID', $cid);
+            if ($return_from_url == null) {
+                $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=todos&contractID={$cid}");
+                $this->input->set('return', $return);
+            }
         }
         return parent::add();
     }

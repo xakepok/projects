@@ -1,6 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\MVC\Model\AdminModel;
 
 class ProjectsViewTodo extends HtmlView {
     protected $item, $form, $script, $id, $isAdmin;
@@ -36,7 +37,13 @@ class ProjectsViewTodo extends HtmlView {
             if ($session->get('contractID') != null)
             {
                 $contractID = $session->get('contractID');
-                $title = JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO_FOR_CONTRACT', $contractID);
+                $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
+                $contract = $cm->getItem($contractID);
+                if ($contract->status != '1') $title = JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO_FOR_CONTRACT', $contractID);
+                if ($contract->status == '1') {
+                    if ($contract->number != null) $title = JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO_FOR_CONTRACT_DG', $contract->number);
+                    if ($contract->number == null) $title = JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO_FOR_CONTRACT_WITHOUT_NUMBER');
+                }
             }
             else
             {

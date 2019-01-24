@@ -1,4 +1,9 @@
 'use strict';
+window.onload = function() {
+    document.querySelector("#filter_search").onmouseover = function () {
+        document.querySelector("#filter_search").select();
+    };
+};
 function clrFilters() {
     var project = document.querySelector("[name='filter_project']");
     if (project !== null) project.selectedIndex = '';
