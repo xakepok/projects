@@ -43,7 +43,7 @@ class ProjectsModelContracts extends ListModel
             ->select("`p`.`title_ru` as `project`, `p`.`id` as `projectID`")
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
             ->select("`u`.`name` as `manager`, (SELECT MIN(`dat`) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan_dat`")
-            ->select("(SELECT COUNT(*) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan`")
+            ->select("(SELECT COUNT(*) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0 AND `is_notify` = 0) as `plan`")
             ->select("(SELECT `number` FROM `#__prj_contract_stands` WHERE `contractID`=`c`.`id` AND `show`=1 LIMIT 1) as `stand`")
             ->select("`a`.`amount_rub`, `a`.`amount_usd`, `a`.`amount_eur`")
             ->select("`pay`.`payments`")
