@@ -16,7 +16,7 @@
                 label="COM_PROJECTS_BLANK_CATTITLE"
                 description="COM_PROJECTS_BLANK_CATTITLE"
                 onchange="this.form.submit();"
-                required="true">
+        >
             <option value="">COM_PROJECTS_FILTER_SELECT_CATALOG</option>
         </field>
     </fields>
