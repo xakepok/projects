@@ -75,7 +75,7 @@ class ProjectsModelTodos extends ListModel
         }
         // Фильтруем по дате.
         $dat = $this->getState('filter.dat');
-        if (!empty($dat))
+        if (!empty($dat) && $contractID == 0)
         {
             $dat = $this->_db->quote($this->_db->escape($dat));
             $query->where('`t`.`dat` = ' . $dat);
