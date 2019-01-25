@@ -2,6 +2,7 @@
 defined('_JEXEC') or die;
 jimport('joomla.form.helper');
 JFormHelper::loadFieldClass('list');
+use Joomla\CMS\MVC\Model\AdminModel;
 
 class JFormFieldCatalog extends JFormFieldList
 {
@@ -36,6 +37,18 @@ class JFormFieldCatalog extends JFormFieldList
             $arr = array('data-square' => $item->square, 'data-num' => $item->number);
             $params = array('attr' => $arr, 'option.attr' => 'optionattr');
             $options[] = JHtml::_('select.option', $item->standID, $title, $params);
+        }
+        $id = JFactory::getApplication()->input->getInt('id', 0);
+        //Добавляем текущий стенд в список
+        if ($id != 0) {
+            $sm = AdminModel::getInstance('Stand', 'ProjectsModel');
+            $stand = $sm->getItem($id);
+            $cm = AdminModel::getInstance('Catalog', 'ProjectsModel');
+            $catalog = $cm->getItem($stand->catalogID);
+            $title = sprintf("№%s (%s %s)", $catalog->number, $catalog->square, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
+            $arr = array('data-square' => $catalog->square, 'data-num' => $catalog->number);
+            $params = array('attr' => $arr, 'option.attr' => 'optionattr');
+            array_unshift($options, JHtml::_('select.option', $catalog->id, $title, $params));
         }
 
         if (!$this->loadExternally) {

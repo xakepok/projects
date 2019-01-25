@@ -1,33 +1,32 @@
 <?php
 defined('_JEXEC') or die;
 jimport('joomla.form.helper');
-JFormHelper::loadFieldClass('list');
+JFormHelper::loadFieldClass('groupedlist');
 
-class JFormFieldItem extends JFormFieldList
+class JFormFieldItem extends JFormFieldGroupedList
 {
     protected $type = 'Item';
     protected $loadExternally = 0;
 
-    protected function getOptions()
+    protected function getGroups()
     {
         $view = JFactory::getApplication()->input->getString('view');
 
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`i`.`id`, `i`.`title_ru`")
+            ->select("`i`.`id`, `i`.`title_ru`, `p`.`title` as `price`")
             ->from('`#__prc_items` as `i`')
-            ->order("`i`.`title_ru`");
+            ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
+            ->leftJoin("`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`")
+            ->order("`p`.`title`, `i`.`title_ru`");
 
         if ($view == 'stat') {
-            $query->where("`i`.`in_stat` = 1");
             $session = JFactory::getSession();
             if ($session->get('projectID')) {
                 $projectID = $session->get('projectID');
                 $priceID = ProjectsHelper::getProjectPrice($projectID);
-                $query
-                    ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
-                    ->where("`s`.`priceID` = {$priceID}");
+                $query->where("`s`.`priceID` = {$priceID}");
                 $session->clear('projectID');
             }
         }
@@ -40,9 +39,7 @@ class JFormFieldItem extends JFormFieldList
                     $contractID = $session->get('contractID');
                     $projectID = ProjectsHelper::getContractProject($contractID);
                     $priceID = ProjectsHelper::getProjectPrice($projectID);
-                    $query
-                        ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
-                        ->where("`s`.`priceID` = {$priceID}");
+                    $query->where("`s`.`priceID` = {$priceID}");
                     $session->clear('contractID');
                 }
             }
@@ -52,11 +49,12 @@ class JFormFieldItem extends JFormFieldList
         $options = array();
 
         foreach ($result as $item) {
-            $options[] = JHtml::_('select.option', $item->id, $item->title_ru);
+            if (!isset($options[$item->price])) $options[$item->price] = array();
+            $options[$item->price][] = JHtml::_('select.option', $item->id, $item->title_ru);
         }
 
         if (!$this->loadExternally) {
-            $options = array_merge(parent::getOptions(), $options);
+            $options = array_merge(parent::getGroups(), $options);
         }
 
         return $options;
@@ -65,6 +63,6 @@ class JFormFieldItem extends JFormFieldList
     public function getOptionsExternally()
     {
         $this->loadExternally = 1;
-        return $this->getOptions();
+        return $this->getGroups();
     }
 }

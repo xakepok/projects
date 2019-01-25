@@ -32,7 +32,7 @@
         />
         <field
                 name="sq"
-                type="text"
+                type="hidden"
                 label="COM_PROJECTS_HEAD_ITEM_HEAD_SQUARE"
                 description="COM_PROJECTS_HEAD_ITEM_HEAD_SQUARE_DESC"
                 autocomplete="off"

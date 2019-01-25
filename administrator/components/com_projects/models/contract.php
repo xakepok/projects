@@ -52,7 +52,7 @@ class ProjectsModelContract extends AdminModel {
         foreach ($items as $item) {
             $arr = array();
             $arr['id'] = $item->id;
-            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$item->id}&amp;return={$return}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;contractID={$cid}&amp;id={$item->id}&amp;return={$return}");
             $arr['number'] = JHtml::link($url, $item->number);
             $arr['freeze'] = $item->freeze;
             $arr['comment'] = $item->comment;

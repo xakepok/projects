@@ -235,9 +235,10 @@ class ProjectsModelContracts extends ListModel
     public function getStandsForContract(int $contractID): array
     {
         $stands = ProjectsHelper::getContractStands($contractID);
+        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contracts");
         $result = array();
         foreach ($stands as $stand) {
-            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand->id}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;contractID={$contractID}&amp;id={$stand->id}&amp;return={$return}");
             $result[] = JHtml::link($url, $stand->number);
         }
         return $result;
