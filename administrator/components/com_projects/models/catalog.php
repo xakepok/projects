@@ -43,7 +43,76 @@ class ProjectsModelCatalog extends AdminModel {
 
     public function save($data)
     {
+        $this->updateStands($data);
         return parent::save($data);
+    }
+
+    /**
+     * Изменяет площадь стенда в заказанных услугах в сделках, в которых заказан этот стенд
+     * @param array $data Массив с новыми данными стенда из каталога
+     * @since 1.0.9.10
+     */
+    protected function updateStands(array $data): void
+    {
+        $old = parent::getItem($data['id']);
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`contractID`, `itemID`, `catalogID`, `contractID`")
+            ->from("`#__prj_stands`")
+            ->where("`catalogID` = {$data['id']}");
+        $stands = $db->setQuery($query)->loadObjectList();
+        foreach ($stands as $stand) {
+            $cm = AdminModel::getInstance('Catalog', 'ProjectsModel');
+            $catalog = $cm->getItem($stand->catalogID);
+            $query = $db->getQuery(true);
+            $query
+                ->update("`#__prj_contract_items`")
+                ->set("`value` = `value` - {$old->square} + {$data['square']}")
+                ->where("`contractID` = {$stand->contractID}")
+                ->where("`itemID` = {$stand->itemID}");
+            $db->setQuery($query)->execute();
+            $nonify = array();
+            $nonify['contractID'] = $stand->contractID;
+            $nonify['old_square'] = $old->square;
+            $nonify['new_square'] = $data['square'];
+            $nonify['stand'] = $catalog->number;
+            $this->sendNotify($nonify);
+        }
+    }
+
+    /**
+     * Отправляет менеджеру уведомление об изменении площади стенда
+     * @param array $data Массив с данными для уведомления
+     * @since 1.0.9.10
+     */
+    public function sendNotify(array $data): void
+    {
+        $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
+        $em = AdminModel::getInstance('Exhibitor', 'ProjectsModel');
+        $pm = AdminModel::getInstance('Project', 'ProjectsModel');
+        $tm = AdminModel::getInstance('Todo', 'ProjectsModel');
+        $contract = $cm->getItem($data['contractID']);
+        $exhibitor = $em->getItem($contract->expID);
+        $project = $pm->getItem($contract->prjID);
+        $arr = array();
+        $arr['id'] = NULL;
+        $arr['is_notify'] = 1;
+        $arr['contractID'] = $data['contractID'];
+        $arr['managerID'] = $contract->managerID;
+        $exhibitor = ProjectsHelper::getExpTitle($exhibitor->title_ru_short, $exhibitor->title_ru_full, $exhibitor->title_en);
+        $project = $project->title;
+        if ($contract->status == '1')
+        {
+            $number = $contract->number ?? JText::sprintf('COM_PROJECTS_WITHOUT_NUMBER');
+            $arr['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_DG_CATALOG_EDITED', $data['stand'], $number, $exhibitor, $project, $data['old_square'], $data['new_square']);
+        }
+        else
+        {
+            $arr['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_SD_CATALOG_EDITED', $data['stand'], $exhibitor, $project, $data['old_square'], $data['new_square']);
+        }
+        $arr['state'] = 0;
+        $tm->save($arr);
     }
 
     protected function prepareTable($table)
