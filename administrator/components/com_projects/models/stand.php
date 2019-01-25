@@ -145,7 +145,15 @@ class ProjectsModelStand extends AdminModel {
             $sm = AdminModel::getInstance('Catalog', 'ProjectsModel');
             $stand_old = $sm->getItem($item->catalogID);
             $stand_new = $sm->getItem($data['catalogID']);
-            if ($stand_old->id != $stand_new->id) {
+            $items_model = AdminModel::getInstance('Ctritem', 'ProjectsModel');
+            if ($item->itemID != $data['itemID'] && $stand_old->id != $stand_new->id) //Если меняются и пункт прайса, и стенд
+            {
+                JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_PROJECTS_ERROR_CANT_EDIT_STAND_TYPE_AND_ITEM'), 'error');
+                return false;
+            }
+
+            //Уведомляем техдиеркцию о изменении стенда
+            if ($stand_old->id != $stand_new->id && $item->itemID == $data['itemID']) {
                 if ($contract->number != null) {
                     $arr['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_DG_EDITED', $contract->number, $stand_old->number, $stand_new->number);
                 } else {
@@ -154,7 +162,7 @@ class ProjectsModelStand extends AdminModel {
                 $arr['managerID'] = 400;
                 $this->_createTodo($arr, true);
             }
-            $items_model = AdminModel::getInstance('Ctritem', 'ProjectsModel');
+            //Обноялвем поля в таблице заказанных услуг
             $nv = array();
             if ($item->itemID == $data['itemID'] && $stand_old->id != $stand_new->id) //Если пункт прайс-листа не меняется, а меняется стенд
             {
