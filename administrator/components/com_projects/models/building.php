@@ -96,7 +96,7 @@ class ProjectsModelBuilding extends ListModel
         $results = array();
         $stands = array(); //Массив контракт - массив стендов
         $itog = array(); //Итоговый массив
-        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=building");
+        $return = base64_encode("index.php?option=com_projects&view=building");
         foreach ($items as $item) {
             $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->exponentID}&amp;return={$return}");
             $exhibitor = ($item->exponentID != null) ? ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en) : '';

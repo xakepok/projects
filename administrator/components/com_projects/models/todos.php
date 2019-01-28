@@ -133,7 +133,7 @@ class ProjectsModelTodos extends ListModel
         $items = parent::getItems();
         $result_no_expire = array();
         $result_expire = array();
-        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=todos");
+        $return = base64_encode("index.php?option=com_projects&view=todos");
         foreach ($items as $item) {
             $arr['expired'] = $this->isExpired($item->date, $item->state);
             $arr['id'] = $item->id;

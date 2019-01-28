@@ -105,7 +105,7 @@ class ProjectsModelExhibitors extends ListModel
     {
         $format = JFactory::getApplication()->input->getString('format', 'html');
         $items = parent::getItems();
-        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=exhibitors");
+        $return = base64_encode("index.php?option=com_projects&view=exhibitors");
         $result = array();
         $projectinactive = $this->getState('filter.projectinactive');
         $projectactive = $this->getState('filter.projectactive');

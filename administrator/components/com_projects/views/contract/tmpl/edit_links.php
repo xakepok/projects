@@ -2,7 +2,7 @@
 defined('_JEXEC') or die;
 $links = array();
 if ($this->item->id != null) {
-    $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contract&layout=edit&id={$this->item->id}");
+    $return = base64_encode("index.php?option=com_projects&view=contract&layout=edit&id={$this->item->id}");
     $exhibitorUrl = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$this->item->expID}&amp;return={$return}");
     $links[] = JHtml::link($exhibitorUrl, JText::sprintf('COM_PROJECTS_GO_EXHIBITOR'));
     $todoUrl = JRoute::_("index.php?option=com_projects&amp;task=todo.add&amp;contractID={$this->item->id}&amp;return={$return}");

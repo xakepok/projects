@@ -48,7 +48,7 @@ class ProjectsModelHistory extends AdminModel {
             ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`")
             ->where("`c`.`expID` = {$exhibitorID}");
         $items = $db->setQuery($query)->loadObjectList();
-        $return = base64_encode(JUri::base() . "index.php?option=com_projects&task=exhibitor.edit&id={$exhibitorID}");
+        $return = base64_encode("index.php?option=com_projects&task=exhibitor.edit&id={$exhibitorID}");
         foreach ($items as $item) {
             $arr = array();
             $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}");
@@ -93,7 +93,7 @@ class ProjectsModelHistory extends AdminModel {
             ->where("`c`.`expID` = {$expID}");
 
         $items = $db->setQuery($query)->loadObjectList();
-        $return = base64_encode(JUri::base() . "index.php?option=com_projects&task=exhibitor.edit&id={$expID}");
+        $return = base64_encode("index.php?option=com_projects&task=exhibitor.edit&id={$expID}");
         foreach ($items as $item) {
             $arr = array();
             $arr['dat'] = $item->dat;

@@ -48,7 +48,7 @@ class ProjectsModelContract extends AdminModel {
         $cid = $item->id;
         $items = ProjectsHelper::getContractStands($cid);
         $result = array();
-        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contract&layout=edit&id={$item->id}");
+        $return = base64_encode("index.php?option=com_projects&view=contract&layout=edit&id={$item->id}");
         foreach ($items as $item) {
             $arr = array();
             $arr['id'] = $item->id;
@@ -78,7 +78,7 @@ class ProjectsModelContract extends AdminModel {
         $item = parent::getItem();
         if ($item->id == null) return $result;
         $todos = ProjectsHelper::getContractTodo($item->id);
-        $return = base64_encode(JUri::base()."index.php?option=com_projects&view=contract&layout=edit&id={$item->id}");
+        $return = base64_encode("index.php?option=com_projects&view=contract&layout=edit&id={$item->id}");
         foreach ($todos as $todo) {
             $arr = array();
             $arr['action'] = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;id={$todo->id}&amp;layout=edit&amp;return={$return}");
@@ -378,7 +378,7 @@ class ProjectsModelContract extends AdminModel {
             ->where("`p`.`id` = {$priceID}")
             ->order("`i`.`application`");
         $items = $db->setQuery($query)->loadObjectList();
-        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contract&layout=edit&id={$item->id}");
+        $return = base64_encode("index.php?option=com_projects&view=contract&layout=edit&id={$item->id}");
         foreach ($items as $item)
         {
             $arr = array();

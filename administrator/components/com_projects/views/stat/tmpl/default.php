@@ -12,7 +12,7 @@ $itemID = JFactory::getApplication()->input->getInt('itemID', 0);
 $action = JRoute::_(($itemID != 0) ? "index.php?option=com_projects&amp;view=stat&amp;itemID={$itemID}" : "index.php?option=com_projects&amp;view=stat");
 $ret = "index.php?option=com_projects&view=stat";
 if ($itemID > 0) $ret .= "&itemID={$itemID}";
-$return = base64_encode(JUri::base() . $ret);
+$return = base64_encode($ret);
 ?>
 <div class="row-fluid">
     <div id="j-sidebar-container" class="span2">

@@ -108,7 +108,7 @@ class ProjectsModelStat extends ListModel
         foreach ($items as $item) {
             $arr = array();
             if ($this->itemID != 0) {
-                $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=stat&itemID={$this->itemID}");
+                $return = base64_encode("index.php?option=com_projects&view=stat&itemID={$this->itemID}");
                 $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}");
                 $title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_rn);
                 $arr['title'] = (!$xls) ? JHtml::link($url, $title) : $title;

@@ -109,7 +109,7 @@ class ProjectsModelScores extends ListModel
     {
         $items = parent::getItems();
         $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'debt' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
-        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=scores");
+        $return = base64_encode("index.php?option=com_projects&view=scores");
         foreach ($items as $item)
         {
             $arr = array();

@@ -8,7 +8,7 @@ JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('searchtools.form');
 
 HTMLHelper::_('script', 'com_projects/script.js', array('version' => 'auto', 'relative' => true));
-$return = base64_encode(JUri::base() . "index.php?option=com_projects&view=sections");
+$return = base64_encode("index.php?option=com_projects&view=sections");
 ?>
 <div class="row-fluid">
     <div id="j-sidebar-container" class="span2">

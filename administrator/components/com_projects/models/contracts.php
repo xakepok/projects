@@ -132,7 +132,7 @@ class ProjectsModelContracts extends ListModel
         $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'debt' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'payments' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
         $ids = array();
         $format = JFactory::getApplication()->input->getString('format', 'html');
-        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contracts");
+        $return = base64_encode("index.php?option=com_projects&view=contracts");
         foreach ($items as $item) {
             $ids[] = $item->id;
             $arr['id'] = $item->id;

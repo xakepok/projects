@@ -66,7 +66,7 @@ class ProjectsModelCatalogs extends ListModel
     {
         $items = parent::getItems();
         $result = array();
-        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=catalogs");
+        $return = base64_encode("index.php?option=com_projects&view=catalogs");
         foreach ($items as $item) {
             $arr['id'] = $item->id;
             $url = JRoute::_("index.php?option=com_projects&amp;task=catalog.edit&amp;&id={$item->id}");
