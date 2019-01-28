@@ -47,6 +47,16 @@
                 class="x2"
         />
         <field
+                name="tmpl_task"
+                type="Templatetask"
+                label="COM_PROJECTS_ACTION_SELECT_FROM_TEMPLATE"
+                description="COM_PROJECTS_ACTION_SELECT_FROM_TEMPLATE"
+                onchange="fromTemplate('task')"
+                class="x2"
+                >
+            <option value="">COM_PROJECTS_FILTER_SELECT_TMPL</option>
+        </field>
+        <field
                 name="task"
                 type="textarea"
                 rows="5"
@@ -57,6 +67,16 @@
                 required="true"
                 class="x2"
         />
+        <field
+                name="tmpl_result"
+                type="Templateresult"
+                label="COM_PROJECTS_ACTION_SELECT_FROM_TEMPLATE"
+                description="COM_PROJECTS_ACTION_SELECT_FROM_TEMPLATE"
+                onchange="fromTemplate('result')"
+                class="x2"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_TMPL</option>
+        </field>
         <field
                 name="result"
                 type="textarea"

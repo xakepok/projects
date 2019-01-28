@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fieldset name="names">
+        <field
+                name="id"
+                type="hidden"
+        />
+        <field
+                name="tip"
+                type="list"
+                label="COM_PROJECTS_HEAD_TMPL_TYPE"
+                description="COM_PROJECTS_HEAD_TMPL_TYPE_DESC"
+                required="true"
+                default="0"
+                class="x2"
+        >
+            <option value="0">COM_PROJECTS_HEAD_TMPL_TYPE_0</option>
+            <option value="1">COM_PROJECTS_HEAD_TMPL_TYPE_1</option>
+        </field>
+        <field
+                name="title"
+                type="text"
+                label="COM_PROJECTS_HEAD_TMPL_TITLE"
+                description="COM_PROJECTS_HEAD_TMPL_TITLE"
+                hint="COM_PROJECTS_HEAD_TMPL_TITLE_HINT"
+                autocomplete="off"
+                required="true"
+                class="x2"
+        />
+        <field
+                name="text"
+                type="textarea"
+                rows="5"
+                label="COM_PROJECTS_HEAD_TMPL_TEXT"
+                description="COM_PROJECTS_HEAD_TMPL_TEXT"
+                hint="COM_PROJECTS_HEAD_TMPL_TEXT_HINT"
+                autocomplete="off"
+                required="true"
+                class="x2"
+        />
+    </fieldset>
+</form>

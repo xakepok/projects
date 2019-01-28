@@ -16,3 +16,8 @@ function getTodosCountOnDate() {
             console.log('Request failed', error);
         });
 }
+function fromTemplate(tip) {
+    var field = document.getElementById("jform_tmpl_"+tip);
+    var text = field.options[field.selectedIndex].getAttribute('data-text');
+    document.querySelector("#jform_"+tip).value = text;
+}

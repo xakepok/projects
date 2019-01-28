@@ -29,6 +29,7 @@ class ProjectsHelper
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_TODOS'), 'index.php?option=com_projects&amp;view=todos', $vName == 'todos');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_EXHIBITORS'), 'index.php?option=com_projects&amp;view=exhibitors', $vName == 'exhibitors');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_BUILDING'), 'index.php?option=com_projects&amp;view=building', $vName == 'building');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_TEMPLATES'), 'index.php?option=com_projects&amp;view=templates', $vName == 'templates');
         }
         if (self::canDo('core.accountant')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_SCORES'), 'index.php?option=com_projects&amp;view=scores', $vName == 'scores');
@@ -409,6 +410,17 @@ class ProjectsHelper
     public static function getScoreState(int $state): string
     {
         return JText::sprintf("COM_PROJECTS_HEAD_SCORE_STATE_{$state}");
+    }
+
+    /**
+     * Возвращает тип шаблона
+     * @param int $tip
+     * @return string
+     * @since 1.1.0.1
+     */
+    public static function getTemplateType(int $tip = 0): string
+    {
+        return JText::sprintf("COM_PROJECTS_HEAD_TMPL_TYPE_{$tip}");
     }
 
     /**     * Возвращает текстовый статус задачи из планировщика
