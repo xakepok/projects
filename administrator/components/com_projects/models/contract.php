@@ -193,7 +193,6 @@ class ProjectsModelContract extends AdminModel {
         return parent::publish($pks, $value);
     }
 
-
     public function save($data)
     {
         if ($data['id'] == null && !ProjectsHelper::canDo('core.general')) $data['managerID'] = JFactory::getUser()->id;
@@ -217,6 +216,15 @@ class ProjectsModelContract extends AdminModel {
             $data['files'][] = $file;
         }
         $s3 = ($data['id]'] != null) ? $this->saveFiles($data['files']) : true;
+        //Удаляем стенды сделки если статус отказ
+        if ($data['status'] == 0 && $data['id'] != 0)
+        {
+            $stands = ProjectsHelper::getContractStands($data['id']);
+            $sm = AdminModel::getInstance('Stand', 'ProjectsModel');
+            foreach ($stands as $stand) {
+                $sm->delete($stand->id);
+            }
+        }
         return $s1 && $s2 && $s3;
     }
 
