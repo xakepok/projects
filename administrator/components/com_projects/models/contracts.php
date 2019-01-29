@@ -44,7 +44,6 @@ class ProjectsModelContracts extends ListModel
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
             ->select("`u`.`name` as `manager`, (SELECT MIN(`dat`) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan_dat`")
             ->select("(SELECT COUNT(*) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0 AND `is_notify` = 0) as `plan`")
-            ->select("(SELECT `number` FROM `#__prj_contract_stands` WHERE `contractID`=`c`.`id` AND `show`=1 LIMIT 1) as `stand`")
             ->select("`a`.`amount_rub`, `a`.`amount_usd`, `a`.`amount_eur`")
             ->select("`pay`.`payments`")
             ->select("IFNULL(`a`.`amount_rub`,0)-IFNULL(`pay`.`payments`,0) as `debt_rub`, IFNULL(`a`.`amount_usd`,0)-IFNULL(`pay`.`payments`,0) as `debt_usd`, IFNULL(`a`.`amount_eur`,0)-IFNULL(`pay`.`payments`,0) as `debt_eur`")
@@ -192,7 +191,6 @@ class ProjectsModelContracts extends ListModel
             $result['debt']['total']['usd'] = $result['amount']['total']['usd'] - $result['payments']['total']['usd'];
             $result['debt']['total']['eur'] = $result['amount']['total']['eur'] - $result['payments']['total']['eur'];
         }
-        $result['stands'] = $this->getStands($ids);
         return $result;
     }
 
@@ -235,47 +233,11 @@ class ProjectsModelContracts extends ListModel
     public function getStandsForContract(int $contractID): array
     {
         $stands = ProjectsHelper::getContractStands($contractID);
-        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contracts");
+        $return = base64_encode("index.php?option=com_projects&view=contracts");
         $result = array();
         foreach ($stands as $stand) {
             $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;contractID={$contractID}&amp;id={$stand->id}&amp;return={$return}");
             $result[] = JHtml::link($url, $stand->number);
-        }
-        return $result;
-    }
-
-    /**
-     * Возвращает массив с номерами стендов по сделкам
-     * @param array $ids Массив с ID сделок
-     * @return array
-     * @since 1.3.0.2
-     * @deprecated
-     * Не используется с 1.0.8.6
-     */
-    private function getStands(array $ids): array
-    {
-        $result = array();
-        $db =& $this->getDbo();
-        $query = $db->getQuery(true);
-        if (empty($ids)) return $result;
-        $ids = implode(", ", $ids);
-        $query
-            ->select("*")
-            ->from("`#__prj_stands`")
-            ->where("`contractID` IN ({$ids})");
-        $stands = $db->setQuery($query)->loadObjectList();
-        $return = base64_encode(JUri::base() . "index.php?option=com_projects&view=contracts");
-        foreach ($stands as $stand) {
-            $contractID = $stand->contractID;
-            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand->id}&amp;return={$return}");
-            $link = JHtml::link($url, $stand->number);
-            if (!isset($result[$contractID]))
-            {
-                $result[$contractID] = $link;
-            }
-            else {
-                $result[$contractID] .= "/{$link}";
-            }
         }
         return $result;
     }

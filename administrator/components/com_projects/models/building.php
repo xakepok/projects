@@ -33,7 +33,7 @@ class ProjectsModelBuilding extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select('`s`.`id` as `standID`, `cat`.`number` as `stand`, `s`.`freeze`, IFNULL(`s`.`tip`,0) as `tip`, IFNULL(`s`.`status`,1) as `status`, IFNULL(`s`.`sq`,`cat`.`square`) as `sq`')
+            ->select('`s`.`id` as `standID`, `cat`.`number` as `stand`, `s`.`freeze`, IFNULL(`s`.`tip`,0) as `tip`, IFNULL(`s`.`status`,1) as `status`, `cat`.`square`as `sq`')
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
             ->select("`c`.`number` as `contract`, `c`.`id` as `contractID`, `c`.`status` as `exp_status`")
             ->select("`u`.`name` as `manager`")

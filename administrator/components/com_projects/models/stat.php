@@ -142,8 +142,9 @@ class ProjectsModelStat extends ListModel
         $xls = (JFactory::getApplication()->input->getString('task') == 'exportxls');
         $stands = ProjectsHelper::getContractStands($contractID);
         $result = array();
+        $return = base64_encode("index.php?option=com_projects&view=stat&itemID={$this->itemID}");
         foreach ($stands as $stand) {
-            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand->id}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;contractID={$contractID}&amp;id={$stand->id}&amp;return={$return}");
             $result[] = (!$xls) ? JHtml::link($url, $stand->number) : $stand->number;
         }
         return $result;

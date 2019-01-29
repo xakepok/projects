@@ -103,21 +103,5 @@
                 default=""
                 onchange="setImg()"
         />
-        <field
-                name="brk2"
-                type="spacer"
-                label=""
-        />
-        <field
-                name="show"
-                type="radio"
-                class="btn-group btn-group-yesno"
-                default="1"
-                label="COM_PROJECTS_HEAD_CONTRACT_STAND_SHOW"
-                description="COM_PROJECTS_HEAD_CONTRACT_STAND_SHOW_DESC"
-        >
-            <option value="0">JNO</option>
-            <option value="1">JYES</option>
-        </field>
     </fieldset>
 </form>

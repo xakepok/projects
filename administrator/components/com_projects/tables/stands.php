@@ -13,7 +13,6 @@ class TableProjectsStands extends Table
     var $tip = null;
     var $freeze = null;
     var $comment = null;
-    var $show = null;
     var $status = null;
     var $scheme = null;
 

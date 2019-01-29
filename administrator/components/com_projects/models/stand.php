@@ -206,25 +206,6 @@ class ProjectsModelStand extends AdminModel {
         return $s;
     }
 
-    /**
-     * Скрывает стенды из выборки при сортировке
-     * @param int $id ID стенда, который остаётся показываться
-     * @param int $contractID ID сделки
-     * @throws
-     * @since 1.0.5.7
-     */
-    private function dontShow(int $id, int $contractID): void
-    {
-        $db = $this->getDbo();
-        $query = $db->getQuery(true);
-        $query
-            ->update("`#__prj_stands`")
-            ->set("`show` = 0")
-            ->where("`contractID` = {$contractID}")
-            ->where("`id` != {$id}");
-        $db->setQuery($query)->execute();
-    }
-
     protected function prepareTable($table)
     {
         $nulls = array('catalogID', 'itemID', 'number', 'freeze', 'comment', 'scheme'); //Поля, которые NULL
