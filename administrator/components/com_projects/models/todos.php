@@ -134,39 +134,121 @@ class ProjectsModelTodos extends ListModel
         $result_no_expire = array();
         $result_expire = array();
         $return = base64_encode("index.php?option=com_projects&view=todos");
+        $task = JFactory::getApplication()->input->getString('task', null);
+        $result = array();
         foreach ($items as $item) {
-            $arr['expired'] = $this->isExpired($item->date, $item->state);
-            $arr['id'] = $item->id;
-            $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contract}&amp;return={$return}");
-            $c = ($item->contract_status != '1') ? ProjectsHelper::getExpStatus($item->contract_status) : JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number);
-            $link = JHtml::link($url, $c);
-            $arr['contract'] = $link;
-            $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}");
-            $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->project : JHtml::link($url, $item->project);
-            $exhibitor = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
-            $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}");
-            $arr['exp'] = JHtml::link($url, $exhibitor);
-            $layout = (!$item->is_notify) ? 'edit' : 'notify';
-            $url_todo = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;layout={$layout}&amp;id={$item->id}");
-            $link = JHtml::link($url_todo, $item->date);
-            $arr['dat'] = $link;
-            $arr['dat_open'] = $item->dat_open;
-            $arr['expID'] = $item->expID;
-            $arr['dat_close'] = $item->dat_close ?? JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_NOT_CLOSE');
-            $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$item->contract}");
-            $arr['task'] = JHtml::link((!$item->is_notify) ? $url : $url_todo, $item->task);
-            $arr['result'] = ($arr['expired']) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : $item->result;
-            $arr['open'] = $item->open;
-            $arr['manager'] = $item->manager;
-            $arr['state'] = $item->state;
-            if ($item->is_notify) {
-                $arr['close_notify'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=todos.publish&amp;id={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_CLOSE_AND_READ'));
+            $arr = array();
+            if ($task != 'exportxls') {
+                $arr['expired'] = $this->isExpired($item->date, $item->state);
+                $arr['id'] = $item->id;
+                $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contract}&amp;return={$return}");
+                $c = ($item->contract_status != '1') ? ProjectsHelper::getExpStatus($item->contract_status) : JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number);
+                $link = JHtml::link($url, $c);
+                $arr['contract'] = $link;
+                $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}");
+                $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->project : JHtml::link($url, $item->project);
+                $exhibitor = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+                $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}");
+                $arr['exp'] = JHtml::link($url, $exhibitor);
+                $layout = (!$item->is_notify) ? 'edit' : 'notify';
+                $url_todo = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;layout={$layout}&amp;id={$item->id}");
+                $link = JHtml::link($url_todo, $item->date);
+                $arr['dat'] = $link;
+                $arr['dat_open'] = $item->dat_open;
+                $arr['expID'] = $item->expID;
+                $arr['dat_close'] = $item->dat_close ?? JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_NOT_CLOSE');
+                $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$item->contract}");
+                $arr['task'] = JHtml::link((!$item->is_notify) ? $url : $url_todo, $item->task);
+                $arr['result'] = ($arr['expired']) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : $item->result;
+                $arr['open'] = $item->open;
+                $arr['manager'] = $item->manager;
+                $arr['state'] = $item->state;
+                if ($item->is_notify) {
+                    $arr['close_notify'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=todos.publish&amp;id={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_CLOSE_AND_READ'));
+                }
+                $arr['state_text'] = ($arr['expired']) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : ProjectsHelper::getTodoState($item->state);
+                if (!$arr['expired']) $result_no_expire[] = $arr;
+                if ($arr['expired']) $result_expire[] = $arr;
             }
-            $arr['state_text'] = ($arr['expired']) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : ProjectsHelper::getTodoState($item->state);
-            if (!$arr['expired']) $result_no_expire[] = $arr;
-            if ($arr['expired']) $result_expire[] = $arr;
+            else
+            {
+                $expired = $this->isExpired($item->date, $item->state);
+                $arr['dat_open'] = $item->dat_open;
+                $arr['dat'] = $item->date;
+                $arr['contract'] = ($item->contract_status != '1') ? ProjectsHelper::getExpStatus($item->contract_status) : JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number);
+                $arr['project'] = $item->project;
+                $arr['exp'] = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+                $arr['project'] = $item->project;
+                $arr['task'] = $item->task;
+                $arr['result'] = $item->result ?? '';
+                $arr['state_text'] = ($expired) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : ProjectsHelper::getTodoState($item->state);
+                $result[] = $arr;
+            }
         }
-        return array_merge($result_expire, $result_no_expire);
+        return ($task != 'exportxls') ? array_merge($result_expire, $result_no_expire) : $result;
+    }
+
+    public function exportToExcel()
+    {
+        if (is_array($this->state->get('filter.items'))) return;
+        $items = $this->getItems();
+        $data = $items;
+        JLoader::discover('PHPExcel', JPATH_LIBRARIES);
+        JLoader::register('PHPExcel', JPATH_LIBRARIES . '/PHPExcel.php');
+        $xls = new PHPExcel();
+        $xls->setActiveSheetIndex(0);
+        $sheet = $xls->getActiveSheet();
+        $sheet->setTitle(JText::sprintf('COM_PROJECTS_MENU_STAT'));
+        for ($i = 1; $i < count($data) + 1; $i++) {
+            for ($j = 0; $j < 8; $j++) {
+                if ($i == 1) {
+                    if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_OPEN'));
+                    if ($j == 1) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE'));
+                    if ($j == 2) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_CONTRACT'));
+                    if ($j == 3) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_PROJECT'));
+                    if ($j == 4) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_EXP'));
+                    if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_TASK'));
+                    if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_RESULT'));
+                    if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE'));
+                }
+                if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['dat_open']);
+                if ($j == 1) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['dat']);
+                if ($j == 2) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['contract']);
+                if ($j == 3) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['project']);
+                if ($j == 4) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['exp']);
+                if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['task']);
+                if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['result'] ?? '');
+                if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['state_text']);
+            }
+        }
+        $sheet->getColumnDimension('A')->setWidth(10);
+        $sheet->getColumnDimension('B')->setWidth(14);
+        $sheet->getColumnDimension('C')->setWidth(23);
+        $sheet->getColumnDimension('D')->setWidth(16);
+        $sheet->getColumnDimension('E')->setWidth(35);
+        $sheet->getColumnDimension('F')->setWidth(72);
+        $sheet->getColumnDimension('G')->setWidth(47);
+        $sheet->getColumnDimension('H')->setWidth(16);
+        $sheet->getStyle('A1')->getFont()->setBold(true);
+        $sheet->getStyle('B1')->getFont()->setBold(true);
+        $sheet->getStyle('C1')->getFont()->setBold(true);
+        $sheet->getStyle('D1')->getFont()->setBold(true);
+        $sheet->getStyle('E1')->getFont()->setBold(true);
+        $sheet->getStyle('F1')->getFont()->setBold(true);
+        $sheet->getStyle('G1')->getFont()->setBold(true);
+        $sheet->getStyle('H1')->getFont()->setBold(true);
+        $user = JFactory::getUser()->name;
+        $filename = JFile::makeSafe("Job by ". $user);
+        $filename = sprintf("%s.xls", $filename);
+        header("Expires: Mon, 1 Apr 1974 05:00:00 GMT");
+        header("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
+        header("Cache-Control: no-cache, must-revalidate");
+        header("Pragma: public");
+        header("Content-type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename={$filename}");
+        $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
+        $objWriter->save('php://output');
+        jexit();
     }
 
     /* Сортировка по умолчанию */
