@@ -12,8 +12,7 @@ class ProjectsHelper
     {
         $view = JFactory::getApplication()->input->getString('view');
         $notify = self::getNotifies();
-        if ($notify > 0)
-        {
+        if ($notify > 0) {
             JHtmlSidebar::addEntry(Text::sprintf('COM_PROJECTS_MENU_NOTIFY', $notify), 'index.php?option=com_projects&amp;view=todos&amp;notify=1', $vName == 'todos');
         }
         if (in_array($view, array('contracts', 'todos', 'building', 'stat', 'scores', 'payments', 'catalogs', 'cattitles', 'exhibitors', 'prices', 'sections', 'items'))) {
@@ -43,6 +42,38 @@ class ProjectsHelper
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ITEMS'), 'index.php?option=com_projects&amp;view=items', $vName == 'items');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ACTIVITIES'), 'index.php?option=com_projects&amp;view=activities', $vName == 'activities');
         }
+    }
+
+    /**
+     * Возвращает павильон, которому принадлежит стенд в соответствии с возвращённым из базы кодом
+     * @param string $code код павильона
+     * @return string
+     * @since 1.1.0.4
+     */
+    public static function getStandPavilion(string $code): string
+    {
+        $tbl = array(0 => $code, 1 => 'A', 2 => 'B', 3 => 'C', 4 => 'D', 5 => 'E', 6 => 'F');
+        $pavilion = "";
+        if (strlen($code) == 1 && is_numeric($code)) {
+            $pavilion = JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_PAVILION_N', $tbl[intval($code)]);
+        }
+        if (strlen($code) == 1 && !is_numeric($code))
+        {
+            if ($code == 'V')
+            {
+                $pavilion = JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_CLOSE');
+            }
+            if ($code == 'Z')
+            {
+                $pavilion = JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_STREET_CLOSE');
+            }
+        }
+        if (strlen($code) > 1)
+        {
+            $pavilion = JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_PAVILION_STREET', $tbl[intval(substr($code,1,1))]);
+        }
+
+        return $pavilion;
     }
 
     /**
@@ -154,8 +185,7 @@ class ProjectsHelper
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `a`.`contractID`")
             ->where("`c`.`prjID` = {$projectID}")
             ->where("`c`.`status` IN ({$statuses})");
-        if (!ProjectsHelper::canDo('projects.contracts.totalamount'))
-        {
+        if (!ProjectsHelper::canDo('projects.contracts.totalamount')) {
             $userID = JFactory::getUser()->id;
             $query->where("`c`.`managerID` = {$userID}");
         }
@@ -181,8 +211,7 @@ class ProjectsHelper
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `p`.`contractID`")
             ->where("`c`.`prjID` = {$projectID}")
             ->where("`c`.`status` IN ({$statuses})");
-        if (!ProjectsHelper::canDo('projects.contracts.totalamount'))
-        {
+        if (!ProjectsHelper::canDo('projects.contracts.totalamount')) {
             $userID = JFactory::getUser()->id;
             $query->where("`c`.`managerID` = {$userID}");
         }

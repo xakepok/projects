@@ -37,6 +37,7 @@ class ProjectsModelBuilding extends ListModel
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
             ->select("`c`.`number` as `contract`, `c`.`id` as `contractID`, `c`.`status` as `exp_status`")
             ->select("`u`.`name` as `manager`")
+            ->select("(SELECT getStandPavilion(`cat`.`number`)) as `pavilion`")
             ->from("`#__prj_catalog` as `cat`")
             ->leftJoin("`#__prj_stands` as `s` ON `s`.`catalogID` = `cat`.`id`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
@@ -83,7 +84,7 @@ class ProjectsModelBuilding extends ListModel
         }
 
         /* Сортировка */
-        $orderCol  = $this->state->get('list.ordering', '`stand`');
+        $orderCol  = $this->state->get('list.ordering', 'pavilion, stand');
         $orderDirn = $this->state->get('list.direction', 'asc');
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
@@ -119,6 +120,9 @@ class ProjectsModelBuilding extends ListModel
             if (ProjectsHelper::canDo('core.general')) {
                 $arr['scheme'] = (!$item->exponentID == null) ? ProjectsHelper::getStandStatus($item->status) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
             }
+            $arr['pavilion'] = $item->pavilion;
+            if (!isset($arr['square'][$item->pavilion])) $arr['square'][$item->pavilion] = 0;
+            $arr['square'][$item->pavilion] += $item->sq;
             $results[] = $arr;
         }
 
@@ -142,7 +146,7 @@ class ProjectsModelBuilding extends ListModel
         $this->setState('filter.standstate', $standstate);
         $standstatus = $this->getUserStateFromRequest($this->context . '.filter.standstatus', 'filter_standstatus');
         $this->setState('filter.standstatus', $standstatus);
-        parent::populateState('`stand`', 'asc');
+        parent::populateState('pavilion, stand', 'asc');
     }
 
     protected function getStoreId($id = '')
