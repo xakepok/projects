@@ -35,8 +35,12 @@ class ProjectsViewReports extends HtmlView
 
 	private function toolbar()
 	{
-	    $title = JText::sprintf('COM_PROJECTS_MENU_REPORTS_DESC');
+	    $title = (!empty($this->type)) ? ProjectsHelper::getReportType($this->type) : JText::sprintf('COM_PROJECTS_MENU_REPORTS_DESC');
 		JToolBarHelper::title($title, '');
+		if (!empty($this->type))
+        {
+            JToolbarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_projects&view=reports');
+        }
         if (ProjectsHelper::canDo('core.admin'))
         {
             JToolBarHelper::preferences('com_projects');

@@ -33,7 +33,7 @@ class ProjectsModelReports extends ListModel
             $project = $this->getState('filter.project');
             if (empty($project)) $project = ProjectsHelper::getActiveProject();
             $query
-                ->select("`e`.`title_ru_full` as `exhibitor`")
+                ->select("`e`.`title_ru_full` as `exhibitor`, `e`.`id` as `exhibitorID`")
                 ->select("`ct`.`name` as `city`, `reg`.`name` as `region`, `ctr`.`name` as `country`")
                 ->select("`cnt`.`director_name`, `cnt`.`director_post`, `cnt`.`indexcode`, `cnt`.`addr_legal_street`, `cnt`.`addr_legal_home`")
                 ->select("`c`.`status`, `c`.`isCoExp`")
@@ -89,6 +89,7 @@ class ProjectsModelReports extends ListModel
                     if (in_array('director_name', $fields)) $arr['director_name'] = $item->director_name;
                     if (in_array('director_post', $fields)) $arr['director_post'] = $item->director_post;
                     if (in_array('address_legal', $fields)) $arr['address_legal'] = ProjectsHelper::buildAddress(array($item->country, $item->region, $item->indexcode, $item->city, $item->addr_legal_street, $item->addr_legal_home));
+                    if (in_array('contacts', $fields)) $arr['contacts'] = implode("; ", $this->getContacts($item->exhibitorID));
                 }
             }
             $result[] = $arr;
@@ -96,15 +97,30 @@ class ProjectsModelReports extends ListModel
         return $result;
     }
 
+    private function getContacts(int $exhibitorID): array
+    {
+        $result = array();
+        $contacts = ProjectsHelper::getExhibitorPersons($exhibitorID);
+        foreach ($contacts as $contact) {
+            $arr = array();
+            if (!empty($contact->fio)) $arr[] = $contact->fio;
+            if (!empty($contact->post)) $arr[] = $contact->post;
+            if (!empty($contact->phone_work)) $arr[] = JText::sprintf('COM_PROJECTS_HEAD_PERSON_PHONE_WORK_SHORT', $contact->phone_work);
+            if (!empty($contact->phone_mobile)) $arr[] = JText::sprintf('COM_PROJECTS_HEAD_PERSON_PHONE_MOBILE_SHORT', $contact->phone_mobile);
+            if (!empty($contact->email)) $arr[] = $contact->email;
+            if (!empty($contact->comment)) $arr[] = $contact->comment;
+            $arr = implode(", ", $arr);
+            $result[] = $arr;
+        }
+        return $result;
+    }
+
     private function getStands(int $contractID): array
     {
-        $xls = (JFactory::getApplication()->input->getString('task') == 'exportxls');
         $stands = ProjectsHelper::getContractStands($contractID);
         $result = array();
-        $return = base64_encode("index.php?option=com_projects&view=stat&itemID={$this->type}");
         foreach ($stands as $stand) {
-            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;contractID={$contractID}&amp;id={$stand->id}&amp;return={$return}");
-            $result[] = (!$xls) ? JHtml::link($url, $stand->number) : $stand->number;
+            $result[] = $stand->number;
         }
         return $result;
     }
@@ -147,6 +163,12 @@ class ProjectsModelReports extends ListModel
                                 $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_SPACER_LEGAL'));
                                 $index++;
                             }
+                            if (in_array('contacts', $fields))
+                            {
+                                $indexes['contacts'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_NAME'));
+                                $index++;
+                            }
                         }
                     }
                     if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['exhibitor']);
@@ -162,6 +184,10 @@ class ProjectsModelReports extends ListModel
                         if (in_array('address_legal', $fields))
                         {
                             $sheet->setCellValueByColumnAndRow($indexes['address_legal'], $i + 1, $data[$i - 1]['address_legal']);
+                        }
+                        if (in_array('contacts', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['contacts'], $i + 1, $data[$i - 1]['contacts']);
                         }
                     }
                 }

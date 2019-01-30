@@ -46,6 +46,28 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает массив с типами текущих отчётов
+     * @return array
+     * @since 1.1.0.6
+     */
+    public static function getReportTypes(): array
+    {
+        return array('exhibitors' => 'Отчёт по экспонентам');
+    }
+
+    /**
+     * Возвращает название текущего отчёта
+     * @param string $type Тип отчёта
+     * @return string
+     * @since 1.1.0.6
+     */
+    public static function getReportType(string $type): string
+    {
+        $types = self::getReportTypes();
+        return $types[$type];
+    }
+
+    /**
      * Возвращает текстовое представление адреса
      * @param array $data Массив с параметрами адреса в нужном порядке
      * @return string

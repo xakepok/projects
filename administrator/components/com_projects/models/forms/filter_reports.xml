@@ -30,6 +30,7 @@
             <option value="director_name">COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_NAME_DESC</option>
             <option value="director_post">COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_POST</option>
             <option value="address_legal">COM_PROJECTS_HEAD_EXP_CONTACT_SPACER_LEGAL</option>
+            <option value="contacts">COM_PROJECTS_HEAD_EXP_CONTACT_NAME</option>
         </field>
     </fields>
     <fields name="list">

@@ -12,6 +12,7 @@ $url = "index.php?option=com_projects&amp;view=reports";
 if (!empty($this->type)) $url .= "&amp;type=".$this->type;
 $action = JRoute::_($url);
 $ret = "index.php?option=com_projects&view=reports";
+if (!empty($this->type)) $ret .= "&type=".$this->type;
 $return = base64_encode($ret);
 ?>
 <div class="row-fluid">
@@ -32,13 +33,16 @@ $return = base64_encode($ret);
         <?php endif; ?>
         <form action="<?php echo $action; ?>" method="post"
               name="adminForm" id="adminForm">
-            <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
+            <?php if (!empty($this->type)) echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
             <?php if (!empty($this->type)) :?>
             <table class="table table-striped">
                 <thead><?php echo $this->loadTemplate("head_{$this->type}"); ?></thead>
                 <tbody><?php echo $this->loadTemplate("body_{$this->type}"); ?></tbody>
                 <tfoot><?php echo $this->loadTemplate("foot_{$this->type}"); ?></tfoot>
             </table>
+            <?php endif; ?>
+            <?php if (empty($this->type)) :?>
+                <?php echo $this->loadTemplate("select_type"); ?>
             <?php endif; ?>
             <div>
                 <input type="hidden" name="task" value=""/>

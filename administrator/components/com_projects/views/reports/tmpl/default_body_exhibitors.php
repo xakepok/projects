@@ -26,5 +26,10 @@ foreach ($this->items as $item) :
                 <?php echo $item['address_legal']; ?>
             </td>
         <?php endif; ?>
+        <?php if (in_array('contacts', $this->fields)): ?>
+            <td class="small">
+                <?php echo $item['contacts']; ?>
+            </td>
+        <?php endif; ?>
     </tr>
 <?php endforeach; ?>

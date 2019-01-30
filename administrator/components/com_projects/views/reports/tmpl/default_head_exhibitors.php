@@ -25,4 +25,9 @@ $listDirn = $this->escape($this->state->get('list.direction'));
             <?php echo JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_SPACER_LEGAL'); ?>
         </th>
     <?php endif;?>
+    <?php if (in_array('contacts', $this->fields)): ?>
+        <th>
+            <?php echo JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_NAME'); ?>
+        </th>
+    <?php endif;?>
 </tr>
