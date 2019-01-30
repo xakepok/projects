@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="COM_PROJECTS_MENU_REPORTS">
+        <message>
+            <![CDATA[COM_PROJECTS_MENU_REPORTS_DESC]]>
+		</message>
+    </layout>
+</metadata>

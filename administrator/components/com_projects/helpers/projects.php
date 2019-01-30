@@ -15,7 +15,7 @@ class ProjectsHelper
         if ($notify > 0) {
             JHtmlSidebar::addEntry(Text::sprintf('COM_PROJECTS_MENU_NOTIFY', $notify), 'index.php?option=com_projects&amp;view=todos&amp;notify=1', $vName == 'todos');
         }
-        if (in_array($view, array('contracts', 'todos', 'building', 'stat', 'scores', 'payments', 'catalogs', 'cattitles', 'exhibitors', 'prices', 'sections', 'items'))) {
+        if (in_array($view, array('reports', 'contracts', 'todos', 'building', 'stat', 'scores', 'payments', 'catalogs', 'cattitles', 'exhibitors', 'prices', 'sections', 'items'))) {
             JHtmlSidebar::addFilter(JText::_('COM_PROJECTS_FILTER_SELECT_ACTIVE_PROJECT'), 'set_active_project', JHtml::_('select.options', ProjectsHtmlFilters::projectOptions(), 'value', 'text', self::getActiveProject()));
         }
         if (self::canDo('core.general')) {
@@ -37,11 +37,26 @@ class ProjectsHelper
         if (self::canDo('core.general')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CATALOG'), 'index.php?option=com_projects&amp;view=catalogs', $vName == 'catalogs');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_STAT'), 'index.php?option=com_projects&amp;view=stat', $vName == 'stat');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_REPORTS'), 'index.php?option=com_projects&amp;view=reports', $vName == 'reports');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PRICES'), 'index.php?option=com_projects&amp;view=prices', $vName == 'prices');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_SECTIONS'), 'index.php?option=com_projects&amp;view=sections', $vName == 'sections');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ITEMS'), 'index.php?option=com_projects&amp;view=items', $vName == 'items');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ACTIVITIES'), 'index.php?option=com_projects&amp;view=activities', $vName == 'activities');
         }
+    }
+
+    /**
+     * Возвращает текстовое представление адреса
+     * @param array $data Массив с параметрами адреса в нужном порядке
+     * @return string
+     * @since 1.1.0.6
+     */
+    public static function buildAddress(array $data): string
+    {
+        foreach ($data as $i => $value) {
+            if (empty($value)) unset($data[$i]);
+        }
+        return implode(", ", $data);
     }
 
     /**
