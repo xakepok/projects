@@ -5,6 +5,7 @@ defined('_JEXEC') or die;
 class TableProjectsExponents extends Table
 {
     var $id = null;
+    var $is_contractor = null;
     var $regID = null;
     var $regID_fact = null;
     var $tip = null;
