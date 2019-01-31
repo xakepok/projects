@@ -45,6 +45,18 @@ class ProjectsHelper
         }
     }
 
+    public static function getExhibitorActs(int $exhibitorID): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`l`.`title`")
+            ->from("`#__prj_exp_act` as `a`")
+            ->leftJoin("`#__prj_activities` as `l` ON `l`.`id` = `a`.`actID`")
+            ->where("`a`.`exbID` = {$exhibitorID}");
+        return $db->setQuery($query)->loadColumn() ?? array();
+    }
+
     /**
      * Возвращает массив с типами текущих отчётов
      * @return array

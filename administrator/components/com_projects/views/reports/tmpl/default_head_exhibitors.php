@@ -7,6 +7,11 @@ $listDirn = $this->escape($this->state->get('list.direction'));
     <th width="1%">
         №
     </th>
+    <?php if (in_array('project', $this->fields)): ?>
+        <th>
+            <?php echo JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_PROJECT'); ?>
+        </th>
+    <?php endif;?>
     <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_DESC', 'e.title_ru_full', $listDirn, $listOrder); ?>
     </th>
@@ -19,6 +24,11 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         </th>
         <th>
             <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_DATE', 'c.dat', $listDirn, $listOrder); ?>
+        </th>
+    <?php endif;?>
+    <?php if (in_array('amount', $this->fields)): ?>
+        <th>
+            <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_AMOUNT_REPORT'); ?>
         </th>
     <?php endif;?>
     <?php if (in_array('stands', $this->fields)): ?>
@@ -49,6 +59,11 @@ $listDirn = $this->escape($this->state->get('list.direction'));
     <?php if (in_array('contacts', $this->fields)): ?>
         <th>
             <?php echo JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_NAME'); ?>
+        </th>
+    <?php endif;?>
+    <?php if (in_array('acts', $this->fields)): ?>
+        <th>
+            <?php echo JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_ACTIVITIES'); ?>
         </th>
     <?php endif;?>
 </tr>
