@@ -21,6 +21,16 @@ $listDirn = $this->escape($this->state->get('list.direction'));
             <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_DATE', 'c.dat', $listDirn, $listOrder); ?>
         </th>
     <?php endif;?>
+    <?php if (in_array('stands', $this->fields)): ?>
+        <th>
+            <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_SHORT'); ?>
+        </th>
+    <?php endif;?>
+    <?php if (in_array('manager', $this->fields)): ?>
+        <th>
+            <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_MANAGER', 'u.name', $listDirn, $listOrder); ?>
+        </th>
+    <?php endif;?>
     <?php if (in_array('director_name', $this->fields)): ?>
         <th>
             <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_EXP_CONTACT_DIRECTOR_NAME_DESC', 'cnt.director_name', $listDirn, $listOrder); ?>

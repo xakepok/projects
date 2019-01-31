@@ -22,6 +22,16 @@ foreach ($this->items as $item) :
                 <?php echo $item['dat']; ?>
             </td>
         <?php endif; ?>
+        <?php if (in_array('stands', $this->fields)): ?>
+            <td class="small">
+                <?php echo $item['stands']; ?>
+            </td>
+        <?php endif; ?>
+        <?php if (in_array('manager', $this->fields)): ?>
+            <td class="small">
+                <?php echo $item['manager']; ?>
+            </td>
+        <?php endif; ?>
         <?php if (in_array('director_name', $this->fields)): ?>
             <td class="small">
                 <?php echo $item['director_name']; ?>

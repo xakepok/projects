@@ -21,6 +21,7 @@ class ProjectsModelReports extends ListModel
                 'c.dat',
                 'search',
                 'fields',
+                'u.name',
             );
         }
         parent::__construct($config);
@@ -39,13 +40,15 @@ class ProjectsModelReports extends ListModel
                 ->select("`e`.`title_ru_full` as `exhibitor`, `e`.`id` as `exhibitorID`")
                 ->select("`ct`.`name` as `city`, `reg`.`name` as `region`, `ctr`.`name` as `country`")
                 ->select("`cnt`.`director_name`, `cnt`.`director_post`, `cnt`.`indexcode`, `cnt`.`addr_legal_street`, `cnt`.`addr_legal_home`")
-                ->select("`c`.`status`, `c`.`isCoExp`, `c`.`number`, `c`.`dat`")
+                ->select("`c`.`status`, `c`.`isCoExp`, `c`.`number`, `c`.`dat`, `c`.`id` as `contractID`")
+                ->select("`u`.`name` as `manager`")
                 ->from("`#__prj_contracts` as `c`")
                 ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
                 ->leftJoin("`#__prj_exp_contacts` as `cnt` ON `cnt`.`exbID` = `c`.`expID`")
                 ->leftJoin("`#__grph_cities` as `ct` ON `ct`.`id` = `e`.`regID`")
                 ->leftJoin('`#__grph_regions` as `reg` ON `reg`.`id` = `ct`.`region_id`')
                 ->leftJoin('`#__grph_countries` as `ctr` ON `ctr`.`id` = `reg`.`country_id`')
+                ->leftJoin('`#__users` as `u` ON `u`.`id` = `c`.`managerID`')
                 ->where('`c`.`prjID` = ' . (int) $project);
 
             /* Фильтр */
@@ -91,6 +94,7 @@ class ProjectsModelReports extends ListModel
                 if (is_array($fields)) {
                     if (in_array('director_name', $fields)) $arr['director_name'] = $item->director_name;
                     if (in_array('director_post', $fields)) $arr['director_post'] = $item->director_post;
+                    if (in_array('manager', $fields)) $arr['manager'] = $item->manager;
                     if (in_array('address_legal', $fields)) $arr['address_legal'] = ProjectsHelper::buildAddress(array($item->country, $item->region, $item->indexcode, $item->city, $item->addr_legal_street, $item->addr_legal_home));
                     if (in_array('contacts', $fields)) $arr['contacts'] = implode("; ", $this->getContacts($item->exhibitorID));
                     if (in_array('status', $fields)) {
@@ -98,6 +102,7 @@ class ProjectsModelReports extends ListModel
                         $arr['number'] = $item->number ?? '';
                         $arr['dat'] = $item->dat ?? '';
                     }
+                    if (in_array('stands', $fields)) $arr['stands'] = implode("; ", $this->getStands($item->contractID));
                 }
             }
             $result[] = $arr;
@@ -129,12 +134,21 @@ class ProjectsModelReports extends ListModel
         return $result;
     }
 
+    /**
+     * Возвращает стенды и статусы у сделки
+     * @param int $contractID
+     * @return array
+     * @since 1.1.0.6
+     */
     private function getStands(int $contractID): array
     {
         $stands = ProjectsHelper::getContractStands($contractID);
         $result = array();
         foreach ($stands as $stand) {
-            $result[] = $stand->number;
+            $arr = array();
+            $arr['number'] = "№{$stand->number}";
+            $arr['status'] = ProjectsHelper::getStandStatus($stand->status);
+            $result[] = implode(" - ", $arr);
         }
         return $result;
     }
@@ -171,6 +185,18 @@ class ProjectsModelReports extends ListModel
                                 $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_DATE'));
                                 $index++;
                             }
+                            if (in_array('stands', $fields))
+                            {
+                                $indexes['stands'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_SHORT'));
+                                $index++;
+                            }
+                            if (in_array('manager', $fields))
+                            {
+                                $indexes['manager'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_MANAGER'));
+                                $index++;
+                            }
                             if (in_array('director_name', $fields))
                             {
                                 $indexes['director_name'] = $index;
@@ -204,6 +230,14 @@ class ProjectsModelReports extends ListModel
                             $sheet->setCellValueByColumnAndRow($indexes['status'], $i + 1, $data[$i - 1]['status']);
                             $sheet->setCellValueByColumnAndRow($indexes['number'], $i + 1, $data[$i - 1]['number']);
                             $sheet->setCellValueByColumnAndRow($indexes['dat'], $i + 1, $data[$i - 1]['dat']);
+                        }
+                        if (in_array('stands', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['stands'], $i + 1, $data[$i - 1]['stands']);
+                        }
+                        if (in_array('manager', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['manager'], $i + 1, $data[$i - 1]['manager']);
                         }
                         if (in_array('director_name', $fields))
                         {

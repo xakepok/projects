@@ -33,6 +33,8 @@
             <option value="address_legal">COM_PROJECTS_HEAD_EXP_CONTACT_SPACER_LEGAL</option>
             <option value="contacts">COM_PROJECTS_HEAD_EXP_CONTACT_NAME</option>
             <option value="status">COM_PROJECTS_HEAD_CONTRACT_STATUS_DOG</option>
+            <option value="stands">COM_PROJECTS_HEAD_CONTRACT_STAND_SHORT</option>
+            <option value="manager">COM_PROJECTS_HEAD_MANAGER</option>
         </field>
     </fields>
     <fields name="list">
