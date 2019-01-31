@@ -35,6 +35,8 @@
             <option value="status">COM_PROJECTS_HEAD_CONTRACT_STATUS_DOG</option>
             <option value="stands">COM_PROJECTS_HEAD_CONTRACT_STAND_SHORT</option>
             <option value="manager">COM_PROJECTS_HEAD_MANAGER</option>
+            <option value="amount">COM_PROJECTS_HEAD_CONTRACT_AMOUNT_REPORT</option>
+            <option value="acts">COM_PROJECTS_BLANK_EXHIBITOR_ACTIVITIES</option>
         </field>
     </fields>
     <fields name="list">

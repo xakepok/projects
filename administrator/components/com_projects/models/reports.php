@@ -22,6 +22,7 @@ class ProjectsModelReports extends ListModel
                 'search',
                 'fields',
                 'u.name',
+                'p.title',
             );
         }
         parent::__construct($config);
@@ -40,8 +41,10 @@ class ProjectsModelReports extends ListModel
                 ->select("`e`.`title_ru_full` as `exhibitor`, `e`.`id` as `exhibitorID`")
                 ->select("`ct`.`name` as `city`, `reg`.`name` as `region`, `ctr`.`name` as `country`")
                 ->select("`cnt`.`director_name`, `cnt`.`director_post`, `cnt`.`indexcode`, `cnt`.`addr_legal_street`, `cnt`.`addr_legal_home`")
-                ->select("`c`.`status`, `c`.`isCoExp`, `c`.`number`, `c`.`dat`, `c`.`id` as `contractID`")
+                ->select("`c`.`status`, `c`.`isCoExp`, `c`.`number`, `c`.`dat`, `c`.`id` as `contractID`, `c`.`currency`")
                 ->select("`u`.`name` as `manager`")
+                ->select("`p`.`title` as `project`")
+                ->select("`a`.`amount_rub`, `a`.`amount_usd`, `a`.`amount_eur`")
                 ->from("`#__prj_contracts` as `c`")
                 ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
                 ->leftJoin("`#__prj_exp_contacts` as `cnt` ON `cnt`.`exbID` = `c`.`expID`")
@@ -49,6 +52,8 @@ class ProjectsModelReports extends ListModel
                 ->leftJoin('`#__grph_regions` as `reg` ON `reg`.`id` = `ct`.`region_id`')
                 ->leftJoin('`#__grph_countries` as `ctr` ON `ctr`.`id` = `reg`.`country_id`')
                 ->leftJoin('`#__users` as `u` ON `u`.`id` = `c`.`managerID`')
+                ->leftJoin('`#__prj_contract_amounts` as `a` ON `a`.`contractID` = `c`.`id`')
+                ->leftJoin('`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`')
                 ->where('`c`.`prjID` = ' . (int) $project);
 
             /* Фильтр */
@@ -92,6 +97,7 @@ class ProjectsModelReports extends ListModel
                 $arr['exhibitor'] = $item->exhibitor;
                 $fields = $this->state->get('filter.fields');
                 if (is_array($fields)) {
+                    if (in_array('project', $fields)) $arr['project'] = $item->project;
                     if (in_array('director_name', $fields)) $arr['director_name'] = $item->director_name;
                     if (in_array('director_post', $fields)) $arr['director_post'] = $item->director_post;
                     if (in_array('manager', $fields)) $arr['manager'] = $item->manager;
@@ -103,6 +109,11 @@ class ProjectsModelReports extends ListModel
                         $arr['dat'] = $item->dat ?? '';
                     }
                     if (in_array('stands', $fields)) $arr['stands'] = implode("; ", $this->getStands($item->contractID));
+                    if (in_array('amount', $fields)) {
+                        $amount_field = "amount_{$item->currency}";
+                        $arr['amount'] = (!$this->xls) ? ProjectsHelper::getCurrency((float) $item->$amount_field, $item->currency) : $item->$amount_field;
+                    }
+                    if (in_array('acts', $fields)) $arr['acts'] = implode(", ", ProjectsHelper::getExhibitorActs($item->exhibitorID));
                 }
             }
             $result[] = $arr;
@@ -185,6 +196,12 @@ class ProjectsModelReports extends ListModel
                                 $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_DATE'));
                                 $index++;
                             }
+                            if (in_array('amount', $fields))
+                            {
+                                $indexes['amount'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_AMOUNT_REPORT'));
+                                $index++;
+                            }
                             if (in_array('stands', $fields))
                             {
                                 $indexes['stands'] = $index;
@@ -221,6 +238,12 @@ class ProjectsModelReports extends ListModel
                                 $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_NAME'));
                                 $index++;
                             }
+                            if (in_array('acts', $fields))
+                            {
+                                $indexes['acts'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_ACTIVITIES'));
+                                $index++;
+                            }
                         }
                     }
                     if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['exhibitor']);
@@ -230,6 +253,10 @@ class ProjectsModelReports extends ListModel
                             $sheet->setCellValueByColumnAndRow($indexes['status'], $i + 1, $data[$i - 1]['status']);
                             $sheet->setCellValueByColumnAndRow($indexes['number'], $i + 1, $data[$i - 1]['number']);
                             $sheet->setCellValueByColumnAndRow($indexes['dat'], $i + 1, $data[$i - 1]['dat']);
+                        }
+                        if (in_array('amount', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['amount'], $i + 1, $data[$i - 1]['amount']);
                         }
                         if (in_array('stands', $fields))
                         {
@@ -254,6 +281,10 @@ class ProjectsModelReports extends ListModel
                         if (in_array('contacts', $fields))
                         {
                             $sheet->setCellValueByColumnAndRow($indexes['contacts'], $i + 1, $data[$i - 1]['contacts']);
+                        }
+                        if (in_array('acts', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['acts'], $i + 1, $data[$i - 1]['acts']);
                         }
                     }
                 }
