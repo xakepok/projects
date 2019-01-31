@@ -38,7 +38,7 @@ class ProjectsModelReports extends ListModel
             $project = $this->getState('filter.project');
             if (empty($project)) $project = ProjectsHelper::getActiveProject();
             $query
-                ->select("`e`.`title_ru_full` as `exhibitor`, `e`.`id` as `exhibitorID`")
+                ->select("IFNULL(`e`.`title_ru_full`,`e`.`title_ru_short`) as `exhibitor`, `c`.`expID` as `exhibitorID`")
                 ->select("`ct`.`name` as `city`, `reg`.`name` as `region`, `ctr`.`name` as `country`")
                 ->select("`cnt`.`director_name`, `cnt`.`director_post`, `cnt`.`indexcode`, `cnt`.`addr_legal_street`, `cnt`.`addr_legal_home`")
                 ->select("`c`.`status`, `c`.`isCoExp`, `c`.`number`, `c`.`dat`, `c`.`id` as `contractID`, `c`.`currency`")
@@ -60,22 +60,7 @@ class ProjectsModelReports extends ListModel
             $search = $this->getState('filter.search');
             if (!empty($search)) {
                 $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-                $query->where('(`e`.`title_ru_full` LIKE ' . $search . ')');
-            }
-            // Фильтруем по статусу.
-            $status = $this->getState('filter.status');
-            if (is_array($status)) {
-                if (!empty($status)) {
-                    $statuses = implode(', ', $status);
-                    if ($status[0] != '0') {
-                        $query->where("`c`.`status` IN ({$statuses})");
-                    }
-                    else
-                    {
-                        $this->state->set('filter.status', '');
-                        $query->where("`c`.`status` IS NOT NULL");
-                    }
-                }
+                $query->where('(`e`.`title_ru_short` LIKE ' . $search . ' OR `e`.`title_ru_full` LIKE ' . $search . ' OR `e`.`title_en` LIKE ' . $search . ')');
             }
 
             /* Сортировка */
@@ -182,7 +167,7 @@ class ProjectsModelReports extends ListModel
                 for ($j = 0; $j < count($data) + 1; $j++) {
                     $index = 1;
                     if ($i == 1) {
-                        if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_DESC'));
+                        if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_EXP_DESC'));
                         if (is_array($fields)) {
                             if (in_array('status', $fields))
                             {

@@ -13,7 +13,7 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         </th>
     <?php endif;?>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_DESC', 'e.title_ru_full', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_PAYMENT_EXP_DESC', 'e.title_ru_full', $listDirn, $listOrder); ?>
     </th>
     <?php if (in_array('status', $this->fields)): ?>
         <th>
