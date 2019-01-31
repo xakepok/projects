@@ -3,7 +3,7 @@
     <layout title="COM_PROJECTS_MENU_REPORTS">
         <message>
             <![CDATA[COM_PROJECTS_MENU_REPORTS_DESC]]>
-		</message>
+        </message>
     </layout>
     <fieldset name="request">
         <fields name="request">
@@ -11,7 +11,8 @@
                     name="type"
                     type="list"
                     default="">
-                    <option value="">COM_PROJECTS_MENU_REPORTS_DESC</option>
+                <option value="">COM_PROJECTS_MENU_REPORTS_DESC</option>
+                <option value="exhibitors">COM_PROJECTS_MENU_STAT_DESC</option>
             </field>
         </fields>
     </fieldset>
