@@ -21,6 +21,7 @@ class ProjectsModelReports extends ListModel
                 'c.dat',
                 'search',
                 'fields',
+                'status',
                 'u.name',
                 'p.title',
             );
@@ -61,6 +62,19 @@ class ProjectsModelReports extends ListModel
             if (!empty($search)) {
                 $search = $db->quote('%' . $db->escape($search, true) . '%', false);
                 $query->where('(`e`.`title_ru_short` LIKE ' . $search . ' OR `e`.`title_ru_full` LIKE ' . $search . ' OR `e`.`title_en` LIKE ' . $search . ')');
+            }
+
+            // Фильтруем по статусу.
+            $status = $this->getState('filter.status');
+            if (is_array($status)) {
+                if (!empty($status)) {
+                    $statuses = implode(', ', $status);
+                    $query->where("`c`.`status` IN ({$statuses})");
+                }
+                else
+                {
+                    $query->where("`c`.`status` IS NOT NULL");
+                }
             }
 
             /* Сортировка */
@@ -320,6 +334,8 @@ class ProjectsModelReports extends ListModel
         $this->setState('filter.status', $status);
         $fields = $this->getUserStateFromRequest($this->context . '.filter.fields', 'filter_fields');
         $this->setState('filter.fields', $fields);
+        $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status');
+        $this->setState('filter.status', $status);
         parent::populateState('e.title_ru_full', 'asc');
     }
 
@@ -329,6 +345,7 @@ class ProjectsModelReports extends ListModel
         $id .= ':' . $this->getState('filter.project');
         $id .= ':' . $this->getState('filter.status');
         $id .= ':' . $this->getState('filter.fields');
+        $id .= ':' . $this->getState('filter.status');
         return parent::getStoreId($id);
     }
 }
