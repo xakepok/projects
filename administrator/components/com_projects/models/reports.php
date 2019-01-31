@@ -16,6 +16,9 @@ class ProjectsModelReports extends ListModel
                 'e.title_ru_full',
                 'cnt.director_name',
                 'cnt.director_post',
+                'c.status',
+                'c.number',
+                'c.dat',
                 'search',
                 'fields',
             );
@@ -36,7 +39,7 @@ class ProjectsModelReports extends ListModel
                 ->select("`e`.`title_ru_full` as `exhibitor`, `e`.`id` as `exhibitorID`")
                 ->select("`ct`.`name` as `city`, `reg`.`name` as `region`, `ctr`.`name` as `country`")
                 ->select("`cnt`.`director_name`, `cnt`.`director_post`, `cnt`.`indexcode`, `cnt`.`addr_legal_street`, `cnt`.`addr_legal_home`")
-                ->select("`c`.`status`, `c`.`isCoExp`")
+                ->select("`c`.`status`, `c`.`isCoExp`, `c`.`number`, `c`.`dat`")
                 ->from("`#__prj_contracts` as `c`")
                 ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
                 ->leftJoin("`#__prj_exp_contacts` as `cnt` ON `cnt`.`exbID` = `c`.`expID`")
@@ -90,6 +93,11 @@ class ProjectsModelReports extends ListModel
                     if (in_array('director_post', $fields)) $arr['director_post'] = $item->director_post;
                     if (in_array('address_legal', $fields)) $arr['address_legal'] = ProjectsHelper::buildAddress(array($item->country, $item->region, $item->indexcode, $item->city, $item->addr_legal_street, $item->addr_legal_home));
                     if (in_array('contacts', $fields)) $arr['contacts'] = implode("; ", $this->getContacts($item->exhibitorID));
+                    if (in_array('status', $fields)) {
+                        $arr['status'] = ProjectsHelper::getExpStatus($item->status, $item->isCoExp);
+                        $arr['number'] = $item->number ?? '';
+                        $arr['dat'] = $item->dat ?? '';
+                    }
                 }
             }
             $result[] = $arr;
@@ -97,6 +105,12 @@ class ProjectsModelReports extends ListModel
         return $result;
     }
 
+    /**
+     * Возвращает массив с контактными лицами экспонента
+     * @param int $exhibitorID
+     * @return array
+     * @since 1.1.0.6
+     */
     private function getContacts(int $exhibitorID): array
     {
         $result = array();
@@ -145,6 +159,18 @@ class ProjectsModelReports extends ListModel
                     if ($i == 1) {
                         if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_DESC'));
                         if (is_array($fields)) {
+                            if (in_array('status', $fields))
+                            {
+                                $indexes['status'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS_DOG'));
+                                $index++;
+                                $indexes['number'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_NUMBER_SHORT'));
+                                $index++;
+                                $indexes['dat'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_DATE'));
+                                $index++;
+                            }
                             if (in_array('director_name', $fields))
                             {
                                 $indexes['director_name'] = $index;
@@ -173,6 +199,12 @@ class ProjectsModelReports extends ListModel
                     }
                     if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['exhibitor']);
                     if (is_array($fields)) {
+                        if (in_array('status', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['status'], $i + 1, $data[$i - 1]['status']);
+                            $sheet->setCellValueByColumnAndRow($indexes['number'], $i + 1, $data[$i - 1]['number']);
+                            $sheet->setCellValueByColumnAndRow($indexes['dat'], $i + 1, $data[$i - 1]['dat']);
+                        }
                         if (in_array('director_name', $fields))
                         {
                             $sheet->setCellValueByColumnAndRow($indexes['director_name'], $i + 1, $data[$i - 1]['director_name']);

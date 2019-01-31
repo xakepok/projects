@@ -11,6 +11,17 @@ foreach ($this->items as $item) :
         <td class="small">
             <?php echo $item['exhibitor']; ?>
         </td>
+        <?php if (in_array('status', $this->fields)): ?>
+            <td class="small">
+                <?php echo $item['status']; ?>
+            </td>
+            <td class="small">
+                <?php echo $item['number']; ?>
+            </td>
+            <td class="small">
+                <?php echo $item['dat']; ?>
+            </td>
+        <?php endif; ?>
         <?php if (in_array('director_name', $this->fields)): ?>
             <td class="small">
                 <?php echo $item['director_name']; ?>
