@@ -83,7 +83,7 @@ class ProjectsModelStat extends ListModel
                 else
                 {
                     $this->state->set('filter.status', '');
-                    $query->where("`c`.`status` IS NOT NULL");
+                    $query->where("`c`.`status` != 0");
                 }
             }
         }
@@ -127,12 +127,16 @@ class ProjectsModelStat extends ListModel
             $arr['unit'] = ProjectsHelper::getUnit($item->unit);
             $arr['unit_2'] = '';
             $arr['value'] = $item->value;
-            $currency = "price_" . $item->currency;
-            $arr['price'][$item->currency] = (!$xls) ? ProjectsHelper::getCurrency((float) $item->$currency, $item->currency) : $item->$currency;
-            $currency = "amount_" . $item->currency;
-            $arr['amount'][$item->currency] = (!$xls) ? ProjectsHelper::getCurrency((float) $item->$currency, $item->currency) : $item->$currency;
+            $arr['price']['rub'] = (!$xls) ? ProjectsHelper::getCurrency((float) $item->price_rub, 'rub') : $item->price_rub;
+            $arr['price']['usd'] = (!$xls) ? ProjectsHelper::getCurrency((float) $item->price_usd, 'usd') : $item->price_usd;
+            $arr['price']['eur'] = (!$xls) ? ProjectsHelper::getCurrency((float) $item->price_eur, 'eur') : $item->price_eur;
+            $arr['amount']['rub'] = (!$xls) ? ProjectsHelper::getCurrency((float) $item->amount_rub, 'rub') : $item->amount_rub;
+            $arr['amount']['usd'] = (!$xls) ? ProjectsHelper::getCurrency((float) $item->amount_usd, 'usd') : $item->amount_usd;
+            $arr['amount']['eur'] = (!$xls) ? ProjectsHelper::getCurrency((float) $item->amount_eur, 'eur') : $item->amount_eur;
             $result['items'][] = $arr;
-            $result['amount'][$item->currency] += $item->$currency;
+            $result['amount']['rub'] += $item->amount_rub;
+            $result['amount']['usd'] += $item->amount_usd;
+            $result['amount']['eur'] += $item->amount_eur;
         }
         return $result;
     }
