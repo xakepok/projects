@@ -25,6 +25,7 @@
             <option value="app2">COM_PROJECTS_HEAD_ITEM_APPLICATION_APP2</option>
             <option value="app3">COM_PROJECTS_HEAD_ITEM_APPLICATION_APP3</option>
             <option value="app4">COM_PROJECTS_HEAD_ITEM_APPLICATION_APP4</option>
+            <option value="adv">COM_PROJECTS_HEAD_ITEM_APPLICATION_ADV</option>
         </field>
         <field
                 name="title_ru"
