@@ -1,11 +1,55 @@
 'use strict';
+function scrolify(tblAsJQueryObject, height) {
+    var oTbl = tblAsJQueryObject;
+
+    // for very large tables you can remove the four lines below
+    // and wrap the table with <div> in the mark-up and assign
+    // height and overflow property
+    var oTblDiv = jQuery("<div/>");
+    oTblDiv.css('height', height);
+    oTblDiv.css('overflow', 'scroll');
+    oTbl.wrap(oTblDiv);
+
+    // save original width
+    oTbl.attr("data-item-original-width", oTbl.width());
+    oTbl.find('thead tr th').each(function() {
+        jQuery(this).attr("data-item-original-width", jQuery(this).width()).css('text-align', 'left');
+    });
+    oTbl.find('tbody tr:eq(0) th').each(function() {
+        jQuery(this).attr("data-item-original-width", jQuery(this).width()).css('text-align', 'left');
+    });
+
+
+    // clone the original table
+    var newTbl = oTbl.clone();
+
+    // remove table header from original table
+    oTbl.find('thead tr').remove();
+    // remove table body from new table
+    newTbl.find('tbody tr').remove();
+
+    oTbl.parent().parent().prepend(newTbl);
+    newTbl.wrap("<div/>");
+
+    // replace ORIGINAL COLUMN width
+    newTbl.width('100%');
+    newTbl.find('thead tr td').each(function() {
+        jQuery(this).width(jQuery(this).attr("data-item-original-width"));
+    });
+    oTbl.width('100%');
+    oTbl.find('tbody tr:eq(0) td').each(function() {
+        jQuery(this).width(jQuery(this).attr("data-item-original-width"));
+    });
+}
+
 window.onload = function () {
+
+    scrolify(jQuery('#tblNeedsScrolling'), 640); // 160 is height
 
     // for bootstrap 3 use 'shown.bs.tab', for bootstrap 2 use 'shown' in the next line
     jQuery('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         // save the latest tab; use cookies if you like 'em better:
         localStorage.setItem('lastTab', jQuery(this).attr('href'));
-        console.log(jQuery(this).attr('href'));
     });
 
     // go to the latest tab, if it exists:

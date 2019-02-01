@@ -3,8 +3,8 @@ defined('_JEXEC') or die;
 if (JFactory::getApplication()->input->getInt('id', 0) == 0) echo JText::sprintf('COM_PROJECTS_MESSAGE_EDIT_PRICE_AFTER_SAVE');
 $sum = 0;
 ?>
-<fieldset class="adminform">
-    <table class="table table-striped">
+<fieldset class="adminform" id="cmptd">
+    <table class="table table-striped" id="tblNeedsScrolling">
         <thead>
         <tr>
             <th>
@@ -55,10 +55,10 @@ $sum = 0;
                         <span data-section="<?php echo $section; ?>"
                               id="label_<?php echo $item['id']; ?>"><?php echo $item['title']; ?></span>
                     </td>
-                    <td class="price_cost">
+                    <td class="price_cost" style="width: 10%">
                         <?php echo $item['cost']; ?>
                     </td>
-                    <td class="price_cost">
+                    <td class="price_cost" style="width: 10%">
                         <?php echo $item['stand']; ?>
                     </td>
                     <td>
@@ -96,7 +96,7 @@ $sum = 0;
                             <span><?php echo $item['unit']; ?></span>
                         <?php endif; ?>
                     </td>
-                    <td class="center">
+                    <td class="center" style="width: 10%">
                         <?php if ($item['isUnit2']): ?>
                             <input
                                     type="text"
@@ -114,7 +114,7 @@ $sum = 0;
                             <span><?php echo $item['unit2']; ?></span>
                         <?php endif; ?>
                     </td>
-                    <td class="center">
+                    <td class="center" style="width: 5%">
                         <?php if ($item['is_factor']): ?>
                             <input
                                     type="number"
@@ -131,12 +131,13 @@ $sum = 0;
                                     aria-invalid="false"/>&nbsp;%
                         <?php endif; ?>
                     </td>
-                    <td class="center">
+                    <td class="center" style="width: 5%">
                         <?php if ($item['is_markup']): ?>
                         <select
                                 name="jform[price][<?php echo $item['id']; ?>][markup]"
                                 id="markup_<?php echo $item['id']; ?>"
                                 autocomplete="off"
+                                style="width: 100px;"
                                 onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
                             <?php if ($item['fixed']) echo "disabled "; ?>
                                 aria-invalid="false">
@@ -152,7 +153,7 @@ $sum = 0;
                             </option>
                             <?php endif; ?>
                     </td>
-                    <td>
+                    <td style="width: 8%">
                     <span class="amounts" id="sum_<?php echo $item['id']; ?>" style="display: none;"><?php echo $item['sum']; ?></span>&nbsp
                     <span class="amounts" id="sumV_<?php echo $item['id']; ?>"><?php echo number_format($item['sum'], 2, ',', ' '); ?></span>
                         <span id="currency_<?php echo $item['id']; ?>"><?php echo $item['currency']; ?></span>
