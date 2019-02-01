@@ -708,15 +708,15 @@ class ProjectsHelper
     /**
      * Возвращает статус участия экспонента в проекте.
      * @param string|null $status Значение из таблицы.
-     * @param string $isCoExp Является соэкспонентом
+     * @param int $isCoExp Является соэкспонентом
      * @return string
      * @since 1.1.0.6
      */
-    public static function getExpStatus($status, $isCoExp = null): string
+    public static function getExpStatus($status, $isCoExp = 0): string
     {
         if ($status == null) return JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS_UNDEFINED');
         $status = mb_strtoupper($status);
-        if ($isCoExp != null && $status == '0') {
+        if ($isCoExp != 0 && $status == '0') {
             return JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS_5');
         }
         return JText::sprintf("COM_PROJECTS_HEAD_CONTRACT_STATUS_{$status}");

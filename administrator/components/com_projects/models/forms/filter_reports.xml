@@ -36,6 +36,7 @@
             <option value="7">COM_PROJECTS_HEAD_CONTRACT_STATUS_7</option>
             <option value="8">COM_PROJECTS_HEAD_CONTRACT_STATUS_8</option>
             <option value="9">COM_PROJECTS_HEAD_CONTRACT_STATUS_9</option>
+            <option value="5">COM_PROJECTS_HEAD_CONTRACT_STATUS_5</option>
         </field>
         <field
                 type="list"

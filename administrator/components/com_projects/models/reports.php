@@ -68,8 +68,17 @@ class ProjectsModelReports extends ListModel
             $status = $this->getState('filter.status');
             if (is_array($status)) {
                 if (!empty($status)) {
-                    $statuses = implode(', ', $status);
-                    $query->where("`c`.`status` IN ({$statuses})");
+                    if (!in_array('5', $status) && !in_array('0', $status))
+                    {
+                        $statuses = implode(', ', $status);
+                        $query->where("`c`.`status` IN ({$statuses})");
+                    }
+                    if (in_array('0', $status)) {
+                        $query->where("`c`.`isCoExp` = 0 AND `c`.`status` = 0");
+                    }
+                    if (in_array('5', $status)) {
+                        $query->where("`c`.`isCoExp` = 1");
+                    }
                 }
                 else
                 {
