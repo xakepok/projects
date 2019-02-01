@@ -98,6 +98,17 @@
             <option value="zvqm">COM_PROJECTS_HEAD_ITEM_UNIT_ZVQM</option>
         </field>
         <field
+                name="need_period"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                default="0"
+                label="COM_PROJECTS_HEAD_ITEM_NEED_PERIOD"
+                description="COM_PROJECTS_HEAD_ITEM_NEED_PERIOD_DESC"
+        >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+        <field
                 name="is_sq"
                 type="radio"
                 class="btn-group btn-group-yesno"

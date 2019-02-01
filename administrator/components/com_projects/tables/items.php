@@ -21,6 +21,7 @@ class TableProjectsItems extends Table
     var $is_markup = null;
     var $is_sq = null;
     var $in_stat = null;
+    var $need_period = null;
     var $state = null;
 
     public function __construct(JDatabaseDriver $db)
