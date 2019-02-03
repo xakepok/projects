@@ -403,7 +403,6 @@ class ProjectsModelContract extends AdminModel {
             $arr['unit2'] = ProjectsHelper::getUnit($item->unit_2);
             $arr['isUnit2'] = $item->isUnit2;
 
-            //$arr['value'] = (!$item->is_sq) ? $values[$item->id]['value'] : $squares[$item->id]->sq;
             $arr['value'] = $values[$item->id]['value'];
             $arr['value2'] = $values[$item->id]['value2'];
             $arr['is_markup'] = $item->is_markup;
@@ -445,7 +444,6 @@ class ProjectsModelContract extends AdminModel {
             $arr['sum'] = (float) round($a + $b - $c, 2);
             $arr['sum_showed'] = number_format($arr['sum'], 2, ',', ' ');
             if (!isset($result[$item->application][$item->section])) $result[$item->application][$item->section] = array();
-            //if (!isset($result[$item->section])) $result[$item->section] = array();
             $result[$item->application][$item->section][] = $arr;
         }
         return $result;

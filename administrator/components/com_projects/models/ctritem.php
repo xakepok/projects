@@ -20,6 +20,16 @@ class ProjectsModelCtritem extends AdminModel {
         return parent::delete($pks);
     }
 
+    public function save($data)
+    {
+        if ($data['value'] <= 0)
+        {
+            if ($data['id'] != null) $this->delete($data['id']);
+            return true;
+        }
+        return parent::save($data);
+    }
+
     public function getForm($data = array(), $loadData = true)
     {
 
