@@ -19,5 +19,11 @@ foreach ($this->items as $i => $item) :?>
         <td>
             <?php echo $item['square'];?>
         </td>
+        <td>
+            <?php echo $item['category'];?>
+        </td>
+        <td>
+            <?php echo $item['hotel'];?>
+        </td>
     </tr>
 <?php endforeach; ?>

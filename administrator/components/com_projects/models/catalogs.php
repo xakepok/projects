@@ -13,8 +13,10 @@ class ProjectsModelCatalogs extends ListModel
                 'square',
                 'catalog',
                 'cattitle',
+                'category',
                 'unit',
                 'search',
+                'hotel',
             );
         }
         parent::__construct($config);
@@ -30,10 +32,14 @@ class ProjectsModelCatalogs extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`cat`.`id`, `cat`.`number`, `cat`.`square`")
+            ->select("`cat`.`id`, IFNULL(`cat`.`number`,`cat`.`title`) as `number`, `cat`.`square`")
             ->select("`t`.`title` as `catalog`, `t`.`id` as `catalogID`")
+            ->select("`n`.`title_ru` as `category`")
+            ->select("`h`.`title_ru` as `hotel`")
             ->from("`#__prj_catalog` as `cat`")
-            ->leftJoin("`#__prj_catalog_titles` as `t` ON `t`.`id` = `cat`.`titleID`");
+            ->leftJoin("`#__prj_catalog_titles` as `t` ON `t`.`id` = `cat`.`titleID`")
+            ->leftJoin("`#__prj_hotels_number_categories` as `n` ON `n`.`id` = `cat`.`categoryID`")
+            ->leftJoin("`#__prj_hotels` as `h` ON `h`.`id` = `n`.`hotelID`");
 
         /* Фильтр */
         $search = $this->getState('filter.search');
@@ -68,6 +74,7 @@ class ProjectsModelCatalogs extends ListModel
         $result = array();
         $return = base64_encode("index.php?option=com_projects&view=catalogs");
         foreach ($items as $item) {
+            $arr = array();
             $arr['id'] = $item->id;
             $url = JRoute::_("index.php?option=com_projects&amp;task=catalog.edit&amp;&id={$item->id}");
             $link = JHtml::link($url, $item->number);
@@ -75,8 +82,12 @@ class ProjectsModelCatalogs extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;task=cattitle.edit&amp;&id={$item->catalogID}&amp;return={$return}");
             $link = JHtml::link($url, $item->catalog);
             $arr['catalog'] = (!ProjectsHelper::canDo('core.general')) ? $item->catalog : $link;
-            $title = ($item->unit != null) ? ProjectsHelper::getUnit($item->unit) : '';
-            $arr['square'] = sprintf("%s %s", $item->square, $title);
+            if ($item->hotel == null) $arr['square'] = sprintf("%s %s", $item->square, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
+            if ($item->hotel != null)
+            {
+                $arr['category'] = $item->category;
+                $arr['hotel'] = $item->hotel;
+            }
             $result[] = $arr;
         }
         return $result;

@@ -34,6 +34,14 @@ if ($return != null)
                             <?php foreach ($this->form->getFieldset('names') as $field) :?>
                                <?php echo $field->renderField();?>
                             <?php endforeach; ?>
+                            <?php if ($this->id > 0):?>
+                                <?php foreach ($this->form->getFieldset($this->fieldset) as $field) :?>
+                                    <?php echo $field->renderField();?>
+                                <?php endforeach; ?>
+                            <?php endif;?>
+                            <?php if ($this->id == 0):?>
+                                <?php echo JText::sprintf('COM_PROJECT_INFO_FOR_ADD_OBJECT');?>
+                            <?php endif;?>
                         </div>
                     </fieldset>
                 </div>

@@ -11,7 +11,6 @@
                 label="COM_PROJECTS_BLANK_CATTITLE"
                 description="COM_PROJECTS_BLANK_CATTITLE"
                 class="x2"
-                required="true"
         />
     </fieldset>
     <fieldset name="stand">
@@ -23,8 +22,6 @@
                 hint="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_HINT"
                 autocomplete="off"
                 class="x2"
-                validate="Standnumber"
-                required="true"
         />
         <field
                 name="square"
@@ -33,22 +30,24 @@
                 description="COM_PROJECTS_HEAD_ITEM_HEAD_SQUARE_DESC"
                 hint="COM_PROJECTS_HEAD_ITEM_HEAD_SQUARE_HINT"
                 autocomplete="off"
-                required="true"
                 class="x2"
         />
     </fieldset>
     <fieldset name="number">
         <field
-                name="title"
-                type="text"></field>
-        <field
-                name="category"
-                type="list"
+                name="categoryID"
+                type="Hotelnumcat"
                 label="COM_PROJECTS_HEAD_NUMBER_CATEGORY"
                 description="COM_PROJECTS_HEAD_NUMBER_CATEGORY_DESC"
                 class="x2"
-                >
-            <option value=""></option>
+        >
         </field>
+        <field
+                name="title"
+                type="text"
+                label="COM_PROJECTS_HEAD_NUMBER_TITLE_DESC"
+                description="COM_PROJECTS_HEAD_NUMBER_TITLE_DESC"
+                class="x2"
+        />
     </fieldset>
 </form>

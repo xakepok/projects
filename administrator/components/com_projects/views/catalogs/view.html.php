@@ -31,7 +31,7 @@ class ProjectsViewCatalogs extends HtmlView
 
 	private function toolbar()
 	{
-		JToolBarHelper::title(JText::sprintf('COM_PROJECTS_MENU_ITEMS'), '');
+		JToolBarHelper::title(JText::sprintf('COM_PROJECTS_BLANK_CATTITLE'), '');
 
         if (ProjectsHelper::canDo('core.general'))
         {

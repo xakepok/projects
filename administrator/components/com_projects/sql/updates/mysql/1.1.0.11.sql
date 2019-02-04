@@ -4,14 +4,15 @@ alter table `#__prj_catalog_titles`
 create table `#__prj_hotels`
 (
   id int auto_increment,
-  title text null,
+  title_ru text null,
+  title_en text default null null,
   constraint `#__prj_hotels_pk`
     primary key (id)
 )
   comment 'Отели';
 
 insert into `#__prj_hotels`
-(`id`, `title`)
+(`id`, `title_ru`)
 VALUES
 (1, 'Комплекс отдыха Бекасово-spa'),
 (2, 'Les Art Resolt'),
@@ -65,3 +66,21 @@ values
 (NULL, '4', 'Полулюкс'),
 (NULL, '5', 'Полулюкс'),
 (NULL, '5', 'Люкс двухкомнатный');
+
+alter table `#__prj_catalog`
+  add categoryID int default NULL null comment 'ID категории номера (для номеров)';
+
+alter table `#__prj_catalog`
+  add title text default NULL null comment 'Название номера (для номеров в отеле)';
+
+create index `#__prj_catalog_categoryID_index`
+  on `#__prj_catalog` (categoryID);
+
+alter table `#__prj_catalog`
+  add constraint `#__prj_catalog_#__prj_hotels_number_categories_id_fk`
+    foreign key (categoryID) references `#__prj_hotels_number_categories` (id)
+      on update cascade on delete cascade;
+
+alter table `#__prj_catalog` modify `number` varchar(10) default NULL null comment 'Номер стенда';
+
+alter table `#__prj_catalog` modify `square` float default NULL null comment 'Площадь стенда';

@@ -17,7 +17,7 @@ class ProjectsModelCattitles extends ListModel
         parent::__construct($config);
     }
 
-    public static function getInstance($type='Catalogs', $prefix = 'ProjectsModel', $config = array())
+    public static function getInstance($type='Cattitles', $prefix = 'ProjectsModel', $config = array())
     {
         return parent::getInstance($type, $prefix, $config);
     }

@@ -3,6 +3,29 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\Model\AdminModel;
 
 class ProjectsModelCatalog extends AdminModel {
+
+    public $tip;
+
+    public function __construct(array $config = array())
+    {
+        $this->id =  JFactory::getApplication()->input->getInt('id', 0);
+        parent::__construct($config);
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getFieldset(): string
+    {
+        if ($this->id == 0) return 'stand';
+        $item = parent::getItem();
+        $ctm = AdminModel::getInstance('Cattitle', 'ProjectsModel');
+        $ct = $ctm->getItem($item->titleID);
+        return ($ct->tip != 0) ? 'number' : 'stand';
+    }
+
     public function getTable($name = 'Catalog', $prefix = 'TableProjects', $options = array())
     {
         return JTable::getInstance($name, $prefix, $options);
@@ -26,6 +49,13 @@ class ProjectsModelCatalog extends AdminModel {
         if (empty($form))
         {
             return false;
+        }
+        if ($this->id == 0)
+        {
+            $form->removeField('number');
+            $form->removeField('square');
+            $form->removeField('categoryID');
+            $form->removeField('title');
         }
         return $form;
     }
@@ -117,7 +147,7 @@ class ProjectsModelCatalog extends AdminModel {
 
     protected function prepareTable($table)
     {
-        $nulls = array(); //Поля, которые NULL
+        $nulls = array('number', 'categoryID', 'title'); //Поля, которые NULL
         foreach ($nulls as $field)
         {
             if (!strlen($table->$field)) $table->$field = NULL;
@@ -143,4 +173,6 @@ class ProjectsModelCatalog extends AdminModel {
     {
         return 'administrator/components/' . $this->option . '/models/forms/catalog.js';
     }
+
+    private $id;
 }
