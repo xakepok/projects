@@ -13,6 +13,8 @@
                 class="x2"
                 required="true"
         />
+    </fieldset>
+    <fieldset name="stand">
         <field
                 name="number"
                 type="text"
@@ -34,5 +36,19 @@
                 required="true"
                 class="x2"
         />
+    </fieldset>
+    <fieldset name="number">
+        <field
+                name="title"
+                type="text"></field>
+        <field
+                name="category"
+                type="list"
+                label="COM_PROJECTS_HEAD_NUMBER_CATEGORY"
+                description="COM_PROJECTS_HEAD_NUMBER_CATEGORY_DESC"
+                class="x2"
+                >
+            <option value=""></option>
+        </field>
     </fieldset>
 </form>
