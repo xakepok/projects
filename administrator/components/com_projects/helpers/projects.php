@@ -706,6 +706,17 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает тип каталога - стенды или номера
+     * @param int $tip
+     * @return string
+     * @since 1.1.0.11
+     */
+    public static function getCatalogType(int $tip): string
+    {
+        return JText::sprintf("COM_PROJECTS_HEAD_CONTRACT_CATALOG_TYPE_{$tip}");
+    }
+
+    /**
      * Возвращает статус участия экспонента в проекте.
      * @param string|null $status Значение из таблицы.
      * @param int $isCoExp Является соэкспонентом

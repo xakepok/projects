@@ -12,6 +12,7 @@ class TableProjectsCatalogtitles extends Table
 {
     var $id = null;
     var $title = null;
+    var $tip = null;
 
     public function __construct(JDatabaseDriver $db)
     {

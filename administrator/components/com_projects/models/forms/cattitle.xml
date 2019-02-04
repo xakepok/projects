@@ -15,5 +15,16 @@
                 class="x2"
                 required="true"
         />
+        <field
+                name="tip"
+                label="COM_PROJECTS_HEAD_CONTRACT_CATALOG_TYPE"
+                description="COM_PROJECTS_HEAD_CONTRACT_CATALOG_TYPE_DESC"
+                type="list"
+                class="x2"
+                required="true"
+                default="0">
+            <option value="0">COM_PROJECTS_HEAD_CONTRACT_CATALOG_TYPE_0</option>
+            <option value="1">COM_PROJECTS_HEAD_CONTRACT_CATALOG_TYPE_1</option>
+        </field>
     </fieldset>
 </form>

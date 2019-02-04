@@ -13,5 +13,8 @@ foreach ($this->items as $i => $item) :?>
         <td>
             <?php echo $item['title'];?>
         </td>
+        <td>
+            <?php echo $item['tip'];?>
+        </td>
     </tr>
 <?php endforeach; ?>

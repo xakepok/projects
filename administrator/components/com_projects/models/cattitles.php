@@ -11,6 +11,7 @@ class ProjectsModelCattitles extends ListModel
             $config['filter_fields'] = array(
                 'title',
                 'search',
+                'tip',
             );
         }
         parent::__construct($config);
@@ -26,7 +27,7 @@ class ProjectsModelCattitles extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`cat`.`id`, `cat`.`title`")
+            ->select("`cat`.`id`, `cat`.`title`, `cat`.`tip`")
             ->from("`#__prj_catalog_titles` as `cat`");
 
         /* Фильтр */
@@ -40,7 +41,12 @@ class ProjectsModelCattitles extends ListModel
         $project = ProjectsHelper::getActiveProject();
         if (is_numeric($project)) {
             $cid = ProjectsHelper::getProjectCatalog($project);
-            $query->where('`cat`.`id` = ' . (int)$cid);
+            $query->where('`cat`.`id` = ' . (int) $cid);
+        }
+        //Фильтр по глобальному проекту
+        $tip = $this->getState('filter.tip');
+        if (is_numeric($tip)) {
+            $query->where('`cat`.`tip` = ' . (int) $tip);
         }
 
         /* Сортировка */
@@ -60,6 +66,7 @@ class ProjectsModelCattitles extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;task=cattitle.edit&amp;&id={$item->id}");
             $link = JHtml::link($url, $item->title);
             $arr['title'] = (!ProjectsHelper::canDo('core.general')) ? $item->price : $link;
+            $arr['tip'] = ProjectsHelper::getCatalogType($item->tip);
             $result[] = $arr;
         }
         return $result;
@@ -70,12 +77,15 @@ class ProjectsModelCattitles extends ListModel
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $this->setState('filter.search', $search);
+        $tip = $this->getUserStateFromRequest($this->context . '.filter.tip', 'filter_tip');
+        $this->setState('filter.tip', $tip);
         parent::populateState('`cat`.`title`', 'asc');
     }
 
     protected function getStoreId($id = '')
     {
         $id .= ':' . $this->getState('filter.search');
+        $id .= ':' . $this->getState('filter.tip');
         return parent::getStoreId($id);
     }
 }
