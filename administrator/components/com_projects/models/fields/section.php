@@ -17,6 +17,13 @@ class JFormFieldSection extends JFormFieldGroupedList
             ->from('`#__prc_sections` as `s`')
             ->leftJoin('`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`')
             ->order("`s`.`priceID`");
+
+        $project = ProjectsHelper::getActiveProject();
+        if (is_numeric($project)) {
+            $price = ProjectsHelper::getProjectPrice($project);
+            if ($price != null) $query->where('`p`.`id` = ' . (int) $price);
+        }
+
         $result = $db->setQuery($query)->loadObjectList();
         $options = array();
 

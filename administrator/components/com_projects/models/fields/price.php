@@ -18,6 +18,12 @@ class JFormFieldPrice extends JFormFieldList
             ->select("`id`, `title`")
             ->from('#__prc_prices')
             ->order("`title`");
+
+        $project = ProjectsHelper::getActiveProject();
+        if (is_numeric($project)) {
+            $price = ProjectsHelper::getProjectPrice($project);
+            if ($price != null) $query->where('`id` = ' . (int) $price);
+        }
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();

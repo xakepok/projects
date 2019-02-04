@@ -16,6 +16,12 @@ class JFormFieldCattitle extends JFormFieldList
             ->select("`id`, `title`")
             ->from("`#__prj_catalog_titles`")
             ->order("`title`");
+        // Фильтруем по проекту.
+        $project = ProjectsHelper::getActiveProject();
+        if (is_numeric($project)) {
+            $catalog = ProjectsHelper::getProjectCatalog($project);
+            if ($catalog != null) $query->where('`id` = ' . (int)$catalog);
+        }
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();

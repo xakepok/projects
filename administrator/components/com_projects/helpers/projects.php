@@ -45,6 +45,11 @@ class ProjectsHelper
         }
     }
 
+    /**
+     * @param int $exhibitorID
+     * @return array
+     * @since 1.1.0.10
+     */
     public static function getExhibitorActs(int $exhibitorID): array
     {
         $db =& JFactory::getDbo();
