@@ -146,7 +146,8 @@ class ProjectsModelContracts extends ListModel
             if ($format == 'html') $arr['todo'] = $link;
             $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->exponentID}&amp;return={$return}");
             $exponentName = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
-            $exponentUrl = JHtml::link($url, $exponentName);
+            $params = array('class' => 'jutooltip', 'title' => $item->title_ru_full ?? JText::sprintf('COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_NOT_EXISTS'));
+            $exponentUrl = JHtml::link($url, $exponentName, $params);
             $arr['exponent'] = ($format != 'html') ? $exponentName : $exponentUrl;
             $arr['number'] = $item->number;
             $arr['manager']['title'] = $item->manager ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MANAGER_UNDEFINED');

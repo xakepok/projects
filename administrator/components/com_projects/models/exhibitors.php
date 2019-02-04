@@ -118,7 +118,8 @@ class ProjectsModelExhibitors extends ListModel
             $title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr['id'] = $item->id;
             $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->id}");
-            $link = JHtml::link($url, $title);
+            $params = array('class' => 'jutooltip', 'title' => $item->title_ru_full ?? JText::sprintf('COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_NOT_EXISTS'));
+            $link = JHtml::link($url, $title, $params);
             $arr['region'] = $item->city;
             $arr['title'] = ($format != 'html') ? $title : $link;
             if (is_numeric($projectinactive))

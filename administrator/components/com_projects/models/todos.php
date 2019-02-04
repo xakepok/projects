@@ -149,7 +149,8 @@ class ProjectsModelTodos extends ListModel
                 $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->project : JHtml::link($url, $item->project);
                 $exhibitor = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
                 $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}");
-                $arr['exp'] = JHtml::link($url, $exhibitor);
+                $params = array('class' => 'jutooltip', 'title' => $item->title_ru_full ?? JText::sprintf('COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_NOT_EXISTS'));
+                $arr['exp'] = JHtml::link($url, $exhibitor, $params);
                 $layout = (!$item->is_notify) ? 'edit' : 'notify';
                 $url_todo = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;layout={$layout}&amp;id={$item->id}");
                 $link = JHtml::link($url_todo, $item->date);
