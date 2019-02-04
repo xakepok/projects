@@ -21,7 +21,7 @@ class ProjectsModelPlans extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select('`pl`.`id`, `pr`.`title`, `pl`.`path`')
+            ->select('`pl`.`id`, `pr`.`title`, `pl`.`path`, `pl`.`prjID`')
             ->from("`#__prj_plans` as `pl`")
             ->leftJoin("`#__prj_projects` as `pr` ON `pr`.`id` = `pl`.`prjID`");
         // Фильтруем по проекту.
@@ -48,7 +48,8 @@ class ProjectsModelPlans extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;view=plan&amp;layout=edit&amp;id={$item->id}");
             $link = JHtml::link($url, $item->title);
             $arr['title'] = $link;
-            $arr['path'] = $item->path;
+            $url = "/images/plans/{$item->path}";
+            $arr['path'] = JHtml::link($url, $item->path, array('target' => '_blank'));
             $result[] = $arr;
         }
         return $result;

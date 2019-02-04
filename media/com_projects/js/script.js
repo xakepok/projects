@@ -113,6 +113,7 @@ function showCard(id) {
                 var url1 = document.createElement('a');
                 url1.href = text.data.info.site;
                 url1.innerText = text.data.info.site;
+                url1.setAttribute('target', '_blank');
                 site.appendChild(url1);
                 myNode.appendChild(document.createTextNode('Веб-сайт: '));
                 myNode.appendChild(site);

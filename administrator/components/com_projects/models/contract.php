@@ -215,7 +215,7 @@ class ProjectsModelContract extends AdminModel {
             $file = ProjectsHelper::uploadFile('upload', 'contracts', $data['id']);
             $data['files'][] = $file;
         }
-        $s3 = ($data['id]'] != null) ? $this->saveFiles($data['files']) : true;
+        $s3 = (!empty($data['files'])) ? $this->saveFiles($data['files']) : true;
         //Удаляем стенды сделки если статус отказ
         if ($data['status'] == 0 && $data['id'] != 0)
         {
@@ -477,8 +477,8 @@ class ProjectsModelContract extends AdminModel {
      */
     private function saveFiles(array $files): bool
     {
+        if (JFactory::getApplication()->input->getInt('id', 0) == 0) return true;
         $model = AdminModel::getInstance('Files', 'ProjectsModel');
-        $table = $model->getTable();
         $contractID = JFactory::getApplication()->input->getInt('id');
         $alreadyFiles = $this->loadFiles(); //Список файлов, который на данный момент в таблице у этой сделке
         foreach ($files as $path)
@@ -492,7 +492,6 @@ class ProjectsModelContract extends AdminModel {
                 'dat' => date("Y-m-d H:i:s"),
                 'id' => ($row->id != null) ? $row->id : NULL
             );
-            $table->bind($data);
             $s = $model->save($data);
             foreach ($alreadyFiles as $i => $file)
             {
