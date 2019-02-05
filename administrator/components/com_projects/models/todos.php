@@ -50,7 +50,7 @@ class ProjectsModelTodos extends ListModel
         if (!empty($search) && $contractID == 0)
         {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-            $query->where('(`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . 'OR `p`.`title_ru` LIKE ' . $search .')');
+            $query->where('(`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . 'OR `p`.`title_ru` LIKE ' . $search .' OR `e`.`comment` LIKE ' . $search . ')');
         }
         // Показываем уведомления
         $notify = JFactory::getApplication()->input->getInt('notify', 0);

@@ -50,7 +50,7 @@ class ProjectsModelExhibitors extends ListModel
             $search = $this->getState('filter.search');
             if (!empty($search)) {
                 $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-                $query->where('(`title_ru_full` LIKE ' . $search . 'OR `title_ru_short` LIKE ' . $search . 'OR `title_en` LIKE ' . $search . ')');
+                $query->where('(`title_ru_full` LIKE ' . $search . 'OR `title_ru_short` LIKE ' . $search . 'OR `title_en` LIKE ' . $search . ' OR `e`.`comment` LIKE ' . $search . ')');
             }
         }
         // Фильтруем по городу.
