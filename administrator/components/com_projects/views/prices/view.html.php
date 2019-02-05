@@ -1,5 +1,4 @@
 <?php
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 
@@ -35,27 +34,13 @@ class ProjectsViewPrices extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_PRICES'), '');
 
-        if (ProjectsHelper::canDo('core.general'))
+        if (ProjectsHelper::canDo('projects.access.prices'))
         {
             JToolbarHelper::addNew('price.add');
-        }
-        if (ProjectsHelper::canDo('core.general'))
-        {
             JToolbarHelper::editList('price.edit');
-        }
-        if (ProjectsHelper::canDo('core.general'))
-        {
             JToolbarHelper::deleteList('', 'prices.delete');
         }
-        if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
-        {
-            JToolbarHelper::divider();
-            JToolbarHelper::publish('prices.publish', 'JTOOLBAR_PUBLISH', true);
-            JToolbarHelper::unpublish('prices.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-            JToolBarHelper::archiveList('prices.archive');
-            JToolBarHelper::trash('prices.trash');
-        }
-		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
+		if (ProjectsHelper::canDo('core.admin', 'com_projects'))
 		{
 			JToolBarHelper::preferences('com_projects');
 		}

@@ -1,5 +1,4 @@
 <?php
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 
@@ -33,27 +32,13 @@ class ProjectsViewSections extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_SECTIONS'), '');
 
-        if (ProjectsHelper::canDo('core.general'))
+        if (ProjectsHelper::canDo('projects.access.prices'))
         {
             JToolbarHelper::addNew('section.add');
-        }
-        if (ProjectsHelper::canDo('core.general'))
-        {
             JToolbarHelper::editList('section.edit');
-        }
-        if (ProjectsHelper::canDo('core.general'))
-        {
             JToolbarHelper::deleteList('', 'sections.delete');
         }
-        if (Factory::getUser()->authorise('core.edit.state', 'com_projects'))
-        {
-            JToolbarHelper::divider();
-            JToolbarHelper::publish('sections.publish', 'JTOOLBAR_PUBLISH', true);
-            JToolbarHelper::unpublish('sections.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-            JToolBarHelper::archiveList('sections.archive');
-            JToolBarHelper::trash('sections.trash');
-        }
-		if (Factory::getUser()->authorise('core.admin', 'com_projects'))
+		if (ProjectsHelper::canDo('core.admin', 'com_projects'))
 		{
 			JToolBarHelper::preferences('com_projects');
 		}
