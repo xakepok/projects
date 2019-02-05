@@ -3,6 +3,7 @@
 use Joomla\CMS\Language\Text;
 use Joomla\Filesystem\Folder;
 use Joomla\Filesystem\File;
+use Joomla\CMS\MVC\Model\AdminModel;
 
 defined('_JEXEC') or die;
 
@@ -57,6 +58,18 @@ class ProjectsHelper
         if (self::canDo('projects.access.acts')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ACTIVITIES'), 'index.php?option=com_projects&amp;view=activities', $vName == 'activities');
         }
+    }
+
+    /**
+     * Добавляет запись в лог действий пользователя
+     * @param array $data массив с событием
+     * @since 1.1.1.3
+     */
+    public static function addEvent(array $data): void
+    {
+        $eventModel = AdminModel::getInstance('Event', 'ProjectsModel');
+        $data['id'] = null;
+        $eventModel->save($data);
     }
 
     /**

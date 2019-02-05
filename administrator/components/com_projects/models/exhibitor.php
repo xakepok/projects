@@ -94,11 +94,16 @@ class ProjectsModelExhibitor extends AdminModel
 
     public function save($data)
     {
+        if ($data['id'] != null) $old = parent::getItem($data['id']);
         $s1 = parent::save($data);
+        $action = ($data['id'] != null) ? 'edit' : 'add';
 
         $data = $this->addId($data);
 
         $data['id'] = $data['bank_id'];
+
+        ProjectsHelper::addEvent(array('action' => $action, 'section' => 'exhibitor', 'itemID' => $data['exbID'], 'params' => $data, 'old_data' => $old));
+
         unset($data['bank_id']);
         $s2 = $this->saveData('Bank', $data);
         $data['id'] = $data['address_id'];
@@ -106,6 +111,15 @@ class ProjectsModelExhibitor extends AdminModel
         $s3 = $this->saveData('Address', $data);
         $s4 = $this->saveActivities();
         return $s1 && $s2 && $s3 && $s4;
+    }
+
+    public function delete(&$pks)
+    {
+        foreach ($pks as $pk) {
+            $old = parent::getItem();
+            ProjectsHelper::addEvent(array('action' => 'delete', 'section' => 'exhibitor', 'itemID' => $pk, 'old_data' => $old));
+        }
+        return parent::delete($pks);
     }
 
     /**

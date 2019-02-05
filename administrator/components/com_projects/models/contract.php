@@ -21,10 +21,15 @@ class ProjectsModelContract extends AdminModel {
                 break;
             }
             $contracts = ProjectsHelper::getContractCoExp($item->expID, $item->prjID);
+            ProjectsHelper::addEvent(array('action' => 'delete', 'section' => 'contract', 'itemID' => $pk, 'old_data' => $item));
             if (!empty($contracts)) $children = array_merge($children, $contracts);
         }
         if ($ok) {
-            $ids = array_merge($pks, $children);
+                $ids = array_merge($pks, $children);
+                foreach ($children as $child) {
+                    $item = parent::getItem($child);
+                    ProjectsHelper::addEvent(array('action' => 'delete', 'section' => 'contract', 'itemID' => $child, 'old_data' => $item));
+                }
         }
         return (!$ok) ? false : parent::delete($ids);
     }
@@ -216,6 +221,7 @@ class ProjectsModelContract extends AdminModel {
 
     public function save($data)
     {
+        if ($data['id'] != null) $old = parent::getItem($data['id']);
         if ($data['id'] == null && !ProjectsHelper::canDo('core.general')) $data['managerID'] = JFactory::getUser()->id;
         if ($data['dat'] != null)
         {
@@ -227,7 +233,19 @@ class ProjectsModelContract extends AdminModel {
             $data['dat'] = date("Y-m-d");
         }
         $s1 = parent::save($data);
-        if ($data['id'] == null) $data['id'] = $this->_db->insertid();
+        $action = 'edit';
+        if ($data['id'] == null) {
+            $data['id'] = $this->_db->insertid();
+            $itemID = $this->_db->insertid();
+            $action = 'add';
+            $old = NULL;
+        }
+        else {
+            $itemID = $data['id'];
+        }
+
+        ProjectsHelper::addEvent(array('action' => $action, 'section' => 'contract', 'itemID' => $itemID, 'params' => $data, 'old_data' => $old));
+
         if (!empty($data['children'])) $this->setCoExp($data['children'], $data['expID'], $data['prjID']);
         $this->saveHistory($data['id'], $data['status']);
         $s2 = $this->savePrice();
