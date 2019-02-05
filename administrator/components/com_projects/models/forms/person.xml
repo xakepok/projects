@@ -28,7 +28,6 @@
                 label="COM_PROJECTS_HEAD_PERSON_POST"
                 description="COM_PROJECTS_HEAD_PERSON_POST_DESC"
                 hint="COM_PROJECTS_HEAD_PERSON_POST_HINT"
-                autocomplete="off"
                 class="person-field"
         />
         <field
