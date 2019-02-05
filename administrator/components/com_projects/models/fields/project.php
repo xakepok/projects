@@ -17,6 +17,10 @@ class JFormFieldProject extends JFormFieldList
             ->select("`id`, `title_ru`")
             ->from('#__prj_projects')
             ->order("`title`");
+        if ($view != 'projects') {
+            $groups = implode(', ', JFactory::getUser()->groups);
+            $query->where("`groupID` IN ({$groups})");
+        }
         if ($view == 'contract')
         {
             $query->where("`priceID` IS NOT NULL");

@@ -243,12 +243,15 @@ abstract class ProjectsHtmlFilters
 
     public static function projectOptions()
     {
+        $groups = implode(', ', JFactory::getUser()->groups);
         $db =& JFactory::getDbo();
         $query =& $db->getQuery(true);
         $query
             ->select("`id`, `title_ru`")
             ->from('#__prj_projects')
-            ->order("`title`");
+            ->order("`title`")
+            ->where("`groupID` IN ({$groups})");
+
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();
