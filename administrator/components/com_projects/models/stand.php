@@ -66,6 +66,7 @@ class ProjectsModelStand extends AdminModel {
         {
             $items_model->delete($ctritem->id);
         }
+        ProjectsHelper::addEvent(array('action' => 'delete', 'section' => 'stand', 'itemID' => $item->id, 'old_data' => $item));
         return parent::delete($pks);
     }
 
@@ -136,9 +137,12 @@ class ProjectsModelStand extends AdminModel {
             $nv['fixed'] = $item->fixed ?? null;
             $nv['value'] = ($item->id != null) ? $item->value + $stand->square : $stand->square;
             $items->save($nv);
+            $action = 'add';
+            $old = null;
         }
         if ($data['id'] != null) {
             $item = parent::getItem($data['id']);
+            $old = $item;
             $arr['contractID'] = $data['contractID'];
             $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
             $contract = $cm->getItem($data['contractID']);
@@ -196,6 +200,8 @@ class ProjectsModelStand extends AdminModel {
                 $nv['value'] = ($ctritem->id != null) ? $ctritem->value + $stand_new->square : $stand_new->square;
                 $items_model->save($nv);
             }
+            $action = 'edit';
+            $itemID = $data['id'];
         }
         if ($data['scheme'] == '-1') $data['scheme'] = NULL;
         if ($data['status'] == '3')
@@ -203,6 +209,11 @@ class ProjectsModelStand extends AdminModel {
             $this->_createTodo($data);
         }
         $s = parent::save($data);
+        if ($action == 'add') {
+            $itemID = parent::getDbo()->insertid();
+            $data['id'] = $itemID;
+        }
+        ProjectsHelper::addEvent(array('action' => $action, 'section' => 'stand', 'itemID' => $itemID, 'params' => $data, 'old_data' => $old));
         return $s;
     }
 
