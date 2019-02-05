@@ -32,7 +32,7 @@ $listDirn = $this->escape($this->state->get('list.direction'));
     <th>
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_ACTIVE_TODOS', 'plan', $listDirn, $listOrder); ?>
     </th>
-    <?php if (ProjectsHelper::canDo('core.general')): ?>
+    <?php if (ProjectsHelper::canDo('projects.access.contracts.full')): ?>
         <th>
             <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_MANAGER', 'manager', $listDirn, $listOrder); ?>
         </th>

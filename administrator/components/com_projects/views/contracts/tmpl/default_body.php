@@ -32,7 +32,7 @@ foreach ($this->items['items'] as $i => $item) :
         <td>
             <?php echo $item['plan']; ?>
         </td>
-        <?php if (ProjectsHelper::canDo('core.general')): ?>
+        <?php if (ProjectsHelper::canDo('projects.access.contracts.full')): ?>
             <td>
                 <span class="<?php echo $item['manager']['class']; ?>"><?php echo $item['manager']['title']; ?></span>
             </td>

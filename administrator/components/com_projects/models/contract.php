@@ -8,6 +8,27 @@ class ProjectsModelContract extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    public function delete(&$pks)
+    {
+        $ok = true;
+        $children = array(); //Сделки, у которых удялемая сделка является соэкспонентом
+        foreach ($pks as $pk) {
+            $item = parent::getItem($pk);
+            $userID = JFactory::getUser()->id;
+            if (!ProjectsHelper::canDo('projects.access.contracts.full') && $item->managerID != $userID) {
+                JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_PROJECTS_ERROR_CONTRACT_REMOVE_IS_NOT_YOUR_CONTRACT'), 'error');
+                $ok = false;
+                break;
+            }
+            $contracts = ProjectsHelper::getContractCoExp($item->expID, $item->prjID);
+            if (!empty($contracts)) $children = array_merge($children, $contracts);
+        }
+        if ($ok) {
+            $ids = array_merge($pks, $children);
+        }
+        return (!$ok) ? false : parent::delete($ids);
+    }
+
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);

@@ -74,7 +74,6 @@ class ProjectsModelContracts extends ListModel
         }
         // Фильтруем по менеджеру.
         $manager = $this->getState('filter.manager');
-        //exit(var_dump($manager));
         if (is_numeric($manager)) {
             $query->where('`c`.`managerID` = ' . (int)$manager);
         }
@@ -111,7 +110,7 @@ class ProjectsModelContracts extends ListModel
             $query->where("`c`.`prjID` = {$project} AND `c`.`expID` = {$exhibitor}");
         }
 
-        if (!ProjectsHelper::canDo('core.general') && !ProjectsHelper::canDo('core.accountant'))
+        if (!ProjectsHelper::canDo('projects.access.contracts.full'))
         {
             $userID = JFactory::getUser()->id;
             $query->where("`c`.`managerID` = {$userID}");
@@ -137,7 +136,7 @@ class ProjectsModelContracts extends ListModel
             $arr['id'] = $item->id;
             $arr['dat'] = $item->dat;
             $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}&amp;return={$return}");
-            $arr['project'] = ($format != 'html' || !ProjectsHelper::canDo('core.manager')) ? $item->project : JHtml::link($url, $item->project);
+            $arr['project'] = ($format != 'html' || ProjectsHelper::canDo('projects.access.projects')) ? $item->project : JHtml::link($url, $item->project);
             $arr['currency'] = $item->currency;
             $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->id}");
             if ($format == 'html') $arr['edit_link'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_GO'));
@@ -170,7 +169,7 @@ class ProjectsModelContracts extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}&amp;return={$return}");
             $color = ($debt != 0) ? 'red' : 'green';
             $arr['color'] = $color;
-            if (ProjectsHelper::canDo('core.accountant') && $debt != 0) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE'), 'style' => "color: {$color}"));
+            if (ProjectsHelper::canDo('projects.access.finanses.full') && $debt != 0) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE'), 'style' => "color: {$color}"));
             if ($format != 'html') $arr['debt'] = $debt;
 
             $result['items'][] = $arr;

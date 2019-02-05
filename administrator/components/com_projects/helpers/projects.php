@@ -18,29 +18,43 @@ class ProjectsHelper
         if (in_array($view, array('reports', 'contracts', 'todos', 'building', 'stat', 'scores', 'payments', 'catalogs', 'cattitles', 'exhibitors', 'prices', 'sections', 'items'))) {
             JHtmlSidebar::addFilter(JText::_('COM_PROJECTS_FILTER_SELECT_ACTIVE_PROJECT'), 'set_active_project', JHtml::_('select.options', ProjectsHtmlFilters::projectOptions(), 'value', 'text', self::getActiveProject()));
         }
-        if (self::canDo('core.general')) {
-            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS'), 'index.php?option=com_projects&amp;view=projects', $vName == 'projects');
-            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PLANS'), 'index.php?option=com_projects&amp;view=plans', $vName == 'plans');
-            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CATTITLES'), 'index.php?option=com_projects&amp;view=cattitles', $vName == 'cattitles');
-        }
-        if (self::canDo('core.manager') || self::canDo('core.accountant')) {
+        if (self::canDo('projects.access.contracts.standart')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CONTRACTS'), 'index.php?option=com_projects&amp;view=contracts', $vName == 'contracts');
-            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_TODOS'), 'index.php?option=com_projects&amp;view=todos', $vName == 'todos');
+        }
+        if (self::canDo('projects.access.exhibitors.standart')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_EXHIBITORS'), 'index.php?option=com_projects&amp;view=exhibitors', $vName == 'exhibitors');
+        }
+        if (self::canDo('projects.access.todos.standart')) {
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_TODOS'), 'index.php?option=com_projects&amp;view=todos', $vName == 'todos');
+        }
+        if (self::canDo('projects.access.building')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_BUILDING'), 'index.php?option=com_projects&amp;view=building', $vName == 'building');
+        }
+        if (self::canDo('projects.access.templates.standart')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_TEMPLATES'), 'index.php?option=com_projects&amp;view=templates', $vName == 'templates');
         }
-        if (self::canDo('core.accountant')) {
-            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_SCORES'), 'index.php?option=com_projects&amp;view=scores', $vName == 'scores');
-            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PAYMENTS'), 'index.php?option=com_projects&amp;view=payments', $vName == 'payments');
-        }
-        if (self::canDo('core.general')) {
+        if (self::canDo('projects.access.catalogs')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CATALOG'), 'index.php?option=com_projects&amp;view=catalogs', $vName == 'catalogs');
-            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_STAT'), 'index.php?option=com_projects&amp;view=stat', $vName == 'stat');
-            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_REPORTS'), 'index.php?option=com_projects&amp;view=reports', $vName == 'reports');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CATTITLES'), 'index.php?option=com_projects&amp;view=cattitles', $vName == 'cattitles');
+        }
+        if (self::canDo('projects.access.prices')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PRICES'), 'index.php?option=com_projects&amp;view=prices', $vName == 'prices');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_SECTIONS'), 'index.php?option=com_projects&amp;view=sections', $vName == 'sections');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ITEMS'), 'index.php?option=com_projects&amp;view=items', $vName == 'items');
+        }
+        if (self::canDo('projects.access.projects')) {
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS'), 'index.php?option=com_projects&amp;view=projects', $vName == 'projects');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PLANS'), 'index.php?option=com_projects&amp;view=plans', $vName == 'plans');
+        }
+        if (self::canDo('projects.access.finanses.standart')) {
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_SCORES'), 'index.php?option=com_projects&amp;view=scores', $vName == 'scores');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PAYMENTS'), 'index.php?option=com_projects&amp;view=payments', $vName == 'payments');
+        }
+        if (self::canDo('projects.access.reports')) {
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_STAT'), 'index.php?option=com_projects&amp;view=stat', $vName == 'stat');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_REPORTS'), 'index.php?option=com_projects&amp;view=reports', $vName == 'reports');
+        }
+        if (self::canDo('projects.access.acts')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ACTIVITIES'), 'index.php?option=com_projects&amp;view=activities', $vName == 'activities');
         }
     }
@@ -239,7 +253,7 @@ class ProjectsHelper
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `a`.`contractID`")
             ->where("`c`.`prjID` = {$projectID}")
             ->where("`c`.`status` IN ({$statuses})");
-        if (!ProjectsHelper::canDo('projects.contracts.totalamount')) {
+        if (!ProjectsHelper::canDo('projects.access.contracts.full')) {
             $userID = JFactory::getUser()->id;
             $query->where("`c`.`managerID` = {$userID}");
         }
@@ -265,7 +279,7 @@ class ProjectsHelper
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `p`.`contractID`")
             ->where("`c`.`prjID` = {$projectID}")
             ->where("`c`.`status` IN ({$statuses})");
-        if (!ProjectsHelper::canDo('projects.contracts.totalamount')) {
+        if (!ProjectsHelper::canDo('projects.access.contracts.full')) {
             $userID = JFactory::getUser()->id;
             $query->where("`c`.`managerID` = {$userID}");
         }
@@ -719,6 +733,26 @@ class ProjectsHelper
     public static function getCatalogType(int $tip): string
     {
         return JText::sprintf("COM_PROJECTS_HEAD_CONTRACT_CATALOG_TYPE_{$tip}");
+    }
+
+    /**
+     * Возвращает список сделок, у которых $exhibitorID является родителем по проекту $projectID
+     * @param int $exhibitorID ID родителя
+     * @param int $projectID ID проекта
+     * @return array
+     * @since 1.1.0.12
+     */
+    public static function getContractCoExp(int $exhibitorID, int $projectID): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`id`")
+            ->from("`#__prj_contracts`")
+            ->where("`parentID` = {$exhibitorID}")
+            ->where("`prjID` = {$projectID}")
+            ->where("`isCoExp` = 1");
+        return $db->setQuery($query)->loadColumn() ?? array();
     }
 
     /**
