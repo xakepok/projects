@@ -144,7 +144,7 @@ class ProjectsModelExhibitor extends AdminModel
         $query
             ->select('*')
             ->from("`#__prj_activities`")
-            ->order($db->quoteName('title'));
+            ->order('title desc');
         $list = $db->setQuery($query)->loadAssocList();
 
         $result = array();
