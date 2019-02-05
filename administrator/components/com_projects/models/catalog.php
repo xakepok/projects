@@ -33,6 +33,10 @@ class ProjectsModelCatalog extends AdminModel {
 
     public function delete(&$pks)
     {
+        foreach ($pks as $pk) {
+            $item = parent::getItem($pk);
+            ProjectsHelper::addEvent(array('action' => 'delete', 'section' => 'catalog', 'itemID' => $pk, 'old_data' => $item));
+        }
         return parent::delete($pks);
     }
 
@@ -73,8 +77,23 @@ class ProjectsModelCatalog extends AdminModel {
 
     public function save($data)
     {
+        if ($data['id'] != null) {
+            $action = 'edit';
+            $old = parent::getItem($data['id']);
+            $itemID = $data['id'];
+        }
+        else {
+            $action = 'add';
+        }
         $this->updateStands($data);
-        return parent::save($data);
+        $s = parent::save($data);
+        if ($action == 'add') {
+            $old = null;
+            $itemID = parent::getDbo()->insertid();
+            $data['id'] = $itemID;
+        }
+        ProjectsHelper::addEvent(array('action' => $action, 'section' => 'catalog', 'itemID' => $itemID, 'params' => $data, 'old_data' => $old));
+        return $s;
     }
 
     /**
