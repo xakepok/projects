@@ -10,6 +10,7 @@ defined('_JEXEC') or die;
 class TableProjectsUal extends Table
 {
     var $id = null;
+    var $dat = null;
     var $userID = null;
     var $section = null;
     var $action = null;
