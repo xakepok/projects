@@ -9,6 +9,8 @@
 		<action name="core.manage" title="JACTION_MANAGE" description="JACTION_MANAGE_COMPONENT_DESC" />
 		<action name="projects.access.projects" title="COM_PROJECTS_ACCESS_PROJECTS" description="COM_PROJECTS_ACCESS_PROJECTS_DESC" />
 		<action name="projects.access.catalogs" title="COM_PROJECTS_ACCESS_CATALOGS" description="COM_PROJECTS_ACCESS_CATALOGS_DESC" />
+		<action name="projects.access.contracts.standart" title="COM_PROJECTS_ACCESS_CONTRACTS_STANDART" description="COM_PROJECTS_ACCESS_CONTRACTS_STANDART_DESC" />
+		<action name="projects.access.contracts.full" title="COM_PROJECTS_ACCESS_CONTRACTS_FULL" description="COM_PROJECTS_ACCESS_CONTRACTS_FULL_DESC" />
 		<action name="projects.access.todos.standart" title="COM_PROJECTS_ACCESS_TODOS_STANDART" description="COM_PROJECTS_ACCESS_TODOS_STANDART_DESC" />
 		<action name="projects.access.todos.full" title="COM_PROJECTS_ACCESS_TODOS_FULL" description="COM_PROJECTS_ACCESS_TODOS_FULL_DESC" />
 		<action name="projects.access.exhibitors.standart" title="COM_PROJECTS_ACCESS_EXHIBITORS_STANDART" description="COM_PROJECTS_ACCESS_EXHIBITORS_STANDART_DESC" />
