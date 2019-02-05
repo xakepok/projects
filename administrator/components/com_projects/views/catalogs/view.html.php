@@ -33,16 +33,10 @@ class ProjectsViewCatalogs extends HtmlView
 	{
 		JToolBarHelper::title(JText::sprintf('COM_PROJECTS_BLANK_CATTITLE'), '');
 
-        if (ProjectsHelper::canDo('core.general'))
+        if (ProjectsHelper::canDo('projects.access.catalogs'))
         {
             JToolbarHelper::addNew('catalog.add');
-        }
-        if (ProjectsHelper::canDo('core.general'))
-        {
             JToolbarHelper::editList('catalog.edit');
-        }
-        if (ProjectsHelper::canDo('core.general'))
-        {
             JToolbarHelper::deleteList(JText::sprintf('COM_PROJECT_QUEST_REMOVE_CATALOG'), 'catalogs.delete');
         }
 		if (ProjectsHelper::canDo('core.admin'))

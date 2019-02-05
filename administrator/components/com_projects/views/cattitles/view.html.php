@@ -33,16 +33,10 @@ class ProjectsViewCattitles extends HtmlView
 	{
 		JToolBarHelper::title(JText::sprintf('COM_PROJECTS_MENU_CATTITLES'), '');
 
-        if (ProjectsHelper::canDo('core.general'))
+        if (ProjectsHelper::canDo('projects.access.catalogs'))
         {
             JToolbarHelper::addNew('cattitle.add');
-        }
-        if (ProjectsHelper::canDo('core.general'))
-        {
             JToolbarHelper::editList('cattitle.edit');
-        }
-        if (ProjectsHelper::canDo('core.general'))
-        {
             JToolbarHelper::deleteList(JText::sprintf('COM_PROJECT_QUEST_REMOVE_CATTITLES'), 'cattitles.delete');
         }
 		if (ProjectsHelper::canDo('core.admin'))
