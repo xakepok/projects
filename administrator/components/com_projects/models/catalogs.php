@@ -78,10 +78,10 @@ class ProjectsModelCatalogs extends ListModel
             $arr['id'] = $item->id;
             $url = JRoute::_("index.php?option=com_projects&amp;task=catalog.edit&amp;&id={$item->id}");
             $link = JHtml::link($url, $item->number);
-            $arr['number'] = (!ProjectsHelper::canDo('core.general')) ? $item->price : $link;
+            $arr['number'] = (!ProjectsHelper::canDo('projects.access.catalogs')) ? $item->price : $link;
             $url = JRoute::_("index.php?option=com_projects&amp;task=cattitle.edit&amp;&id={$item->catalogID}&amp;return={$return}");
             $link = JHtml::link($url, $item->catalog);
-            $arr['catalog'] = (!ProjectsHelper::canDo('core.general')) ? $item->catalog : $link;
+            $arr['catalog'] = (!ProjectsHelper::canDo('projects.access.catalogs')) ? $item->catalog : $link;
             if ($item->hotel == null) $arr['square'] = sprintf("%s %s", $item->square, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
             if ($item->hotel != null)
             {
