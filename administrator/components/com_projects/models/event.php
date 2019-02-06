@@ -39,7 +39,6 @@ class ProjectsModelEvent extends AdminModel {
     public function save($data)
     {
         $data['userID'] = JFactory::getUser()->id;
-        $data['dat'] = JDate::getInstance()->getTimestamp();
         $data['params'] = json_encode($data['params']);
         $data['old_data'] = json_encode($data['old_data']);
         return parent::save($data);
