@@ -58,7 +58,7 @@ class ProjectsHelper
         if (self::canDo('projects.access.acts')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ACTIVITIES'), 'index.php?option=com_projects&amp;view=activities', $vName == 'activities');
         }
-        if (self::canDo('projects.access.events')) {
+        if (self::canDo('projects.access.events.standart')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_EVENTS'), 'index.php?option=com_projects&amp;view=events', $vName == 'events');
         }
     }

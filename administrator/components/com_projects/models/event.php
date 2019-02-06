@@ -23,7 +23,8 @@ class ProjectsModelEvent extends AdminModel {
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
-        return parent::getItem($pk);
+        $item->manager = JFactory::getUser($item->userID)->name;
+        return $item;
     }
 
     protected function loadFormData()

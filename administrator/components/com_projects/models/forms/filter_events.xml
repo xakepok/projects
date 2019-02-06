@@ -10,6 +10,51 @@
                 autocomplete="off"
                 class="js-stools-search-string"
         />
+        <field
+                name="dat"
+                type="calendar"
+                label="COM_PROJECTS_FILTER_DAT"
+                description="COM_PROJECTS_FILTER_DAT"
+                hint="COM_PROJECTS_FILTER_DAT"
+                onchange="this.form.submit();"
+        />
+        <field
+                name="manager"
+                type="manager"
+                label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
+                description="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
+                hint="COM_PROJECTS_FILTER_SELECT_MANAGER"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_MANAGER</option>
+        </field>
+        <field
+                name="section"
+                type="list"
+                label="COM_PROJECTS_FILTER_SELECT_EVENTS_SECTION"
+                description="COM_PROJECTS_FILTER_SELECT_EVENTS_SECTION"
+                hint="COM_PROJECTS_FILTER_SELECT_EVENTS_SECTION"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_EVENTS_SECTION</option>
+            <option value="catalog">COM_PROJECTS_HEAD_SECTION_EVENT_CATALOG</option>
+            <option value="contract">COM_PROJECTS_HEAD_SECTION_EVENT_CONTRACT</option>
+            <option value="exhibitor">COM_PROJECTS_HEAD_SECTION_EVENT_EXHIBITOR</option>
+            <option value="stand">COM_PROJECTS_HEAD_SECTION_EVENT_STAND</option>
+        </field>
+        <field
+                name="action"
+                type="list"
+                label="COM_PROJECTS_FILTER_SELECT_EVENTS_ACTION"
+                description="COM_PROJECTS_FILTER_SELECT_EVENTS_ACTION"
+                hint="COM_PROJECTS_FILTER_SELECT_EVENTS_ACTION"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_EVENTS_ACTION</option>
+            <option value="add">COM_PROJECTS_HEAD_ACTION_EVENT_ADD</option>
+            <option value="edit">COM_PROJECTS_HEAD_ACTION_EVENT_EDIT</option>
+            <option value="delete">COM_PROJECTS_HEAD_ACTION_EVENT_DELETE</option>
+        </field>
     </fields>
     <fields name="list">
         <field

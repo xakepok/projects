@@ -18,6 +18,12 @@ class ProjectsViewEvents extends HtmlView
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
 
+        if (!ProjectsHelper::canDo('projects.access.events.full')) {
+            unset($this->activeFilters['manager']);
+            $this->filterForm->removeField('manager', 'filter');
+        }
+        $this->filterForm->setFieldAttribute('dat', 'default', date("Y-m-d"), 'filter');
+
         // Show the toolbar
 		$this->toolbar();
 

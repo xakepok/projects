@@ -16,7 +16,12 @@ class ProjectsViewEvent extends HtmlView {
     }
 
     protected function addToolbar() {
-        JToolbarHelper::title(JText::sprintf('COM_PROJECTS_BLANK_EVENT'));
+        $manager = $this->item->manager;
+        $section = ProjectsHelper::getEventSection($this->item->section)." ".$this->item->itemID;
+        $action = ProjectsHelper::getEventAction($this->item->action);
+        $title = JText::sprintf('COM_PROJECTS_BLANK_EVENT');
+        $title .= " {$manager} - {$section} - {$action}";
+        JToolbarHelper::title($title);
         JToolbarHelper::cancel('event.cancel', 'JTOOLBAR_CLOSE');
     }
 
