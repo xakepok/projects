@@ -23,6 +23,7 @@
 		<action name="projects.access.reports" title="COM_PROJECTS_ACCESS_REPORTS" description="COM_PROJECTS_ACCESS_REPORTS_DESC" />
 		<action name="projects.access.prices" title="COM_PROJECTS_ACCESS_PRICES" description="COM_PROJECTS_ACCESS_PRICES_DESC" />
 		<action name="projects.access.acts" title="COM_PROJECTS_ACCESS_ACTS" description="COM_PROJECTS_ACCESS_ACTS_DESC" />
+		<action name="projects.access.events" title="COM_PROJECTS_ACCESS_EVENTS" description="COM_PROJECTS_ACCESS_EVENTS_DESC" />
 		<action name="core.create" title="JACTION_CREATE" description="JACTION_CREATE_COMPONENT_DESC" />
 		<action name="core.delete" title="JACTION_DELETE" description="JACTION_DELETE_COMPONENT_DESC" />
 		<action name="core.edit" title="JACTION_EDIT" description="JACTION_EDIT_COMPONENT_DESC" />

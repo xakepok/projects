@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fields name="filter">
+        <field
+                name="search"
+                type="text"
+                label="COM_PROJECTS_FILTER_EVENT"
+                description="COM_PROJECTS_FILTER_EVENT"
+                hint="COM_PROJECTS_FILTER_EVENT"
+                autocomplete="off"
+                class="js-stools-search-string"
+        />
+    </fields>
+    <fields name="list">
+        <field
+                name="limit"
+                type="limitbox"
+                class="input-mini"
+                default="0"
+                label="COM_PROJECTS_FILTER_SELECT_LIMIT"
+                description="COM_CONTENT_LIST_LIMIT_DESC"
+                onchange="this.form.submit();"
+        />
+    </fields>
+</form>

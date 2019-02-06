@@ -58,6 +58,31 @@ class ProjectsHelper
         if (self::canDo('projects.access.acts')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ACTIVITIES'), 'index.php?option=com_projects&amp;view=activities', $vName == 'activities');
         }
+        if (self::canDo('projects.access.events')) {
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_EVENTS'), 'index.php?option=com_projects&amp;view=events', $vName == 'events');
+        }
+    }
+
+    /**
+     * Возвращает название раздела, где было действие пользователя
+     * @param string $name
+     * @return string
+     * @since 1.1.1.8
+     */
+    public static function getEventSection(string $name): string
+    {
+        return JText::sprintf("COM_PROJECTS_HEAD_SECTION_EVENT_{$name}");
+    }
+
+    /**
+     * Возвращает название действия, которое произвёл пользователь
+     * @param string $name
+     * @return string
+     * @since 1.1.1.8
+     */
+    public static function getEventAction(string $name): string
+    {
+        return JText::sprintf("COM_PROJECTS_HEAD_ACTION_EVENT_{$name}");
     }
 
     /**
