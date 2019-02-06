@@ -22,6 +22,7 @@ class ProjectsModelEvent extends AdminModel {
 
     public function getItem($pk = null)
     {
+        $item = parent::getItem($pk);
         return parent::getItem($pk);
     }
 
