@@ -180,6 +180,8 @@ class ProjectsModelTodos extends ListModel
                 $arr['project'] = $item->project;
                 $arr['exp'] = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
                 $arr['project'] = $item->project;
+                $arr['author'] = JFactory::getUser($item->userOpen)->name;
+                $arr['manager'] = JFactory::getUser($item->managerID)->name;
                 $arr['task'] = $item->task;
                 $arr['result'] = $item->result ?? '';
                 $arr['state_text'] = ($expired) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : ProjectsHelper::getTodoState($item->state);
@@ -201,25 +203,29 @@ class ProjectsModelTodos extends ListModel
         $sheet = $xls->getActiveSheet();
         $sheet->setTitle(JText::sprintf('COM_PROJECTS_MENU_STAT'));
         for ($i = 1; $i < count($data) + 1; $i++) {
-            for ($j = 0; $j < 8; $j++) {
+            for ($j = 0; $j < 10; $j++) {
                 if ($i == 1) {
                     if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_OPEN'));
                     if ($j == 1) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE'));
                     if ($j == 2) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_CONTRACT'));
                     if ($j == 3) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_PROJECT'));
                     if ($j == 4) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_EXP'));
-                    if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_TASK'));
-                    if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_RESULT'));
-                    if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE'));
+                    if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_OPEN'));
+                    if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_TASK'));
+                    if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_MANAGER'));
+                    if ($j == 8) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_RESULT'));
+                    if ($j == 9) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE'));
                 }
                 if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['dat_open']);
                 if ($j == 1) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['dat']);
                 if ($j == 2) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['contract']);
                 if ($j == 3) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['project']);
                 if ($j == 4) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['exp']);
-                if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['task']);
-                if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['result'] ?? '');
-                if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['state_text']);
+                if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['author']);
+                if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['task']);
+                if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['manager']);
+                if ($j == 8) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['result'] ?? '');
+                if ($j == 9) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['state_text']);
             }
         }
         $sheet->getColumnDimension('A')->setWidth(10);
@@ -227,9 +233,11 @@ class ProjectsModelTodos extends ListModel
         $sheet->getColumnDimension('C')->setWidth(23);
         $sheet->getColumnDimension('D')->setWidth(16);
         $sheet->getColumnDimension('E')->setWidth(35);
-        $sheet->getColumnDimension('F')->setWidth(72);
-        $sheet->getColumnDimension('G')->setWidth(47);
-        $sheet->getColumnDimension('H')->setWidth(16);
+        $sheet->getColumnDimension('F')->setWidth(35);
+        $sheet->getColumnDimension('G')->setWidth(72);
+        $sheet->getColumnDimension('H')->setWidth(35);
+        $sheet->getColumnDimension('I')->setWidth(47);
+        $sheet->getColumnDimension('J')->setWidth(16);
         $sheet->getStyle('A1')->getFont()->setBold(true);
         $sheet->getStyle('B1')->getFont()->setBold(true);
         $sheet->getStyle('C1')->getFont()->setBold(true);
@@ -238,6 +246,8 @@ class ProjectsModelTodos extends ListModel
         $sheet->getStyle('F1')->getFont()->setBold(true);
         $sheet->getStyle('G1')->getFont()->setBold(true);
         $sheet->getStyle('H1')->getFont()->setBold(true);
+        $sheet->getStyle('I1')->getFont()->setBold(true);
+        $sheet->getStyle('J1')->getFont()->setBold(true);
         $user = JFactory::getUser()->name;
         $filename = JFile::makeSafe("Job by ". $user);
         $filename = sprintf("%s.xls", $filename);
