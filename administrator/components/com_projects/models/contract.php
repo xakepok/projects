@@ -42,10 +42,54 @@ class ProjectsModelContract extends AdminModel {
             $item->files = $this->loadFiles();
             $item->stands = $this->getStands();
             $item->finanses = $this->getFinanses();
+            $item->coExps = $this->getCoExps();
             $item->amount = ProjectsHelper::getContractAmount($item->id);
             $item->children = $this->loadCoExp($item->expID, $item->prjID);
         }
         return $item;
+    }
+
+    /**
+     * Возвращает список дочерних экспонентов
+     * @return array
+     * @since 1.1.2.1
+     */
+    public function getCoExps(): array
+    {
+        $item = parent::getItem();
+        if ($item->id == null) return array();
+        $result = array();
+        $coExp = ProjectsHelper::getContractCoExp($item->expID, $item->prjID);
+        if (!empty($coExp)) {
+            $em = AdminModel::getInstance('Exhibitor', 'ProjectsModel');
+            $return = base64_encode("index.php?option=com_projects&view=contract&layout=edit&id={$item->id}");
+            foreach ($coExp as $contractID) {
+                $arr = array();
+                $contract = parent::getItem($contractID);
+                $exhibitor = $em->getItem($contract->expID);
+                $title = ProjectsHelper::getExpTitle($exhibitor->title_ru_short, $exhibitor->title_ru_full, $exhibitor->title_en);
+                $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$exhibitor->id}&amp;return={$return}");
+                $arr['exhibitor'] = JHtml::link($url, $title);
+                $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$contractID}&amp;return={$return}");
+                $arr['contract'] = JHtml::link($url, ProjectsHelper::getContractTitle($contract->status, $contract->number ?? 0, $contract->dat ?? ''));
+                $stands = ProjectsHelper::getContractStands($contractID);
+                if (!empty($stands)) {
+                    $sts = array();
+                    foreach ($stands as $stand) {
+                        $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand->id}&amp;contractID={$contractID}&amp;return={$return}");
+                        $status = ProjectsHelper::getStandStatus($stand->status);
+                        $name = sprintf("%s - %s", $stand->number, $status);
+                        $sts[] = JHtml::link($url, $name);
+                    }
+                    $arr['stands'] = implode(", ", $sts);
+                }
+                else {
+                    $arr['stands'] = JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_IS_EMPTY');
+                }
+                $result[] = $arr;
+            }
+        }
+        return $result;
     }
 
     /**
@@ -175,6 +219,7 @@ class ProjectsModelContract extends AdminModel {
             {
                 $form->removeField('number');
             }
+            $form->setFieldAttribute('managerID', 'default', JFactory::getUser()->id);
             $form->removeField('dat');
             $form->removeField('children');
             $session = JFactory::getSession();

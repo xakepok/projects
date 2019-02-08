@@ -34,6 +34,7 @@ if ($return != null)
                     </div>
                     <div class="span6">
                         <?php if ($this->item->id != null): ?>
+                            <?php if (!empty($this->item->coExps)) echo $this->loadTemplate('coexps');?>
                             <?php echo $this->loadTemplate('links');?>
                         <?php endif; ?>
                     </div>

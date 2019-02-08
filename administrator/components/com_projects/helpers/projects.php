@@ -649,6 +649,30 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает статус сделки
+     * @param int $status
+     * @param int $number
+     * @param string $date
+     * @return string
+     * @since 1.1.1.2
+     */
+    public static function getContractTitle(int $status, int $number = 0, string $date = ''): string
+    {
+        if ($status != 1) {
+            return self::getExpStatus($status);
+        }
+        else {
+            if ($number != 0) {
+                $date = JDate::getInstance($date)->format("d.m.Y");
+                return JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITH_DATE', $number, $date);
+            }
+            else {
+                return JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
+            }
+        }
+    }
+
+    /**
      * Возвращает список стендов из указанной сделки
      * @param int $contractID
      * @return array
