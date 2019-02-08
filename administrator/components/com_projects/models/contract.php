@@ -72,13 +72,14 @@ class ProjectsModelContract extends AdminModel {
                 $arr['exhibitor'] = JHtml::link($url, $title);
                 $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$contractID}&amp;return={$return}");
                 $arr['contract'] = JHtml::link($url, ProjectsHelper::getContractTitle($contract->status, $contract->number ?? 0, $contract->dat ?? ''));
-                $stands = ProjectsHelper::getContractStands($contractID);
+                $stands = ProjectsHelper::getContractStands($contractID, array($item->id));
                 if (!empty($stands)) {
                     $sts = array();
                     foreach ($stands as $stand) {
                         $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand->id}&amp;contractID={$contractID}&amp;return={$return}");
                         $status = ProjectsHelper::getStandStatus($stand->status);
                         $name = sprintf("%s - %s", $stand->number, $status);
+                        //if ($stand->contractID != $contractID && $stand->delegate == null) continue;
                         $sts[] = JHtml::link($url, $name);
                     }
                     $arr['stands'] = implode(", ", $sts);

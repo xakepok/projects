@@ -727,21 +727,28 @@ class ProjectsHelper
     /**
      * Возвращает список стендов из указанной сделки
      * @param int $contractID
+     * @param array $coExps список соэкспонентов
      * @return array
-     * @since 1.3.0.2
+     * @since 1.1.2.2
      */
-    public static function getContractStands(int $contractID): array
+    public static function getContractStands(int $contractID, array $coExps = array()): array
     {
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`s`.`id`, `s`.`tip`, `c`.`square` as `sq`, `s`.`freeze`, `s`.`comment`, `s`.`status`, `s`.`scheme`, `s`.`itemID`")
+            ->select("`s`.`id`, `s`.`tip`, `c`.`square` as `sq`, `s`.`freeze`, `s`.`comment`, `s`.`status`, `s`.`scheme`, `s`.`itemID`, `s`.`delegate`")
             ->select("`c`.`number`")
             ->select("`i`.`title_ru` as `item`")
             ->from("`#__prj_stands` as `s`")
             ->leftJoin("`#__prj_catalog` as `c` ON `c`.`id` = `s`.`catalogID`")
-            ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `s`.`itemID`")
-            ->where("`s`.`contractID` = {$contractID}");
+            ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `s`.`itemID`");
+        if (empty($coExps)) {
+            $query->where("`s`.`contractID` = {$contractID}");
+        }
+        else {
+            $coExps = implode(', ', $coExps);
+            $query->where("`s`.`contractID` IN ({$coExps}, {$contractID})");
+        }
         return $db->setQuery($query)->loadObjectList();
     }
 
