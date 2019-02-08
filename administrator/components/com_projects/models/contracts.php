@@ -236,8 +236,8 @@ class ProjectsModelContracts extends ListModel
         $return = base64_encode("index.php?option=com_projects&view=contracts");
         $result = array();
         foreach ($stands as $stand) {
-            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;contractID={$contractID}&amp;id={$stand->id}&amp;return={$return}");
-            $result[] = JHtml::link($url, $stand->number);
+            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;contractID={$stand->contractID}&amp;id={$stand->id}&amp;return={$return}");
+            $result[] = ($contractID != $stand->contractID) ? $stand->number : JHtml::link($url, $stand->number);
         }
         return $result;
     }

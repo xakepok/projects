@@ -34,5 +34,12 @@ if (!empty($this->item->coExps)):
             </tr>
         <?php endforeach; ?>
         </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="3" style="font-style: italic;">
+                <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_IS_DELEGATED_HINT');?>
+            </td>
+        </tr>
+        </tfoot>
     </table>
 <?php endif; ?>

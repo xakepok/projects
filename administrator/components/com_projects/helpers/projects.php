@@ -727,22 +727,43 @@ class ProjectsHelper
     /**
      * Возвращает список стендов из указанной сделки
      * @param int $contractID
-     * @param array $coExps список соэкспонентов
      * @return array
      * @since 1.1.2.2
      */
-    public static function getContractStands(int $contractID, array $coExps = array()): array
+    public static function getContractStands(int $contractID): array
     {
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`s`.`id`, `s`.`tip`, `c`.`square` as `sq`, `s`.`freeze`, `s`.`comment`, `s`.`status`, `s`.`scheme`, `s`.`itemID`")
+            ->select("`s`.`id`, `s`.`tip`, `c`.`square` as `sq`, `s`.`freeze`, `s`.`comment`, `s`.`status`, `s`.`scheme`, `s`.`itemID`, `s`.`contractID`")
             ->select("`c`.`number`")
             ->select("`i`.`title_ru` as `item`")
             ->from("`#__prj_stands` as `s`")
             ->leftJoin("`#__prj_catalog` as `c` ON `c`.`id` = `s`.`catalogID`")
             ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `s`.`itemID`")
             ->where("`s`.`contractID` = {$contractID}");
+        return array_merge($db->setQuery($query)->loadObjectList(), self::loadDelegatedStands($contractID));
+    }
+
+    /**
+     * Возвращает список делегированных стендов
+     * @param int $contractID
+     * @return array
+     * @since 1.1.2.3
+     */
+    function loadDelegatedStands(int $contractID): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`s`.`id`, `s`.`tip`, `c`.`square` as `sq`, `s`.`freeze`, `s`.`comment`, `s`.`status`, `s`.`scheme`, `s`.`itemID`, `s`.`contractID`")
+            ->select("CONCAT(`c`.`number`,' *') as `number`")
+            ->select("`i`.`title_ru` as `item`")
+            ->from("`#__prj_stands_delegate` as `d`")
+            ->leftJoin("`#__prj_stands` as `s` ON `s`.`id` = `d`.`standID`")
+            ->leftJoin("`#__prj_catalog` as `c` ON `c`.`id` = `s`.`catalogID`")
+            ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `s`.`itemID`")
+            ->where("`d`.`contractID` = {$contractID}");
         return $db->setQuery($query)->loadObjectList();
     }
 

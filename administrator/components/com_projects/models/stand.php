@@ -295,7 +295,7 @@ class ProjectsModelStand extends AdminModel {
      * Загружает делегированные сделки
      * @since 1.1.2.3
      */
-    private function loadDelegates(): array
+    public function loadDelegates(): array
     {
         $item = parent::getItem();
         if ($item->id == null) return array();

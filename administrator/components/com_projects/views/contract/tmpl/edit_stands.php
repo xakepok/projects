@@ -81,4 +81,11 @@ $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_STAND'));
         </form>
     <?php endforeach; ?>
     </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="10" style="font-style: italic;">
+            <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_IS_DELEGATED_HINT');?>
+        </td>
+    </tr>
+    </tfoot>
 </table>

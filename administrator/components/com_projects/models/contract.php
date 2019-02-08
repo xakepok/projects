@@ -58,6 +58,7 @@ class ProjectsModelContract extends AdminModel {
     {
         $item = parent::getItem();
         if ($item->id == null) return array();
+        $cid = $item->id;
         $result = array();
         $coExp = ProjectsHelper::getContractCoExp($item->expID, $item->prjID);
         if (!empty($coExp)) {
@@ -72,15 +73,14 @@ class ProjectsModelContract extends AdminModel {
                 $arr['exhibitor'] = JHtml::link($url, $title);
                 $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$contractID}&amp;return={$return}");
                 $arr['contract'] = JHtml::link($url, ProjectsHelper::getContractTitle($contract->status, $contract->number ?? 0, $contract->dat ?? ''));
-                $stands = ProjectsHelper::getContractStands($contractID, array($item->id));
+                $stands = ProjectsHelper::getContractStands($contractID);
                 if (!empty($stands)) {
                     $sts = array();
                     foreach ($stands as $stand) {
-                        $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand->id}&amp;contractID={$contractID}&amp;return={$return}");
+                        $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand->id}&amp;contractID={$stand->contractID}&amp;return={$return}");
                         $status = ProjectsHelper::getStandStatus($stand->status);
                         $name = sprintf("%s - %s", $stand->number, $status);
-                        //if ($stand->contractID != $contractID && $stand->delegate == null) continue;
-                        $sts[] = JHtml::link($url, $name);
+                        $sts[] = ($contractID != $stand->contractID) ? $name : JHtml::link($url, $name);
                     }
                     $arr['stands'] = implode(", ", $sts);
                 }
@@ -123,8 +123,8 @@ class ProjectsModelContract extends AdminModel {
         foreach ($items as $item) {
             $arr = array();
             $arr['id'] = $item->id;
-            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;contractID={$cid}&amp;id={$item->id}&amp;return={$return}");
-            $arr['number'] = JHtml::link($url, $item->number);
+            $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;contractID={$item->contractID}&amp;id={$item->id}&amp;return={$return}");
+            $arr['number'] = ($item->contractID != $cid) ? $item->number : JHtml::link($url, $item->number);
             $arr['freeze'] = $item->freeze;
             $arr['comment'] = $item->comment;
             $arr['sq'] = sprintf("%s %s", $item->sq, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
@@ -500,8 +500,8 @@ class ProjectsModelContract extends AdminModel {
             {
                 $sts = array();
                 foreach ($stands as $stand) {
-                    if ($stand->itemID != $item->id) continue;
-                    $sts[] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;contractID={$contractID}&amp;task=stand.edit&amp;id={$stand->id}&amp;return={$return}"), $stand->number);
+                    if (($stand->itemID != $item->id) || $stand->contractID != $contractID) continue;
+                    $sts[] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;contractID={$stand->contractID}&amp;task=stand.edit&amp;id={$stand->id}&amp;return={$return}"), $stand->number);
                 }
                 $arr['stand'] = implode(" / ", $sts);
                 if (empty($arr['stand'])) $arr['value'] = 0;
