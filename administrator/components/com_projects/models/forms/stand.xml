@@ -109,9 +109,8 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_STAND_DELEGATE"
                 description="COM_PROJECTS_HEAD_CONTRACT_STAND_DELEGATE_DESC"
                 autocomplete="off"
+                multiple="true"
                 class="x2"
-        >
-                <option value="">COM_PROJECTS_FILTER_SELECT_CO_EXHIBITOR</option>
-        </field>
+        />
     </fieldset>
 </form>

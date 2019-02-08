@@ -97,6 +97,7 @@ class ProjectsModelStand extends AdminModel {
             if (count($coExps) == 0) {
                 $form->removeField('delegate');
             }
+            $form->setValue('delegate', null, $this->loadDelegates());
         }
 
         return $form;
@@ -222,12 +223,13 @@ class ProjectsModelStand extends AdminModel {
             $data['id'] = $itemID;
         }
         ProjectsHelper::addEvent(array('action' => $action, 'section' => 'stand', 'itemID' => $itemID, 'params' => $data, 'old_data' => $old));
+        $this->saveDelegates($itemID, $data['delegate'] ?? array());
         return $s;
     }
 
     protected function prepareTable($table)
     {
-        $nulls = array('catalogID', 'itemID', 'number', 'freeze', 'comment', 'scheme', 'delegate'); //Поля, которые NULL
+        $nulls = array('catalogID', 'itemID', 'number', 'freeze', 'comment', 'scheme'); //Поля, которые NULL
         foreach ($nulls as $field)
         {
             if (!strlen($table->$field)) $table->$field = NULL;
@@ -252,6 +254,58 @@ class ProjectsModelStand extends AdminModel {
     public function getScript()
     {
         return 'administrator/components/' . $this->option . '/models/forms/stand.js';
+    }
+
+    /**
+     * Делегирует стенд соэкспонентам
+     * @param int $standID ID стенда
+     * @param array $contracts массив с ID сделок
+     * @since 1.1.2.3
+     */
+    private function saveDelegates(int $standID, array $contracts): void
+    {
+        $dm = AdminModel::getInstance('Delegate', 'ProjectsModel');
+        if (empty($contracts)) {
+            $already = $this->loadDelegates(); //Массив с ID сделок уже имеющимихся делегатов
+            foreach ($already as $item) {
+                $item = $dm->getItem(array('standID' => $standID, 'contractID' => $item));
+                if ($item->id != null) $dm->delete($item->id);
+            }
+            return;
+        }
+        $already = $this->loadDelegates(); //Массив с ID сделок уже имеющимихся делегатов
+        foreach ($contracts as $contract) {
+            $item = $dm->getItem(array('standID' => $standID, 'contractID' => $contract));
+            $arr = array();
+            $arr['id'] = $item->id;
+            $arr['standID'] = $standID;
+            $arr['contractID'] = $contract;
+            if (in_array($contract, $already)) {
+                if (($key = array_search($contract, $already)) !== false) unset($already[$key]);
+            } //Удаляем сделку из списка на удаление из таблицы делегатов
+            $dm->save($arr);
+        }
+        foreach ($already as $item) {
+            $item = $dm->getItem(array('standID' => $standID, 'contractID' => $item));
+            if ($item->id != null) $dm->delete($item->id);
+        }
+    }
+
+    /**
+     * Загружает делегированные сделки
+     * @since 1.1.2.3
+     */
+    private function loadDelegates(): array
+    {
+        $item = parent::getItem();
+        if ($item->id == null) return array();
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("contractID")
+            ->from("`#__prj_stands_delegate`")
+            ->where("`standID` = {$item->id}");
+        return $db->setQuery($query)->loadColumn() ?? array();
     }
 
 

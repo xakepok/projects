@@ -736,19 +736,13 @@ class ProjectsHelper
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`s`.`id`, `s`.`tip`, `c`.`square` as `sq`, `s`.`freeze`, `s`.`comment`, `s`.`status`, `s`.`scheme`, `s`.`itemID`, `s`.`delegate`")
+            ->select("`s`.`id`, `s`.`tip`, `c`.`square` as `sq`, `s`.`freeze`, `s`.`comment`, `s`.`status`, `s`.`scheme`, `s`.`itemID`")
             ->select("`c`.`number`")
             ->select("`i`.`title_ru` as `item`")
             ->from("`#__prj_stands` as `s`")
             ->leftJoin("`#__prj_catalog` as `c` ON `c`.`id` = `s`.`catalogID`")
-            ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `s`.`itemID`");
-        if (empty($coExps)) {
-            $query->where("`s`.`contractID` = {$contractID}");
-        }
-        else {
-            $coExps = implode(', ', $coExps);
-            $query->where("`s`.`contractID` IN ({$coExps}, {$contractID})");
-        }
+            ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `s`.`itemID`")
+            ->where("`s`.`contractID` = {$contractID}");
         return $db->setQuery($query)->loadObjectList();
     }
 
