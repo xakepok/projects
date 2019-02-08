@@ -31,6 +31,15 @@
                 class="x2"
         />
         <field
+                name="delegate"
+                type="Delegate"
+                label="COM_PROJECTS_HEAD_CONTRACT_STAND_DELEGATE"
+                description="COM_PROJECTS_HEAD_CONTRACT_STAND_DELEGATE_DESC"
+                autocomplete="off"
+                multiple="true"
+                class="x2"
+        />
+        <field
                 name="sq"
                 type="hidden"
                 label="COM_PROJECTS_HEAD_ITEM_HEAD_SQUARE"
@@ -102,15 +111,6 @@
                 hide_default="true"
                 default=""
                 onchange="setImg()"
-        />
-        <field
-                name="delegate"
-                type="Delegate"
-                label="COM_PROJECTS_HEAD_CONTRACT_STAND_DELEGATE"
-                description="COM_PROJECTS_HEAD_CONTRACT_STAND_DELEGATE_DESC"
-                autocomplete="off"
-                multiple="true"
-                class="x2"
         />
     </fieldset>
 </form>
