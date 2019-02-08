@@ -650,26 +650,78 @@ class ProjectsHelper
 
     /**
      * Возвращает статус сделки
-     * @param int $status
-     * @param int $number
-     * @param string $date
+     * @param int $status код статусв сделки
+     * @param int $number номер договора
+     * @param string $date дата заключения договора
+     * @param string $exhibitor название экспонента
+     * @param bool $coExp является ли соэкспонентом
      * @return string
      * @since 1.1.1.2
      */
-    public static function getContractTitle(int $status, int $number = 0, string $date = ''): string
+    public static function getContractTitle(int $status, int $number = 0, string $date = '', string $exhibitor = '', bool $coExp = false): string
     {
         if ($status != 1) {
-            return self::getExpStatus($status);
+            $text = self::getExpStatus($status);
         }
         else {
             if ($number != 0) {
                 $date = JDate::getInstance($date)->format("d.m.Y");
-                return JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITH_DATE', $number, $date);
+                if ($exhibitor != '') {
+                    $text = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITH_DATE_AND_EXHIBITOR', $number, $date, $exhibitor);
+                }
+                else {
+                    $text = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITH_DATE', $number, $date);
+                }
             }
             else {
-                return JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
+                if ($exhibitor != '') {
+                    $text = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER_WITH_EXHIBITOR', $exhibitor);
+                }
+                else {
+                    $text = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
+                }
             }
         }
+        if ($coExp) $text .= " - " . JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS_5');
+        return $text;
+    }
+
+    /**
+     * Возвращает текст для отображения в поле типа "Сделка"
+     * @param int $status код статусв сделки
+     * @param int $number номер договора
+     * @param string $date дата заключения договора
+     * @param string $exhibitor название экспонента
+     * @param string $project название проекта
+     * @return string
+     * @since 1.1.1.2
+     */
+    public static function getContractFieldTitle(int $status, int $number = 0, string $date = '', string $exhibitor = '', string $project = ''): string
+    {
+        if ($status != 1) {
+            $text = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT', $exhibitor, $project);
+            $text = sprintf("%s - %s",$text, self::getExpStatus($status));
+        }
+        else {
+            if ($number != 0) {
+                $date = JDate::getInstance($date)->format("d.m.Y");
+                if ($exhibitor != '') {
+                    $text = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITH_DATE_AND_EXHIBITOR', $number, $date, $exhibitor);
+                }
+                else {
+                    $text = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITH_DATE', $number, $date);
+                }
+            }
+            else {
+                if ($exhibitor != '') {
+                    $text = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER_WITH_EXHIBITOR', $exhibitor);
+                }
+                else {
+                    $text = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
+                }
+            }
+        }
+        return $text;
     }
 
     /**
@@ -826,7 +878,7 @@ class ProjectsHelper
      */
     public static function getExpStatus($status, $isCoExp = 0): string
     {
-        if ($status == null) return JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS_UNDEFINED');
+        if ($status === null) return JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS_UNDEFINED');
         $status = mb_strtoupper($status);
         if ($isCoExp != 0 && $status == '0') {
             return JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS_5');

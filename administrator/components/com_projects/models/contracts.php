@@ -169,7 +169,7 @@ class ProjectsModelContracts extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}&amp;return={$return}");
             $color = ($debt != 0) ? 'red' : 'green';
             $arr['color'] = $color;
-            if (ProjectsHelper::canDo('projects.access.finanses.full') && $debt != 0) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE'), 'style' => "color: {$color}"));
+            if (ProjectsHelper::canDo('projects.access.finanses.full') && $debt != 0 && $item->status == '1') $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE'), 'style' => "color: {$color}"));
             if ($format != 'html') $arr['debt'] = $debt;
 
             $result['items'][] = $arr;

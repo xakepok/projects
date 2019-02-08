@@ -2,10 +2,11 @@
 defined('_JEXEC') or die;
 jimport('joomla.form.helper');
 JFormHelper::loadFieldClass('list');
+use Joomla\CMS\MVC\Model\AdminModel;
 
-class JFormFieldContract extends JFormFieldList
+class JFormFieldDelegate extends JFormFieldList
 {
-    protected $type = 'Contract';
+    protected $type = 'Delegate';
     protected $loadExternally = 0;
 
     protected function getOptions()
@@ -20,26 +21,15 @@ class JFormFieldContract extends JFormFieldList
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
             ->order("`c`.`id`");
-        if (!ProjectsHelper::canDo('core.general') && !ProjectsHelper::canDo('core.accountant'))
-        {
-            $userID = JFactory::getUser()->id;
-            $query->where("`c`.`managerID` = {$userID}");
-        }
         $session = JFactory::getSession();
-        $view = JFactory::getApplication()->input->getString('view', '');
-        if (($view == 'todo' || $view == 'stand' || $view == 'score') && $session->get('contractID') != null)
+        if ($session->get('contractID') != null)
         {
             $contractID = $session->get('contractID');
-            $query->where("`c`.`id` = {$contractID}");
-            if ($view != 'stand') $session->clear('contractID');
-        }
-        if ($view == 'score')
-        {
-            $query->where("`c`.`status` = 1");
-        }
-        if ($view == 'contract')
-        {
-            $query->where("`c`.`isCoExp` = 1");
+            $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
+            $contract = $cm->getItem($contractID);
+            $coExps = implode(', ', ProjectsHelper::getContractCoExp($contract->expID, $contract->prjID));
+            $query->where("`c`.`id` IN ({$coExps})");
+            $session->clear('contractID');
         }
         $result = $db->setQuery($query)->loadObjectList();
 

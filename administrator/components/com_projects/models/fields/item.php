@@ -2,6 +2,7 @@
 defined('_JEXEC') or die;
 jimport('joomla.form.helper');
 JFormHelper::loadFieldClass('groupedlist');
+use Joomla\CMS\MVC\Model\AdminModel;
 
 class JFormFieldItem extends JFormFieldGroupedList
 {
@@ -40,7 +41,12 @@ class JFormFieldItem extends JFormFieldGroupedList
                     $projectID = ProjectsHelper::getContractProject($contractID);
                     $priceID = ProjectsHelper::getProjectPrice($projectID);
                     $query->where("`s`.`priceID` = {$priceID}");
-                    $session->clear('contractID');
+                    $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
+                    $contract = $cm->getItem($contractID);
+                    $coExps = ProjectsHelper::getContractCoExp($contract->expID, $contract->prjID);
+                    if (count($coExps) == 0) {
+                        $session->clear('contractID');
+                    }
                 }
             }
         }

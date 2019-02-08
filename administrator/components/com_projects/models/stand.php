@@ -90,6 +90,14 @@ class ProjectsModelStand extends AdminModel {
         $contractID = $form->getValue('contractID') ?? $session->get('contractID');
         $dir = ($contractID != null && JFolder::exists(JPATH_ROOT."/images/contracts/{$contractID}")) ? JPATH_ROOT."/images/contracts/{$contractID}" : JPATH_ROOT."/images/contracts";
         $form->setFieldAttribute('scheme', 'directory', $dir);
+        if ($contractID != null) {
+            $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
+            $contract = $cm->getItem($contractID);
+            $coExps = ProjectsHelper::getContractCoExp($contract->expID, $contract->prjID);
+            if (count($coExps) == 0) {
+                $form->removeField('delegate');
+            }
+        }
 
         return $form;
     }
@@ -219,7 +227,7 @@ class ProjectsModelStand extends AdminModel {
 
     protected function prepareTable($table)
     {
-        $nulls = array('catalogID', 'itemID', 'number', 'freeze', 'comment', 'scheme'); //Поля, которые NULL
+        $nulls = array('catalogID', 'itemID', 'number', 'freeze', 'comment', 'scheme', 'delegate'); //Поля, которые NULL
         foreach ($nulls as $field)
         {
             if (!strlen($table->$field)) $table->$field = NULL;
