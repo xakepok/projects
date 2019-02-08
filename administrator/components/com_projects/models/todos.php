@@ -180,8 +180,8 @@ class ProjectsModelTodos extends ListModel
                 $arr['project'] = $item->project;
                 $arr['exp'] = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
                 $arr['project'] = $item->project;
-                $arr['author'] = JFactory::getUser($item->userOpen)->name;
-                $arr['manager'] = JFactory::getUser($item->managerID)->name;
+                $arr['author'] = $item->open;
+                $arr['manager'] = $item->manager;
                 $arr['task'] = $item->task;
                 $arr['result'] = $item->result ?? '';
                 $arr['state_text'] = ($expired) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : ProjectsHelper::getTodoState($item->state);
