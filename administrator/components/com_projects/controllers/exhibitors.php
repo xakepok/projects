@@ -35,4 +35,20 @@ class ProjectsControllerExhibitors extends AdminController
         echo new JsonResponse($result);
         jexit();
     }
+
+    public function getRegion()
+    {
+        $search = $this->input->getString('search', '');
+        $id = $this->input->getInt('id', 0);
+        if (strlen($search) < 2 && $id < 1)
+        {
+            exit(json_encode(array()));
+        }
+        else
+        {
+            $model = $this->getModel();
+            $result = $model->getRegion($id, $search);
+            exit(json_encode($result));
+        }
+    }
 }

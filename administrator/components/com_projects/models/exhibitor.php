@@ -11,6 +11,38 @@ class ProjectsModelExhibitor extends AdminModel
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    public function getRegion(int $id, string $search): array
+    {
+        $db =& $this->getDbo();
+        $search = $db->q('%'.$db->escape($search).'%');
+        $query = $db->getQuery(true);
+        $query
+            ->select("`c`.`id`, `c`.`name` as `city`, `r`.`name` as `region`, `s`.`name` as `country`")
+            ->from('`#__grph_cities` as `c`')
+            ->leftJoin('`#__grph_regions` as `r` ON `r`.`id` = `c`.`region_id`')
+            ->leftJoin('`#__grph_countries` as `s` ON `s`.`id` = `r`.`country_id`')
+            ->order("`c`.`is_capital` DESC, `c`.`name`")
+            ->where("(`s`.`state` = 1 AND `c`.`name` LIKE {$search})");
+        if ($id > 0) {
+            $query->orWhere("`c`.`id` = {$id}");
+        }
+        $result = $db->setQuery($query)->loadObjectList();
+
+        $options = array();
+
+        if ($result) {
+            foreach ($result as $p) {
+                if (!isset($options[$p->region])) {
+                    $options[$p->region] = array();
+                }
+                $name = sprintf("%s (%s, %s)", $p->city, $p->region, $p->country);
+                $options[$p->region][$p->id] = $name;
+            }
+        }
+
+        return $options;
+    }
+
     /**
      * Возвращает текущих контактных лиц для экспонента
      * @return array
