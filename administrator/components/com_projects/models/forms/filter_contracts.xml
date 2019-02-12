@@ -51,6 +51,14 @@
             <option value="">COM_PROJECTS_FILTER_SELECT_MANAGER</option>
         </field>
         <field
+                name="activity"
+                type="Activity"
+                label="COM_PROJECTS_FILTER_SELECT_ACTIVITY"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_ACTIVITY</option>
+        </field>
+        <field
                 name="status"
                 type="list"
                 label="COM_PROJECTS_FILTER_SELECT_STATUS"

@@ -29,6 +29,7 @@ class ProjectsModelContracts extends ListModel
                 'debt_eur',
                 'payments',
                 'stand',
+                'activity',
             );
         }
         parent::__construct($config);
@@ -59,6 +60,15 @@ class ProjectsModelContracts extends ListModel
         {
             $search = $db->quote('%' . $db->escape($search, true) . '%', false);
             $query->where('(`e`.`title_ru_full` LIKE ' . $search . ' OR `e`.`title_ru_short` LIKE ' . $search . ' OR `e`.`title_en` LIKE ' . $search . ' OR `p`.`title_ru` LIKE ' . $search . ' OR `e`.`comment` LIKE ' . $search . ')');
+        }
+        // Фильтруем по видам деятельности.
+        $act = $this->getState('filter.activity');
+        if (is_numeric($act)) {
+            $exponents = ProjectsHelper::getExponentsInActivities($act);
+            if (!empty($exponents)) {
+                $exponents = implode(', ', $exponents);
+                $query->where("`c`.`expID` IN ({$exponents})");
+            }
         }
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
@@ -210,6 +220,8 @@ class ProjectsModelContracts extends ListModel
         $this->setState('filter.status', $status);
         $currency = $this->getUserStateFromRequest($this->context . '.filter.currency', 'filter_currency');
         $this->setState('filter.currency', $currency);
+        $activity = $this->getUserStateFromRequest($this->context . '.filter.activity', 'filter_activity', '', 'string');
+        $this->setState('filter.state', $activity);
         parent::populateState('`plan_dat`', 'asc');
     }
 
@@ -221,6 +233,7 @@ class ProjectsModelContracts extends ListModel
         $id .= ':' . $this->getState('filter.manager');
         $id .= ':' . $this->getState('filter.status');
         $id .= ':' . $this->getState('filter.currency');
+        $id .= ':' . $this->getState('filter.activity');
         return parent::getStoreId($id);
     }
 
