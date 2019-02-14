@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_PROJECTS_MENU_FRONT_FORMS">
+		<message>
+			<![CDATA[COM_PROJECTS_MENU_FRONT_FORMS_DESC]]>
+		</message>
+	</layout>
+	<fieldset name="request">
+		<fields name="request">
+			<field
+					name="type"
+					type="list"
+					label="COM_PROJECTS_MENU_FRONT_FORMS_TYPE"
+					description="COM_PROJECTS_MENU_FRONT_FORMS_TYPE_DESC">
+					<option value="forms">COM_PROJECTS_MENU_FRONT_FORMS_LIST</option>
+					<option value="catalog_site">COM_PROJECTS_MENU_FRONT_FORMS_TYPE_CATALOG_SITE</option>
+					<option value="catalog_print">COM_PROJECTS_MENU_FRONT_FORMS_TYPE_CATALOG_PRINT</option>
+					<option value="info">COM_PROJECTS_MENU_FRONT_FORMS_TYPE_INFO</option>
+			</field>
+		</fields>
+	</fieldset>
+</metadata>
