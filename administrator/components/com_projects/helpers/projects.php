@@ -63,6 +63,7 @@ class ProjectsHelper
         }
         if (self::canDo('projects.access.hotels.standart')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_HOTELS'), 'index.php?option=com_projects&amp;view=hotels', $vName == 'hotels');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_HOTEL_CATS'), 'index.php?option=com_projects&amp;view=hotelcats', $vName == 'hotelcats');
         }
     }
 

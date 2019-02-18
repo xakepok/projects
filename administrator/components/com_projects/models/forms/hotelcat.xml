@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fieldset name="names">
+        <field
+                name="id"
+                type="hidden"
+        />
+        <field
+                name="hotelID"
+                type="Hotel"
+                label="COM_PROJECTS_HEAD_HOTEL_NAME"
+                description="COM_PROJECTS_HEAD_HOTEL_NAME"
+                class="x2"
+                required="true"
+        />
+        <field
+                name="title_ru"
+                type="text"
+                label="COM_PROJECTS_HEAD_ROOM_CAT_NAME_RU"
+                description="COM_PROJECTS_HEAD_ROOM_CAT_NAME_RU_DESC"
+                hint="COM_PROJECTS_HEAD_ROOM_CAT_NAME_RU_HINT"
+                autocomplete="off"
+                class="x2"
+        />
+        <field
+                name="title_en"
+                type="text"
+                label="COM_PROJECTS_HEAD_ROOM_CAT_NAME_EN"
+                description="COM_PROJECTS_HEAD_ROOM_CAT_NAME_EN_DESC"
+                hint="COM_PROJECTS_HEAD_ROOM_CAT_NAME_EN_HINT"
+                autocomplete="off"
+                class="x2"
+        />
+    </fieldset>
+</form>
