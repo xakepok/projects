@@ -3,9 +3,16 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\Model\AdminModel;
 
 class ProjectsModelContract extends AdminModel {
+    public $tip;
     public function getTable($name = 'Contracts', $prefix = 'TableProjects', $options = array())
     {
         return JTable::getInstance($name, $prefix, $options);
+    }
+
+    public function getTip(): int
+    {
+        $item = parent::getItem();
+        return ($item->id != null) ? ProjectsHelper::getContractType($item->id) : -1;
     }
 
     public function delete(&$pks)
@@ -120,11 +127,13 @@ class ProjectsModelContract extends AdminModel {
         $items = ProjectsHelper::getContractStands($cid);
         $result = array();
         $return = base64_encode("index.php?option=com_projects&view=contract&layout=edit&id={$item->id}");
+        $tip = ProjectsHelper::getContractType($cid);
         foreach ($items as $item) {
             $arr = array();
             $arr['id'] = $item->id;
+            $num_field = ($tip == 0) ? 'number' : 'title';
             $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;contractID={$item->contractID}&amp;id={$item->id}&amp;return={$return}");
-            $arr['number'] = ($item->contractID != $cid) ? $item->number : JHtml::link($url, $item->number);
+            $arr['number'] = ($item->contractID != $cid && $tip == 0) ? $item->$num_field : JHtml::link($url, $item->$num_field);
             $arr['freeze'] = $item->freeze;
             $arr['comment'] = $item->comment;
             $arr['sq'] = sprintf("%s %s", $item->sq, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
@@ -133,6 +142,16 @@ class ProjectsModelContract extends AdminModel {
             $arr['tip'] = ProjectsHelper::getStandType($item->tip);
             $arr['status'] = ProjectsHelper::getStandStatus($item->status);
             $arr['action'] = JRoute::_("index.php?option=com_projects&amp;view=stand&amp;layout=edit&amp;id={$item->id}");
+            if ($item->arrival != null) {
+                $dat = JDate::getInstance($item->arrival);
+                $arr['arrival'] = $dat->format("d.m.Y");
+                $arr['category'] = $item->category;
+                $arr['hotel'] = $item->hotel;
+            }
+            if ($item->department != null) {
+                $dat = JDate::getInstance($item->department);
+                $arr['department'] = $dat->format("d.m.Y");
+            }
             $result[] = $arr;
         }
         return $result;

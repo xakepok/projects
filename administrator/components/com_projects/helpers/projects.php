@@ -68,6 +68,22 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает тип сделки - для стендов, делегаций и т.п.
+     * @param int $contractID - ID сделки
+     * @return int тип проекта. 0 - стенды, 1 - делегации
+     * @since 1.1.2.6
+     */
+    public static function getContractType(int $contractID = 0): int
+    {
+        if ($contractID == 0) return -1;
+        $projectID = ProjectsHelper::getContractProject($contractID);
+        $catalogID = self::getProjectCatalog($projectID);
+        $cm = AdminModel::getInstance('Cattitle', 'ProjectsModel');
+        $ct = $cm->getItem($catalogID);
+        return $ct->tip;
+    }
+
+    /**
      * Возвращает название раздела, где было действие пользователя
      * @param string $name
      * @return string
@@ -741,11 +757,14 @@ class ProjectsHelper
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`s`.`id`, `s`.`tip`, `c`.`square` as `sq`, `s`.`freeze`, `s`.`comment`, `s`.`status`, `s`.`scheme`, `s`.`itemID`, `s`.`contractID`")
-            ->select("`c`.`number`")
+            ->select("`s`.`id`, `s`.`tip`, `c`.`square` as `sq`, `s`.`freeze`, `s`.`comment`, `s`.`status`, `s`.`scheme`, `s`.`itemID`, `s`.`contractID`, `s`.`arrival`, `s`.`department`")
+            ->select("`c`.`number`, `c`.`title`")
+            ->select("`cats`.`title_ru` as `category`, `h`.`title_ru` as `hotel`")
             ->select("`i`.`title_ru` as `item`")
             ->from("`#__prj_stands` as `s`")
             ->leftJoin("`#__prj_catalog` as `c` ON `c`.`id` = `s`.`catalogID`")
+            ->leftJoin("`#__prj_hotels_number_categories` as `cats` ON `cats`.`id` = `c`.`categoryID`")
+            ->leftJoin("`#__prj_hotels` as `h` ON `h`.`id` = `cats`.`hotelID`")
             ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `s`.`itemID`")
             ->where("`s`.`contractID` = {$contractID}");
         return array_merge($db->setQuery($query)->loadObjectList(), self::loadDelegatedStands($contractID));

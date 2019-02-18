@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form addrulepath="/administrator/components/com_projects/models/rules">
-    <fieldset name="names">
+    <fieldset name="general">
         <field
                 name="id"
                 type="hidden"
@@ -14,6 +14,16 @@
                 class="x2"
         />
         <field
+                name="itemID"
+                type="Item"
+                label="COM_PROJECTS_MENU_ITEM"
+                description="COM_PROJECTS_FILTER_ITEM"
+                autocomplete="off"
+                class="x2"
+        />
+    </fieldset>
+    <fieldset name="stand">
+        <field
                 name="catalogID"
                 type="Catalog"
                 label="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER"
@@ -21,14 +31,6 @@
                 autocomplete="off"
                 class="x2"
                 onchange="setSquare()"
-        />
-        <field
-                name="itemID"
-                type="Item"
-                label="COM_PROJECTS_MENU_ITEM"
-                description="COM_PROJECTS_FILTER_ITEM"
-                autocomplete="off"
-                class="x2"
         />
         <field
                 name="delegate"
@@ -58,7 +60,6 @@
                 label="COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE"
                 description="COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_DESC"
                 class="x2"
-                required="true"
                 size="1"
         >
             <option value="0">COM_PROJECTS_HEAD_CONTRACT_STAND_TYPE_0</option>
@@ -92,7 +93,6 @@
                 description="COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_DESC"
                 hint="COM_PROJECTS_HEAD_CONTRACT_STAND_COMMENT_HINT"
                 class="x2"
-                required="true"
                 size="1"
         >
             <option value="0">COM_PROJECTS_HEAD_CONTRACT_STAND_STATUS_0</option>
@@ -111,6 +111,30 @@
                 hide_default="true"
                 default=""
                 onchange="setImg()"
+        />
+    </fieldset>
+    <fieldset name="room">
+        <field
+                name="catalogID"
+                type="Catalognumber"
+                label="COM_PROJECTS_HEAD_NUMBER_TITLE"
+                description="COM_PROJECTS_HEAD_NUMBER_TITLE_DESC"
+                autocomplete="off"
+                class="x2"
+        />
+        <field
+                name="arrival"
+                type="calendar"
+                label="COM_PROJECTS_HEAD_CONTRACT_ROOM_ARRIVAL"
+                description="COM_PROJECTS_HEAD_CONTRACT_ROOM_ARRIVAL_DESC"
+                format="%d.%m.%Y"
+        />
+        <field
+                name="department"
+                type="calendar"
+                label="COM_PROJECTS_HEAD_CONTRACT_ROOM_DEPARTMENT"
+                description="COM_PROJECTS_HEAD_CONTRACT_ROOM_DEPARTMENT_DESC"
+                format="%d.%m.%Y"
         />
     </fieldset>
 </form>

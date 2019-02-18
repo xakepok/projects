@@ -9,6 +9,7 @@ HTMLHelper::_('script', $this->script);
 HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto', 'relative' => true));
 $action = JRoute::_('index.php?option=com_projects&amp;view=contract&amp;layout=edit&amp;id=' . (int)$this->item->id);
 $return = JFactory::getApplication()->input->get('return', null);
+
 if ($return != null)
 {
     $action .= "&amp;return={$return}";
@@ -80,10 +81,10 @@ if ($return != null)
                     <?php echo JHtml::_('bootstrap.endTab'); ?>
                 <?php endif;?>
                 <?php if ($this->item->id != null): ?>
-                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'stands', JText::sprintf('COM_PROJECTS_BLANK_STANDS')); ?>
+                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'stands', JText::sprintf(($this->tip == 0) ? 'COM_PROJECTS_BLANK_STANDS' : 'COM_PROJECTS_BLANK_ROOMS')); ?>
                     <div class="row-fluid">
                         <div>
-                            <?php echo $this->loadTemplate('stands');?>
+                            <?php echo $this->loadTemplate(($this->tip == 0) ? 'stands' : 'rooms');?>
                         </div>
                     </div>
                     <?php echo JHtml::_('bootstrap.endTab'); ?>

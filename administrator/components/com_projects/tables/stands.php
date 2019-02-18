@@ -15,6 +15,8 @@ class TableProjectsStands extends Table
     var $comment = null;
     var $status = null;
     var $scheme = null;
+    var $arrival = null;
+    var $department = null;
 
     public function __construct(JDatabaseDriver $db)
     {

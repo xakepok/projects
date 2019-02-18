@@ -97,6 +97,27 @@ function removeStand(standID) {
             console.log('Request failed', error);
         });
 }
+function removeRoom(standID) {
+    if (!confirm('Удалить номер? Проверьте введённые данные, после удаления стенда страница перезагрузится. Нажмите ДА или ОК, если вы сохранили данные или НЕТ или ОТМЕНА, если вы не сохранили данные')) return;
+    fetch('/administrator/index.php?option=com_projects&task=contracts.removeStand&id=' + standID)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (text) {
+            if (text.data.result !== 1)
+            {
+                alert(text.data.message);
+            }
+            else
+            {
+                document.querySelector('#row_stand_' + standID).remove();
+                location.reload();
+            }
+        })
+        .catch(function (error) {
+            console.log('Request failed', error);
+        });
+}
 
 function setNumber() {
     var radios = document.forms["adminForm"].elements["jform[isCoExp]"];

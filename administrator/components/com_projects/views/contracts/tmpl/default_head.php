@@ -18,7 +18,12 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_DATE_DOG', 'c.dat', $listDirn, $listOrder); ?>
     </th>
     <th width="4%">
-        <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_SHORT'); ?>
+        <?php
+        if (!ProjectsHelper::canDo('projects.access.hotels.standart')) $head = 'COM_PROJECTS_HEAD_CONTRACT_STAND_SHORT';
+        if (ProjectsHelper::canDo('projects.access.hotels.standart')) $head = 'COM_PROJECTS_HEAD_CONTRACT_STANDS_ROOMS';
+        if (ProjectsHelper::canDo('projects.access.hotels.full') && ProjectsHelper::canDo('projects.access.contracts.full')) $head = 'COM_PROJECTS_HEAD_CONTRACT_STANDS_ROOMS_SHORT';
+        echo JText::sprintf($head);
+        ?>
     </th>
     <th>
         <?php echo JText::sprintf('COM_PROJECTS_ACTION_GO'); ?>

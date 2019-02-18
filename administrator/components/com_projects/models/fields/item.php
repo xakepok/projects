@@ -33,19 +33,27 @@ class JFormFieldItem extends JFormFieldGroupedList
         }
         if ($view == 'catalogs' || $view == 'catalog' || $view == 'stand')
         {
-            $query->where("`i`.`is_sq` = 1");
+            $session = JFactory::getSession();
+            $id = JFactory::getApplication()->input->getInt('id', null);
+            if ($id != null) {
+                $sm = AdminModel::getInstance('Stand', 'ProjectsModel');
+                $cid = $sm->getItem($id)->contractID ?? null;
+            }
+            $contractID = $session->get('contractID') ?? $cid;
+            $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
             if ($view == 'stand') {
-                $session = JFactory::getSession();
-                if ($session->get('contractID')) {
-                    $contractID = $session->get('contractID');
+                $tip = ProjectsHelper::getContractType($contractID);
+                if ($tip == 0) $query->where("`i`.`is_sq` = 1");
+            }
+            if ($view == 'stand') {
+                if ($contractID != null) {
                     $projectID = ProjectsHelper::getContractProject($contractID);
                     $priceID = ProjectsHelper::getProjectPrice($projectID);
                     $query->where("`s`.`priceID` = {$priceID}");
-                    $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
                     $contract = $cm->getItem($contractID);
                     $coExps = ProjectsHelper::getContractCoExp($contract->expID, $contract->prjID);
                     if (count($coExps) == 0) {
-                        $session->clear('contractID');
+                        //$session->clear('contractID');
                     }
                 }
             }

@@ -8,6 +8,32 @@ class ProjectsModelStand extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    /**
+     * Возвращает тип параметров полей для заполнения
+     * @return string
+     * @since 1.1.2.6
+     */
+    public function getNames(): string
+    {
+        $session = JFactory::getSession();
+        $item = parent::getItem();
+        $contractID = $session->get('contractID');
+        $tip = ProjectsHelper::getContractType($contractID ?? $item->contractID);
+        $result = '';
+        switch ($tip)
+        {
+            case 0: {
+                $result = 'stand';
+                break;
+            }
+            case 1: {
+                $result = 'room';
+                break;
+            }
+        }
+        return $result;
+    }
+
     public function getStandTitle(int $id): string
     {
         $model = AdminModel::getInstance('Contract', 'ProjectsModel');
@@ -217,6 +243,14 @@ class ProjectsModelStand extends AdminModel {
         {
             $this->_createTodo($data);
         }
+        if ($data['arrival'] != null) {
+            $dat = JDate::getInstance($data['arrival']);
+            $data['arrival'] = $dat->format("Y-m-d");
+        }
+        if ($data['department'] != null) {
+            $dat = JDate::getInstance($data['department']);
+            $data['department'] = $dat->format("Y-m-d");
+        }
         $s = parent::save($data);
         if ($action == 'add') {
             $itemID = parent::getDbo()->insertid();
@@ -229,7 +263,7 @@ class ProjectsModelStand extends AdminModel {
 
     protected function prepareTable($table)
     {
-        $nulls = array('catalogID', 'itemID', 'number', 'freeze', 'comment', 'scheme'); //Поля, которые NULL
+        $nulls = array('catalogID', 'itemID', 'number', 'freeze', 'comment', 'scheme', 'arrival', 'department'); //Поля, которые NULL
         foreach ($nulls as $field)
         {
             if (!strlen($table->$field)) $table->$field = NULL;
