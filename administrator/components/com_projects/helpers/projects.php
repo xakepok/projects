@@ -61,6 +61,9 @@ class ProjectsHelper
         if (self::canDo('projects.access.events.standart')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_EVENTS'), 'index.php?option=com_projects&amp;view=events', $vName == 'events');
         }
+        if (self::canDo('projects.access.hotels.standart')) {
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_HOTELS'), 'index.php?option=com_projects&amp;view=hotels', $vName == 'hotels');
+        }
     }
 
     /**
