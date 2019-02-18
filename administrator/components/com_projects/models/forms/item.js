@@ -13,7 +13,29 @@ window.onload = function () {
     if (lastTab) {
         jQuery('[href="' + lastTab + '"]').tab('show');
     }
+    setPercents();
 };
+
+function setPercents() {
+    var l = document.querySelector("#jform_column_1");
+    for (var i=0; i < l.options.length; i++)
+    {
+        l.options[i].text += "%";
+    }
+    jQuery("#jform_column_1").trigger("liszt:updated");
+    l = document.querySelector("#jform_column_2");
+    for (i=0; i < l.options.length; i++)
+    {
+        l.options[i].text += "%";
+    }
+    jQuery("#jform_column_2").trigger("liszt:updated");
+    l = document.querySelector("#jform_column_3");
+    for (i=0; i < l.options.length; i++)
+    {
+        l.options[i].text += "%";
+    }
+    jQuery("#jform_column_3").trigger("liszt:updated");
+}
 
 function convert() {
     var field = document.querySelector('#jform_price_rub');
