@@ -81,12 +81,33 @@ class ProjectsModelExhibitor extends AdminModel
         }
         $item = parent::getItem($pk);
         $item->title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+        $item->activities = $this->getActivities();
         $where = array('exbID' => $item->id);
         $bank = AdminModel::getInstance('Bank', 'ProjectsModel')->getItem($where);
         $address = AdminModel::getInstance('Address', 'ProjectsModel')->getItem($where);
         if (mb_strpos($address->site, 'http://') === false && !empty($address->site)) $address->site = "http://".$address->site;
         unset($item->_errors, $bank->exbID, $bank->id, $bank->_errors, $address->exbID, $address->id, $address->_errors);
         return (object)array_merge((array)$item, (array)$bank, (array)$address);
+    }
+
+    /**
+     * Возвращает виды деятельности у экспонента
+     * @return array
+     * @since 1.1.2.5
+     */
+    private function getActivities()
+    {
+        $item = parent::getItem();
+        $db = $this->getDbo();
+        if ($item->id == null) return array();
+        $exbID = $item->id;
+        $query = $db->getQuery(true);
+        $query
+            ->select('`actID`')
+            ->from($db->quoteName('#__prj_exp_act'))
+            ->where($db->quoteName('exbID') . " = " . $db->quote($exbID));
+        $activities = $db->setQuery($query)->loadColumn();
+        return $activities;
     }
 
     public function getForm($data = array(), $loadData = true)
@@ -141,7 +162,7 @@ class ProjectsModelExhibitor extends AdminModel
         $data['id'] = $data['address_id'];
         unset($data['address_id']);
         $s3 = $this->saveData('Address', $data);
-        $s4 = $this->saveActivities();
+        $s4 = $this->saveActivities($data['activities'] ?? array());
         return $s1 && $s2 && $s3 && $s4;
     }
 
@@ -170,80 +191,33 @@ class ProjectsModelExhibitor extends AdminModel
     }
 
     /**
-     * Получает массив видов деятельности для текущего экспонента.
-     * @return  array   Массив
-     * @since   1.1.3
-     * @throws
-     */
-    public function getActivities(): array
-    {
-        $exbID = $this->getId();
-        $db =& $this->getDbo();
-        $query = $db->getQuery(true);
-        $query
-            ->select('*')
-            ->from($db->quoteName('#__prj_exp_act'))
-            ->where($db->quoteName('exbID') . " = " . $db->quote($exbID));
-        $activities = $db->setQuery($query)->loadAssocList();
-        $db =& $this->getDbo();
-        $query = $db->getQuery(true);
-        $query
-            ->select('*')
-            ->from("`#__prj_activities`")
-            ->order('title desc');
-        $list = $db->setQuery($query)->loadAssocList();
-
-        $result = array();
-        foreach ($list as $item) {
-            $arr = array();
-            $arr['id'] = $item['id'];
-            $arr['title'] = $item['title'];
-            $arr['checked'] = false;
-            if ($exbID > 0) {
-                foreach ($activities as $activity) {
-                    if ($activity['exbID'] == $exbID && $activity['actID'] == $item['id']) {
-                        $arr['checked'] = true;
-                        break;
-                    }
-                }
-            }
-            $result[] = $arr;
-        }
-        return $result;
-    }
-
-    /**
      * Сохраняет запись в дочернюю таблицу видов деятельности.
+     * @param array $activities массив с видами деятельности
      * @return  boolean True on success, False on error.
-     * @since   1.1.3
+     * @since   1.1.2.5
      * @throws
      */
-    private function saveActivities(): bool
+    private function saveActivities(array $activities): bool
     {
         $exbID = $this->getId();
-        $post = $_POST['jform']['act'];
-        if (empty($post)) return true;
-        $model = AdminModel::getInstance('Act', 'ProjectsModel');
-        $table = $model->getTable();
-        foreach ($post as $act => $value) {
+        if (empty($activities)) return true;
+        $already = $this->getActivities();
+        $am = AdminModel::getInstance('Act', 'ProjectsModel');
+        foreach ($activities as $act) {
+            $arr = array();
             $pks = array('exbID' => $exbID, 'actID' => $act);
-            $row = $model->getItem($pks);
-            if ($row->id != null)
-            {
-                if ($value == '')
-                {
-                    $model->delete($row->id);
-                }
-            }
-            else {
-                if ($value == '1') {
-                    $arr['exbID'] = $exbID;
-                    $arr['actID'] = $act;
-                    $arr['id'] = null;
-                    $table->bind($arr);
-                    $model->save($arr);
-                }
-            }
+            $row = $am->getItem($pks);
+            $arr['id'] = $row->id;
+            $arr['exbID'] = $exbID;
+            $arr['actID'] = $act;
+            if (in_array($act, $already)) {
+                if (($key = array_search($act, $already)) !== false) unset($already[$key]);
+            } //Удаляем сделку из списка на удаление из таблицы делегатов
+            $am->save($arr);
+        }
+        foreach ($already as $act) {
+            $item = $am->getItem(array('exbID' => $exbID, 'actID' => $act));
+            if ($item->id != null) $am->delete($item->id);
         }
         return true;
     }

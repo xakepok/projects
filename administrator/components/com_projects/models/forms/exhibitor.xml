@@ -78,6 +78,14 @@
                 class="input-xlarge"
                 rows="5"
         />
+        <field
+                name="activities"
+                type="Activity"
+                multiple="true"
+                label="COM_PROJECTS_MENU_ACTIVITIES"
+                description="COM_PROJECTS_MENU_ACTIVITIES"
+                class="input-xlarge"
+        />
     </fieldset>
     <fieldset name="bank">
         <field

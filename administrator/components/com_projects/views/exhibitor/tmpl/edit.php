@@ -58,16 +58,6 @@ if ($return != null) {
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
-                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'activities', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_ACTIVITIES')); ?>
-                <div class="row-fluid">
-                    <div class="span6">
-                        <?php echo $this->loadTemplate('acts'); ?>
-                    </div>
-                    <div class="span6">
-                        <?php echo $this->loadTemplate('acts_exists'); ?>
-                    </div>
-                </div>
-                <?php echo JHtml::_('bootstrap.endTab'); ?>
                 <?php if ($this->item->id != 0): ?>
                     <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'history', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_HISTORY')); ?>
                     <div class="row-fluid">
