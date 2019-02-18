@@ -50,7 +50,7 @@ class ProjectsModelProject extends AdminModel {
 
     protected function prepareTable($table)
     {
-    	$nulls = array('title_ru', 'title_en', 'priceID'); //Поля, которые NULL
+    	$nulls = array('title_ru', 'title_en', 'priceID', 'contract_prefix'); //Поля, которые NULL
 	    foreach ($nulls as $field)
 	    {
 		    if (!strlen($table->$field)) $table->$field = NULL;

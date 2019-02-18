@@ -10,3 +10,6 @@ create index `#__prj_stands_arrival_index`
 create index `#__prj_stands_department_index`
   on `#__prj_stands` (department);
 
+alter table `#__prj_projects`
+  add contract_prefix varchar(10) default null null;
+

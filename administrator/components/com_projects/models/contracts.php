@@ -141,6 +141,7 @@ class ProjectsModelContracts extends ListModel
         $ids = array();
         $format = JFactory::getApplication()->input->getString('format', 'html');
         $return = base64_encode("index.php?option=com_projects&view=contracts");
+        $prefixes = ProjectsHelper::getProjectsPrefix();
         foreach ($items as $item) {
             $ids[] = $item->id;
             $arr['id'] = $item->id;
@@ -158,7 +159,7 @@ class ProjectsModelContracts extends ListModel
             $params = array('class' => 'jutooltip', 'title' => $item->title_ru_full ?? JText::sprintf('COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_NOT_EXISTS'));
             $exponentUrl = JHtml::link($url, $exponentName, $params);
             $arr['exponent'] = ($format != 'html') ? $exponentName : $exponentUrl;
-            $arr['number'] = $item->number;
+            $arr['number'] = ($item->number != null) ? $prefixes[$item->projectID]['contract_prefix'].$item->number : '';
             $arr['manager']['title'] = $item->manager ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MANAGER_UNDEFINED');
             $arr['manager']['class'] = (!empty($item->manager)) ? '' : 'no-data';
             $arr['group']['title'] = $item->group ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_UNDEFINED');

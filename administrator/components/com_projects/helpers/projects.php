@@ -68,6 +68,21 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает префиксы номеров договоров всех проектов
+     * @return array массив номер проекта - префикс
+     * @since 1.1.2.6
+     */
+    public static function getProjectsPrefix(): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`id`, `contract_prefix`")
+            ->from("`#__prj_projects`");
+        return $db->setQuery($query)->loadAssocList('id');
+    }
+
+    /**
      * Возвращает тип сделки - для стендов, делегаций и т.п.
      * @param int $contractID - ID сделки
      * @return int тип проекта. 0 - стенды, 1 - делегации

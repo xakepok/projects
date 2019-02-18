@@ -15,6 +15,7 @@ class TableProjectsProjects extends Table
     var $columnID = null;
     var $date_start = null;
     var $date_end = null;
+    var $contract_prefix = null;
 
     public function __construct(JDatabaseDriver $db)
     {

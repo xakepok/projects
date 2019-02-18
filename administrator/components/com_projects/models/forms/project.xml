@@ -77,6 +77,15 @@
                 class="input-xlarge"
         />
         <field
+                name="contract_prefix"
+                type="text"
+                label="COM_PROJECTS_HEAD_CONTRACT_PREFIX"
+                description="COM_PROJECTS_HEAD_CONTRACT_PREFIX_DESC"
+                hint="COM_PROJECTS_HEAD_CONTRACT_PREFIX_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
                 name="date_start"
                 type="calendar"
                 label="COM_PROJECTS_HEAD_DATE_START"
