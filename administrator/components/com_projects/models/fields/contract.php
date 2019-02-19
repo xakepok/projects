@@ -13,7 +13,7 @@ class JFormFieldContract extends JFormFieldList
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`c`.`id`, `c`.`number`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`")
+            ->select("`c`.`id`, IFNULL(`c`.`number_free`,`c`.`number`) as `number`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
             ->from('`#__prj_contracts` as `c`')

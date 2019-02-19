@@ -18,3 +18,6 @@ create table `#__prj_exp_parents`
 create index `#__prj_exp_parents_parentID_index`
   on `#__prj_exp_parents` (parentID);
 
+alter table `#__prj_contracts`
+  add number_free varchar(20) default null null comment 'Произвольный номер договора' after number;
+

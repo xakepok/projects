@@ -35,7 +35,7 @@ class ProjectsModelPayments extends ListModel
             ->select("`pm`.`id`, `pm`.`pp`, `pm`.`amount`, `u`.`name` as `author`, DATE_FORMAT(`pm`.`dat`,'%d.%m.%Y') as `dat`")
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
             ->select("`p`.`title_ru` as `project`, `p`.`id` as `projectID`")
-            ->select("`c`.`id` as `contractID`, `c`.`number`, `c`.`currency`")
+            ->select("`c`.`id` as `contractID`, IFNULL(`c`.`number_free`,`c`.`number`) as `number`, `c`.`currency`")
             ->select("`s`.`number` as `score`, `s`.`id` as `scoreID`, `s`.`amount` as `score_amount`, DATE_FORMAT(`s`.`dat`,'%d.%m.%Y') as `score_dat`")
             ->from("`#__prj_payments` as `pm`")
             ->leftJoin("`#__prj_scores` as `s` ON `s`.`id` = `pm`.`scoreID`")

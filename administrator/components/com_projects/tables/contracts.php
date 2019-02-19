@@ -14,6 +14,7 @@ class TableProjectsContracts extends Table
     var $isCoExp = null;
     var $status = null;
     var $number = null;
+    var $number_free = null;
 
     public function __construct(JDatabaseDriver $db)
     {

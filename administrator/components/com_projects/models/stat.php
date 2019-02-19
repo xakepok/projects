@@ -50,7 +50,7 @@ class ProjectsModelStat extends ListModel
         if ($this->itemID != 0) {
             $query
                 ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `c`.`expID`")
-                ->select("`c`.`number` as `contract`, `c`.`id` as `contractID`")
+                ->select("IFNULL(`c`.`number_free`,`c`.`number`) as `contract`, `c`.`id` as `contractID`")
                 ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
                 ->where("`s`.`itemID` = {$this->itemID}")
                 ->group("`c`.`expID`");

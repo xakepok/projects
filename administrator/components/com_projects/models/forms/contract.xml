@@ -107,6 +107,14 @@
                 autocomplete="off"
                 class="x2"
         />
+        <field
+                name="number_free"
+                type="text"
+                label="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_FREE"
+                description="COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER_FREE_DESC"
+                autocomplete="off"
+                class="x2"
+        />
     </fieldset>
     <fieldset name="files">
         <field

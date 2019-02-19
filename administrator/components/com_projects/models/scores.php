@@ -35,7 +35,7 @@ class ProjectsModelScores extends ListModel
         $query
             ->select("`s`.`id`, `s`.`contractID`, DATE_FORMAT(`s`.`dat`,'%d.%m.%Y') as `dat`, `s`.`number`, `s`.`amount`, `s`.`state`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `e`.`id` as `expID`")
-            ->select("`c`.`currency`, `c`.`number` as `number_contract`")
+            ->select("`c`.`currency`, IFNULL(`c`.`number_free`,`c`.`number`) as `number_contract`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`, `p`.`id` as `projectID`")
             ->select("IFNULL(`pay`.`payments`,0) as `payments`, `s`.`amount`-IFNULL(`pay`.`payments`,0) as `debt`")
             ->from("`#__prj_scores` as `s`")

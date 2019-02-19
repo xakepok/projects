@@ -42,7 +42,7 @@ class ProjectsModelReports extends ListModel
                 ->select("IFNULL(`e`.`title_ru_full`,`e`.`title_ru_short`) as `exhibitor`, `c`.`expID` as `exhibitorID`")
                 ->select("`ct`.`name` as `city`, `reg`.`name` as `region`, `ctr`.`name` as `country`")
                 ->select("`cnt`.`director_name`, `cnt`.`director_post`, `cnt`.`indexcode`, `cnt`.`addr_legal_street`, `cnt`.`addr_legal_home`")
-                ->select("`c`.`status`, `c`.`isCoExp`, `c`.`number`, `c`.`dat`, `c`.`id` as `contractID`, `c`.`currency`")
+                ->select("`c`.`status`, `c`.`isCoExp`, IFNULL(`c`.`number_free`,`c`.`number`) as `number`, `c`.`dat`, `c`.`id` as `contractID`, `c`.`currency`")
                 ->select("`u`.`name` as `manager`")
                 ->select("`p`.`title` as `project`")
                 ->select("`a`.`amount_rub`, `a`.`amount_usd`, `a`.`amount_eur`")

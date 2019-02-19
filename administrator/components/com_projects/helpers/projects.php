@@ -762,14 +762,14 @@ class ProjectsHelper
     /**
      * Возвращает текст для отображения в поле типа "Сделка"
      * @param int $status код статусв сделки
-     * @param int $number номер договора
+     * @param string $number номер договора
      * @param string $date дата заключения договора
      * @param string $exhibitor название экспонента
      * @param string $project название проекта
      * @return string
      * @since 1.1.1.2
      */
-    public static function getContractFieldTitle(int $status, int $number = 0, string $date = '', string $exhibitor = '', string $project = ''): string
+    public static function getContractFieldTitle(int $status, string $number = '0', string $date = '', string $exhibitor = '', string $project = ''): string
     {
         if ($status != 1) {
             $text = JText::sprintf('COM_PROJECTS_TITLE_CONTRACT', $exhibitor, $project);
