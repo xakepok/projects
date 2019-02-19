@@ -11,6 +11,7 @@ class JFormFieldExhibitor extends JFormFieldList
     protected function getOptions()
     {
         $view = JFactory::getApplication()->input->getString('view');
+        $id = JFactory::getApplication()->input->getInt('id', 0);
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
@@ -24,6 +25,9 @@ class JFormFieldExhibitor extends JFormFieldList
             $exbID = $session->get('exbID');
             $query->where("`e`.`id` = {$exbID}");
             $session->clear('exbID');
+        }
+        if ($view == 'exhibitor' && $id > 0) {
+            $query->where("`e`.`id` != {$id}");
         }
         $result = $db->setQuery($query)->loadObjectList();
 

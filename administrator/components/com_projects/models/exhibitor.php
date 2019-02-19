@@ -80,6 +80,10 @@ class ProjectsModelExhibitor extends AdminModel
             $table->load($id);
         }
         $item = parent::getItem($pk);
+        if ($id > 0) {
+            $parent = $this->loadParent($id);
+            if ($parent > 0) $item->parentID = $parent;
+        }
         $item->title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
         $item->activities = $this->getActivities();
         $where = array('exbID' => $item->id);
@@ -163,7 +167,50 @@ class ProjectsModelExhibitor extends AdminModel
         unset($data['address_id']);
         $s3 = $this->saveData('Address', $data);
         $s4 = $this->saveActivities($data['activities'] ?? array());
+        if ($data['parentID'] != '') {
+            $this->saveParent((int) $data['exbID'], (int) $data['parentID']);
+        }
+        else {
+            $this->saveParent($data['exbID'], 0);
+        }
         return $s1 && $s2 && $s3 && $s4;
+    }
+
+    /**
+     * Возвращает ID родителя экспонента
+     * @param int $id ID экспонента, для которого надо получить родителя. 0 - для текущего.
+     * @return int ID родителя
+     * @since 1.1.2.8
+     */
+    public function loadParent(int $id = 0): int
+    {
+        if ($id == 0) return -1;
+        $pm = AdminModel::getInstance('Exparent', 'ProjectsModel');
+        $parent = $pm->getItem(array('exhibitorID' => $id));
+        return $parent->parentID ?? 0;
+    }
+
+    /**
+     * Сохраняет родителя экспонента
+     * @param int $exhibitorID ID экспонента
+     * @param int $parentID ID родителя. Если 0 - удаляет родителя
+     * @since 1.1.2.8
+     */
+    public function saveParent(int $exhibitorID, int $parentID = 0): void
+    {
+        if ($exhibitorID == 0 || $exhibitorID == $parentID) return;
+        $pm = AdminModel::getInstance('Exparent', 'ProjectsModel');
+        $item = $pm->getItem(array('exhibitorID' => $exhibitorID));
+        if ($parentID > 0) {
+            $arr = array();
+            $arr['id'] = $item->id;
+            $arr['exhibitorID'] = $exhibitorID;
+            $arr['parentID'] = $parentID;
+            $pm->save($arr);
+        }
+        else {
+            if ($item->id != null) $pm->delete($item->id);
+        }
     }
 
     public function delete(&$pks)

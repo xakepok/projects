@@ -17,6 +17,14 @@
             <option value="1">JYES</option>
         </field>
         <field
+                name="parentID"
+                type="Exhibitor"
+                label="COM_PROJECTS_HEAD_EXP_PARENT"
+                description="COM_PROJECTS_HEAD_EXP_PARENT_DESC"
+                class="input-xlarge">
+                <option value="">COM_PROJECTS_HEAD_EXP_PARENT_HINT</option>
+        </field>
+        <field
                 name="tip"
                 type="text"
                 label="COM_PROJECTS_HEAD_EXP_TIP"
