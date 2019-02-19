@@ -68,6 +68,42 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает массив с ID дочерних экспонентов
+     * @param int $exhibitorID ID родительского экспонента
+     * @return array массив с дочерними экспонентами
+     * @since 1.1.2.8
+     */
+    public static function getExhibitorChildren(int $exhibitorID = 0): array
+    {
+        if ($exhibitorID == 0) return array();
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`exhibitorID`")
+            ->from("`#__prj_exp_parents`")
+            ->where("`parentID` = {$exhibitorID}");
+        return $db->setQuery($query)->loadColumn() ?? array();
+    }
+
+    /**
+     * Возвращает ID родителя экспонента
+     * @param int $exhibitorID ID дочернего экспонента
+     * @return int ID родителя или 0, если нет родителя
+     * @since 1.1.2.8
+     */
+    public static function getExhibitorParent(int $exhibitorID = 0): int
+    {
+        if ($exhibitorID == 0) return 0;
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`parentID`")
+            ->from("`#__prj_exp_parents`")
+            ->where("`exhibitorID` = {$exhibitorID}");
+        return $db->setQuery($query, 0, 1)->loadResult() ?? 0;
+    }
+
+    /**
      * Возвращает префиксы номеров договоров всех проектов
      * @return array массив номер проекта - префикс
      * @since 1.1.2.6

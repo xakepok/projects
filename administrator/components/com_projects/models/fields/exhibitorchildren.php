@@ -3,9 +3,9 @@ defined('_JEXEC') or die;
 jimport('joomla.form.helper');
 JFormHelper::loadFieldClass('list');
 
-class JFormFieldExhibitor extends JFormFieldList
+class JFormFieldExhibitorchildren extends JFormFieldList
 {
-    protected $type = 'Exhibitor';
+    protected $type = 'Exhibitorchildren';
     protected $loadExternally = 0;
 
     protected function getOptions()
@@ -28,11 +28,8 @@ class JFormFieldExhibitor extends JFormFieldList
         }
         if ($view == 'exhibitor' && $id > 0) {
             $query->where("`e`.`id` != {$id}");
-            $children = ProjectsHelper::getExhibitorChildren($id);
-            if (!empty($children)) {
-                $children = implode(', ', $children);
-                $query->where("`e`.`id` NOT IN ({$children})");
-            }
+            $parent = ProjectsHelper::getExhibitorParent($id);
+            if ($parent > 0) $query->where("`e`.`id` != {$parent}");
         }
         $result = $db->setQuery($query)->loadObjectList();
 

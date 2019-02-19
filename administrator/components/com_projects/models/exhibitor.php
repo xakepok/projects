@@ -81,8 +81,10 @@ class ProjectsModelExhibitor extends AdminModel
         }
         $item = parent::getItem($pk);
         if ($id > 0) {
-            $parent = $this->loadParent($id);
+            $parent = ProjectsHelper::getExhibitorParent($id);
             if ($parent > 0) $item->parentID = $parent;
+            $children = ProjectsHelper::getExhibitorChildren($id);
+            if (!empty($children)) $item->children = $children;
         }
         $item->title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
         $item->activities = $this->getActivities();
@@ -173,21 +175,8 @@ class ProjectsModelExhibitor extends AdminModel
         else {
             $this->saveParent($data['exbID'], 0);
         }
+        $this->saveChildren((int) $data['exbID'], $data['children'] ?? array());
         return $s1 && $s2 && $s3 && $s4;
-    }
-
-    /**
-     * Возвращает ID родителя экспонента
-     * @param int $id ID экспонента, для которого надо получить родителя. 0 - для текущего.
-     * @return int ID родителя
-     * @since 1.1.2.8
-     */
-    public function loadParent(int $id = 0): int
-    {
-        if ($id == 0) return -1;
-        $pm = AdminModel::getInstance('Exparent', 'ProjectsModel');
-        $parent = $pm->getItem(array('exhibitorID' => $id));
-        return $parent->parentID ?? 0;
     }
 
     /**
@@ -209,6 +198,35 @@ class ProjectsModelExhibitor extends AdminModel
             $pm->save($arr);
         }
         else {
+            if ($item->id != null) $pm->delete($item->id);
+        }
+    }
+
+    /**
+     * Обновляет информацию о дочерних экспонентах
+     * @param int $parentID ID родителя
+     * @param array $children массив с ID дочерних экспонентов
+     * @since 1.1.2.8
+     */
+    public function saveChildren(int $parentID, array $children): void
+    {
+        $pm = AdminModel::getInstance('Exparent', 'ProjectsModel');
+        $already = ProjectsHelper::getExhibitorChildren($parentID);
+        if (!empty($children)) {
+            foreach ($children as $exhibitor) {
+                $item = $pm->getItem(array('exhibitorID' => $exhibitor, 'parentID' => $parentID));
+                $arr = array();
+                $arr['id'] = $item->id;
+                $arr['exhibitorID'] = $exhibitor;
+                $arr['parentID'] = $parentID;
+                if (in_array($exhibitor, $already)) {
+                    if (($key = array_search($exhibitor, $already)) !== false) unset($already[$key]);
+                }
+                $pm->save($arr);
+            }
+        }
+        foreach ($already as $exhibitor) {
+            $item = $pm->getItem(array('exhibitorID' => $exhibitor, 'parentID' => $parentID));
             if ($item->id != null) $pm->delete($item->id);
         }
     }

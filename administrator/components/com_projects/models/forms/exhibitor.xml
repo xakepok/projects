@@ -25,6 +25,14 @@
                 <option value="">COM_PROJECTS_HEAD_EXP_PARENT_HINT</option>
         </field>
         <field
+                name="children"
+                type="Exhibitorchildren"
+                label="COM_PROJECTS_HEAD_EXP_CHILDREN"
+                description="COM_PROJECTS_HEAD_EXP_CHILDREN_DESC"
+                multiple="true"
+                class="input-xlarge"
+        />
+        <field
                 name="tip"
                 type="text"
                 label="COM_PROJECTS_HEAD_EXP_TIP"
