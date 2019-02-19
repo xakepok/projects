@@ -25,7 +25,7 @@ class ProjectsViewTodos extends HtmlView
 
 		// Show the sidebar
 		$this->helper = new ProjectsHelper();
-		$this->helper->addSubmenu('todos');
+		$this->helper->addSubmenu((!$this->isNotify) ? 'todos' : 'notify');
 		$this->sidebar = JHtmlSidebar::render();
 
 		// Display it all
