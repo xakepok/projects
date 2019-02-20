@@ -25,8 +25,11 @@ class ProjectsViewContract extends HtmlView {
         $title = ($this->item->id != null) ? $this->get('Title') : JText::sprintf('COM_PROJECTS_TITLE_NEW_CONTRACT');
 
         JToolbarHelper::title($title, '');
-	    JToolBarHelper::apply('contract.apply', 'JTOOLBAR_APPLY');
-        JToolbarHelper::save('contract.save', 'JTOOLBAR_SAVE');
+        $userID = JFactory::getUser()->id;
+        if (ProjectsHelper::canDo('projects.access.contracts.full') || (!ProjectsHelper::canDo('projects.access.contracts.full') && $this->item->managerID == $userID)) {
+            JToolBarHelper::apply('contract.apply', 'JTOOLBAR_APPLY');
+            JToolbarHelper::save('contract.save', 'JTOOLBAR_SAVE');
+        }
         JToolbarHelper::cancel('contract.cancel', 'JTOOLBAR_CLOSE');
     }
 

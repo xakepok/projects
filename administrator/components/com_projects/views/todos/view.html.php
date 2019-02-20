@@ -19,6 +19,9 @@ class ProjectsViewTodos extends HtmlView
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
         $this->isNotify = JFactory::getApplication()->input->get('notify', 0);
+        if (!ProjectsHelper::canDo('projects.access.todos.full')) {
+            $this->filterForm->removeField('manager', 'filter');
+        }
 
 		// Show the toolbar
 		$this->toolbar();
