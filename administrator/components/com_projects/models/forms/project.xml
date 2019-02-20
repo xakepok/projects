@@ -77,6 +77,14 @@
                 class="input-xlarge"
         />
         <field
+                name="rubrics"
+                type="Rubric"
+                label="COM_PROJECTS_HEAD_THEMATIC_RUBRICS"
+                description="COM_PROJECTS_HEAD_THEMATIC_RUBRICS_DESC"
+                multiple="true"
+                class="input-xlarge"
+        />
+        <field
                 name="contract_prefix"
                 type="text"
                 label="COM_PROJECTS_HEAD_CONTRACT_PREFIX"

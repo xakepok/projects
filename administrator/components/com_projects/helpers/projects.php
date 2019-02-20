@@ -55,12 +55,12 @@ class ProjectsHelper
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_STAT'), 'index.php?option=com_projects&amp;view=stat', $vName == 'stat');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_REPORTS'), 'index.php?option=com_projects&amp;view=reports', $vName == 'reports');
         }
-        if (self::canDo('projects.access.acts')) {
+        /*if (self::canDo('projects.access.acts')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ACTIVITIES'), 'index.php?option=com_projects&amp;view=activities', $vName == 'activities');
         }
         if (self::canDo('projects.access.rubrics')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_RUBRICS'), 'index.php?option=com_projects&amp;view=rubrics', $vName == 'rubrics');
-        }
+        }*/
         if (self::canDo('projects.access.events.standart')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_EVENTS'), 'index.php?option=com_projects&amp;view=events', $vName == 'events');
         }
@@ -85,6 +85,24 @@ class ProjectsHelper
             ->select("`rubricID`")
             ->from("`#__prj_contract_rubrics`")
             ->where("`contractID` = {$contractID}");
+        return $db->setQuery($query)->loadColumn() ?? array();
+    }
+
+    /**
+     * Возвращает массив с ID рубрик проекта
+     * @param int $projectID ID проекта
+     * @return array массив с рубриками
+     * @since 1.1.3.0
+     */
+    public static function getProjectRubrics(int $projectID = 0): array
+    {
+        if ($projectID == 0) return array();
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`rubricID`")
+            ->from("`#__prj_project_rubrics`")
+            ->where("`projectID` = {$projectID}");
         return $db->setQuery($query)->loadColumn() ?? array();
     }
 

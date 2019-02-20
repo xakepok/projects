@@ -16,6 +16,24 @@ class JFormFieldRubric extends JFormFieldList
             ->select("`id`, `title`")
             ->from("`#__prj_rubrics`")
             ->order("title");
+
+        $view = JFactory::getApplication()->input->getString('view');
+        if ($view == 'contract') {
+            //Подгружаем только рубрики из текущего проекта
+            $contractID = JFactory::getApplication()->input->getInt('id', 0);
+            if ($contractID > 0) {
+                $projectID = ProjectsHelper::getContractProject($contractID);
+                $rubrics = ProjectsHelper::getProjectRubrics($projectID);
+                $rubrics = implode(', ', $rubrics);
+                if (!empty($rubrics)) {
+                    $query->where("`id` IN ({$rubrics})");
+                }
+                else {
+                    $query->where("`id` = 0"); //Если у проекта нет ни одной привязанной рубрики
+                }
+            }
+        }
+
         $result = $db->setQuery($query)->loadObjectList();
 
         $options = array();

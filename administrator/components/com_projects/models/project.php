@@ -14,15 +14,55 @@ class ProjectsModelProject extends AdminModel {
         $data['date_start'] = $dat->format("Y-m-d");
         $dat = new DateTime($data['date_end']);
         $data['date_end'] = $dat->format("Y-m-d");
-        return parent::save($data);
+        $s = parent::save($data);
+        $projectID = $data['id'] ?? $this->getDbo()->insertid();
+        $this->saveRubrics($projectID, $data['rubrics'] ?? array());
+        return $s;
     }
 
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
-        if ($item->id == null) $item->managerID = JFactory::getUser()->id;
+        if ($item->id == null) {
+            $item->managerID = JFactory::getUser()->id;
+        }
+        if ($item->id != null) {
+            $rubrics = ProjectsHelper::getProjectRubrics($item->id);
+            if (!empty($rubrics)) $item->rubrics = $rubrics;
+        }
         return $item;
     }
+
+
+    /**
+     * Сохраняет привязки рубрик к проекту
+     * @param int $projectID ID проекта
+     * @param array $rubrics массив с ID рубрик
+     * @since 1.1.3.0
+     */
+    public function saveRubrics(int $projectID, array $rubrics = array()): void
+    {
+        $pm = AdminModel::getInstance('Prjrubric', 'ProjectsModel');
+        $already = ProjectsHelper::getProjectRubrics($projectID);
+        if (!empty($rubrics)) {
+            foreach ($rubrics as $rubric) {
+                $item = $pm->getItem(array('projectID' => $projectID, 'rubricID' => $rubric));
+                $arr = array();
+                $arr['id'] = $item->id;
+                $arr['projectID'] = $projectID;
+                $arr['rubricID'] = $rubric;
+                if (in_array($rubric, $already)) {
+                    if (($key = array_search($rubric, $already)) !== false) unset($already[$key]);
+                }
+                $pm->save($arr);
+            }
+        }
+        foreach ($already as $rubric) {
+            $item = $pm->getItem(array('projectID' => $projectID, 'rubricID' => $rubric));
+            if ($item->id != null) $pm->delete($item->id);
+        }
+    }
+
 
     public function getForm($data = array(), $loadData = true)
     {
