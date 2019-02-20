@@ -71,6 +71,23 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает массив сделок, которые имеют указанную рубрику
+     * @param int $rubricID ID рубрики
+     * @return array массив с ID сделок
+     * @since 1.1.3.1
+     */
+    public static function getRubricContracts(int $rubricID): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`contractID`")
+            ->from("`#__prj_contract_rubrics`")
+            ->where("`rubricID` = {$rubricID}");
+        return $db->setQuery($query)->loadColumn() ?? array();
+    }
+
+    /**
      * Возвращает массив с ID рубрик сделки
      * @param int $contractID ID сделки
      * @return array массив с рубриками

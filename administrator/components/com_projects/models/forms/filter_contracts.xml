@@ -59,6 +59,14 @@
             <option value="">COM_PROJECTS_FILTER_SELECT_ACTIVITY</option>
         </field>
         <field
+                name="rubric"
+                type="Rubric"
+                label="COM_PROJECTS_FILTER_SELECT_RUBRIC"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_RUBRIC</option>
+        </field>
+        <field
                 name="status"
                 type="list"
                 label="COM_PROJECTS_FILTER_SELECT_STATUS"

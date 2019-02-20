@@ -33,6 +33,20 @@ class JFormFieldRubric extends JFormFieldList
                 }
             }
         }
+        if ($view == 'contracts') {
+            $projectID = ProjectsHelper::getActiveProject();
+            if (is_numeric($projectID)) {
+                //Подгружаем только рубрики из текущего проекта
+                $rubrics = ProjectsHelper::getProjectRubrics($projectID);
+                $rubrics = implode(', ', $rubrics);
+                if (!empty($rubrics)) {
+                    $query->where("`id` IN ({$rubrics})");
+                }
+                else {
+                    $query->where("`id` = 0"); //Если у проекта нет ни одной привязанной рубрики
+                }
+            }
+        }
 
         $result = $db->setQuery($query)->loadObjectList();
 

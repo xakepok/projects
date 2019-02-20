@@ -30,6 +30,7 @@ class ProjectsModelContracts extends ListModel
                 'payments',
                 'stand',
                 'activity',
+                'rubric',
             );
         }
         parent::__construct($config);
@@ -70,6 +71,28 @@ class ProjectsModelContracts extends ListModel
                 $query->where("`c`.`expID` IN ({$exponents})");
             }
         }
+        //Фильтруем по тематикам разделов
+        $rubric = $this->getState('filter.rubric');
+        if (is_numeric($rubric)) {
+            $ids = ProjectsHelper::getRubricContracts($rubric);
+            if (!empty($ids)) {
+                $ids = implode(', ', $ids);
+                $query->where("`c`.`id` IN ($ids)");
+            }
+            else {
+                $query->where("`c`.`id` = 0");
+            }
+        }
+
+        //Показываем только свои сделки, но если только неактивны фильтры по видам деятельности и тематической рубрике
+        if (!ProjectsHelper::canDo('projects.access.contracts.full'))
+        {
+            if (!is_numeric($act) && !is_numeric($rubric)) {
+                $userID = JFactory::getUser()->id;
+                $query->where("`c`.`managerID` = {$userID}");
+            }
+        }
+
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
         if (empty($project)) $project = ProjectsHelper::getActiveProject();
@@ -118,12 +141,6 @@ class ProjectsModelContracts extends ListModel
         if ($exhibitor != 0 && $project != 0)
         {
             $query->where("`c`.`prjID` = {$project} AND `c`.`expID` = {$exhibitor}");
-        }
-
-        if (!ProjectsHelper::canDo('projects.access.contracts.full'))
-        {
-            $userID = JFactory::getUser()->id;
-            $query->where("`c`.`managerID` = {$userID}");
         }
 
         /* Сортировка */
@@ -223,6 +240,8 @@ class ProjectsModelContracts extends ListModel
         $this->setState('filter.currency', $currency);
         $activity = $this->getUserStateFromRequest($this->context . '.filter.activity', 'filter_activity', '', 'string');
         $this->setState('filter.state', $activity);
+        $rubric = $this->getUserStateFromRequest($this->context . '.filter.rubric', 'filter_rubric', '', 'string');
+        $this->setState('filter.rubric', $rubric);
         parent::populateState('`plan_dat`', 'asc');
     }
 
@@ -235,6 +254,7 @@ class ProjectsModelContracts extends ListModel
         $id .= ':' . $this->getState('filter.status');
         $id .= ':' . $this->getState('filter.currency');
         $id .= ':' . $this->getState('filter.activity');
+        $id .= ':' . $this->getState('filter.rubric');
         return parent::getStoreId($id);
     }
 
