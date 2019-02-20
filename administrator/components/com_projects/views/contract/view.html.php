@@ -26,7 +26,7 @@ class ProjectsViewContract extends HtmlView {
 
         JToolbarHelper::title($title, '');
         $userID = JFactory::getUser()->id;
-        if (ProjectsHelper::canDo('projects.access.contracts.full') || (!ProjectsHelper::canDo('projects.access.contracts.full') && $this->item->managerID == $userID)) {
+        if (ProjectsHelper::canDo('projects.access.contracts.full') || (!ProjectsHelper::canDo('projects.access.contracts.full') && $this->item->managerID == $userID) || $this->item->id == null) {
             JToolBarHelper::apply('contract.apply', 'JTOOLBAR_APPLY');
             JToolbarHelper::save('contract.save', 'JTOOLBAR_SAVE');
         }
