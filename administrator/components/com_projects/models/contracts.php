@@ -74,13 +74,21 @@ class ProjectsModelContracts extends ListModel
         //Фильтруем по тематикам разделов
         $rubric = $this->getState('filter.rubric');
         if (is_numeric($rubric)) {
-            $ids = ProjectsHelper::getRubricContracts($rubric);
-            if (!empty($ids)) {
-                $ids = implode(', ', $ids);
-                $query->where("`c`.`id` IN ($ids)");
+            if ($rubric != -1) {
+                $ids = ProjectsHelper::getRubricContracts($rubric);
+                if (!empty($ids)) {
+                    $ids = implode(', ', $ids);
+                    $query->where("`c`.`id` IN ({$ids})");
+                } else {
+                    $query->where("`c`.`id` = 0");
+                }
             }
             else {
-                $query->where("`c`.`id` = 0");
+                $ids = ProjectsHelper::getRubricContracts();
+                if (!empty($ids)) {
+                    $ids = implode(', ', $ids);
+                    $query->where("`c`.`id` NOT IN ({$ids})");
+                }
             }
         }
 

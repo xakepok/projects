@@ -65,6 +65,7 @@
                 onchange="this.form.submit();"
         >
             <option value="">COM_PROJECTS_FILTER_SELECT_RUBRIC</option>
+            <option value="-1">COM_PROJECTS_FILTER_SELECT_RUBRIC_WITHOUT</option>
         </field>
         <field
                 name="status"

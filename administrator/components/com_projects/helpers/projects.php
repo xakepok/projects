@@ -72,18 +72,20 @@ class ProjectsHelper
 
     /**
      * Возвращает массив сделок, которые имеют указанную рубрику
-     * @param int $rubricID ID рубрики
+     * @param int $rubricID ID рубрики. 0 для получения всех сделок, у которых указана рубрика
      * @return array массив с ID сделок
      * @since 1.1.3.1
      */
-    public static function getRubricContracts(int $rubricID): array
+    public static function getRubricContracts(int $rubricID = 0): array
     {
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
             ->select("`contractID`")
-            ->from("`#__prj_contract_rubrics`")
-            ->where("`rubricID` = {$rubricID}");
+            ->from("`#__prj_contract_rubrics`");
+        if ($rubricID > 0) {
+            $query->where("`rubricID` = {$rubricID}");
+        }
         return $db->setQuery($query)->loadColumn() ?? array();
     }
 
