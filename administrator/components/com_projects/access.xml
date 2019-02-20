@@ -23,6 +23,7 @@
 		<action name="projects.access.reports" title="COM_PROJECTS_ACCESS_REPORTS" description="COM_PROJECTS_ACCESS_REPORTS_DESC" />
 		<action name="projects.access.prices" title="COM_PROJECTS_ACCESS_PRICES" description="COM_PROJECTS_ACCESS_PRICES_DESC" />
 		<action name="projects.access.acts" title="COM_PROJECTS_ACCESS_ACTS" description="COM_PROJECTS_ACCESS_ACTS_DESC" />
+		<action name="projects.access.rubrics" title="COM_PROJECTS_ACCESS_RUBRICS" description="COM_PROJECTS_ACCESS_RUBRICS_DESC" />
 		<action name="projects.access.events.standart" title="COM_PROJECTS_ACCESS_EVENTS_STANDART" description="COM_PROJECTS_ACCESS_EVENTS_STANDART_DESC" />
 		<action name="projects.access.events.full" title="COM_PROJECTS_ACCESS_EVENTS_FULL" description="COM_PROJECTS_ACCESS_EVENTS_FULL_DESC" />
 		<action name="projects.access.hotels.standart" title="COM_PROJECTS_ACCESS_HOTELS_STANDART" description="COM_PROJECTS_ACCESS_HOTELS_STANDART_DESC" />

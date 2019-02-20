@@ -52,8 +52,38 @@ class ProjectsModelContract extends AdminModel {
             $item->coExps = $this->getCoExps();
             $item->amount = ProjectsHelper::getContractAmount($item->id);
             $item->children = $this->loadCoExp($item->expID, $item->prjID);
+            $item->rubrics = ProjectsHelper::getContractRubrics($item->id);
         }
         return $item;
+    }
+
+    /**
+     * Сохраняет привязки рубрик к сделки
+     * @param int $contractID ID сделки
+     * @param array $rubrics массив с ID рубрик
+     * @since 1.1.2.9
+     */
+    public function saveRubrics(int $contractID, array $rubrics = array()): void
+    {
+        $rm = AdminModel::getInstance('Ctrrubric', 'ProjectsModel');
+        $already = ProjectsHelper::getContractRubrics($contractID);
+        if (!empty($rubrics)) {
+            foreach ($rubrics as $rubric) {
+                $item = $rm->getItem(array('contractID' => $contractID, 'rubricID' => $rubric));
+                $arr = array();
+                $arr['id'] = $item->id;
+                $arr['contractID'] = $contractID;
+                $arr['rubricID'] = $rubric;
+                if (in_array($rubric, $already)) {
+                    if (($key = array_search($rubric, $already)) !== false) unset($already[$key]);
+                }
+                $rm->save($arr);
+            }
+        }
+        foreach ($already as $rubric) {
+            $item = $rm->getItem(array('contractID' => $contractID, 'rubricID' => $rubric));
+            if ($item->id != null) $rm->delete($item->id);
+        }
     }
 
     /**
@@ -242,6 +272,7 @@ class ProjectsModelContract extends AdminModel {
             $form->setFieldAttribute('managerID', 'default', JFactory::getUser()->id);
             $form->removeField('dat');
             $form->removeField('children');
+            $form->removeField('rubrics');
             $session = JFactory::getSession();
             $activeProject = $session->get('active_project');
             if (is_numeric($activeProject)) {
@@ -309,6 +340,8 @@ class ProjectsModelContract extends AdminModel {
             $itemID = $data['id'];
         }
 
+        $this->saveRubrics($itemID, $data['rubrics'] ?? array());
+
         ProjectsHelper::addEvent(array('action' => $action, 'section' => 'contract', 'itemID' => $itemID, 'params' => $data, 'old_data' => $old));
 
         if (!empty($data['children'])) $this->setCoExp($data['children'], $data['expID'], $data['prjID']);
@@ -329,6 +362,7 @@ class ProjectsModelContract extends AdminModel {
                 $sm->delete($stand->id);
             }
         }
+
         return $s1 && $s2 && $s3;
     }
 

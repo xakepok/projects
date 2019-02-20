@@ -58,6 +58,9 @@ class ProjectsHelper
         if (self::canDo('projects.access.acts')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_ACTIVITIES'), 'index.php?option=com_projects&amp;view=activities', $vName == 'activities');
         }
+        if (self::canDo('projects.access.rubrics')) {
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_RUBRICS'), 'index.php?option=com_projects&amp;view=rubrics', $vName == 'rubrics');
+        }
         if (self::canDo('projects.access.events.standart')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_EVENTS'), 'index.php?option=com_projects&amp;view=events', $vName == 'events');
         }
@@ -65,6 +68,24 @@ class ProjectsHelper
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_HOTELS'), 'index.php?option=com_projects&amp;view=hotels', $vName == 'hotels');
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_HOTEL_CATS'), 'index.php?option=com_projects&amp;view=hotelcats', $vName == 'hotelcats');
         }
+    }
+
+    /**
+     * Возвращает массив с ID рубрик сделки
+     * @param int $contractID ID сделки
+     * @return array массив с рубриками
+     * @since 1.1.2.9
+     */
+    public static function getContractRubrics(int $contractID = 0): array
+    {
+        if ($contractID == 0) return array();
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`rubricID`")
+            ->from("`#__prj_contract_rubrics`")
+            ->where("`contractID` = {$contractID}");
+        return $db->setQuery($query)->loadColumn() ?? array();
     }
 
     /**

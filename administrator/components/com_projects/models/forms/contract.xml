@@ -115,6 +115,14 @@
                 autocomplete="off"
                 class="x2"
         />
+        <field
+                name="rubrics"
+                type="Rubric"
+                label="COM_PROJECTS_HEAD_CONTRACT_RUBRICS"
+                description="COM_PROJECTS_HEAD_CONTRACT_RUBRICS_DESC"
+                multiple="true"
+                class="x2"
+        />
     </fieldset>
     <fieldset name="files">
         <field
