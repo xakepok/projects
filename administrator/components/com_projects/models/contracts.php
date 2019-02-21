@@ -152,8 +152,12 @@ class ProjectsModelContracts extends ListModel
         }
 
         /* Сортировка */
-        $orderCol  = $this->state->get('list.ordering', '`plan_dat`');
+        $orderCol  = $this->state->get('list.ordering', 'plan_dat');
         $orderDirn = $this->state->get('list.direction', 'asc');
+        if ($orderCol == 'number') {
+            if ($orderDirn == 'asc') $orderCol = 'LENGTH(number), number';
+            if ($orderDirn == 'desc') $orderCol = 'LENGTH(number) desc, number';
+        }
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
         return $query;
@@ -252,7 +256,7 @@ class ProjectsModelContracts extends ListModel
         $this->setState('filter.state', $activity);
         $rubric = $this->getUserStateFromRequest($this->context . '.filter.rubric', 'filter_rubric', '', 'string');
         $this->setState('filter.rubric', $rubric);
-        parent::populateState('`plan_dat`', 'asc');
+        parent::populateState('plan_dat', 'asc');
     }
 
     protected function getStoreId($id = '')
