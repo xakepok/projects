@@ -17,9 +17,6 @@ class ProjectsViewContracts extends HtmlView
 	    $this->state = $this->get('State');
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
-        if (!ProjectsHelper::canDo('projects.access.contracts.full')) {
-            $this->filterForm->removeField('manager', 'filter');
-        }
 
         // Show the toolbar
 		$this->toolbar();
