@@ -39,6 +39,30 @@
             <option value="">COM_PROJECTS_FILTER_SELECT_EXHIBITOR</option>
         </field>
         <field
+                name="hotel"
+                type="Hotel"
+                label="COM_PROJECTS_FILTER_SELECT_HOTEL"
+                description="COM_PROJECTS_FILTER_SELECT_HOTEL"
+                onchange="this.form.submit();">
+            <option value="">COM_PROJECTS_FILTER_SELECT_HOTEL</option>
+        </field>
+        <field
+                name="arrival"
+                type="calendar"
+                label="COM_PROJECTS_HEAD_CONTRACT_ROOM_ARRIVAL"
+                hint="COM_PROJECTS_HEAD_CONTRACT_ROOM_ARRIVAL"
+                format="%d.%m.%Y"
+                onchange="this.form.submit();"
+        />
+        <field
+                name="department"
+                type="calendar"
+                label="COM_PROJECTS_HEAD_CONTRACT_ROOM_DEPARTMENT"
+                hint="COM_PROJECTS_HEAD_CONTRACT_ROOM_DEPARTMENT"
+                format="%d.%m.%Y"
+                onchange="this.form.submit();"
+        />
+        <field
                 name="standtype"
                 label="COM_PROJECTS_FILTER_SELECT_STAND_TYPE"
                 description="COM_PROJECTS_FILTER_SELECT_STAND_TYPE"

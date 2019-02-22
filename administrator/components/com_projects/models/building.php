@@ -20,21 +20,55 @@ class ProjectsModelBuilding extends ListModel
                 'standstate',
                 'standstatus',
                 's.status',
+                's.arrival', 'arrival',
+                's.department', 'department',
+                'hotel',
                 'exp_status',
                 'exhibitor',
                 'stand',
+                'nc.title_ru',
+                'h.title_ru',
             );
         }
         parent::__construct($config);
     }
 
+    /**
+     * Возвращает название подключаемого слоя
+     * @return string название слоя
+     * @since 1.1.3.6
+     */
+    public function getLayout(): string
+    {
+        $layout = '';
+        $project = $this->state->get('filter.project');
+        if (empty($project)) $project = ProjectsHelper::getActiveProject();
+        if (is_numeric($project)) {
+            $tip = ProjectsHelper::getProjectType($project);
+            switch ($tip)
+            {
+                case 0: {
+                    $layout = '';
+                    break;
+                }
+                case 1: {
+                    $layout = 'rooms';
+                    break;
+                }
+                default: $layout = '';
+            }
+        }
+        return $layout;
+    }
+
     protected function _getListQuery()
     {
+        $layout = $this->getLayout();
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select('`s`.`id` as `standID`, `cat`.`number` as `stand`, `s`.`freeze`, IFNULL(`s`.`tip`,0) as `tip`, IFNULL(`s`.`status`,1) as `status`, `cat`.`square`as `sq`')
-            ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
+            ->select('`s`.`id` as `standID`, IFNULL(`cat`.`number`,`cat`.`title`) as `stand`, `s`.`freeze`, IFNULL(`s`.`tip`,0) as `tip`, IFNULL(`s`.`status`,1) as `status`, `cat`.`square`as `sq`')
+            ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `c`.`expID` as `exponentID`")
             ->select("IFNULL(`c`.`number_free`,`c`.`number`) as `contract`, `c`.`id` as `contractID`, `c`.`status` as `exp_status`")
             ->select("`u`.`name` as `manager`")
             ->select("(SELECT getStandPavilion(`cat`.`number`)) as `pavilion`")
@@ -43,6 +77,14 @@ class ProjectsModelBuilding extends ListModel
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
             ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`");
+        if ($layout != '') {
+            $query->where("`e`.`id` IS NOT NULL");
+            $query
+                ->select("DATE_FORMAT(`s`.`arrival`,'%d.%m.%Y') as `arrival`, DATE_FORMAT(`s`.`department`,'%d.%m.%Y') as `department`")
+                ->select("`nc`.`title_ru` as `number_category`, `h`.`title_ru` as `hotel`")
+                ->leftJoin("`#__prj_hotels_number_categories` as `nc` ON `nc`.`id` = `cat`.`categoryID`")
+                ->leftJoin("`#__prj_hotels` as `h` ON `h`.`id` = `nc`.`hotelID`");
+        }
         /* Фильтр */
         $search = $this->getState('filter.search');
         if (!empty($search)) {
@@ -52,7 +94,22 @@ class ProjectsModelBuilding extends ListModel
         // Фильтруем по экспоненту.
         $exhibitor = $this->getState('filter.exhibitor');
         if (is_numeric($exhibitor)) {
-            $query->where('`c`.`expID` = ' . (int)$exhibitor);
+            $query->where('`c`.`expID` = ' . (int) $exhibitor);
+        }
+        // Фильтруем по отелю.
+        $hotel = $this->getState('filter.hotel');
+        if (is_numeric($hotel)) {
+            $query->where('`h`.`id` = ' . (int) $hotel);
+        }
+        // Фильтруем по датам заезда и выезда
+        $arrival = $this->getState('filter.arrival');
+        $department = $this->getState('filter.department');
+        if (!empty($arrival) && !empty($department)) {
+            $d = JDate::getInstance($arrival);
+            $arrival = $db->q($d->format("Y-m-d"));
+            $d = JDate::getInstance($department);
+            $department = $db->q($d->format("Y-m-d"));
+            $query->where("(`s`.`arrival` >= {$arrival} AND `s`.`department` <= {$department})");
         }
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
@@ -93,6 +150,7 @@ class ProjectsModelBuilding extends ListModel
 
     public function getItems($raw = false)
     {
+        $layout = $this->getLayout();
         $items = parent::getItems();
         $results = array();
         $stands = array(); //Массив контракт - массив стендов
@@ -103,6 +161,7 @@ class ProjectsModelBuilding extends ListModel
             $exhibitor = ($item->exponentID != null) ? ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en) : '';
             $link = JHtml::link($url, $exhibitor);
             $arr['exhibitor'] = (!$item->sq == null) ?  $link : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE');
+            if ($layout != '') $arr['exhibitor'] = $link;
             $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;contractID={$item->contractID}&amp;id={$item->standID}&amp;return={$return}");
             $arr['stand'] = (!$item->contractID == null) ? JHtml::link($url, $item->stand) : $item->stand;
             $title = sprintf("%s (%s, %s)", $item->stand, ProjectsHelper::getStandType($item->tip), ProjectsHelper::getStandStatus($item->status));
@@ -123,6 +182,12 @@ class ProjectsModelBuilding extends ListModel
             $arr['pavilion'] = $item->pavilion;
             if (!isset($arr['square'][$item->pavilion])) $arr['square'][$item->pavilion] = 0;
             $arr['square'][$item->pavilion] += $item->sq;
+            if ($layout == 'rooms') {
+                $arr['number_category'] = $item->number_category;
+                $arr['hotel'] = $item->hotel;
+                $arr['arrival'] = $item->arrival;
+                $arr['department'] = $item->department;
+            }
             $results[] = $arr;
         }
 
@@ -146,6 +211,12 @@ class ProjectsModelBuilding extends ListModel
         $this->setState('filter.standstate', $standstate);
         $standstatus = $this->getUserStateFromRequest($this->context . '.filter.standstatus', 'filter_standstatus');
         $this->setState('filter.standstatus', $standstatus);
+        $arrival = $this->getUserStateFromRequest($this->context . '.filter.arrival', 'filter_arrival');
+        $this->setState('filter.arrival', $arrival);
+        $department = $this->getUserStateFromRequest($this->context . '.filter.department', 'filter_department');
+        $this->setState('filter.department', $department);
+        $hotel = $this->getUserStateFromRequest($this->context . '.filter.hotel', 'filter_hotel');
+        $this->setState('filter.hotel', $hotel);
         parent::populateState('pavilion, stand', 'asc');
     }
 
@@ -157,6 +228,9 @@ class ProjectsModelBuilding extends ListModel
         $id .= ':' . $this->getState('filter.manager');
         $id .= ':' . $this->getState('filter.standtype');
         $id .= ':' . $this->getState('filter.standstatus');
+        $id .= ':' . $this->getState('filter.arrival');
+        $id .= ':' . $this->getState('filter.department');
+        $id .= ':' . $this->getState('filter.hotel');
         return parent::getStoreId($id);
     }
 }

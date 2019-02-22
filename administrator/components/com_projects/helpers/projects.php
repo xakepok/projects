@@ -193,6 +193,21 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает тип проекта - для стендов, делегаций и т.п.
+     * @param int $projectID - ID проекта
+     * @return int тип проекта. 0 - стенды, 1 - делегации
+     * @since 1.1.3.5
+     */
+    public static function getProjectType(int $projectID = 0): int
+    {
+        if ($projectID == 0) return -1;
+        $catalogID = self::getProjectCatalog($projectID);
+        $cm = AdminModel::getInstance('Cattitle', 'ProjectsModel');
+        $ct = $cm->getItem($catalogID);
+        return $ct->tip;
+    }
+
+    /**
      * Возвращает название раздела, где было действие пользователя
      * @param string $name
      * @return string

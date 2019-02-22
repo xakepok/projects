@@ -8,7 +8,7 @@ class ProjectsViewBuilding extends HtmlView
 {
 	protected $helper;
 	protected $sidebar = '';
-	public $items, $pagination, $uid, $state, $links, $filterForm, $activeFilters;
+	public $items, $pagination, $uid, $state, $links, $filterForm, $activeFilters, $_layout;
 
 	public function display($tpl = null)
 	{
@@ -17,6 +17,18 @@ class ProjectsViewBuilding extends HtmlView
 	    $this->state = $this->get('State');
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
+        $this->_layout = $this->get('Layout');
+        if ($this->_layout != '') {
+            $this->filterForm->removeField('manager', 'filter');
+            $this->filterForm->removeField('standtype', 'filter');
+            $this->filterForm->removeField('standstatus', 'filter');
+            $this->filterForm->setFieldAttribute('search', 'hint', JText::sprintf('COM_PROJECTS_HEAD_NUMBER_TITLE'), 'filter');
+        }
+        if ($this->_layout == '') {
+            $this->filterForm->removeField('hotel', 'filter');
+            $this->filterForm->removeField('arrival', 'filter');
+            $this->filterForm->removeField('department', 'filter');
+        }
 
 		// Show the toolbar
 		$this->toolbar();

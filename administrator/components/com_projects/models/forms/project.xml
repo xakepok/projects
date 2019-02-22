@@ -82,7 +82,7 @@
                 label="COM_PROJECTS_HEAD_THEMATIC_RUBRICS"
                 description="COM_PROJECTS_HEAD_THEMATIC_RUBRICS_DESC"
                 multiple="true"
-                class="input-xlarge"
+                class="fullfield"
         />
         <field
                 name="contract_prefix"

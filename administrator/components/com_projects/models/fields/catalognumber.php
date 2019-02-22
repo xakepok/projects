@@ -28,7 +28,16 @@ class JFormFieldCatalognumber extends JFormFieldGroupedList
             $projectID = ProjectsHelper::getContractProject($contractID);
             $catalogID = ProjectsHelper::getProjectCatalog($projectID);
             $query->where("`cat`.`titleID` = {$catalogID}");
-            $query->where("`cat`.`id` NOT IN (SELECT `c`.`catalogID` FROM `#__prj_contract_stands` as `c` LEFT JOIN `#__prj_contracts` AS `con` ON `con`.`id` = `c`.`contractID` WHERE `con`.`prjID` = {$projectID} AND `con`.`status` != 0)");
+            /*$id = JFactory::getApplication()->input->getInt('id', 0);
+            if ($id != 0) {
+                $sm = AdminModel::getInstance('Stand', 'ProjectsModel');
+                $stand = $sm->getItem($id);
+                $cid = $stand->catalogID;
+                $query->where("((`cat`.`id` NOT IN (SELECT `c`.`catalogID` FROM `#__prj_contract_stands` as `c` LEFT JOIN `#__prj_contracts` AS `con` ON `con`.`id` = `c`.`contractID` WHERE `con`.`prjID` = {$projectID} AND `con`.`status` != 0)) OR (`cat`.`id` = {$cid}))");
+            }
+            else {
+                $query->where("`cat`.`id` NOT IN (SELECT `c`.`catalogID` FROM `#__prj_contract_stands` as `c` LEFT JOIN `#__prj_contracts` AS `con` ON `con`.`id` = `c`.`contractID` WHERE `con`.`prjID` = {$projectID} AND `con`.`status` != 0)");
+            }*/
             $session->clear('contractID');
         }
         $result = $db->setQuery($query)->loadObjectList();
@@ -41,18 +50,6 @@ class JFormFieldCatalognumber extends JFormFieldGroupedList
             if (!isset($options[$item->hotel])) $options[$item->hotel] = array();
             $options[$item->hotel][] = JHtml::_('select.option', $item->numberID, $title);
         }
-        /*$id = JFactory::getApplication()->input->getInt('id', 0);
-        //Добавляем текущий стенд в список
-        if ($id != 0) {
-            $sm = AdminModel::getInstance('Stand', 'ProjectsModel');
-            $stand = $sm->getItem($id);
-            $cm = AdminModel::getInstance('Catalog', 'ProjectsModel');
-            $catalog = $cm->getItem($stand->catalogID);
-            $title = sprintf("№%s (%s %s)", $catalog->number, $catalog->square, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
-            $arr = array('data-square' => $catalog->square, 'data-num' => $catalog->number);
-            $params = array('attr' => $arr, 'option.attr' => 'optionattr');
-            array_unshift($options, JHtml::_('select.option', $catalog->id, $title, $params));
-        }*/
 
         if (!$this->loadExternally) {
             $options = array_merge(parent::getGroups(), $options);
