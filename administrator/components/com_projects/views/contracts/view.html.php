@@ -17,6 +17,10 @@ class ProjectsViewContracts extends HtmlView
 	    $this->state = $this->get('State');
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
+        if (!is_numeric($this->state->get('filter.rubric'))) {
+            $this->filterForm->removeField('manager', 'filter');
+        }
+        $this->filterForm->removeField('activity', 'filter');
 
         // Show the toolbar
 		$this->toolbar();

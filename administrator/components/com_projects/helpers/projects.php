@@ -128,19 +128,30 @@ class ProjectsHelper
     /**
      * Возвращает массив с ID дочерних экспонентов
      * @param int $exhibitorID ID родительского экспонента
+     * @param bool $title возвращать вместе с названием или нет
      * @return array массив с дочерними экспонентами
      * @since 1.1.2.8
      */
-    public static function getExhibitorChildren(int $exhibitorID = 0): array
+    public static function getExhibitorChildren(int $exhibitorID = 0, bool $title = false): array
     {
         if ($exhibitorID == 0) return array();
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`exhibitorID`")
-            ->from("`#__prj_exp_parents`")
-            ->where("`parentID` = {$exhibitorID}");
-        return $db->setQuery($query)->loadColumn() ?? array();
+            ->select("`p`.`exhibitorID`")
+            ->from("`#__prj_exp_parents` as `p`")
+            ->where("`p`.`parentID` = {$exhibitorID}");
+        if ($title) {
+            $query
+                ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
+                ->leftJoin("`#__prj_exp` as `e` on `e`.`id` = `p`.`exhibitorID`");
+        }
+        if (!$title) {
+            return $db->setQuery($query)->loadColumn() ?? array();
+        }
+        else {
+            return $db->setQuery($query)->loadAssoc() ?? array();
+        }
     }
 
     /**
@@ -180,31 +191,36 @@ class ProjectsHelper
      * Возвращает тип сделки - для стендов, делегаций и т.п.
      * @param int $contractID - ID сделки
      * @return int тип проекта. 0 - стенды, 1 - делегации
-     * @since 1.1.2.6
+     * @since 1.1.3.6
      */
     public static function getContractType(int $contractID = 0): int
     {
         if ($contractID == 0) return -1;
-        $projectID = ProjectsHelper::getContractProject($contractID);
-        $catalogID = self::getProjectCatalog($projectID);
-        $cm = AdminModel::getInstance('Cattitle', 'ProjectsModel');
-        $ct = $cm->getItem($catalogID);
-        return $ct->tip;
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`tip`")
+            ->from("`#__prj_contract_info`")
+            ->where("`contractID` = {$contractID}");
+        return $db->setQuery($query)->loadResult();
     }
 
     /**
      * Возвращает тип проекта - для стендов, делегаций и т.п.
      * @param int $projectID - ID проекта
      * @return int тип проекта. 0 - стенды, 1 - делегации
-     * @since 1.1.3.5
+     * @since 1.1.3.6
      */
     public static function getProjectType(int $projectID = 0): int
     {
         if ($projectID == 0) return -1;
-        $catalogID = self::getProjectCatalog($projectID);
-        $cm = AdminModel::getInstance('Cattitle', 'ProjectsModel');
-        $ct = $cm->getItem($catalogID);
-        return $ct->tip;
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`tip`")
+            ->from("`#__prj_contract_info`")
+            ->where("`projectID` = {$projectID}");
+        return $db->setQuery($query)->loadResult();
     }
 
     /**
@@ -882,7 +898,7 @@ class ProjectsHelper
         $query = $db->getQuery(true);
         $query
             ->select("`s`.`id`, `s`.`tip`, `c`.`square` as `sq`, `s`.`freeze`, `s`.`comment`, `s`.`status`, `s`.`scheme`, `s`.`itemID`, `s`.`contractID`, `s`.`arrival`, `s`.`department`")
-            ->select("`c`.`number`, `c`.`title`")
+            ->select("IFNULL(`c`.`number`,`c`.`title`) as `number`, `c`.`title`")
             ->select("`cats`.`title_ru` as `category`, `h`.`title_ru` as `hotel`")
             ->select("`i`.`title_ru` as `item`")
             ->from("`#__prj_stands` as `s`")

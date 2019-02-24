@@ -9,10 +9,20 @@ class ProjectsModelContract extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    /**
+     * Возвращает код типа сделки
+     * @return int идентификатор типа сделки. 0 - для стендов, 1 - для делегаций
+     * @since 1.1.3.6
+     */
     public function getTip(): int
     {
         $item = parent::getItem();
-        return ($item->id != null) ? ProjectsHelper::getContractType($item->id) : -1;
+        if ($item->id != null) {
+           return ProjectsHelper::getContractType($item->id) ?? -1;
+        }
+        else {
+            return -1;
+        }
     }
 
     public function delete(&$pks)
@@ -528,6 +538,7 @@ class ProjectsModelContract extends AdminModel {
         foreach ($items as $item)
         {
             $arr = array();
+            $tip = ProjectsHelper::getContractType($contractID);
             $arr['id'] = $item->id;
             $arr['section_id'] = $item->sectionID;
             $arr['title'] = $item->title;
@@ -549,12 +560,18 @@ class ProjectsModelContract extends AdminModel {
             $arr['factor'] = (int) ($values[$item->id]['factor'] != null) ? 100 - $values[$item->id]['factor'] * 100 : 0;
             $arr['fixed'] = ($activeColumn != $values[$item->id]['columnID'] && !empty($values[$item->id]['columnID']) && !ProjectsHelper::canDo('core.admin')) ? true : false;
             $arr['is_sq'] = $item->is_sq;
-            if ($item->is_sq)
+            if ($item->is_sq || $tip != 0)
             {
                 $sts = array();
                 foreach ($stands as $stand) {
                     if (($stand->itemID != $item->id) || $stand->contractID != $contractID) continue;
-                    $sts[] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;contractID={$stand->contractID}&amp;task=stand.edit&amp;id={$stand->id}&amp;return={$return}"), $stand->number);
+                    if ($tip == 1) {
+                        $title = sprintf("№%s (%s)", $stand->number, $stand->category);
+                    }
+                    else {
+                        $title = $stand->number;
+                    }
+                    $sts[] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;contractID={$stand->contractID}&amp;task=stand.edit&amp;id={$stand->id}&amp;return={$return}"), $title);
                 }
                 $arr['stand'] = implode(" / ", $sts);
                 if (empty($arr['stand'])) $arr['value'] = 0;

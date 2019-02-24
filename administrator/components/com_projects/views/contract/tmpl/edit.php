@@ -22,6 +22,7 @@ if ($return != null)
         }
     };
 </script>
+
 <form action="<?php echo $action; ?>"
       method="post" name="adminForm" id="adminForm" xmlns="http://www.w3.org/1999/html" class="form-validate" enctype="multipart/form-data">
     <div class="row-fluid">
@@ -108,4 +109,3 @@ if ($return != null)
     </div>
 </form>
 <?php echo $this->loadTemplate('exhibitor');?>
-

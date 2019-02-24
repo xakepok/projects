@@ -16,13 +16,15 @@
             <option value="0">JNO</option>
             <option value="1">JYES</option>
         </field>
+    </fieldset>
+    <fieldset name="names2">
         <field
                 name="parentID"
                 type="Exhibitor"
                 label="COM_PROJECTS_HEAD_EXP_PARENT"
                 description="COM_PROJECTS_HEAD_EXP_PARENT_DESC"
                 class="input-xlarge">
-                <option value="">COM_PROJECTS_HEAD_EXP_PARENT_HINT</option>
+            <option value="">COM_PROJECTS_HEAD_EXP_PARENT_HINT</option>
         </field>
         <field
                 name="children"
