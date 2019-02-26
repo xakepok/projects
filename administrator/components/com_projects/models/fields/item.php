@@ -16,7 +16,7 @@ class JFormFieldItem extends JFormFieldGroupedList
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`i`.`id`, `i`.`title_ru`, `p`.`title` as `price`")
+            ->select("`i`.`id`, `i`.`title_ru`, `p`.`title` as `price`, `s`.`title` as `section`")
             ->from('`#__prc_items` as `i`')
             ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
             ->leftJoin("`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`")
@@ -48,6 +48,7 @@ class JFormFieldItem extends JFormFieldGroupedList
             if ($view == 'stand') {
                 if ($contractID != null) {
                     $projectID = ProjectsHelper::getContractProject($contractID);
+                    $tip = ProjectsHelper::getProjectType($projectID);
                     $priceID = ProjectsHelper::getProjectPrice($projectID);
                     $query->where("`s`.`priceID` = {$priceID}");
                     $contract = $cm->getItem($contractID);
@@ -63,8 +64,20 @@ class JFormFieldItem extends JFormFieldGroupedList
         $options = array();
 
         foreach ($result as $item) {
-            if (!isset($options[$item->price])) $options[$item->price] = array();
-            $options[$item->price][] = JHtml::_('select.option', $item->id, $item->title_ru);
+            if ($view != 'stand') {
+                if (!isset($options[$item->price])) $options[$item->price] = array();
+                $options[$item->price][] = JHtml::_('select.option', $item->id, $item->title_ru);
+            }
+            else {
+                if ($tip == 1) {
+                    if (!isset($options[$item->section])) $options[$item->section] = array();
+                    $options[$item->section][] = JHtml::_('select.option', $item->id, $item->title_ru);
+                }
+                else {
+                    if (!isset($options[$item->price])) $options[$item->price] = array();
+                    $options[$item->price][] = JHtml::_('select.option', $item->id, $item->title_ru);
+                }
+            }
         }
 
         if (!$this->loadExternally) {
