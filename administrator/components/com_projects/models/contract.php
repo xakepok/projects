@@ -498,6 +498,7 @@ class ProjectsModelContract extends AdminModel {
             ->select("`ci`.*")
             ->from("`#__prj_contract_items` as `ci`")
             ->leftJoin("`#__prc_items` as `i` on `i`.`id` = `ci`.`itemID`")
+            //->leftJoin("`#__prj_contract_info` as `inf` on `inf`.`contractID` = `ci`.`contractID`")
             ->where("`ci`.`contractID` = {$contractID}");
         $items = $db->setQuery($query)->loadAssocList('itemID');
         return $items;
@@ -575,6 +576,7 @@ class ProjectsModelContract extends AdminModel {
                 }
                 $arr['stand'] = implode(" / ", $sts);
                 if (empty($arr['stand'])) $arr['value'] = 0;
+                $arr['stands_count'] = count($stands);
             }
             $a = 0;
             $b = 0;

@@ -67,7 +67,7 @@ $sum = 0;
                                     type="text"
                                     name="jform[price][<?php echo $item['id']; ?>][value]"
                                     id="price_<?php echo $item['id']; ?>"
-                                    value="<?php echo $item['value']; ?>"
+                                    value="<?php echo ($this->tip != 0) ? $item['stands_count'] : $item['value']; ?>"
                                     data-cost="<?php echo $item['cost_clean']; ?>"
                                     class="input"
                                     placeholder=""
