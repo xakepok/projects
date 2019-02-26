@@ -1,6 +1,7 @@
 <?php
 use Joomla\CMS\MVC\Controller\AdminController;
 use \Joomla\CMS\Response\JsonResponse;
+use Joomla\CMS\MVC\Model\ListModel;
 defined('_JEXEC') or die;
 
 class ProjectsControllerContracts extends AdminController
@@ -8,6 +9,13 @@ class ProjectsControllerContracts extends AdminController
     public function getModel($name = 'Contract', $prefix = 'ProjectsModel', $config = array())
     {
         return parent::getModel($name, $prefix, array('ignore_request' => true));
+    }
+
+    public function exportxls(): void
+    {
+        $model = ListModel::getInstance('Contracts', 'ProjectsModel');
+        $model->exportToExcel();
+        jexit();
     }
 
     /**

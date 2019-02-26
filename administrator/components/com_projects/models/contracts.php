@@ -176,7 +176,7 @@ class ProjectsModelContracts extends ListModel
             $arr['id'] = $item->id;
             $arr['dat'] = $item->dat;
             $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}&amp;return={$return}");
-            $arr['project'] = ($format != 'html' || ProjectsHelper::canDo('projects.access.projects')) ? $item->project : JHtml::link($url, $item->project);
+            $arr['project'] = ($format != 'html' || ProjectsHelper::canDo('projects.access.projects') || $this->isExcel()) ? $item->project : JHtml::link($url, $item->project);
             $arr['currency'] = $item->currency;
             $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->id}");
             if ($format == 'html') {
@@ -189,7 +189,7 @@ class ProjectsModelContracts extends ListModel
             $exponentName = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $params = array('class' => 'jutooltip', 'title' => $item->title_ru_full ?? JText::sprintf('COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_NOT_EXISTS'));
             $exponentUrl = JHtml::link($url, $exponentName, $params);
-            $arr['exponent'] = ($format != 'html') ? $exponentName : $exponentUrl;
+            $arr['exponent'] = ($format != 'html' || $this->isExcel()) ? $exponentName : $exponentUrl;
             $arr['number'] = ($item->number != null) ? $prefixes[$item->projectID]['contract_prefix'].$item->number : '';
             $arr['manager']['title'] = $item->manager ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MANAGER_UNDEFINED');
             $arr['manager']['class'] = (!empty($item->manager)) ? '' : 'no-data';
@@ -203,15 +203,15 @@ class ProjectsModelContracts extends ListModel
             $amount = $item->$amount_field;
             $payments = $item->payments;
             $debt = $item->$debt_field;
-            $arr['amount'] = ($format != 'html') ? $amount : ProjectsHelper::getCurrency((float) $amount, (string) $item->currency);
+            $arr['amount'] = ($format != 'html' || $this->isExcel()) ? $amount : ProjectsHelper::getCurrency((float) $amount, (string) $item->currency);
             $arr['amount_only'] = $amount; //Только цена
             $paid = (float) $amount - (float) $debt;
-            $arr['paid'] = ProjectsHelper::getCurrency((float) $paid, (string) $item->currency);
-            $arr['debt'] = ($format != 'html') ? $debt : ProjectsHelper::getCurrency((float) $debt, (string) $item->currency);
+            $arr['paid'] = (!$this->isExcel()) ? ProjectsHelper::getCurrency((float) $paid, (string) $item->currency) : $paid;
+            $arr['debt'] = ($format != 'html' || $this->isExcel()) ? $debt : ProjectsHelper::getCurrency((float) $debt, (string) $item->currency);
             $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}&amp;return={$return}");
             $color = ($debt != 0) ? 'red' : 'green';
             $arr['color'] = $color;
-            if (ProjectsHelper::canDo('projects.access.finanses.full') && $debt != 0 && $item->status == '1') $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE'), 'style' => "color: {$color}"));
+            if (ProjectsHelper::canDo('projects.access.finanses.full') && $debt != 0 && $item->status == '1' && !$this->isExcel()) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE'), 'style' => "color: {$color}"));
             if ($format != 'html') $arr['debt'] = $debt;
 
             $result['items'][] = $arr;
@@ -236,6 +236,76 @@ class ProjectsModelContracts extends ListModel
         return $result;
     }
 
+    public function exportToExcel()
+    {
+        $items = $this->getItems();
+        $data = $items;
+        JLoader::discover('PHPExcel', JPATH_LIBRARIES);
+        JLoader::register('PHPExcel', JPATH_LIBRARIES . '/PHPExcel.php');
+        $xls = new PHPExcel();
+        $xls->setActiveSheetIndex(0);
+        $sheet = $xls->getActiveSheet();
+        $sheet->setTitle(JText::sprintf('COM_PROJECTS_MENU_CONTRACTS'));
+        for ($i = 1; $i < count($data['items']) + 1; $i++) {
+            for ($j = 0; $j < 11; $j++) {
+                if ($i == 1) {
+                    if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_NUMBER_SHORT'));
+                    if ($j == 1) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_DATE_DOG'));
+                    if ($j == 2) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_SHORT'));
+                    if ($j == 3) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT'));
+                    if ($j == 4) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_EXPONENT'));
+                    if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MANAGER'));
+                    if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STATUS'));
+                    if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_CURRENCY'));
+                    if ($j == 8) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_AMOUNT'));
+                    if ($j == 9) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_SCORE_PAYMENT'));
+                    if ($j == 10) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_DEBT'));
+                }
+                if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['number']);
+                if ($j == 1) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['dat']);
+                if ($j == 2) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['stand']);
+                if ($j == 3) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['project']);
+                if ($j == 4) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['exponent']);
+                if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['manager']['title']);
+                if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['status']);
+                if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['currency']);
+                if ($j == 8) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['amount'] ?? '');
+                if ($j == 9) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['paid']);
+                if ($j == 10) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['debt']);
+            }
+        }
+        $sheet->getColumnDimension('A')->setWidth(8);
+        $sheet->getColumnDimension('B')->setWidth(14);
+        $sheet->getColumnDimension('C')->setWidth(16);
+        $sheet->getColumnDimension('D')->setWidth(25);
+        $sheet->getColumnDimension('E')->setWidth(35);
+        $sheet->getColumnDimension('F')->setWidth(25);
+        $sheet->getColumnDimension('G')->setWidth(30);
+        $sheet->getColumnDimension('H')->setWidth(8);
+        $sheet->getColumnDimension('I')->setWidth(19);
+        $sheet->getColumnDimension('J')->setWidth(19);
+        $sheet->getColumnDimension('K')->setWidth(19);
+        $sheet->getStyle('A1')->getFont()->setBold(true);
+        $sheet->getStyle('B1')->getFont()->setBold(true);
+        $sheet->getStyle('C1')->getFont()->setBold(true);
+        $sheet->getStyle('D1')->getFont()->setBold(true);
+        $sheet->getStyle('E1')->getFont()->setBold(true);
+        $sheet->getStyle('F1')->getFont()->setBold(true);
+        $sheet->getStyle('G1')->getFont()->setBold(true);
+        $sheet->getStyle('H1')->getFont()->setBold(true);
+        $sheet->getStyle('I1')->getFont()->setBold(true);
+        $sheet->getStyle('J1')->getFont()->setBold(true);
+        $sheet->getStyle('K1')->getFont()->setBold(true);
+        header("Expires: Mon, 1 Apr 1974 05:00:00 GMT");
+        header("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
+        header("Cache-Control: no-cache, must-revalidate");
+        header("Pragma: public");
+        header("Content-type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename=Contracts.xls");
+        $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
+        $objWriter->save('php://output');
+        jexit();
+    }
 
     /* Сортировка по умолчанию */
     protected function populateState($ordering = null, $direction = null)
@@ -286,7 +356,7 @@ class ProjectsModelContracts extends ListModel
         $tip = ProjectsHelper::getContractType($contractID);
         foreach ($stands as $stand) {
             $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;contractID={$stand->contractID}&amp;id={$stand->id}&amp;return={$return}");
-            $result[] = ($contractID != $stand->contractID && $tip == 0) ? $stand->number : JHtml::link($url, ($tip == 0) ? $stand->number : $stand->title);
+            $result[] = (($contractID != $stand->contractID && $tip == 0) || $this->isExcel()) ? $stand->number : JHtml::link($url, ($tip == 0) ? $stand->number : $stand->title);
         }
         return $result;
     }
@@ -307,5 +377,11 @@ class ProjectsModelContracts extends ListModel
             ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `v`.`itemID`")
             ->where("`v`.`contractID` = {$item->id}");
         return (float) 0 + $db->setQuery($query)->loadResult();
+    }
+
+    public function isExcel(): bool
+    {
+        $task = JFactory::getApplication()->input->getString('task');
+        return ($task != 'exportxls') ? false : true;
     }
 }

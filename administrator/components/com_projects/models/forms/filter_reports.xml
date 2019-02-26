@@ -39,6 +39,15 @@
             <option value="5">COM_PROJECTS_HEAD_CONTRACT_STATUS_5</option>
         </field>
         <field
+                name="rubric"
+                type="Rubric"
+                label="COM_PROJECTS_FILTER_SELECT_RUBRIC"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_RUBRIC</option>
+            <option value="-1">COM_PROJECTS_FILTER_SELECT_RUBRIC_WITHOUT</option>
+        </field>
+        <field
                 type="list"
                 name="fields"
                 label="COM_PROJECTS_FILTER_SELECT_FIELDS"
@@ -56,6 +65,7 @@
             <option value="manager">COM_PROJECTS_HEAD_MANAGER</option>
             <option value="amount">COM_PROJECTS_HEAD_CONTRACT_AMOUNT_REPORT</option>
             <option value="acts">COM_PROJECTS_BLANK_EXHIBITOR_ACTIVITIES</option>
+            <option value="rubrics">COM_PROJECTS_HEAD_THEMATIC_RUBRICS</option>
         </field>
     </fields>
     <fields name="list">

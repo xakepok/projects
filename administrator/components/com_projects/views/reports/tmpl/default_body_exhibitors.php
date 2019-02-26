@@ -67,5 +67,10 @@ foreach ($this->items as $item) :
                 <?php echo $item['acts']; ?>
             </td>
         <?php endif; ?>
+        <?php if (in_array('rubrics', $this->fields)): ?>
+            <td class="small">
+                <?php echo $item['rubrics']; ?>
+            </td>
+        <?php endif; ?>
     </tr>
 <?php endforeach; ?>

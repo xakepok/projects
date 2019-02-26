@@ -22,6 +22,7 @@ class ProjectsModelReports extends ListModel
                 'search',
                 'fields',
                 'status',
+                'rubric',
                 'u.name',
                 'p.title',
             );
@@ -62,6 +63,27 @@ class ProjectsModelReports extends ListModel
             if (!empty($search)) {
                 $search = $db->quote('%' . $db->escape($search, true) . '%', false);
                 $query->where('(`e`.`title_ru_short` LIKE ' . $search . ' OR `e`.`title_ru_full` LIKE ' . $search . ' OR `e`.`title_en` LIKE ' . $search . ')');
+            }
+
+            //Фильтруем по тематикам разделов
+            $rubric = $this->getState('filter.rubric');
+            if (is_numeric($rubric)) {
+                if ($rubric != -1) {
+                    $ids = ProjectsHelper::getRubricContracts($rubric);
+                    if (!empty($ids)) {
+                        $ids = implode(', ', $ids);
+                        $query->where("`c`.`id` IN ({$ids})");
+                    } else {
+                        $query->where("`c`.`id` = 0");
+                    }
+                }
+                else {
+                    $ids = ProjectsHelper::getRubricContracts();
+                    if (!empty($ids)) {
+                        $ids = implode(', ', $ids);
+                        $query->where("`c`.`id` NOT IN ({$ids})");
+                    }
+                }
             }
 
             // Фильтруем по статусу.
@@ -122,6 +144,7 @@ class ProjectsModelReports extends ListModel
                         $arr['amount'] = (!$this->xls) ? ProjectsHelper::getCurrency((float) $item->$amount_field, $item->currency) : $item->$amount_field;
                     }
                     if (in_array('acts', $fields)) $arr['acts'] = implode(", ", ProjectsHelper::getExhibitorActs($item->exhibitorID));
+                    if (in_array('rubrics', $fields)) $arr['rubrics'] = implode(", ", ProjectsHelper::getContractRubrics($item->contractID, true));
                 }
             }
             $result[] = $arr;
@@ -252,6 +275,12 @@ class ProjectsModelReports extends ListModel
                                 $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_ACTIVITIES'));
                                 $index++;
                             }
+                            if (in_array('rubrics', $fields))
+                            {
+                                $indexes['rubrics'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_THEMATIC_RUBRICS'));
+                                $index++;
+                            }
                         }
                     }
                     if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['exhibitor']);
@@ -293,6 +322,10 @@ class ProjectsModelReports extends ListModel
                         if (in_array('acts', $fields))
                         {
                             $sheet->setCellValueByColumnAndRow($indexes['acts'], $i + 1, $data[$i - 1]['acts']);
+                        }
+                        if (in_array('rubrics', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['rubrics'], $i + 1, $data[$i - 1]['rubrics']);
                         }
                     }
                 }
@@ -345,6 +378,8 @@ class ProjectsModelReports extends ListModel
         $this->setState('filter.fields', $fields);
         $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status');
         $this->setState('filter.status', $status);
+        $rubric = $this->getUserStateFromRequest($this->context . '.filter.rubric', 'filter_rubric');
+        $this->setState('filter.rubric', $rubric);
         parent::populateState('e.title_ru_full', 'asc');
     }
 
@@ -355,6 +390,7 @@ class ProjectsModelReports extends ListModel
         $id .= ':' . $this->getState('filter.status');
         $id .= ':' . $this->getState('filter.fields');
         $id .= ':' . $this->getState('filter.status');
+        $id .= ':' . $this->getState('filter.rubric');
         return parent::getStoreId($id);
     }
 }

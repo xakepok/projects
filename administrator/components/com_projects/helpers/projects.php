@@ -92,18 +92,22 @@ class ProjectsHelper
     /**
      * Возвращает массив с ID рубрик сделки
      * @param int $contractID ID сделки
+     * @param bool $title возвращать названия или нет
      * @return array массив с рубриками
      * @since 1.1.2.9
      */
-    public static function getContractRubrics(int $contractID = 0): array
+    public static function getContractRubrics(int $contractID = 0, $title = false): array
     {
         if ($contractID == 0) return array();
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`rubricID`")
-            ->from("`#__prj_contract_rubrics`")
-            ->where("`contractID` = {$contractID}");
+            ->select((!$title) ? "`r`.`rubricID`" : "`t`.`title`")
+            ->from("`#__prj_contract_rubrics` as `r`")
+            ->where("`r`.`contractID` = {$contractID}");
+        if ($title) {
+            $query->leftJoin("`#__prj_rubrics` as `t` on `t`.`id` = `r`.`rubricID`");
+        }
         return $db->setQuery($query)->loadColumn() ?? array();
     }
 

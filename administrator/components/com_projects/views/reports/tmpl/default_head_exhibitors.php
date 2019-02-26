@@ -66,4 +66,9 @@ $listDirn = $this->escape($this->state->get('list.direction'));
             <?php echo JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_ACTIVITIES'); ?>
         </th>
     <?php endif;?>
+    <?php if (in_array('rubrics', $this->fields)): ?>
+        <th>
+            <?php echo JText::sprintf('COM_PROJECTS_HEAD_THEMATIC_RUBRICS'); ?>
+        </th>
+    <?php endif;?>
 </tr>
