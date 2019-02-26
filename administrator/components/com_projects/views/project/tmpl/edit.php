@@ -39,15 +39,6 @@ if ($return != null)
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
                 <?php if ($this->item->id != null): ?>
-                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'contracts', JText::sprintf('COM_PROJECTS_MENU_CONTRACTS')); ?>
-                <div class="row-fluid">
-                    <div class="span12">
-                        <?php echo $this->loadTemplate('contracts'); ?>
-                    </div>
-                </div>
-                <?php echo JHtml::_('bootstrap.endTab'); ?>
-                <?php endif;?>
-                <?php if ($this->item->id != null): ?>
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'price', JText::sprintf('COM_PROJECTS_HEAD_PRICE_LIST')); ?>
                 <div class="row-fluid">
                     <div class="span12">

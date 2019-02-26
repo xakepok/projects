@@ -20,6 +20,9 @@ echo JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_ADD_STAND_TO_CAT'));
         <th>
             <?php echo JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_COMPANY'); ?>
         </th>
+        <th>
+            <?php echo JText::sprintf('COM_PROJECTS_ACTION_DELETE'); ?>
+        </th>
     </tr>
     </thead>
     <tbody>
@@ -36,6 +39,9 @@ echo JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_ADD_STAND_TO_CAT'));
             </td>
             <td>
                 <?php echo $item['exhibitor']; ?>
+            </td>
+            <td>
+                <?php echo $item['delete']; ?>
             </td>
         </tr>
     <?php endforeach; ?>

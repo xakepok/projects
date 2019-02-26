@@ -33,7 +33,12 @@ class ProjectsModelProject extends AdminModel {
         return $item;
     }
 
-    public function getPriceItems()
+    /**
+     * Возвращает массив с элементами пункта прайса для текущего проекта
+     * @return array
+     * @since 1.1.4.5
+     */
+    public function getPriceItems(): array
     {
         $item = parent::getItem();
         $result = array();
@@ -46,12 +51,19 @@ class ProjectsModelProject extends AdminModel {
             $arr['title'] = JHtml::link($url, $punkt->title_ru);
             $arr['section'] = $punkt->section;
             $arr['unit'] = $punkt->unit;
+            $url = JRoute::_("index.php?option=com_projects&amp;task=items.removeItem&amp;id={$punkt->id}&amp;return={$return}");
+            $arr['delete'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_DELETE'));
             $result[] = $arr;
         }
         return $result;
     }
 
-    public function getCatalogItems()
+    /**
+     * Возврашает массив с элементами каталога продаж для текущего проекта
+     * @return array
+     * @since 1.1.4.5
+     */
+    public function getCatalogItems(): array
     {
         $item = parent::getItem();
         $result = array();
@@ -70,6 +82,8 @@ class ProjectsModelProject extends AdminModel {
             else {
                 $arr['exhibitor'] = JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE_OK');
             }
+            $url = JRoute::_("index.php?option=com_projects&amp;task=catalogs.removeCatalog&amp;id={$catalog->id}&amp;return={$return}");
+            $arr['delete'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_DELETE'));
             $result[] = $arr;
         }
         return $result;

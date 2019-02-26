@@ -642,6 +642,7 @@ class ProjectsHelper
      * @param int $projectID ID проекта
      * @return array массив со сделками
      * @since 1.0.3.5
+     * @deprecated 1.1.4.5
      */
     public static function getProjectContracts(int $projectID): array
     {
