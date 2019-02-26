@@ -33,6 +33,47 @@ class ProjectsModelProject extends AdminModel {
         return $item;
     }
 
+    public function getPriceItems()
+    {
+        $item = parent::getItem();
+        $result = array();
+        if ($item->id == null) return $result;
+        $items = ProjectsHelper::getProjectPriceItems($item->id);
+        $return = base64_encode("index.php?option=com_projects&view=project&layout=edit&id={$item->id}");
+        foreach ($items as $punkt) {
+            $arr = array();
+            $url = JRoute::_("index.php?option=com_projects&amp;task=item.edit&amp;id={$punkt->id}&amp;return={$return}");
+            $arr['title'] = JHtml::link($url, $punkt->title_ru);
+            $arr['section'] = $punkt->section;
+            $arr['unit'] = $punkt->unit;
+            $result[] = $arr;
+        }
+        return $result;
+    }
+
+    public function getCatalogItems()
+    {
+        $item = parent::getItem();
+        $result = array();
+        if ($item->id == null) return $result;
+        $items = ProjectsHelper::getProjectCatalogItems($item->id);
+        $return = base64_encode("index.php?option=com_projects&view=project&layout=edit&id={$item->id}");
+        foreach ($items as $catalog) {
+            $arr = array();
+            $url = JRoute::_("index.php?option=com_projects&amp;task=catalog.edit&amp;id={$catalog->id}&amp;return={$return}");
+            $arr['title'] = JHtml::link($url, $catalog->number);
+            $arr['square'] = sprintf("%s %s", $catalog->square, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_SQM'));
+            if ($catalog->exhibitorID != null) {
+                $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$catalog->exhibitorID}&amp;return={$return}");
+                $arr['exhibitor'] = JHtml::link($url, ProjectsHelper::getExpTitle($catalog->title_ru_short, $catalog->title_ru_full, $catalog->title_en));
+            }
+            else {
+                $arr['exhibitor'] = JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_FREE_OK');
+            }
+            $result[] = $arr;
+        }
+        return $result;
+    }
 
     /**
      * Сохраняет привязки рубрик к проекту

@@ -10,6 +10,9 @@ class JFormFieldCattitle extends JFormFieldList
 
     protected function getOptions()
     {
+        $view = JFactory::getApplication()->input->getString('view');
+        $id = JFactory::getApplication()->input->getInt('id', 0);
+
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
@@ -17,10 +20,23 @@ class JFormFieldCattitle extends JFormFieldList
             ->from("`#__prj_catalog_titles`")
             ->order("`title`");
         // Фильтруем по проекту.
-        $project = ProjectsHelper::getActiveProject();
-        if (is_numeric($project)) {
-            $catalog = ProjectsHelper::getProjectCatalog($project);
-            if ($catalog != null) $query->where('`id` = ' . (int)$catalog);
+        $session = JFactory::getSession();
+        if ($view != 'project') {
+            if ($view == 'catalog' && $session->get('projectID') != null) {
+                $projectID = $session->get('projectID');
+                $titleID = ProjectsHelper::getProjectCatalog($projectID);
+                $query->where("`id` = {$titleID}");
+                $session->clear('projectID');
+            }
+            else {
+                if ($id == 0) {
+                    $project = ProjectsHelper::getActiveProject();
+                    if (is_numeric($project)) {
+                        $catalog = ProjectsHelper::getProjectCatalog($project);
+                        if ($catalog != null) $query->where('`id` = ' . (int)$catalog);
+                    }
+                }
+            }
         }
         $result = $db->setQuery($query)->loadObjectList();
 

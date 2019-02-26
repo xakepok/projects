@@ -71,6 +71,57 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает массив с пунктами прайс-листа проекта
+     * @param int $projectID ID проекта
+     * @return array
+     * @since 1.1.4.4
+     */
+    public static function getProjectPriceItems(int $projectID = 0): array
+    {
+        $result = array();
+        if ($projectID == 0) return $result;
+        $priceID = self::getProjectPrice($projectID);
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`i`.`id`, `i`.`title_ru`, `i`.`title_en`, `i`.`unit`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `i`.`state`")
+            ->select("`p`.`title` as `price`, `s`.`title` as `section`")
+            ->from('`#__prc_items` as `i`')
+            ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
+            ->leftJoin("`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`")
+            ->where("`s`.`priceID` = {$priceID}");
+        return $db->setQuery($query)->loadObjectList() ?? array();
+    }
+
+    /**
+     * Возвращает массив со стендами из каталога проекта
+     * @param int $projectID ID проекта
+     * @return array
+     * @since 1.1.4.4
+     */
+    public static function getProjectCatalogItems(int $projectID = 0): array
+    {
+        $result = array();
+        if ($projectID == 0) return $result;
+        $tip = ProjectsHelper::getProjectType($projectID);
+        if ($tip > 0) return $result;
+        $catalogID = self::getProjectCatalog($projectID);
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+
+        $query
+            ->select("`cat`.`id`, `cat`.`number`, `cat`.`square`")
+            ->select("`e`.`id` as `exhibitorID`, `e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
+            ->from("`#__prj_catalog` as `cat`")
+            ->leftJoin("`#__prj_stands` as `s` on `s`.`catalogID` = `cat`.`id`")
+            ->leftJoin("`#__prj_contracts` as `c` on `c`.`id` = `s`.`contractID`")
+            ->leftJoin("`#__prj_exp` as `e` on `e`.`id` = `c`.`expID`")
+            ->where("`cat`.`titleID` = {$catalogID}");
+
+        return $db->setQuery($query)->loadObjectList() ?? array();
+    }
+
+    /**
      * Возвращает массив сделок, которые имеют указанную рубрику
      * @param int $rubricID ID рубрики. 0 для получения всех сделок, у которых указана рубрика
      * @return array массив с ID сделок

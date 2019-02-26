@@ -10,6 +10,9 @@ class JFormFieldSection extends JFormFieldGroupedList
 
     protected function getGroups()
     {
+        $id = JFactory::getApplication()->input->getInt('id', 0);
+        $view = JFactory::getApplication()->input->getString('view');
+
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
@@ -18,10 +21,28 @@ class JFormFieldSection extends JFormFieldGroupedList
             ->leftJoin('`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`')
             ->order("`s`.`priceID`");
 
-        $project = ProjectsHelper::getActiveProject();
-        if (is_numeric($project)) {
-            $price = ProjectsHelper::getProjectPrice($project);
-            if ($price != null) $query->where('`p`.`id` = ' . (int) $price);
+        if ($view == 'item') {
+            $session = JFactory::getSession();
+            if ($session->get('projectID')) {
+                $projectID = $session->get('projectID');
+                $priceID = ProjectsHelper::getProjectPrice($projectID);
+                $query->where("`s`.`priceID` = {$priceID}");
+                $session->clear('projectID');
+            }
+            else {
+                $project = ProjectsHelper::getActiveProject();
+                if (is_numeric($project)) {
+                    $price = ProjectsHelper::getProjectPrice($project);
+                    if ($price != null) $query->where('`p`.`id` = ' . (int) $price);
+                }
+            }
+        }
+        else {
+            $project = ProjectsHelper::getActiveProject();
+            if (is_numeric($project)) {
+                $price = ProjectsHelper::getProjectPrice($project);
+                if ($price != null) $query->where('`p`.`id` = ' . (int) $price);
+            }
         }
 
         $result = $db->setQuery($query)->loadObjectList();

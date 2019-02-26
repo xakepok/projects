@@ -38,11 +38,29 @@ if ($return != null)
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
-                <?php if ($this->item->id != 0): ?>
+                <?php if ($this->item->id != null): ?>
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'contracts', JText::sprintf('COM_PROJECTS_MENU_CONTRACTS')); ?>
                 <div class="row-fluid">
                     <div class="span12">
                         <?php echo $this->loadTemplate('contracts'); ?>
+                    </div>
+                </div>
+                <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php endif;?>
+                <?php if ($this->item->id != null): ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'price', JText::sprintf('COM_PROJECTS_HEAD_PRICE_LIST')); ?>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <?php echo $this->loadTemplate('price'); ?>
+                    </div>
+                </div>
+                <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php endif;?>
+                <?php if ($this->item->id != null): ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'catalog', JText::sprintf('COM_PROJECTS_BLANK_PROJECT_CATALOGS')); ?>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <?php echo $this->loadTemplate('catalog'); ?>
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>

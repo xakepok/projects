@@ -1,7 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 ?>
-<table class="addPrice">
+<table class="table table-striped">
     <thead>
     <tr>
         <th>

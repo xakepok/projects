@@ -7,4 +7,15 @@ class ProjectsControllerCatalog extends FormController {
     {
         return parent::display($cachable, $urlparams);
     }
+
+    public function add()
+    {
+        $projectID = $this->input->getInt('projectID', 0);
+        if ($projectID != 0)
+        {
+            $session = JFactory::getSession();
+            $session->set('projectID', $projectID);
+        }
+        return parent::add();
+    }
 }
