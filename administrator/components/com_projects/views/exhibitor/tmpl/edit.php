@@ -11,6 +11,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 HTMLHelper::_('script', $this->script);
 HTMLHelper::_('script', 'com_projects/jquery.maskedinput.min.js', array('version' => 'auto', 'relative' => true));
 HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto', 'relative' => true));
+HTMLHelper::_('script', 'com_projects/script.js', array('version' => 'auto', 'relative' => true));
 $action = JRoute::_('index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id=' . (int)$this->item->id);
 $return = JFactory::getApplication()->input->get('return', null);
 if ($return != null) {
@@ -51,6 +52,15 @@ if ($return != null) {
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php if ($this->item->id != null && !empty($this->children)): ?>
+                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'children', JText::sprintf('COM_PROJECTS_BLANK_CHILDREN_COMPANIES')); ?>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <?php echo $this->loadTemplate('children'); ?>
+                        </div>
+                    </div>
+                    <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php endif; ?>
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'contact', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_CONTACTS')); ?>
                 <div class="row-fluid">
                     <div class="span12">
@@ -58,7 +68,7 @@ if ($return != null) {
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
-                <?php if ($this->item->id != 0): ?>
+                <?php if ($this->item->id != null): ?>
                     <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'history', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_HISTORY')); ?>
                     <div class="row-fluid">
                         <div class="span6">

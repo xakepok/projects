@@ -3,7 +3,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\View\HtmlView;
 
 class ProjectsViewExhibitor extends HtmlView {
-    protected $item, $form, $script, $id, $history, $coExhibitors, $persons;
+    protected $item, $form, $script, $id, $history, $coExhibitors, $persons, $children;
 
     public function display($tmp = null) {
         $this->id = JFactory::getApplication()->input->getInt('id', 0);
@@ -13,6 +13,7 @@ class ProjectsViewExhibitor extends HtmlView {
         $this->history = $this->get('History');
         $this->coExhibitors = $this->get('CoExhibitors');
         $this->persons = $this->get('Persons');
+        $this->children = ($this->item->id != null) ? $this->get('Children') : array();
 
         $this->addToolbar();
         $this->setDocument();

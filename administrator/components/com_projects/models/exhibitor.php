@@ -97,6 +97,32 @@ class ProjectsModelExhibitor extends AdminModel
     }
 
     /**
+     * Возвращает массив со ссылками на дочерние компании экспонента
+     * @return array
+     * @since 1.1.4.0
+     */
+    public function getChildren(): array
+    {
+        $item = parent::getItem();
+        $result = array();
+        if ($item->id == null) return $result;
+        $items = ProjectsHelper::getExhibitorChildren($item->id, true);
+        if (empty($items)) return $result;
+        $return = base64_encode("index.php?option=com_projects&view=exhibitor&layout=edit&id={$item->id}");
+        foreach ($items as $exhibitor) {
+            $arr = array();
+            $title = ProjectsHelper::getExpTitle($exhibitor['title_ru_short'], $exhibitor['title_ru_full'], $exhibitor['title_en']);
+            $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$exhibitor['exhibitorID']}&amp;return={$return}");
+            $arr['id'] = $exhibitor['exhibitorID'];
+            $arr['link'] = JHtml::link($url, $title, array('target' => '_blank'));
+            $url = JRoute::_("index.php?option=com_projects&amp;view=contracts&amp;exhibitorID={$exhibitor['exhibitorID']}&amp;return={$return}");
+            $arr['contracts'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_HISTORY'), array('target' => '_blank'));
+            $result[] = $arr;
+        }
+        return $result;
+    }
+
+    /**
      * Возвращает виды деятельности у экспонента
      * @return array
      * @since 1.1.2.5

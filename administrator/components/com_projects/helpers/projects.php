@@ -154,7 +154,7 @@ class ProjectsHelper
             return $db->setQuery($query)->loadColumn() ?? array();
         }
         else {
-            return $db->setQuery($query)->loadAssoc() ?? array();
+            return $db->setQuery($query)->loadAssocList() ?? array();
         }
     }
 

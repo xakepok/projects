@@ -150,6 +150,10 @@ class ProjectsModelContracts extends ListModel
         {
             $query->where("`c`.`prjID` = {$project} AND `c`.`expID` = {$exhibitor}");
         }
+        if ($exhibitor != 0)
+        {
+            $query->where("`c`.`expID` = {$exhibitor}");
+        }
 
         /* Сортировка */
         $orderCol  = $this->state->get('list.ordering', 'plan_dat');
