@@ -86,11 +86,11 @@ class ProjectsModelStand extends AdminModel {
         $nv['fixed'] = $ctritem->fixed ?? null;
         $nv['value'] = $ctritem->value - $stand->square;
         if ($nv['value'] > 0) {
-            $items_model->save($nv);
+            //$items_model->save($nv);
         }
         else
         {
-            $items_model->delete($ctritem->id);
+            //$items_model->delete($ctritem->id);
         }
         ProjectsHelper::addEvent(array('action' => 'delete', 'section' => 'stand', 'itemID' => $item->id, 'old_data' => $item));
         return parent::delete($pks);
@@ -171,7 +171,7 @@ class ProjectsModelStand extends AdminModel {
             $nv['value2'] = $item->value2 ?? null;
             $nv['fixed'] = $item->fixed ?? null;
             $nv['value'] = ($item->id != null) ? $item->value + $stand->square : $stand->square;
-            $items->save($nv);
+            //$items->save($nv);
             $action = 'add';
             $old = null;
         }
@@ -208,7 +208,7 @@ class ProjectsModelStand extends AdminModel {
                 $ctritem = $items_model->getItem(array('itemID' => $data['itemID'], 'contractID' => $data['contractID']));
                 $nv['id'] = $ctritem->id;
                 $nv['value'] = $ctritem->value - $stand_old->square + $stand_new->square;
-                $items_model->save($nv);
+                //$items_model->save($nv);
             }
             if ($item->itemID != $data['itemID'] && $stand_old->id == $stand_new->id) //Если пункт прайс-листа меняется, но не меняется стенд
             {
@@ -216,11 +216,11 @@ class ProjectsModelStand extends AdminModel {
                 $nv['id'] = $ctritem->id;
                 $nv['value'] = $ctritem->value - $stand_old->square;
                 if ($nv['value'] > 0) {
-                    $items_model->save($nv);
+                    //$items_model->save($nv);
                 }
                 else
                 {
-                    $items_model->delete($ctritem->id);
+                    //$items_model->delete($ctritem->id);
                 }
                 $ctritem = $items_model->getItem(array('itemID' => $data['itemID'], 'contractID' => $data['contractID']));
                 $nv = array();
@@ -233,7 +233,7 @@ class ProjectsModelStand extends AdminModel {
                 $nv['value2'] = $ctritem->value2 ?? null;
                 $nv['fixed'] = $ctritem->fixed ?? null;
                 $nv['value'] = ($ctritem->id != null) ? $ctritem->value + $stand_new->square : $stand_new->square;
-                $items_model->save($nv);
+                //$items_model->save($nv);
             }
             $action = 'edit';
             $itemID = $data['id'];

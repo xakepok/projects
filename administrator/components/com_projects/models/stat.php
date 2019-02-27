@@ -42,7 +42,7 @@ class ProjectsModelStat extends ListModel
             ->select("SUM(`s`.`price_rub`) as `amount_rub`, SUM(`s`.`price_usd`) as `amount_usd`, SUM(`s`.`price_eur`) as `amount_eur`")
             ->select("`i`.`price_rub`, `i`.`price_usd`,`i`.`price_eur`")
             ->select("`c`.`currency`")
-            ->from("`#__prj_stat` as `s`")
+            ->from("`#__prj_stat_by_currency` as `s`")
             ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `s`.`itemID`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
             ->where("`s`.`value` > 0");

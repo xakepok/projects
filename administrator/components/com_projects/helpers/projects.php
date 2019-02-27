@@ -503,7 +503,7 @@ class ProjectsHelper
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("IFNULL(SUM(`a`.`amount_rub`),0) as `rub`, IFNULL(SUM(`a`.`amount_usd`),0) as `usd`, IFNULL(SUM(`a`.`amount_eur`),0) as `eur`")
+            ->select("IFNULL(SUM(`a`.`price`),0) as `amount`, `c`.`currency`")
             ->from("`#__prj_contract_amounts` as `a`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `a`.`contractID`")
             ->where("`c`.`prjID` = {$projectID}")
@@ -512,8 +512,12 @@ class ProjectsHelper
             $userID = JFactory::getUser()->id;
             $query->where("`c`.`managerID` = {$userID}");
         }
-        $result = $db->setQuery($query)->loadAssocList();
-        return $result[0];
+        $items = $db->setQuery($query)->loadObjectList();
+        $result = array();
+        foreach ($items as $item) {
+            $result[$item->currency] = $item->amount;
+        }
+        return $result;
     }
 
     /**
@@ -556,9 +560,8 @@ class ProjectsHelper
     {
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
-        $currency = self::getContractCurrency($contractID);
         $query
-            ->select("`amount_{$currency}`")
+            ->select("`price`")
             ->from("`#__prj_contract_amounts`")
             ->where("`contractID` = {$contractID}");
 

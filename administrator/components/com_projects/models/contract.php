@@ -495,11 +495,21 @@ class ProjectsModelContract extends AdminModel {
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`ci`.*")
-            ->from("`#__prj_contract_items` as `ci`")
-            ->leftJoin("`#__prc_items` as `i` on `i`.`id` = `ci`.`itemID`")
-            //->leftJoin("`#__prj_contract_info` as `inf` on `inf`.`contractID` = `ci`.`contractID`")
-            ->where("`ci`.`contractID` = {$contractID}");
+            ->select("*")
+            ->from("`#__prj_stat`")
+            ->where("`contractID` = {$contractID}");
+        $items = $db->setQuery($query)->loadAssocList('itemID');
+        return $items;
+    }
+
+    private function getPriceCounts(int $contractID): array
+    {
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("*")
+            ->from("`#__prj_contract_item_values`")
+            ->where("`contractID` = {$contractID}");
         $items = $db->setQuery($query)->loadAssocList('itemID');
         return $items;
     }
@@ -521,6 +531,7 @@ class ProjectsModelContract extends AdminModel {
         $activeColumn = ProjectsHelper::getActivePriceColumn($item->id);
         $squares = ProjectsHelper::getStandsSquare($item->id);
         $stands = ProjectsHelper::getContractStands($item->id);
+        $counts = $this->getPriceCounts($item->id);
         $result = array();
         $query = $db->getQuery(true);
         $query
@@ -553,12 +564,12 @@ class ProjectsModelContract extends AdminModel {
             $arr['unit2'] = ProjectsHelper::getUnit($item->unit_2);
             $arr['isUnit2'] = $item->isUnit2;
 
-            $arr['value'] = $values[$item->id]['value'];
+            $arr['value'] = $counts[$item->id]['value'];
             $arr['value2'] = $values[$item->id]['value2'];
             $arr['is_markup'] = $item->is_markup;
-            $arr['markup'] = (float) ($values[$item->id]['markup'] != null) ? (float) $values[$item->id]['markup'] * 100 - 100 : 0;
+            $arr['markup'] = $values[$item->id]['markup'];
             $arr['is_factor'] = $item->is_factor;
-            $arr['factor'] = (int) ($values[$item->id]['factor'] != null) ? 100 - $values[$item->id]['factor'] * 100 : 0;
+            $arr['factor'] = $values[$item->id]['factor'];
             $arr['fixed'] = ($activeColumn != $values[$item->id]['columnID'] && !empty($values[$item->id]['columnID']) && !ProjectsHelper::canDo('core.admin')) ? true : false;
             $arr['is_sq'] = $item->is_sq;
             if ($item->is_sq || $tip != 0)
@@ -578,30 +589,11 @@ class ProjectsModelContract extends AdminModel {
                 if (empty($arr['stand'])) $arr['value'] = 0;
                 $arr['stands_count'] = count($stands);
             }
-            $a = 0;
-            $b = 0;
-            $c = 0;
-            if ($values[$item->id]['value'])
-            {
-                //if (empty($arr['stand']) && $item->is_sq) $values[$item->id]['value'] = 0;
-                $a += $values[$item->id]['value'] * $cost;
-            }
-            if ($values[$item->id]['value2'] != null)
-            {
-                $a *= $values[$item->id]['value2'];
-            }
-            if ($values[$item->id]['markup'] != null)
-            {
-                $b = $a * $values[$item->id]['markup'] - $a;
-            }
-            if ($values[$item->id]['factor'] != null)
-            {
-                $c = $a * (1 - $values[$item->id]['factor']);
-            }
-            $arr['sum'] = (float) round($a + $b - $c, 2);
+            $arr['sum'] = $values[$item->id]['price'];
             $arr['sum_showed'] = number_format($arr['sum'], 2, ',', ' ');
             if (!isset($result[$item->application][$item->section])) $result[$item->application][$item->section] = array();
-            $result[$item->application][$item->section][] = $arr;
+            $result[$item->application][$item->section][$item->id] = $arr;
+            unset($values[$item->id]);
         }
         return $result;
     }

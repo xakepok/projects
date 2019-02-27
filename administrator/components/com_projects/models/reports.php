@@ -46,7 +46,7 @@ class ProjectsModelReports extends ListModel
                 ->select("`c`.`status`, `c`.`isCoExp`, IFNULL(`c`.`number_free`,`c`.`number`) as `number`, `c`.`dat`, `c`.`id` as `contractID`, `c`.`currency`")
                 ->select("`u`.`name` as `manager`")
                 ->select("`p`.`title` as `project`")
-                ->select("`a`.`amount_rub`, `a`.`amount_usd`, `a`.`amount_eur`")
+                ->select("`a`.`price`")
                 ->from("`#__prj_contracts` as `c`")
                 ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
                 ->leftJoin("`#__prj_exp_contacts` as `cnt` ON `cnt`.`exbID` = `c`.`expID`")
@@ -140,8 +140,7 @@ class ProjectsModelReports extends ListModel
                     }
                     if (in_array('stands', $fields)) $arr['stands'] = implode("; ", $this->getStands($item->contractID));
                     if (in_array('amount', $fields)) {
-                        $amount_field = "amount_{$item->currency}";
-                        $arr['amount'] = (!$this->xls) ? ProjectsHelper::getCurrency((float) $item->$amount_field, $item->currency) : $item->$amount_field;
+                        $arr['amount'] = (!$this->xls) ? ProjectsHelper::getCurrency((float) $item->price, $item->currency) : $item->price;
                     }
                     if (in_array('acts', $fields)) $arr['acts'] = implode(", ", ProjectsHelper::getExhibitorActs($item->exhibitorID));
                     if (in_array('rubrics', $fields)) $arr['rubrics'] = implode(", ", ProjectsHelper::getContractRubrics($item->contractID, true));

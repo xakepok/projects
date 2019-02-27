@@ -20,6 +20,18 @@
             <option value="">COM_PROJECTS_FILTER_SELECT_PROJECT</option>
         </field>
         <field
+                name="currency"
+                type="list"
+                label="COM_PROJECTS_FILTER_SELECT_CURRENCY"
+                description="COM_PROJECTS_FILTER_SELECT_CURRENCY"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_CURRENCY</option>
+            <option value="rub">COM_PROJECTS_HEAD_ITEM_PRICE_RUB</option>
+            <option value="usd">COM_PROJECTS_HEAD_ITEM_PRICE_USD</option>
+            <option value="eur">COM_PROJECTS_HEAD_ITEM_PRICE_EUR</option>
+        </field>
+        <field
                 name="status"
                 type="list"
                 label="COM_PROJECTS_FILTER_SELECT_STATUS"

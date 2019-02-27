@@ -16,9 +16,12 @@ class JFormFieldContract extends JFormFieldList
             ->select("`c`.`id`, IFNULL(`c`.`number_free`,`c`.`number`) as `number`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
+            ->select("IFNULL((IFNULL(`a`.`price`,0)-IFNULL(`pm`.`payments`,0)),0) as `amount`")
             ->from('`#__prj_contracts` as `c`')
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
+            ->leftJoin("`#__prj_contract_amounts` as `a` ON `a`.`contractID` = `c`.`id`")
+            ->leftJoin("`#__prj_contract_payments` as `pm` ON `pm`.`contractID` = `c`.`id`")
             ->order("`c`.`id`");
         if (!ProjectsHelper::canDo('core.general') && !ProjectsHelper::canDo('core.accountant'))
         {
@@ -46,9 +49,11 @@ class JFormFieldContract extends JFormFieldList
         $options = array();
 
         foreach ($result as $item) {
+            $arr = array('data-amount' => $item->amount);
+            $params = array('attr' => $arr, 'option.attr' => 'optionattr');
             $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $name = ProjectsHelper::getContractFieldTitle($item->status ?? 0, $item->number ?? 0, $item->dat ?? '', $exp, $item->project);
-            $options[] = JHtml::_('select.option', $item->id, $name);
+            $options[] = JHtml::_('select.option', $item->id, $name, $params);
         }
 
         if (!$this->loadExternally) {

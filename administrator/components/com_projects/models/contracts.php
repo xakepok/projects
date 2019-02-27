@@ -46,9 +46,9 @@ class ProjectsModelContracts extends ListModel
             ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
             ->select("`u`.`name` as `manager`, (SELECT MIN(`dat`) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan_dat`")
             ->select("(SELECT COUNT(*) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0 AND `is_notify` = 0) as `plan`")
-            ->select("`a`.`amount_rub`, `a`.`amount_usd`, `a`.`amount_eur`")
+            ->select("`a`.`price` as `amount`")
             ->select("`pay`.`payments`")
-            ->select("IFNULL(`a`.`amount_rub`,0)-IFNULL(`pay`.`payments`,0) as `debt_rub`, IFNULL(`a`.`amount_usd`,0)-IFNULL(`pay`.`payments`,0) as `debt_usd`, IFNULL(`a`.`amount_eur`,0)-IFNULL(`pay`.`payments`,0) as `debt_eur`")
+            ->select("IFNULL(`a`.`price`,0)-IFNULL(`pay`.`payments`,0) as `debt`")
             ->from("`#__prj_contracts` as `c`")
             ->leftJoin("`#__prj_projects` AS `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `expID`")
@@ -202,11 +202,9 @@ class ProjectsModelContracts extends ListModel
             if ($format == 'html') $arr['plan'] = $link;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
             $arr['stand'] = implode(" ", $this->getStandsForContract($item->id));
-            $amount_field = "amount_{$item->currency}";
-            $debt_field = "debt_{$item->currency}";
-            $amount = $item->$amount_field;
+            $amount = $item->amount;
             $payments = $item->payments;
-            $debt = $item->$debt_field;
+            $debt = $item->debt;
             $arr['amount'] = ($format != 'html' || $this->isExcel()) ? $amount : ProjectsHelper::getCurrency((float) $amount, (string) $item->currency);
             $arr['amount_only'] = $amount; //Только цена
             $paid = (float) $amount - (float) $debt;
