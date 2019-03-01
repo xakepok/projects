@@ -336,7 +336,10 @@ class ProjectsHelper
      */
     public static function getReportTypes(): array
     {
-        return array('exhibitors' => 'Отчёт по экспонентам');
+        return array(
+            'exhibitors' => JText::sprintf('COM_PROJECTS_REPORT_TYPE_BY_EXHIBITORS'),
+            'managers' => JText::sprintf('COM_PROJECTS_REPORT_TYPE_BY_MANAGERS'),
+        );
     }
 
     /**

@@ -27,7 +27,7 @@ $return = base64_encode($ret);
             <?php
             $url = "index.php?option=com_projects&amp;task=reports.exportxls&amp;type={$this->type}";
             $url = JRoute::_($url);
-            echo JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_EXPORT_XLS'));
+            if ($this->type == 'exhibitors') echo JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_EXPORT_XLS'));
             ?>
         </div>
         <?php endif; ?>

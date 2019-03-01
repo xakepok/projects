@@ -13,6 +13,8 @@ class ProjectsModelReports extends ListModel
         $this->xls = (JFactory::getApplication()->input->getString('task') != 'exportxls') ? false : true;
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
+                'manager',
+                'project',
                 'e.title_ru_full',
                 'cnt.director_name',
                 'cnt.director_post',
@@ -114,6 +116,30 @@ class ProjectsModelReports extends ListModel
             $query->order($db->escape($orderCol . ' ' . $orderDirn));
         }
 
+        if ($this->type == 'managers') {
+            $query
+                ->select("*")
+                ->from("`#__prj_rep_statuses`");
+
+            // Фильтруем по менеджеру.
+            $manager = $this->getState('filter.manager');
+            if (is_numeric($manager)) {
+                $query->where('`managerID` = ' . (int) $manager);
+            }
+
+            // Фильтруем по проекту.
+            $project = $this->getState('filter.project');
+            if (empty($project)) $project = ProjectsHelper::getActiveProject();
+            if (is_numeric($project)) {
+                $query->where('`projectID` = ' . (int)$project);
+            }
+
+            /* Сортировка */
+            $orderCol = $this->state->get('list.ordering', 'manager');
+            $orderDirn = $this->state->get('list.direction', 'asc');
+            $query->order($db->escape($orderCol . ' ' . $orderDirn));
+        }
+
         return $query;
     }
 
@@ -122,8 +148,8 @@ class ProjectsModelReports extends ListModel
         $items = parent::getItems();
         $result = array();
         foreach ($items as $item) {
-            $arr = array();
             if ($this->type == 'exhibitors') {
+                $arr = array();
                 $arr['exhibitor'] = $item->exhibitor;
                 $fields = $this->state->get('filter.fields');
                 if (is_array($fields)) {
@@ -145,8 +171,28 @@ class ProjectsModelReports extends ListModel
                     if (in_array('acts', $fields)) $arr['acts'] = implode(", ", ProjectsHelper::getExhibitorActs($item->exhibitorID));
                     if (in_array('rubrics', $fields)) $arr['rubrics'] = implode(", ", ProjectsHelper::getContractRubrics($item->contractID, true));
                 }
+                $result[] = $arr;
             }
-            $result[] = $arr;
+            if ($this->type == 'managers') {
+                if (!isset($result[$item->manager][$item->status])) $result[$item->manager][$item->status] = 0;
+               $result[$item->manager][$item->status] += $item->cnt;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Возвращает список фильтров, которые необходимо убрать из отображения
+     * @return array
+     * @since 1.1.4.8
+     */
+    public function getNotAvailableFilters(): array {
+        $result = array();
+        if ($this->type == 'exhibitors') {
+            $result = array('manager');
+        }
+        if ($this->type == 'managers') {
+            $result = array('status', 'rubric', 'fields');
         }
         return $result;
     }
@@ -379,7 +425,9 @@ class ProjectsModelReports extends ListModel
         $this->setState('filter.status', $status);
         $rubric = $this->getUserStateFromRequest($this->context . '.filter.rubric', 'filter_rubric');
         $this->setState('filter.rubric', $rubric);
-        parent::populateState('e.title_ru_full', 'asc');
+        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
+        $this->setState('filter.manager', $manager);
+        parent::populateState(($this->type == 'exhibitors') ? 'e.title_ru_full' : 'manager', 'asc');
     }
 
     protected function getStoreId($id = '')
@@ -390,6 +438,7 @@ class ProjectsModelReports extends ListModel
         $id .= ':' . $this->getState('filter.fields');
         $id .= ':' . $this->getState('filter.status');
         $id .= ':' . $this->getState('filter.rubric');
+        $id .= ':' . $this->getState('filter.manager');
         return parent::getStoreId($id);
     }
 }

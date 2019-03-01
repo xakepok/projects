@@ -9,7 +9,7 @@ class ProjectsViewReports extends HtmlView
 {
 	protected $helper;
 	protected $sidebar = '';
-	public $items, $pagination, $uid, $state, $links, $isAdmin, $filterForm, $activeFilters, $type, $fields;
+	public $items, $pagination, $uid, $state, $links, $isAdmin, $filterForm, $activeFilters, $type, $fields, $notAvailableFilters;
 
 	public function display($tpl = null)
 	{
@@ -19,8 +19,13 @@ class ProjectsViewReports extends HtmlView
         $this->state = $this->get('State');
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
+        $this->notAvailableFilters = $this->get('NotAvailableFilters');
         $this->fields = $this->state->get('filter.fields', array());
 
+        /* Удаляем поля, по которым не нужен фильтр, в зависимости от типа отчёта */
+        foreach ($this->notAvailableFilters as $filter) {
+            $this->filterForm->removeField($filter, 'filter');
+        }
 		// Show the toolbar
 		$this->toolbar();
 
