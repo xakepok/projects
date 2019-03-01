@@ -133,8 +133,11 @@ class ProjectsModelTodos extends ListModel
         $items = parent::getItems();
         $result_no_expire = array();
         $result_expire = array();
-        $return = base64_encode("index.php?option=com_projects&view=todos");
         $task = JFactory::getApplication()->input->getString('task', null);
+        $cid = JFactory::getApplication()->input->getInt('contractID', 0);
+        $ret_url = "index.php?option=com_projects&view=todos";
+        if ($cid > 0) $ret_url .= "&amp;contractID={$cid}";
+        $return = base64_encode($ret_url);
         $result = array();
         foreach ($items as $item) {
             $arr = array();
@@ -152,7 +155,7 @@ class ProjectsModelTodos extends ListModel
                 $params = array('class' => 'jutooltip', 'title' => $item->title_ru_full ?? JText::sprintf('COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_NOT_EXISTS'));
                 $arr['exp'] = JHtml::link($url, $exhibitor, $params);
                 $layout = (!$item->is_notify) ? 'edit' : 'notify';
-                $url_todo = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;layout={$layout}&amp;id={$item->id}");
+                $url_todo = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;layout={$layout}&amp;id={$item->id}&amp;return={$return}");
                 $link = JHtml::link($url_todo, $item->date);
                 $arr['dat'] = $link;
                 $arr['dat_open'] = $item->dat_open;
