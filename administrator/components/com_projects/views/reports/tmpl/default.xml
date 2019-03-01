@@ -13,6 +13,7 @@
                     default="">
                 <option value="">COM_PROJECTS_MENU_REPORTS_DESC</option>
                 <option value="exhibitors">COM_PROJECTS_MENU_STAT_DESC</option>
+                <option value="managers">COM_PROJECTS_REPORT_TYPE_BY_MANAGERS</option>
             </field>
         </fields>
     </fieldset>
