@@ -46,6 +46,7 @@ $sum = 0;
                     <td colspan="8" class="center" style="font-weight: bold;"><?php echo $section; ?></td>
                 </tr>
                 <?php foreach ($arr as $i => $item) :
+                if ($this->tip == 1 && $item['value'] == 0 && $item['is_sq']) continue;
                 $sum += $item['sum'];
                 $subsum += $item['sum'];
                 ?>
