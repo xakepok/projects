@@ -18,6 +18,14 @@ if ($return != null) {
     $action .= "&amp;return={$return}";
 }
 ?>
+<?php if ($this->item->id != null) :?>
+    <script type="text/javascript">
+        window.onload = function () {
+            searchCity('citytest', 'regID', <?php echo $this->item->regID;?>);
+            searchCity('citytestfact', 'regID_fact', <?php echo $this->item->regID_fact;?>);
+        }
+    </script>
+<?php endif;?>
 <script type="text/javascript">
     Joomla.submitbutton = function (task) {
         if (task === 'exhibitor.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/

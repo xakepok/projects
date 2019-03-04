@@ -8,6 +8,8 @@ window.onload = function () {
     field3.addEventListener('keyup', checkExp, false);
     var inn = document.getElementById("jform_inn");
     inn.addEventListener('keyup', checkExp, false);
+    var addr = document.getElementById("jform_citytest");
+    addr.addEventListener('change', searchCity, false);
     setMask('mask_jform[phone_1]', 'jform_phone_1');
     setMask('mask_jform[phone_2]', 'jform_phone_2');
 
@@ -25,29 +27,31 @@ window.onload = function () {
     }
 };
 
-function searchCity() {
-    var indx = document.querySelector('#jform_city_test').value;
-    var url = 'index.php?option=com_projects&task=exhibitors.getRegion&search=' + indx;
+function searchCity(field, to, id) {
+    var indx = document.querySelector('#jform_' + field).value;
+    var url = '';
+    if (id === 0) {
+        url = 'index.php?option=com_projects&task=exhibitors.getRegion&search=' + indx;
+    }
+    else {
+        url = 'index.php?option=com_projects&task=exhibitors.getRegion&id=' + id;
+    }
     fetch(url)
         .then(function (response) {
             return response.json();
         })
         .then(function (text) {
-            var select = document.querySelector("#jform_regID");
-            var length = select.options.length;
-            for (var i = 0; i < length; i++) {
-                select.options[i] = null;
-            }
+            var select = jQuery("#jform_" + to);
+            select.children().remove("option");
+            select.children().remove("optgroup");
             jQuery(select).trigger("liszt:updated");
-            console.log(text.length);
-            for (i = 0; i < text.length; i++) {
+            for (var i = 0; i < text.length; i++) {
                 var opt = document.createElement('option');
-                opt.value = text[i];
-                opt.innerText = text[i];
-                select.appendChild(opt);
-                console.log(text[i]);
+                opt.value = text[i].id;
+                opt.innerText = text[i].name;
+                document.querySelector("#jform_" + to).appendChild(opt);
             }
-            jQuery(select).trigger("liszt:updated");
+            select.trigger("liszt:updated");
         })
         .catch(function (error) {
             console.log('Request failed', error);
@@ -57,6 +61,12 @@ function searchCity() {
 function copyAddr() {
     var field = document.querySelector('#jform_regID');
     var city = field.options[field.selectedIndex].value;
+    jQuery('#jform_regID_fact').children().remove('option');
+    jQuery('#jform_regID_fact').children().remove('optgroup').trigger("liszt:updated");
+    var opt = document.createElement('option');
+    opt.value = city;
+    opt.innerText = field.options[field.selectedIndex].innerText;
+    document.querySelector("#jform_regID_fact").appendChild(opt);
     jQuery('#jform_regID_fact').val(city).trigger("liszt:updated");
     var indx = document.querySelector('#jform_indexcode').value;
     document.querySelector("#jform_indexcode_fact").value = indx;

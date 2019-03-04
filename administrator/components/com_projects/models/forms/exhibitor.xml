@@ -163,23 +163,24 @@
     </fieldset>
     <fieldset name="addresses">
         <field
+                name="citytest"
+                type="text"
+                label="COM_PROJECTS_HEAD_CITY_START_INPUT_HINT"
+                description="COM_PROJECTS_HEAD_CITY_START_INPUT"
+                hint="COM_PROJECTS_HEAD_CITY_START_INPUT_HINT"
+                class="input-xlarge"
+                onchange="searchCity('citytest', 'regID', 0)"
+                autocomplete="false"
+        />
+        <field
                 name="regID"
-                type="Region"
+                type="list"
                 label="COM_PROJECTS_HEAD_CITY"
                 description="COM_PROJECTS_HEAD_CITY_DESC"
                 required="true"
                 class="input-xlarge"
                 default="4400"
         />
-        <field
-                name="city_test"
-                type="text"
-                label="COM_PROJECTS_HEAD_CITY"
-                description="COM_PROJECTS_HEAD_CITY_DESC"
-                class="input-xlarge"
-                onkeyup="searchCity()"
-                autocomplete="false"
-                />
         <field
                 name="indexcode"
                 type="text"
@@ -208,8 +209,19 @@
                 class="input-xlarge"
         />
         <field
+                name="citytestfact"
+                type="text"
+                label="COM_PROJECTS_HEAD_CITY_START_INPUT_HINT"
+                description="COM_PROJECTS_HEAD_CITY_START_INPUT"
+                hint="COM_PROJECTS_HEAD_CITY_START_INPUT_HINT"
+                class="input-xlarge"
+                onchange="searchCity('citytestfact', 'regID_fact', 0)"
+                autocomplete="false"
+        />
+
+        <field
                 name="regID_fact"
-                type="Region"
+                type="list"
                 label="COM_PROJECTS_HEAD_CITY_FACT"
                 description="COM_PROJECTS_HEAD_CITY_FACT_DESC"
                 required="true"

@@ -21,10 +21,12 @@ class ProjectsModelExhibitor extends AdminModel
             ->from('`#__grph_cities` as `c`')
             ->leftJoin('`#__grph_regions` as `r` ON `r`.`id` = `c`.`region_id`')
             ->leftJoin('`#__grph_countries` as `s` ON `s`.`id` = `r`.`country_id`')
-            ->order("`c`.`is_capital` DESC, `c`.`name`")
-            ->where("(`s`.`state` = 1 AND `c`.`name` LIKE {$search})");
+            ->order("`c`.`is_capital` DESC, `c`.`name`");
+        if ($id == 0) {
+            $query->where("`c`.`name` LIKE {$search}");
+        }
         if ($id > 0) {
-            $query->orWhere("`c`.`id` = {$id}");
+            $query->Where("`c`.`id` = {$id}");
         }
         $result = $db->setQuery($query)->loadObjectList();
 
@@ -33,7 +35,7 @@ class ProjectsModelExhibitor extends AdminModel
         if ($result) {
             foreach ($result as $p) {
                 $name = sprintf("%s (%s, %s)", $p->city, $p->region, $p->country);
-                $options[] = $name;
+                $options[] = array('id' => $p->id, 'name' => $name);
             }
         }
 
