@@ -98,20 +98,39 @@ $sum = 0;
                     </td>
                     <td class="center" style="width: 10%">
                         <?php if ($item['isUnit2']): ?>
-                            <input
-                                    type="text"
-                                    name="jform[price][<?php echo $item['id']; ?>][value2]"
-                                    id="value2_<?php echo $item['id']; ?>"
-                                    value="<?php echo $item['value2']; ?>"
-                                    class="input"
-                                    placeholder=""
-                                    autocomplete="off"
-                                    onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
-                                    onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
-                                <?php if ($item['fixed']) echo "disabled "; ?>
-                                    style="width: 50px;"
-                                    aria-invalid="false"/>&nbsp;
-                            <span><?php echo $item['unit2']; ?></span>
+                            <?php if (!$item['is_sq']): ?>
+                                <input
+                                        type="text"
+                                        name="jform[price][<?php echo $item['id']; ?>][value2]"
+                                        id="value2_<?php echo $item['id']; ?>"
+                                        value="<?php echo $item['value2']; ?>"
+                                        class="input"
+                                        placeholder=""
+                                        autocomplete="off"
+                                        onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
+                                        onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
+                                    <?php if ($item['fixed']) echo "disabled "; ?>
+                                        style="width: 50px;"
+                                        aria-invalid="false"/>&nbsp;
+                                <span><?php echo $item['unit2']; ?></span>
+                            <?php endif; ?>
+                            <?php if ($item['is_sq']): ?>
+                                <input
+                                        type="hidden"
+                                        name="jform[price][<?php echo $item['id']; ?>][value2]"
+                                        id="value2_<?php echo $item['id']; ?>"
+                                        value="<?php echo $item['value2']; ?>"
+                                        class="input"
+                                        placeholder=""
+                                        autocomplete="off"
+                                        onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
+                                        onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
+                                    <?php if ($item['fixed']) echo "disabled "; ?>
+                                        style="width: 50px;"
+                                        aria-invalid="false"/>&nbsp;
+                                <span><?php echo $item['value2']; ?></span>
+                                <span><?php echo $item['unit2']; ?></span>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </td>
                     <td class="center" style="width: 5%">
@@ -154,8 +173,10 @@ $sum = 0;
                             <?php endif; ?>
                     </td>
                     <td style="width: 8%">
-                    <span class="amounts" id="sum_<?php echo $item['id']; ?>" style="display: none;"><?php echo $item['sum']; ?></span>&nbsp
-                    <span class="amounts" id="sumV_<?php echo $item['id']; ?>"><?php echo number_format($item['sum'], 2, ',', ' '); ?></span>
+                        <span class="amounts" id="sum_<?php echo $item['id']; ?>"
+                              style="display: none;"><?php echo $item['sum']; ?></span>&nbsp
+                        <span class="amounts"
+                              id="sumV_<?php echo $item['id']; ?>"><?php echo number_format($item['sum'], 2, ',', ' '); ?></span>
                         <span id="currency_<?php echo $item['id']; ?>"><?php echo $item['currency']; ?></span>
                     </td>
                 </tr>
