@@ -172,6 +172,15 @@
                 default="4400"
         />
         <field
+                name="city_test"
+                type="text"
+                label="COM_PROJECTS_HEAD_CITY"
+                description="COM_PROJECTS_HEAD_CITY_DESC"
+                class="input-xlarge"
+                onkeyup="searchCity()"
+                autocomplete="false"
+                />
+        <field
                 name="indexcode"
                 type="text"
                 label="COM_PROJECTS_HEAD_EXP_INDEX"

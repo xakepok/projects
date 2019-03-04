@@ -32,11 +32,8 @@ class ProjectsModelExhibitor extends AdminModel
 
         if ($result) {
             foreach ($result as $p) {
-                if (!isset($options[$p->region])) {
-                    $options[$p->region] = array();
-                }
                 $name = sprintf("%s (%s, %s)", $p->city, $p->region, $p->country);
-                $options[$p->region][$p->id] = $name;
+                $options[] = $name;
             }
         }
 

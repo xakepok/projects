@@ -25,6 +25,35 @@ window.onload = function () {
     }
 };
 
+function searchCity() {
+    var indx = document.querySelector('#jform_city_test').value;
+    var url = 'index.php?option=com_projects&task=exhibitors.getRegion&search=' + indx;
+    fetch(url)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (text) {
+            var select = document.querySelector("#jform_regID");
+            var length = select.options.length;
+            for (var i = 0; i < length; i++) {
+                select.options[i] = null;
+            }
+            jQuery(select).trigger("liszt:updated");
+            console.log(text.length);
+            for (i = 0; i < text.length; i++) {
+                var opt = document.createElement('option');
+                opt.value = text[i];
+                opt.innerText = text[i];
+                select.appendChild(opt);
+                console.log(text[i]);
+            }
+            jQuery(select).trigger("liszt:updated");
+        })
+        .catch(function (error) {
+            console.log('Request failed', error);
+        });
+}
+
 function copyAddr() {
     var field = document.querySelector('#jform_regID');
     var city = field.options[field.selectedIndex].value;
