@@ -12,7 +12,7 @@ sort($dates);
 ?>
 <tr>
     <th>
-        <?php echo $manager; ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TMPL_MANAGER', 'manager', $listDirn, $listOrder); ?>
     </th>
     <?php foreach ($dates as $date) :?>
         <th>
