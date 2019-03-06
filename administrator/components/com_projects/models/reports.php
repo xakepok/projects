@@ -36,6 +36,8 @@ class ProjectsModelReports extends ListModel
     protected function _getListQuery()
     {
         $db =& $this->getDbo();
+
+        $db->setQuery("SET lc_time_names = 'ru_RU'")->execute();
         $query = $db->getQuery(true);
 
         if ($this->type == 'exhibitors')
@@ -141,62 +143,26 @@ class ProjectsModelReports extends ListModel
             $query->order($db->escape($orderCol . ' ' . $orderDirn));
         }
 
-        if ($this->type == 'sales') {
+        if ($this->type == 'todos_by_dates') {
             $query
-                ->select("`s`.`itemID`, `i`.`title_ru` as `item`, `i`.`application`, `i`.`unit`")
-                ->select("SUM(`s`.`value`) as `value`")
-                ->select("SUM(`s`.`price_rub`) as `amount_rub`, SUM(`s`.`price_usd`) as `amount_usd`, SUM(`s`.`price_eur`) as `amount_eur`")
-                ->select("`i`.`price_rub`, `i`.`price_usd`,`i`.`price_eur`")
-                ->select("`c`.`currency`")
-                ->from("`#__prj_stat_by_currency` as `s`")
-                ->leftJoin("`#__prc_items` as `i` ON `i`.`id` = `s`.`itemID`")
-                ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
-                ->where("`s`.`value` > 0");
+                ->select("*")
+                ->from("`#__prj_rep_todos_by_dates`");
 
-            if (!empty($this->itemIDs)) {
-                $ids = implode(', ', $this->itemIDs);
-                $query
-                    ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `c`.`expID`")
-                    ->select("IFNULL(`c`.`number_free`,`c`.`number`) as `contract`, `c`.`id` as `contractID`")
-                    ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
-                    ->where("`s`.`itemID` IN ({$ids})")
-                    ->group("`c`.`expID`");
-            } else {
-                $query->group("`s`.`itemID`");
+            // Фильтруем по менеджеру.
+            $manager = $this->getState('filter.manager');
+            if (is_numeric($manager)) {
+                $query->where('`managerID` = ' . (int) $manager);
             }
 
-            /* Фильтр */
-            $search = $this->getState('filter.search');
-            if (!empty($search)) {
-                $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-                $query->where('`i`.`title_ru` LIKE ' . $search);
-            }
             // Фильтруем по проекту.
             $project = $this->getState('filter.project');
             if (empty($project)) $project = ProjectsHelper::getActiveProject();
             if (is_numeric($project)) {
-                $query->where('`c`.`prjID` = ' . (int) $project);
-                $session = JFactory::getSession();
-                $session->set('projectID', $project);
-            }
-            // Фильтруем по статусу.
-            $status = $this->getState('filter.status');
-            if (is_array($status)) {
-                if (!empty($status)) {
-                    $statuses = implode(', ', $status);
-                    if ($status[0] != '0') {
-                        $query->where("`c`.`status` IN ({$statuses})");
-                    }
-                    else
-                    {
-                        $this->state->set('filter.status', '');
-                        $query->where("`c`.`status` != 0");
-                    }
-                }
+                $query->where('`projectID` = ' . (int)$project);
             }
 
             /* Сортировка */
-            $orderCol = $this->state->get('list.ordering', 'i.title_ru');
+            $orderCol = $this->state->get('list.ordering', 'manager');
             $orderDirn = $this->state->get('list.direction', 'asc');
             $query->order($db->escape($orderCol . ' ' . $orderDirn));
         }
@@ -238,45 +204,8 @@ class ProjectsModelReports extends ListModel
                 if (!isset($result[$item->manager][$item->status])) $result[$item->manager][$item->status] = 0;
                $result[$item->manager][$item->status] += $item->cnt;
             }
-            if ($this->type == 'sales') {
-                $result['amount'] = array('rub' => 0, 'usd' => 0, 'eur' => 0);
-                $result['sum'] = array('rub' => 0, 'usd' => 0, 'eur' => 0);
-                if ($this->itemID != 0) $result['cnt'] = 0;
-                $result['items'] = array();
-                $xls = (JFactory::getApplication()->input->getString('task') == 'exportxls');
-                foreach ($items as $item) {
-                    $arr = array();
-                    if (!empty($this->itemIDs)) {
-                        $return = base64_encode("index.php?option=com_projects&view=reports&type=sales");
-                        $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}");
-                        $title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_rn);
-                        $arr['title'] = (!$xls) ? JHtml::link($url, $title) : $title;
-                        $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
-                        $title = ($item->contract != null) ? JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITH_NUMBER', $item->contract) : JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
-                        $arr['contract'] = (!$xls) ? JHtml::link($url, $title) : $title;
-                        $stands = $this->getStands($item->contractID);
-                        $arr['stands'] = implode(' ', $stands);
-                        $result['cnt'] += $item->value;
-                    } else {
-                        $url = JRoute::_("index.php?option=com_projects&amp;view=reports&amp;type=sales&amp;itemID={$item->itemID}");
-                        $options = array('class' => 'small');
-                        $arr['title'] = (!$xls) ? JHtml::link($url, $item->item, $options) : $item->item;
-                    }
-                    $arr['application'] = ProjectsHelper::getApplication($item->application);
-                    $arr['unit'] = ProjectsHelper::getUnit($item->unit);
-                    $arr['unit_2'] = '';
-                    $arr['value'] = $item->value;
-                    $arr['price']['rub'] = (!$xls) ? ProjectsHelper::getCurrency((float)$item->price_rub, 'rub') : $item->price_rub;
-                    $arr['price']['usd'] = (!$xls) ? ProjectsHelper::getCurrency((float)$item->price_usd, 'usd') : $item->price_usd;
-                    $arr['price']['eur'] = (!$xls) ? ProjectsHelper::getCurrency((float)$item->price_eur, 'eur') : $item->price_eur;
-                    $arr['amount']['rub'] = (!$xls) ? ProjectsHelper::getCurrency((float)$item->amount_rub, 'rub') : $item->amount_rub;
-                    $arr['amount']['usd'] = (!$xls) ? ProjectsHelper::getCurrency((float)$item->amount_usd, 'usd') : $item->amount_usd;
-                    $arr['amount']['eur'] = (!$xls) ? ProjectsHelper::getCurrency((float)$item->amount_eur, 'eur') : $item->amount_eur;
-                    $result['items'][] = $arr;
-                    $result['amount']['rub'] += $item->amount_rub;
-                    $result['amount']['usd'] += $item->amount_usd;
-                    $result['amount']['eur'] += $item->amount_eur;
-                }
+            if ($this->type == 'todos_by_dates') {
+                $result[$item->dat] = array($item->manager => $item->cnt);
             }
         }
         return $result;
@@ -295,12 +224,10 @@ class ProjectsModelReports extends ListModel
         if ($this->type == 'managers') {
             $result = array('status', 'rubric', 'fields');
         }
+        if ($this->type == 'todos_by_dates') {
+            $result = array('status', 'rubric', 'fields');
+        }
         return $result;
-    }
-
-    public function getItemIds()
-    {
-        return $this->itemIDs;
     }
 
     /**
