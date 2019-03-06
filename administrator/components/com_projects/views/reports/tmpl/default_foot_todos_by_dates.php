@@ -3,7 +3,7 @@
 defined('_JEXEC') or die;
 foreach ($this->items as $dat => $arr) :
     foreach ($arr as $manager => $cnt) :
-        $dates[] = $dat;
+        if (!in_array($dat, $dates)) $dates[] = $dat;
     endforeach;
 endforeach;
 ?>

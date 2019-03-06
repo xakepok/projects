@@ -5,7 +5,7 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 $dates = array();
 foreach ($this->items as $dat => $arr) :
     foreach ($arr as $manager => $cnt) :
-        $dates[] = $dat;
+        if (!in_array($dat, $dates)) $dates[] = $dat;
     endforeach;
 endforeach;
 sort($dates);

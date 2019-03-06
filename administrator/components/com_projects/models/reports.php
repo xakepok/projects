@@ -205,7 +205,7 @@ class ProjectsModelReports extends ListModel
                $result[$item->manager][$item->status] += $item->cnt;
             }
             if ($this->type == 'todos_by_dates') {
-                $result[$item->dat] = array($item->manager => $item->cnt);
+                $result[$item->dat][$item->manager] = $item->cnt;
             }
         }
         return $result;

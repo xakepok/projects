@@ -7,7 +7,7 @@ $dates = array();
 foreach ($this->items as $dat => $arr) :
     foreach ($arr as $manager => $cnt) :
         if (!in_array($manager, $managers)) $managers[] = $manager;
-        $dates[] = $dat;
+        if (!in_array($dat, $dates)) $dates[] = $dat;
     endforeach;
 endforeach;
 sort($dates);
