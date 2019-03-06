@@ -71,6 +71,32 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает массив с количеством просроченных заданий менеджеров
+     * @return array
+     * @since 1.1.6.0
+     */
+    public static function getExpiredTodosByManager(): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`u`.`name` as `manager`, count(`t`.`id`) as `cnt`")
+            ->from("`#__prj_todos` as `t`")
+            ->leftJoin("`#__users` as `u` on `u`.`id` = `t`.`managerID`")
+            ->where("`t`.`dat` < current_date")
+            ->where("`t`.`state` = 0")
+            ->where("`t`.`is_notify` = 0")
+            ->group("`t`.`managerID`");
+        $items = $db->setQuery($query)->loadObjectList();
+        $result = array();
+        if (empty($items)) return $result;
+        foreach ($items as $item) {
+            $result[$item->manager] = $item->cnt;
+        }
+        return $result;
+    }
+
+    /**
      * Возвращает массив с пунктами прайс-листа проекта
      * @param int $projectID ID проекта
      * @return array
