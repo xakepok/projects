@@ -3,10 +3,10 @@ defined('_JEXEC') or die;
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 $dates = array();
-$next_week = (int) date("W") + 1;
+$next_week = (int) strftime("%W") + 1;
 foreach ($this->items['current'] as $dat => $arr) :
     foreach ($arr as $manager => $cnt) :
-        if (!in_array($dat, $dates) && date("W", strtotime($dat)) == $next_week) {
+        if (!in_array($dat, $dates) && strftime("%W", strtotime($dat)) == $next_week) {
             $dates[] = $dat;
         }
     endforeach;
