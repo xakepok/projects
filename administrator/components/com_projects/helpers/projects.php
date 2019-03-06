@@ -339,6 +339,7 @@ class ProjectsHelper
         return array(
             'exhibitors' => JText::sprintf('COM_PROJECTS_REPORT_TYPE_BY_EXHIBITORS'),
             'managers' => JText::sprintf('COM_PROJECTS_REPORT_TYPE_BY_MANAGERS'),
+            'sales' => JText::sprintf('COM_PROJECTS_REPORT_TYPE_BY_SALES'),
         );
     }
 

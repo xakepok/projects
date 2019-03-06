@@ -54,7 +54,8 @@ class ProjectsModelStat extends ListModel
                 ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
                 ->where("`s`.`itemID` = {$this->itemID}")
                 ->group("`c`.`expID`");
-        } else {
+        }
+        if ($this->itemID == 0) {
             $query->group("`s`.`itemID`");
         }
 
@@ -105,6 +106,7 @@ class ProjectsModelStat extends ListModel
         if ($this->itemID != 0) $result['cnt'] = 0;
         $result['items'] = array();
         $xls = (JFactory::getApplication()->input->getString('task') == 'exportxls');
+        if ($this->itemID != 0) $item_title = $this->getExhibitorTitle();
         foreach ($items as $item) {
             $arr = array();
             if ($this->itemID != 0) {
@@ -117,6 +119,7 @@ class ProjectsModelStat extends ListModel
                 $arr['contract'] = (!$xls) ? JHtml::link($url, $title) : $title;
                 $stands = $this->getStands($item->contractID);
                 $arr['stands'] = implode(' ', $stands);
+                $arr['item_title'] = $item_title;
                 $result['cnt'] += $item->value;
             } else {
                 $url = JRoute::_("index.php?option=com_projects&amp;view=stat&amp;itemID={$item->itemID}");
@@ -165,52 +168,111 @@ class ProjectsModelStat extends ListModel
         $xls->setActiveSheetIndex(0);
         $sheet = $xls->getActiveSheet();
         $sheet->setTitle(JText::sprintf('COM_PROJECTS_MENU_STAT'));
-        for ($i = 1; $i < count($data) + 1; $i++) {
-            for ($j = 0; $j < 10; $j++) {
-                if ($i == 1) {
-                    if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf(($this->itemID != 0) ? 'COM_PROJECTS_HEAD_PAYMENT_CONTRACT_DESC' : 'COM_PROJECTS_HEAD_ITEM_APPLICATION'));
-                    if ($j == 1) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf(($this->itemID != 0) ? 'COM_PROJECTS_HEAD_PAYMENT_EXP_DESC' : 'COM_PROJECTS_HEAD_ITEM_TITLE'));
-                    if ($j == 2) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT'));
-                    if ($j == 3) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_RUB_SHORT'));
-                    if ($j == 4) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_USD_SHORT'));
-                    if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_EUR_SHORT'));
-                    if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT_SHORT'));
-                    if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_RUB'));
-                    if ($j == 8) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_USD'));
-                    if ($j == 9) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_EUR'));
+        if ($this->itemID != 0) {
+            for ($i = 1; $i < count($data) + 1; $i++) {
+                for ($j = 0; $j < 12; $j++) {
+                    if ($i == 1) {
+                        if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_TITLE'));
+                        if ($j == 1) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_CONTRACT_DESC'));
+                        if ($j == 2) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_BLANK_STANDS'));
+                        if ($j == 3) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_EXP_DESC'));
+                        if ($j == 4) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT'));
+                        if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_RUB_SHORT'));
+                        if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_USD_SHORT'));
+                        if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_EUR_SHORT'));
+                        if ($j == 8) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT_SHORT'));
+                        if ($j == 9) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_RUB'));
+                        if ($j == 10) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_USD'));
+                        if ($j == 11) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_EUR'));
+                    }
+                    if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['item_title']);
+                    if ($j == 1) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['contract']);
+                    if ($j == 2) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['stands']);
+                    if ($j == 3) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['title']);
+                    if ($j == 4) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['unit']);
+                    if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['price']['rub'] ?? 0);
+                    if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['price']['usd'] ?? 0);
+                    if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['price']['eur'] ?? 0);
+                    if ($j == 8) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['value'] ?? 0);
+                    if ($j == 9) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['amount']['rub'] ?? 0);
+                    if ($j == 10) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['amount']['usd'] ?? 0);
+                    if ($j == 11) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['amount']['eur'] ?? 0);
                 }
-                if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, ($this->itemID != 0) ? $data[$i - 1]['contract'] : $data[$i - 1]['application']);
-                if ($j == 1) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['title']);
-                if ($j == 2) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['unit']);
-                if ($j == 3) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['price']['rub'] ?? 0);
-                if ($j == 4) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['price']['usd'] ?? 0);
-                if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['price']['eur'] ?? 0);
-                if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['value'] ?? 0);
-                if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['amount']['rub'] ?? 0);
-                if ($j == 8) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['amount']['usd'] ?? 0);
-                if ($j == 9) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['amount']['eur'] ?? 0);
             }
+            $sheet->getColumnDimension('A')->setWidth(66);
+            $sheet->getColumnDimension('B')->setWidth(21);
+            $sheet->getColumnDimension('C')->setWidth(20);
+            $sheet->getColumnDimension('D')->setWidth(61);
+            $sheet->getColumnDimension('E')->setWidth(9);
+            $sheet->getColumnDimension('F')->setWidth(15);
+            $sheet->getColumnDimension('G')->setWidth(15);
+            $sheet->getColumnDimension('H')->setWidth(15);
+            $sheet->getColumnDimension('I')->setWidth(15);
+            $sheet->getColumnDimension('J')->setWidth(15);
+            $sheet->getColumnDimension('K')->setWidth(15);
+            $sheet->getColumnDimension('L')->setWidth(15);
+            $sheet->getStyle('A1')->getFont()->setBold(true);
+            $sheet->getStyle('B1')->getFont()->setBold(true);
+            $sheet->getStyle('C1')->getFont()->setBold(true);
+            $sheet->getStyle('D1')->getFont()->setBold(true);
+            $sheet->getStyle('E1')->getFont()->setBold(true);
+            $sheet->getStyle('F1')->getFont()->setBold(true);
+            $sheet->getStyle('G1')->getFont()->setBold(true);
+            $sheet->getStyle('H1')->getFont()->setBold(true);
+            $sheet->getStyle('I1')->getFont()->setBold(true);
+            $sheet->getStyle('J1')->getFont()->setBold(true);
+            $sheet->getStyle('K1')->getFont()->setBold(true);
+            $sheet->getStyle('L1')->getFont()->setBold(true);
+
         }
-        $sheet->getColumnDimension('A')->setWidth(20);
-        $sheet->getColumnDimension('B')->setWidth(66);
-        $sheet->getColumnDimension('C')->setWidth(11);
-        $sheet->getColumnDimension('D')->setWidth(15);
-        $sheet->getColumnDimension('E')->setWidth(15);
-        $sheet->getColumnDimension('F')->setWidth(15);
-        $sheet->getColumnDimension('G')->setWidth(11);
-        $sheet->getColumnDimension('H')->setWidth(15);
-        $sheet->getColumnDimension('I')->setWidth(15);
-        $sheet->getColumnDimension('J')->setWidth(15);
-        $sheet->getStyle('A1')->getFont()->setBold(true);
-        $sheet->getStyle('B1')->getFont()->setBold(true);
-        $sheet->getStyle('C1')->getFont()->setBold(true);
-        $sheet->getStyle('D1')->getFont()->setBold(true);
-        $sheet->getStyle('E1')->getFont()->setBold(true);
-        $sheet->getStyle('F1')->getFont()->setBold(true);
-        $sheet->getStyle('G1')->getFont()->setBold(true);
-        $sheet->getStyle('H1')->getFont()->setBold(true);
-        $sheet->getStyle('I1')->getFont()->setBold(true);
-        $sheet->getStyle('J1')->getFont()->setBold(true);
+        if ($this->itemID == 0) {
+            for ($i = 1; $i < count($data) + 1; $i++) {
+                for ($j = 0; $j < 10; $j++) {
+                    if ($i == 1) {
+                        if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_APPLICATION'));
+                        if ($j == 1) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_TITLE'));
+                        if ($j == 2) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT'));
+                        if ($j == 3) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_RUB_SHORT'));
+                        if ($j == 4) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_USD_SHORT'));
+                        if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_EUR_SHORT'));
+                        if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT_SHORT'));
+                        if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_RUB'));
+                        if ($j == 8) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_USD'));
+                        if ($j == 9) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_EUR'));
+                    }
+                    if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['application']);
+                    if ($j == 1) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['title']);
+                    if ($j == 2) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['unit']);
+                    if ($j == 3) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['price']['rub'] ?? 0);
+                    if ($j == 4) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['price']['usd'] ?? 0);
+                    if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['price']['eur'] ?? 0);
+                    if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['value'] ?? 0);
+                    if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['amount']['rub'] ?? 0);
+                    if ($j == 8) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['amount']['usd'] ?? 0);
+                    if ($j == 9) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['amount']['eur'] ?? 0);
+                }
+            }
+            $sheet->getColumnDimension('A')->setWidth(20);
+            $sheet->getColumnDimension('B')->setWidth(66);
+            $sheet->getColumnDimension('C')->setWidth(11);
+            $sheet->getColumnDimension('D')->setWidth(15);
+            $sheet->getColumnDimension('E')->setWidth(15);
+            $sheet->getColumnDimension('F')->setWidth(15);
+            $sheet->getColumnDimension('G')->setWidth(11);
+            $sheet->getColumnDimension('H')->setWidth(15);
+            $sheet->getColumnDimension('I')->setWidth(15);
+            $sheet->getColumnDimension('J')->setWidth(15);
+            $sheet->getStyle('A1')->getFont()->setBold(true);
+            $sheet->getStyle('B1')->getFont()->setBold(true);
+            $sheet->getStyle('C1')->getFont()->setBold(true);
+            $sheet->getStyle('D1')->getFont()->setBold(true);
+            $sheet->getStyle('E1')->getFont()->setBold(true);
+            $sheet->getStyle('F1')->getFont()->setBold(true);
+            $sheet->getStyle('G1')->getFont()->setBold(true);
+            $sheet->getStyle('H1')->getFont()->setBold(true);
+            $sheet->getStyle('I1')->getFont()->setBold(true);
+            $sheet->getStyle('J1')->getFont()->setBold(true);
+        }
         $filename = ($this->itemID != 0) ? JFile::makeSafe($this->getExhibitorTitle()) : 'Report';
         $filename = sprintf("%s.xls", $filename);
         header("Expires: Mon, 1 Apr 1974 05:00:00 GMT");
