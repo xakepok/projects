@@ -506,11 +506,12 @@ class ProjectsHelper
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("IFNULL(SUM(`a`.`price`),0) as `amount`, `c`.`currency`")
+            ->select("IFNULL(SUM(`a`.`price`),0) as `amount`, `a`.`currency`")
             ->from("`#__prj_contract_amounts` as `a`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `a`.`contractID`")
             ->where("`c`.`prjID` = {$projectID}")
-            ->where("`c`.`status` IN ({$statuses})");
+            ->where("`c`.`status` IN ({$statuses})")
+            ->group("`currency`");
         if (!ProjectsHelper::canDo('projects.access.contracts.full')) {
             $userID = JFactory::getUser()->id;
             $query->where("`c`.`managerID` = {$userID}");
