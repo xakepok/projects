@@ -44,6 +44,17 @@
             >
             <option value="">COM_PROJECTS_FILTER_SELECT_PROJECT_ACTIVE</option>
         </field>
+        <field
+            name="status"
+            type="list"
+            label="COM_PROJECTS_FILTER_SELECT_COMPANY_STATUS"
+            description="COM_PROJECTS_FILTER_SELECT_COMPANY_STATUS"
+            onchange="this.form.submit();"
+            >
+            <option value="">COM_PROJECTS_FILTER_SELECT_COMPANY_STATUS</option>
+            <option value="0">COM_PROJECTS_HEAD_EXP_COMPANY</option>
+            <option value="1">COM_PROJECTS_HEAD_EXP_CONTRACTOR</option>
+        </field>
     </fields>
     <fields name="list">
         <field

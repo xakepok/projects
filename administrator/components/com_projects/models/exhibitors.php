@@ -20,6 +20,7 @@ class ProjectsModelExhibitors extends ListModel
                 'search',
                 'activity',
                 'city',
+                'status',
             );
         }
         parent::__construct($config);
@@ -57,6 +58,11 @@ class ProjectsModelExhibitors extends ListModel
         $city = $this->getState('filter.city');
         if (is_numeric($city) && $format != 'html') {
             $query->where('`e`.`regID` = ' . (int)$city);
+        }
+        // Фильтруем по статусу (подрядчик или нет).
+        $status = $this->getState('filter.status');
+        if (is_numeric($status)) {
+            $query->where('`e`.`is_contractor` = ' . (int) $status);
         }
         // Фильтруем проектам, в которых экспонент не учавствует
         $projectinactive = $this->getState('filter.projectinactive');
@@ -150,6 +156,8 @@ class ProjectsModelExhibitors extends ListModel
         $this->setState('filter.projectinactive', $projectinactive);
         $projectactive = $this->getUserStateFromRequest($this->context . '.filter.projectactive', 'filter_$projectactive', '', 'string');
         $this->setState('filter.projectactive', $projectactive);
+        $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status', '', 'string');
+        $this->setState('filter.status', $status);
         parent::populateState('`title_ru_short`', 'asc');
     }
 
@@ -160,6 +168,7 @@ class ProjectsModelExhibitors extends ListModel
         $id .= ':' . $this->getState('filter.city');
         $id .= ':' . $this->getState('filter.projectinactive');
         $id .= ':' . $this->getState('filter.projectactive');
+        $id .= ':' . $this->getState('filter.status');
         return parent::getStoreId($id);
     }
 }
