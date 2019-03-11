@@ -190,7 +190,7 @@ class ProjectsModelReports extends ListModel
                         $tmp = array();
                         if (!empty(trim($item->email))) $tmp[] = $item->email;
                         if (!empty(trim($item->site))) $tmp[] = $item->site;
-                        $arr['sites'] = implode(', ', $tmp);
+                        $arr['sites'] = trim($item->site);
                     }
                     if (in_array('status', $fields)) {
                         $arr['status'] = ProjectsHelper::getExpStatus($item->status, $item->isCoExp);
