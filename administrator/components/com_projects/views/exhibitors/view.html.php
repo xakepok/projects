@@ -18,7 +18,12 @@ class ProjectsViewExhibitors extends HtmlView
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
 
-		// Show the toolbar
+        if (!ProjectsHelper::canDo('projects.access.contractors')) {
+            $this->filterForm->removeField('status', 'filter');
+        }
+
+
+        // Show the toolbar
 		$this->toolbar();
 
 		// Show the sidebar
