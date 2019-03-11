@@ -85,6 +85,15 @@ class ProjectsModelExhibitor extends AdminModel
             $children = ProjectsHelper::getExhibitorChildren($id);
             if (!empty($children)) $item->children = $children;
         }
+        if ($id == 0) {
+            $tip = JFactory::getApplication()->input->getString('layout', null);
+            if ($tip == 'contractor') {
+                $item->is_contractor = '1';
+            }
+            if ($tip == 'edit') {
+                $item->is_contractor = '0';
+            }
+        }
         $item->title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
         $item->activities = $this->getActivities();
         $where = array('exbID' => $item->id);
@@ -278,6 +287,19 @@ class ProjectsModelExhibitor extends AdminModel
         $model = AdminModel::getInstance('History', 'ProjectsModel');
         $history = $model->getHistory($expID);
         return $history;
+    }
+
+    /**
+     * Возвращает название подгружаемого слоя для редактирования компании
+     * @return string
+     * @throws Exception
+     * @since 1.1.6.2
+     */
+    public function getLayout(): string
+    {
+        $id = JFactory::getApplication()->input->getInt('id', 0);
+        $item = parent::getItem($id);
+        return ($item->is_contractor == '0') ? 'edit' : 'contractor';
     }
 
     /**
