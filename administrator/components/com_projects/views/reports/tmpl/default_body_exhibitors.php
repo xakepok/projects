@@ -59,6 +59,9 @@ foreach ($this->items as $item) :
         <?php endif; ?>
         <?php if (in_array('contacts', $this->fields)): ?>
             <td class="small">
+                <?php echo $item['sites']; ?>
+            </td>
+            <td class="small">
                 <?php echo $item['contacts']; ?>
             </td>
         <?php endif; ?>

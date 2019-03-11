@@ -47,7 +47,7 @@ class ProjectsModelReports extends ListModel
             $query
                 ->select("IFNULL(`e`.`title_ru_full`,`e`.`title_ru_short`) as `exhibitor`, `c`.`expID` as `exhibitorID`")
                 ->select("`ct`.`name` as `city`, `reg`.`name` as `region`, `ctr`.`name` as `country`")
-                ->select("`cnt`.`director_name`, `cnt`.`director_post`, `cnt`.`indexcode`, `cnt`.`addr_legal_street`, `cnt`.`addr_legal_home`")
+                ->select("`cnt`.`director_name`, `cnt`.`director_post`, `cnt`.`indexcode`, `cnt`.`addr_legal_street`, `cnt`.`addr_legal_home`, `cnt`.`email`, `cnt`.`site`")
                 ->select("`c`.`status`, `c`.`isCoExp`, IFNULL(`c`.`number_free`,`c`.`number`) as `number`, `c`.`dat`, `c`.`id` as `contractID`, `c`.`currency`")
                 ->select("`u`.`name` as `manager`")
                 ->select("`p`.`title` as `project`")
@@ -185,7 +185,13 @@ class ProjectsModelReports extends ListModel
                     if (in_array('director_post', $fields)) $arr['director_post'] = $item->director_post;
                     if (in_array('manager', $fields)) $arr['manager'] = $item->manager;
                     if (in_array('address_legal', $fields)) $arr['address_legal'] = ProjectsHelper::buildAddress(array($item->country, $item->region, $item->indexcode, $item->city, $item->addr_legal_street, $item->addr_legal_home));
-                    if (in_array('contacts', $fields)) $arr['contacts'] = implode("; ", $this->getContacts($item->exhibitorID));
+                    if (in_array('contacts', $fields)) {
+                        $arr['contacts'] = implode("; ", $this->getContacts($item->exhibitorID));
+                        $tmp = array();
+                        if (!empty(trim($item->email))) $tmp[] = $item->email;
+                        if (!empty(trim($item->site))) $tmp[] = $item->site;
+                        $arr['sites'] = implode(', ', $tmp);
+                    }
                     if (in_array('status', $fields)) {
                         $arr['status'] = ProjectsHelper::getExpStatus($item->status, $item->isCoExp);
                         $arr['number'] = $item->number ?? '';
@@ -343,6 +349,9 @@ class ProjectsModelReports extends ListModel
                             }
                             if (in_array('contacts', $fields))
                             {
+                                $indexes['sites'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_SITES'));
+                                $index++;
                                 $indexes['contacts'] = $index;
                                 $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_NAME'));
                                 $index++;
@@ -395,6 +404,7 @@ class ProjectsModelReports extends ListModel
                         }
                         if (in_array('contacts', $fields))
                         {
+                            $sheet->setCellValueByColumnAndRow($indexes['sites'], $i + 1, $data[$i - 1]['sites']);
                             $sheet->setCellValueByColumnAndRow($indexes['contacts'], $i + 1, $data[$i - 1]['contacts']);
                         }
                         if (in_array('acts', $fields))
