@@ -16,6 +16,7 @@ class ProjectsModelReports extends ListModel
             $config['filter_fields'] = array(
                 'manager',
                 'project',
+                'exhibitor',
                 'e.title_ru_full',
                 'cnt.director_name',
                 'cnt.director_post',
@@ -158,13 +159,37 @@ class ProjectsModelReports extends ListModel
             $project = $this->getState('filter.project');
             if (empty($project)) $project = ProjectsHelper::getActiveProject();
             if (is_numeric($project)) {
-                $query->where('`projectID` = ' . (int)$project);
+                $query->where('`projectID` = ' . (int) $project);
             }
 
             /* Сортировка */
             $orderCol = $this->state->get('list.ordering', 'manager');
             $orderDirn = $this->state->get('list.direction', 'asc');
             $query->order($db->escape($orderCol . ' ' . $orderDirn));
+        }
+
+        if ($this->type == 'squares') {
+            $query
+                ->select("`c`.`id` as `contractID`, `c`.`number`, DATE_FORMAT(`c`.`dat`, '%d.%m.%Y') as `dat`, `c`.`currency`")
+                ->select("IFNULL(`e`.`title_ru_full`,`e`.`title_ru_short`) as `exhibitor`")
+                ->select("`i`.`title_ru` as `item`, `i`.`id` as `itemID`, `i`.`unit`")
+                ->select("`v`.*")
+                ->select("`a`.`price` as `amount`")
+                ->from("`#__prj_contract_item_values` as `v`")
+                ->leftJoin("`#__prj_contract_amounts` as `a` on `a`.`contractID` = `v`.`contractID`")
+                ->leftJoin("`#__prc_items` as `i` on `i`.`id` = `v`.`itemID`")
+                ->leftJoin("`#__prj_contracts` as `c` on `c`.`id` = `v`.`contractID`")
+                ->leftJoin("`#__prj_exp` as `e` on `e`.`id` = `c`.`expID`")
+                ->where("`c`.`number` is not null")
+                ->where("`i`.`in_stat` = 1");
+
+            // Фильтруем по проекту.
+            $project = $this->getState('filter.project');
+            if (empty($project)) $project = ProjectsHelper::getActiveProject();
+            if (is_numeric($project)) {
+                $query->where('`c`.`prjID` = ' . (int) $project);
+            }
+
         }
 
         return $query;
@@ -197,7 +222,7 @@ class ProjectsModelReports extends ListModel
                         $arr['number'] = $item->number ?? '';
                         $arr['dat'] = $item->dat ?? '';
                     }
-                    if (in_array('stands', $fields)) $arr['stands'] = implode("; ", $this->getStands($item->contractID));
+                    if (in_array('stands', $fields)) $arr['stands'] = implode("; ", $this->getStands($item->contractID, true));
                     if (in_array('amount', $fields)) {
                         $arr['amount'] = (!$this->xls) ? ProjectsHelper::getCurrency((float) $item->price, $item->currency) : $item->price;
                     }
@@ -213,7 +238,25 @@ class ProjectsModelReports extends ListModel
             if ($this->type == 'todos_by_dates') {
                 $result[(!$item->is_future) ? 'current' : 'future'][$item->dat][$item->manager] = $item->cnt;
             }
+            if ($this->type == 'squares') {
+                $arr = array();
+                $arr['number'] = $item->number;
+                $arr['stands'] = implode("; ", $this->getStands($item->contractID));
+                $arr['dat'] = $item->dat;
+                $arr['exhibitor'] = $item->exhibitor;
+                $arr['amount'] = $item->amount;
+                $arr['currency'] = $item->currency;
+                if (!isset($result['contracts'][$item->contractID])) {
+                    $result['contracts'][$item->contractID]['info'] = $arr;
+                }
+                $sq = array();
+                $sq['item'] = $item->item;
+                $sq['value'] = sprintf("%s %s", $item->value, ProjectsHelper::getUnit($item->unit));
+                $result['contracts'][$item->contractID]['squares'][$item->itemID] = $sq;
+                if (!isset($result['items'][$item->itemID])) $result['items'][$item->itemID] = $item->item;
+            }
         }
+        //exit(var_dump($result));
         return $result;
     }
 
@@ -263,18 +306,24 @@ class ProjectsModelReports extends ListModel
     /**
      * Возвращает стенды и статусы у сделки
      * @param int $contractID
+     * @param bool $status - отображать ли статус отрисовки стенда
      * @return array
      * @since 1.1.0.6
      */
-    private function getStands(int $contractID): array
+    private function getStands(int $contractID, bool $status = false): array
     {
         $stands = ProjectsHelper::getContractStands($contractID);
         $result = array();
         foreach ($stands as $stand) {
             $arr = array();
             $arr['number'] = "№{$stand->number}";
-            $arr['status'] = ProjectsHelper::getStandStatus($stand->status);
-            $result[] = implode(" - ", $arr);
+            if ($status) {
+                $arr['status'] = ProjectsHelper::getStandStatus($stand->status);
+                $result[] = implode(" - ", $arr);
+            }
+            else {
+                $result[] = $arr['number'];
+            }
         }
         return $result;
     }
