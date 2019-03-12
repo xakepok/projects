@@ -190,6 +190,11 @@ class ProjectsModelReports extends ListModel
                 $query->where('`c`.`prjID` = ' . (int) $project);
             }
 
+            /* Сортировка */
+            $orderCol = $this->state->get('list.ordering', 'c.number');
+            $orderDirn = $this->state->get('list.direction', 'asc');
+            $query->order($db->escape($orderCol . ' ' . $orderDirn));
+
         }
 
         return $query;
@@ -521,7 +526,26 @@ class ProjectsModelReports extends ListModel
         $this->setState('filter.rubric', $rubric);
         $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
         $this->setState('filter.manager', $manager);
-        parent::populateState(($this->type == 'exhibitors') ? 'e.title_ru_full' : 'manager', 'asc');
+        switch ($this->type) {
+            case 'exhibitor': {
+                $sort = 'e.title_ru_full';
+                break;
+            }
+            case  'managers': {
+                $sort = 'manager';
+                break;
+            }
+            case  'todos_by_dates': {
+                $sort = 'manager';
+                break;
+            }
+            case 'squares': {
+                $sort = 'c.number';
+                break;
+            }
+            default: $sort = 'manager';
+        }
+        parent::populateState($sort, 'asc');
     }
 
     protected function getStoreId($id = '')
