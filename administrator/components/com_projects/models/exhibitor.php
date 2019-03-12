@@ -11,6 +11,50 @@ class ProjectsModelExhibitor extends AdminModel
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    public function getForm($data = array(), $loadData = true)
+    {
+        $form = $this->loadForm(
+            $this->option . '.exhibitor', 'exhibitor', array('control' => 'jform', 'load_data' => $loadData)
+        );
+        if (empty($form)) {
+            return false;
+        }
+        return $form;
+    }
+
+    public function getItem($pk = null)
+    {
+        $table = $this->getTable();
+        $id = JFactory::getApplication()->input->get('id', 0);
+        if ($id != 0)
+        {
+            $table->load($id);
+        }
+        $item = parent::getItem($pk);
+        if ($id > 0) {
+            $parent = ProjectsHelper::getExhibitorParent($id);
+            if ($parent > 0) $item->parentID = $parent;
+            $children = ProjectsHelper::getExhibitorChildren($id);
+            if (!empty($children)) $item->children = $children;
+        }
+        if ($id == 0) {
+            $tip = JFactory::getApplication()->input->getString('layout', null);
+            if ($tip == 'contractor') {
+                $item->is_contractor = '1';
+            }
+            if ($tip == 'edit') {
+                $item->is_contractor = '0';
+            }
+        }
+        $item->title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+        $item->activities = $this->getActivities();
+        $where = array('exbID' => $item->id);
+        $bank = AdminModel::getInstance('Bank', 'ProjectsModel')->getItem($where);
+        $address = AdminModel::getInstance('Address', 'ProjectsModel')->getItem($where);
+        unset($item->_errors, $bank->exbID, $bank->id, $bank->_errors, $address->exbID, $address->id, $address->_errors);
+        return (object)array_merge((array)$item, (array)$bank, (array)$address);
+    }
+
     public function getRegion(int $id, string $search): array
     {
         $db =& $this->getDbo();
@@ -70,40 +114,6 @@ class ProjectsModelExhibitor extends AdminModel
         return $result;
     }
 
-    public function getItem($pk = null)
-    {
-        $table = $this->getTable();
-        $id = JFactory::getApplication()->input->get('id', 0);
-        if ($id != 0)
-        {
-            $table->load($id);
-        }
-        $item = parent::getItem($pk);
-        if ($id > 0) {
-            $parent = ProjectsHelper::getExhibitorParent($id);
-            if ($parent > 0) $item->parentID = $parent;
-            $children = ProjectsHelper::getExhibitorChildren($id);
-            if (!empty($children)) $item->children = $children;
-        }
-        if ($id == 0) {
-            $tip = JFactory::getApplication()->input->getString('layout', null);
-            if ($tip == 'contractor') {
-                $item->is_contractor = '1';
-            }
-            if ($tip == 'edit') {
-                $item->is_contractor = '0';
-            }
-        }
-        $item->title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
-        $item->activities = $this->getActivities();
-        $where = array('exbID' => $item->id);
-        $bank = AdminModel::getInstance('Bank', 'ProjectsModel')->getItem($where);
-        $address = AdminModel::getInstance('Address', 'ProjectsModel')->getItem($where);
-        if (mb_strpos($address->site, 'http://') === false && !empty($address->site)) $address->site = "http://".$address->site;
-        unset($item->_errors, $bank->exbID, $bank->id, $bank->_errors, $address->exbID, $address->id, $address->_errors);
-        return (object)array_merge((array)$item, (array)$bank, (array)$address);
-    }
-
     /**
      * Возвращает массив со ссылками на дочерние компании экспонента
      * @return array
@@ -148,17 +158,6 @@ class ProjectsModelExhibitor extends AdminModel
             ->where($db->quoteName('exbID') . " = " . $db->quote($exbID));
         $activities = $db->setQuery($query)->loadColumn();
         return $activities;
-    }
-
-    public function getForm($data = array(), $loadData = true)
-    {
-        $form = $this->loadForm(
-            $this->option . '.exhibitor', 'exhibitor', array('control' => 'jform', 'load_data' => $loadData)
-        );
-        if (empty($form)) {
-            return false;
-        }
-        return $form;
     }
 
     protected function loadFormData()

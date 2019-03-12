@@ -103,15 +103,6 @@ function removePerson(personID) {
         });
 }
 
-function checkURL (abc) {
-    var string = abc.value;
-    if (!~string.indexOf("http")) {
-        string = "http://" + string;
-    }
-    abc.value = string;
-    return abc
-}
-
 function checkExp() {
     var title = '';
     var t1 = document.getElementById("jform_title_ru_short").value;
