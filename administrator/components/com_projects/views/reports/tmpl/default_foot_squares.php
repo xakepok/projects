@@ -1,7 +1,8 @@
 <?php
 // Запрет прямого доступа.
 defined('_JEXEC') or die;
+$colspan = count($this->items['items']) + 8;
 ?>
 <tr>
-    <td colspan="20" class="pagination-centered"><?php echo $this->pagination->getListFooter(); ?></td>
+    <td colspan="<?php echo $colspan;?>" class="pagination-centered"><?php echo $this->pagination->getListFooter(); ?></td>
 </tr>

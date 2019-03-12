@@ -256,7 +256,6 @@ class ProjectsModelReports extends ListModel
                 if (!isset($result['items'][$item->itemID])) $result['items'][$item->itemID] = $item->item;
             }
         }
-        //exit(var_dump($result));
         return $result;
     }
 
@@ -275,6 +274,9 @@ class ProjectsModelReports extends ListModel
         }
         if ($this->type == 'todos_by_dates') {
             $result = array('status', 'rubric', 'fields');
+        }
+        if ($this->type == 'squares') {
+            $result = array('status', 'rubric', 'fields', 'manager');
         }
         return $result;
     }

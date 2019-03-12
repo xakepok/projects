@@ -15,6 +15,7 @@
                 <option value="exhibitors">COM_PROJECTS_REPORT_TYPE_BY_EXHIBITORS</option>
                 <option value="managers">COM_PROJECTS_REPORT_TYPE_BY_MANAGERS</option>
                 <option value="todos_by_dates">COM_PROJECTS_REPORT_TYPE_BY_SALES</option>
+                <option value="squares">COM_PROJECTS_REPORT_TYPE_BY_SQUARES</option>
             </field>
         </fields>
     </fieldset>
