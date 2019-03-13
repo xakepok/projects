@@ -3,13 +3,14 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\View\HtmlView;
 
 class ProjectsViewStand extends HtmlView {
-    protected $item, $form, $script, $id, $isAdmin, $names;
+    protected $item, $form, $script, $id, $isAdmin, $names, $price;
 
     public function display($tmp = null) {
         $this->form = $this->get('Form');
         $this->item = $this->get('Item');
         $this->script = $this->get('Script');
         $this->names = $this->get('Names');
+        $this->price = $this->get('Price');
         $this->isAdmin = ProjectsHelper::canDo('projects.exec.edit');
 
         $this->addToolbar();

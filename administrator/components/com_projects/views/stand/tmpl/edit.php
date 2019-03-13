@@ -40,7 +40,35 @@ if ($return != null)
                     <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'electric', JText::sprintf('COM_PROJECTS_BLANK_STAND_ELECTRIC')); ?>
                     <div class="row-fluid">
                         <div class="span12">
-                            <?php //echo $this->loadTemplate('electric');?>
+                            <?php echo $this->loadTemplate('electric');?>
+                        </div>
+                    </div>
+                    <?php echo JHtml::_('bootstrap.endTab'); ?>
+                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'internet', JText::sprintf('COM_PROJECTS_BLANK_STAND_INTERNET')); ?>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <?php echo $this->loadTemplate('internet');?>
+                        </div>
+                    </div>
+                    <?php echo JHtml::_('bootstrap.endTab'); ?>
+                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'multimedia', JText::sprintf('COM_PROJECTS_BLANK_STAND_MULTIMEDIA')); ?>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <?php echo $this->loadTemplate('multimedia');?>
+                        </div>
+                    </div>
+                    <?php echo JHtml::_('bootstrap.endTab'); ?>
+                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'water', JText::sprintf('COM_PROJECTS_BLANK_STAND_WATER')); ?>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <?php echo $this->loadTemplate('water');?>
+                        </div>
+                    </div>
+                    <?php echo JHtml::_('bootstrap.endTab'); ?>
+                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'cleaning', JText::sprintf('COM_PROJECTS_BLANK_STAND_CLEANING')); ?>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <?php echo $this->loadTemplate('cleaning');?>
                         </div>
                     </div>
                     <?php echo JHtml::_('bootstrap.endTab'); ?>

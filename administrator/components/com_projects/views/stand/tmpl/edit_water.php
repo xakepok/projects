@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($this->price['electric'] as $item) : ?>
+        <?php foreach ($this->price['water'] as $item) : ?>
         <tr>
             <td>
                 <?php echo $item['title']; ?>

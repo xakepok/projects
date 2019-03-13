@@ -131,11 +131,30 @@ class ProjectsModelStand extends AdminModel {
 
     public function getPrice()
     {
-        $db =& $this->getDbo();
-        $query = $db->getQuery(true);
-        $query
-            ->select("*")
-            ->from("`#__prc_items`");
+        $item = parent::getItem();
+        $session = JFactory::getSession();
+        $contractID = $item->contractID ?? $session->get('contractID');
+        unset($item);
+        $projectID = ProjectsHelper::getContractProject($contractID);
+        $price = ProjectsHelper::getProjectPriceItems($projectID);
+        $result = array();
+        foreach ($price as $item) {
+            $tip = '';
+            if ($item->is_electric != 0) $tip = 'electric';
+            if ($item->is_internet != 0) $tip = 'internet';
+            if ($item->is_multimedia != 0) $tip = 'multimedia';
+            if ($item->is_water != 0) $tip = 'water';
+            if ($item->is_cleaning != 0) $tip = 'cleaning';
+            if ($tip != '') {
+                if (!isset($result[$tip])) $result[$tip] = array();
+                $arr = array();
+                $arr['title'] = $item->title_ru;
+                $arr['id'] = $item->id;
+                $arr['value'] = 0;
+                $result[$tip][] = $arr;
+            }
+        }
+        return $result;
     }
 
     protected function loadFormData()

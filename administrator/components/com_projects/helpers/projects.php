@@ -110,7 +110,7 @@ class ProjectsHelper
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`i`.`id`, `i`.`title_ru`, `i`.`title_en`, `i`.`unit`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `i`.`state`")
+            ->select("`i`.`id`, `i`.`title_ru`, `i`.`title_en`, `i`.`unit`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `i`.`state`, `i`.`is_electric`, `i`.`is_internet`, `i`.`is_water`, `i`.`is_cleaning`, `i`.`is_multimedia`")
             ->select("`p`.`title` as `price`, `s`.`title` as `section`")
             ->from('`#__prc_items` as `i`')
             ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
