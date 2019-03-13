@@ -241,7 +241,8 @@ class ProjectsModelReports extends ListModel
                $result[$item->manager][$item->status] += $item->cnt;
             }
             if ($this->type == 'todos_by_dates') {
-                $result[(!$item->is_future) ? 'current' : 'future'][$item->dat][$item->manager] = $item->cnt;
+                if (!isset($result[(!$item->is_future) ? 'current' : 'future'][$item->dat][$item->manager])) $result[(!$item->is_future) ? 'current' : 'future'][$item->dat][$item->manager] = 0;
+                $result[(!$item->is_future) ? 'current' : 'future'][$item->dat][$item->manager] += $item->cnt;
             }
             if ($this->type == 'squares') {
                 $arr = array();

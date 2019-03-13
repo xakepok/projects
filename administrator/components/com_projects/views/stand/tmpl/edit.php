@@ -15,7 +15,7 @@ if ($return != null)
 ?>
 <script type="text/javascript">
     Joomla.submitbutton = function(task) {
-        if (task === 'stand.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
+        if (task === 'stand.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {
             Joomla.submitform(task, document.getElementById('adminForm'));
         }
     }
@@ -36,6 +36,15 @@ if ($return != null)
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php if ($this->names == 'stand'): ?>
+                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'electric', JText::sprintf('COM_PROJECTS_BLANK_STAND_ELECTRIC')); ?>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <?php //echo $this->loadTemplate('electric');?>
+                        </div>
+                    </div>
+                    <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php endif;?>
             </div>
             <?php echo JHtml::_('bootstrap.endTabSet'); ?>
         </div>

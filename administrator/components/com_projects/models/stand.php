@@ -129,6 +129,15 @@ class ProjectsModelStand extends AdminModel {
         return $form;
     }
 
+    public function getPrice()
+    {
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("*")
+            ->from("`#__prc_items`");
+    }
+
     protected function loadFormData()
     {
         $data = JFactory::getApplication()->getUserState($this->option.'.edit.stand.data', array());
