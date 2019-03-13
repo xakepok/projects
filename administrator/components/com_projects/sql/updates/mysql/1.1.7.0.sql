@@ -13,3 +13,5 @@ alter table `#__prc_items`
 alter table `#__prc_items`
   add is_multimedia tinyint default 0 not null comment 'Представляет собой мультимедиа' after is_internet;
 
+create unique index `#__prj_stands_advanced_standID_itemID_uindex`
+  on `#__prj_stands_advanced` (standID, itemID);

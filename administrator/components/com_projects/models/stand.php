@@ -138,6 +138,11 @@ class ProjectsModelStand extends AdminModel {
         $projectID = ProjectsHelper::getContractProject($contractID);
         $price = ProjectsHelper::getProjectPriceItems($projectID);
         $result = array();
+        $ids = array(); //Массив с ID пунктов прайса
+        foreach ($price as $item) {
+            $ids[] = $item->id;
+        }
+        $data = $this->loadPriceData($item->id ?? 0, $ids);
         foreach ($price as $item) {
             $tip = '';
             if ($item->is_electric != 0) $tip = 'electric';
@@ -150,11 +155,52 @@ class ProjectsModelStand extends AdminModel {
                 $arr = array();
                 $arr['title'] = $item->title_ru;
                 $arr['id'] = $item->id;
-                $arr['value'] = 0;
+                $arr['value'] = $data[$item->id] ?? 0;
                 $result[$tip][] = $arr;
             }
         }
         return $result;
+    }
+
+    private function savePrice(int $standID = 0): void
+    {
+        if ($standID == 0) return;
+        $data = $_POST['jform']['price'];
+        $db =& $this->getDbo();
+        $values = array();
+        $for_del = array(); //Массив с ID элементов для удаления
+        foreach ($data as $itemID => $value) {
+            if ($value == 0) {
+                $for_del[] = $itemID;
+                continue;
+            }
+            $value = $db->q($value);
+            $itemID = $db->q($itemID);
+            $values[] = "({$standID}, {$itemID}, {$value})";
+        }
+        $values = implode(', ', $values);
+        $query = "INSERT INTO `#__prj_stands_advanced` (`standID`, `itemID`, `value`) VALUES {$values}";
+        $query .= "ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)";
+        $db->setQuery($query)->execute();
+        if (empty($for_del)) return;
+        $am = AdminModel::getInstance('Standadv', 'ProjectsModel');
+        foreach ($for_del as $item) {
+            $row = $am->getItem(array('standID' => $standID, 'itemID' => $item));
+            if ($row->id != null) $am->delete($row->id);
+        }
+    }
+
+    private function loadPriceData(int $standID = 0, array $ids = array()): array
+    {
+        if (empty($ids) || $standID == 0) return array();
+        $ids = implode(', ', $ids);
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`itemID`, `value`")
+            ->from("`#__prj_stands_advanced`")
+            ->where("`itemID` IN ({$ids})");
+        return $db->setQuery($query)->loadObjectList("`itemID`");
     }
 
     protected function loadFormData()
@@ -284,6 +330,7 @@ class ProjectsModelStand extends AdminModel {
             $itemID = parent::getDbo()->insertid();
             $data['id'] = $itemID;
         }
+        $this->savePrice($itemID);
         ProjectsHelper::addEvent(array('action' => $action, 'section' => 'stand', 'itemID' => $itemID, 'params' => $data, 'old_data' => $old));
         $this->saveDelegates($itemID, $data['delegate'] ?? array());
         return $s;

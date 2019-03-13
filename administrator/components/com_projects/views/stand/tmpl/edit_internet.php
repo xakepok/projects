@@ -22,7 +22,7 @@ defined('_JEXEC') or die;
             <td>
                 <input
                         type="text"
-                        name="jform[price][<?php echo $item['id']; ?>][value]"
+                        name="jform[price][<?php echo $item['id']; ?>]"
                         value="<?php echo $item['value']; ?>"
                         class="input"
                         placeholder=""
