@@ -63,7 +63,7 @@ $sum = 0;
                         <?php echo $item['stand']; ?>
                     </td>
                     <td>
-                        <?php if (!$item['is_sq']): ?>
+                        <?php if (!$item['block']): ?>
                             <input
                                     type="text"
                                     name="jform[price][<?php echo $item['id']; ?>][value]"
@@ -79,7 +79,7 @@ $sum = 0;
                                     aria-invalid="false"/>&nbsp;
                             <span><?php echo $item['unit']; ?></span>
                         <?php endif; ?>
-                        <?php if ($item['is_sq']): ?>
+                        <?php if ($item['block']): ?>
                             <input
                                     type="hidden"
                                     name="jform[price][<?php echo $item['id']; ?>][value]"
@@ -93,7 +93,7 @@ $sum = 0;
                                 <?php if ($item['fixed']) echo "disabled "; ?>
                                     style="width: 50px;"
                                     aria-invalid="false"/>
-                            <span><?php echo $item['value']; ?></span>
+                            <span><?php echo $item['value'] ?? 0; ?></span>
                             <span><?php echo $item['unit']; ?></span>
                         <?php endif; ?>
                     </td>

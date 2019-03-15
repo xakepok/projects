@@ -132,6 +132,7 @@ class ProjectsModelStand extends AdminModel {
     public function getPrice()
     {
         $item = parent::getItem();
+        $standID = $item->id;
         $session = JFactory::getSession();
         $contractID = $item->contractID ?? $session->get('contractID');
         unset($item);
@@ -142,7 +143,7 @@ class ProjectsModelStand extends AdminModel {
         foreach ($price as $item) {
             $ids[] = $item->id;
         }
-        $data = $this->loadPriceData($item->id ?? 0, $ids);
+        $data = $this->loadPriceData($standID ?? 0, $ids);
         foreach ($price as $item) {
             $tip = '';
             if ($item->is_electric != 0) $tip = 'electric';
@@ -196,11 +197,17 @@ class ProjectsModelStand extends AdminModel {
         $ids = implode(', ', $ids);
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
+        $result = array();
         $query
             ->select("`itemID`, `value`")
             ->from("`#__prj_stands_advanced`")
-            ->where("`itemID` IN ({$ids})");
-        return $db->setQuery($query)->loadObjectList("`itemID`");
+            ->where("`itemID` IN ({$ids}) AND `standID` = {$standID}");
+        $items = $db->setQuery($query)->loadObjectList();
+        if (empty($items)) return $result;
+        foreach ($items as $item) {
+            $result[$item->itemID] = $item->value;
+        }
+        return $result;
     }
 
     protected function loadFormData()
