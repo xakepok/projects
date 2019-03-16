@@ -29,3 +29,17 @@ insert into `#__prj_stands_advanced` (`standID`, `itemID`, `value`)
                               from `#__prj_stands`
                               group by `contractID`
                               having count(`id`) = 1));
+
+create table `#__tmp_army`
+(
+  id int auto_increment,
+  title_old text not null,
+  exhibitorID int default null null,
+  constraint `#__tmp_army_pk`
+    primary key (id),
+  constraint `#__tmp_army_#__prj_exp_id_fk`
+    foreign key (exhibitorID) references `#__prj_exp` (id)
+      on update cascade on delete cascade
+)
+  comment 'Временная таблица с экспонентами армии-2018';
+

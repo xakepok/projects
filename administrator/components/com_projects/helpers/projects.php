@@ -70,6 +70,30 @@ class ProjectsHelper
         }
     }
 
+    public static function searchExhibitor(int $id, string $text): string
+    {
+        $db =& JFactory::getDbo();
+        $text = $db->q('%' . $text . '%');
+        $query = $db->getQuery(true);
+        $query
+            ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `e`.  `id`")
+            ->select("`r`.`name` as `region`")
+            ->select("`u`.`name` as `manager`")
+            ->from("`#__prj_exp` as `e`")
+            ->leftJoin("`#__grph_cities` as `r` on `r`.`id` = `e`.`regID`")
+            ->leftJoin("`#__prj_contracts` as `c` on `c`.`expID` = `e`.`id`")
+            ->leftJoin("`#__users` as `u` on `u`.`id` = `c`.`managerID`")
+            ->where("(`title_ru_short` LIKE {$text} OR `title_ru_full` LIKE {$text} OR `title_en` LIKE {$text})")
+            ->where("`c`.`prjID` = 5");
+        $items = $db->setQuery($query)->loadObjectList();
+        $result = array();
+        foreach ($items as $item) {
+            $url = JRoute::_("index.php?option=com_projects&amp;task=search.asset&amp;old_id={$id}&amp;new_id={$item->id}");
+            $result[] = sprintf("%s: %s (%s), %s", $item->region, JHtml::link($url, $item->title_ru_short), $item->title_ru_full, $item->manager);
+        }
+        return implode("<br>", $result);
+    }
+
     /**
      * Возвращает массив с количеством просроченных заданий менеджеров
      * @return array
