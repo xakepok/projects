@@ -28,8 +28,9 @@ class ProjectsModelSearch extends ListModel
         $search = $this->getState('filter.search');
         if (!empty($search))
         {
-            $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-            $query->where('`title_old` LIKE ' . $search);
+            $session = JFactory::getSession();
+            $params = explode(':', $search);
+            $session->set('result', ProjectsHelper::searchExhibitor($params[0], $params[1]));
         }
 
         /* Сортировка */
@@ -50,6 +51,14 @@ class ProjectsModelSearch extends ListModel
             $id = JFactory::getApplication()->input->getInt('id', 0);
             $text = JFactory::getApplication()->input->getString('text', '');
             $arr['variants'] = ($id == $item->id && !empty($text)) ? ProjectsHelper::searchExhibitor($item->id, $text) : ProjectsHelper::searchExhibitor($item->id, $item->title_old);
+            $session = JFactory::getSession();
+            $search = $this->state->get('filter.search');
+            $params = explode(':', $search);
+            if ($params[0] == $item->id) {
+                $arr['variants'] = $session->get('result');
+                $session->clear('result');
+                $this->state->set('filter.search', '');
+            }
             $arr['exhibitorID'] = $item->exhibitorID ?? '';
             $result[] = $arr;
         }

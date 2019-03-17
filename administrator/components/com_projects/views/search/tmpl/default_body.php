@@ -8,7 +8,7 @@ foreach ($this->items as $i => $item) :?>
             <?php echo JHtml::_('grid.id', $i, $item['id']); ?>
         </td>
         <td>
-            <?php echo ++$ii; ?>
+            <?php echo $item['id']; ?>
         </td>
         <td>
             <?php echo $item['title_old'];?>
