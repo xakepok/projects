@@ -42,4 +42,27 @@ class ProjectsControllerSearch extends AdminController
         $this->redirect();
         jexit();
     }
+
+    //Одноразовый метод для восстановления сделок
+    public function repair()
+    {
+        $db =& JFactory::getDbo();
+        $query = "SELECT * FROM `#__prj_user_action_log` WHERE `itemID` IN (SELECT `id` FROM `#__prj_contracts` WHERE `prjID` = 9) ORDER BY `id`";
+        $items = $db->setQuery($query)->loadObjectList();
+        $result = array();
+        $upd = array();
+        foreach ($items as $item) {
+            $arr = json_decode($item->params, true);
+            $query = "UPDATE `#__prj_contracts` SET ";
+            foreach ($arr as $param => $value) {
+                if ($param == "id" || $param == "tags" || $param == "rubrics") continue;
+                $upd[] = $db->qn($param) . " = " . $db->q($value);
+            }
+            $query .= implode(", ", $upd);
+            $query .= " WHERE `id` = {$item->itemID} LIMIT 1;";
+            $db->setQuery($query)->execute();
+            $result[] = $query;
+        }
+        exit(var_dump($result));
+    }
 }
