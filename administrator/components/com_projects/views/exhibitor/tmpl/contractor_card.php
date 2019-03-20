@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
         <p id="cardValues"></p>
         <hr style="width: 80%;">
         <p style="font-weight: bold; font-size: 1.3em;" id="modalExpContacts"><?php echo JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_NAME');?></p>
-        <p id="contactsValues"></p>
+        <p id="contactsValues" style="overflow: auto; max-height: 360px;"></p>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>

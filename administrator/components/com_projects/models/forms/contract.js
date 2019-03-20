@@ -341,13 +341,14 @@ function showCard(id) {
                 url.innerText = text.data.info.email;
                 email.appendChild(url);
                 myNode.appendChild(document.createTextNode('Электронная почта: '));
-                myNode.appendChild(url);
+                myNode.appendChild(email);
             }
             if (text.data.info.site != null) {
                 var site = document.createElement('p');
                 var url1 = document.createElement('a');
                 url1.href = text.data.info.site;
                 url1.innerText = text.data.info.site;
+                url1.setAttribute('target', '_blank');
                 site.appendChild(url1);
                 myNode.appendChild(document.createTextNode('Веб-сайт: '));
                 myNode.appendChild(url1);
