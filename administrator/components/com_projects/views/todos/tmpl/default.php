@@ -21,6 +21,9 @@ $return = base64_encode("index.php?option=com_projects&view=todos");
                   name="adminForm" id="adminForm">
                 <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
                 <table class="table table-striped">
+                    <?php if (!$this->isNotify): ?>
+                        <div><?php echo JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=todos.exportxls"), JText::sprintf('COM_PROJECTS_ACTION_EXPORT_XLS')); ?></div>
+                    <?php endif; ?>
                     <thead><?php echo (!$this->isNotify) ? $this->loadTemplate('head') : $this->loadTemplate('head_notify'); ?></thead>
                     <tbody><?php echo (!$this->isNotify) ? $this->loadTemplate('body') : $this->loadTemplate('body_notify'); ?></tbody>
                     <tfoot><?php echo (!$this->isNotify) ? $this->loadTemplate('foot') : $this->loadTemplate('foot_notify'); ?></tfoot>
