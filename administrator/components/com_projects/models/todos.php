@@ -10,6 +10,7 @@ class ProjectsModelTodos extends ListModel
         {
             $config['filter_fields'] = array(
                 't.dat',
+                't.is_expire',
                 't.dat_open',
                 't.dat_close',
                 'open',
@@ -30,38 +31,26 @@ class ProjectsModelTodos extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`t`.`id`, `t`.`task`, `t`.`result`, `t`.`state`")
-            ->select("DATE_FORMAT(`t`.`dat`,'%d.%m.%Y') as `date`")
-            ->select("DATE_FORMAT(`t`.`dat_open`,'%d.%m.%Y') as `dat_open`, DATE_FORMAT(`t`.`dat_close`,'%d.%m.%Y') as `dat_close`")
-            ->select("`c`.`id` as `contract`, `c`.`number`, `c`.`status` as `contract_status`")
-            ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`, `e`.`id` as `expID`")
-            ->select("`u1`.`name` as `open`, `u3`.`name` as `manager`")
-            ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`, `p`.`id` as `projectID`")
-            ->select("`t`.`is_notify`")
-            ->from("`#__prj_todos` as `t`")
-            ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `t`.`contractID`")
-            ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
-            ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
-            ->leftJoin("`#__users` as `u1` ON `u1`.`id` = `t`.`userOpen`")
-            ->leftJoin("`#__users` as `u3` ON `u3`.`id` = `t`.`managerID`");
+            ->select("*")
+            ->from("`#__prj_todo_list` as `t`");
         /* Фильтр */
         $contractID = JFactory::getApplication()->input->getInt('contractID', 0);
         $search = $this->getState('filter.search');
         if (!empty($search) && $contractID == 0)
         {
-            $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-            $query->where('(`e`.`title_ru_full` LIKE ' . $search . 'OR `e`.`title_ru_short` LIKE ' . $search . 'OR `e`.`title_en` LIKE ' . $search . 'OR `p`.`title_ru` LIKE ' . $search .' OR `e`.`comment` LIKE ' . $search . ')');
+            $search = $db->q("%{$search}%");
+            $query->where("(`t`.`exhibitor` LIKE {$search})");
         }
         // Показываем уведомления
         $notify = JFactory::getApplication()->input->getInt('notify', 0);
-        $query->where("`is_notify` = {$notify}");
+        $query->where("`t`.`is_notify` = {$notify}");
         if ($notify == 0) {
             // Фильтруем по состоянию.
             $published = $this->getState('filter.state');
             if (is_numeric($published)) {
-                $query->where('`t`.`state` = ' . (int)$published);
+                $query->where('`t`.`state` = ' . (int) $published);
             } elseif ($published === '') {
-                $query->where('(`t`.`state` = 0 OR `t`.`state` = 1)');
+                $query->where('(`t`.`state` IN (0, 1))');
             }
         }
         else
@@ -71,33 +60,33 @@ class ProjectsModelTodos extends ListModel
         // Фильтруем по менеджеру.
         $manager = $this->getState('filter.manager');
         if (is_numeric($manager)) {
-            $query->where('`t`.`managerID` = ' . (int)$manager);
+            $query->where('`t`.`managerID` = ' . (int) $manager);
         }
         // Фильтруем по дате.
         $dat = $this->getState('filter.dat');
         if (!empty($dat) && $contractID == 0)
         {
-            $dat = $this->_db->quote($this->_db->escape($dat));
-            $query->where('`t`.`dat` = ' . $dat);
+            $dat = $db->q($dat);
+            $query->where("`t`.`dat` = {$dat}");
         }
         // Фильтруем по экспоненту.
         $exhibitor = $this->getState('filter.exhibitor');
         if (is_numeric($exhibitor))
         {
-            $query->where('`c`.`expID` = ' . (int) $exhibitor);
+            $query->where('`t`.`exhibitorID` = ' . (int) $exhibitor);
         }
         // Фильтруем по проекту.
         $project = $this->getState('filter.project');
         if (empty($project) && $notify == 0) $project = ProjectsHelper::getActiveProject();
         if (is_numeric($project))
         {
-            $query->where('`c`.`prjID` = ' . (int) $project);
+            $query->where('`t`.`projectID` = ' . (int) $project);
         }
         //Фильтруем по дате из URL
         $dat = JFactory::getApplication()->input->getString('date');
         if ($dat !== null)
         {
-            $dat = $this->_db->quote($this->_db->escape($dat));
+            $dat = $db->q($dat);
             $query->where("`t`.`dat` = {$dat}");
         }
         //Если не руководитель, выводим только назначенные пользователю задания
@@ -121,7 +110,7 @@ class ProjectsModelTodos extends ListModel
         }
 
         /* Сортировка */
-        $orderCol  = $this->state->get('list.ordering', '`t`.`dat`');
+        $orderCol  = $this->state->get('list.ordering','t.dat');
         $orderDirn = $this->state->get('list.direction', 'desc');
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
@@ -131,57 +120,55 @@ class ProjectsModelTodos extends ListModel
     public function getItems()
     {
         $items = parent::getItems();
-        $result_no_expire = array();
-        $result_expire = array();
         $task = JFactory::getApplication()->input->getString('task', null);
         $cid = JFactory::getApplication()->input->getInt('contractID', 0);
         $ret_url = "index.php?option=com_projects&view=todos";
+        $result_no_expire = array();
+        $result_expire = array();
         if ($cid > 0) $ret_url .= "&amp;contractID={$cid}";
         $return = base64_encode($ret_url);
         $result = array();
         foreach ($items as $item) {
             $arr = array();
             if ($task != 'exportxls') {
-                $arr['expired'] = $this->isExpired($item->date, $item->state);
+                $arr['is_expire'] = $item->is_expire;
                 $arr['id'] = $item->id;
-                $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contract}&amp;return={$return}");
-                $c = ($item->contract_status != '1') ? ProjectsHelper::getExpStatus($item->contract_status) : JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number);
+                $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
+                $c = ProjectsHelper::getContractTitle($item->contract_status, $item->number ?? 0, $item->contract_dat ?? '');
                 $link = JHtml::link($url, $c);
                 $arr['contract'] = $link;
                 $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}");
                 $arr['project'] = (!ProjectsHelper::canDo('core.general')) ? $item->project : JHtml::link($url, $item->project);
-                $exhibitor = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
-                $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}");
-                $params = array('class' => 'jutooltip', 'title' => $item->title_ru_full ?? JText::sprintf('COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_NOT_EXISTS'));
-                $arr['exp'] = JHtml::link($url, $exhibitor, $params);
+                $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->exhibitorID}&amp;return={$return}");
+                $arr['exp'] = JHtml::link($url, $item->exhibitor);
                 $layout = (!$item->is_notify) ? 'edit' : 'notify';
                 $url_todo = JRoute::_("index.php?option=com_projects&amp;view=todo&amp;layout={$layout}&amp;id={$item->id}&amp;return={$return}");
-                $link = JHtml::link($url_todo, $item->date);
+                $link = JHtml::link($url_todo, JDate::getInstance($item->dat)->format("d.m.Y"));
                 $arr['dat'] = $link;
-                $arr['dat_open'] = $item->dat_open;
-                $arr['expID'] = $item->expID;
-                $arr['dat_close'] = $item->dat_close ?? JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_NOT_CLOSE');
-                $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$item->contract}");
+                $arr['dat_open'] = JDate::getInstance($item->dat_open)->format("d.m.Y");
+                $arr['expID'] = $item->exhibitorID;
+                $arr['dat_close'] = (!empty($item->dat_close)) ? JDate::getInstance($item->dat_close)->format("d.m.Y") : JText::sprintf('COM_PROJECTS_HEAD_TODO_DATE_NOT_CLOSE');
+                $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$item->contractID}");
                 $arr['task'] = JHtml::link((!$item->is_notify) ? $url : $url_todo, $item->task);
-                $arr['result'] = ($arr['expired']) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : $item->result;
+                $arr['result'] = ($arr['is_expire'] == '1') ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : $item->result;
                 $arr['open'] = $item->open;
                 $arr['manager'] = $item->manager;
                 $arr['state'] = $item->state;
                 if ($item->is_notify) {
                     $arr['close_notify'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=todos.publish&amp;id={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_CLOSE_AND_READ'));
                 }
-                $arr['state_text'] = ($arr['expired']) ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : ProjectsHelper::getTodoState($item->state);
-                if (!$arr['expired']) $result_no_expire[] = $arr;
-                if ($arr['expired']) $result_expire[] = $arr;
+                $arr['state_text'] = ($arr['is_expire'] == '1') ? JText::sprintf('COM_PROJECTS_HEAD_TODO_STATE_EXPIRED') : ProjectsHelper::getTodoState($item->state);
+                if ($item->is_expire == '0') $result_no_expire[] = $arr;
+                if ($item->is_expire == '1') $result_expire[] = $arr;
             }
             else
             {
-                $expired = $this->isExpired($item->date, $item->state);
-                $arr['dat_open'] = $item->dat_open;
-                $arr['dat'] = $item->date;
-                $arr['contract'] = ($item->contract_status != '1') ? ProjectsHelper::getExpStatus($item->contract_status) : JText::sprintf('COM_PROJECTS_HEAD_TODO_DOGOVOR_N', $item->number);
+                $expired = $item->is_expire;
+                $arr['dat_open'] = JDate::getInstance($item->dat_open)->format("d.m.Y");
+                $arr['dat'] = JDate::getInstance($item->dat)->format("d.m.Y");
+                $arr['contract'] = ProjectsHelper::getContractTitle($item->contract_status, $item->number ?? 0, $item->contract_dat ?? '');
                 $arr['project'] = $item->project;
-                $arr['exp'] = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+                $arr['exp'] = $item->exhibitor;
                 $arr['project'] = $item->project;
                 $arr['author'] = $item->open;
                 $arr['manager'] = $item->manager;
@@ -233,7 +220,7 @@ class ProjectsModelTodos extends ListModel
         }
         $sheet->getColumnDimension('A')->setWidth(10);
         $sheet->getColumnDimension('B')->setWidth(14);
-        $sheet->getColumnDimension('C')->setWidth(23);
+        $sheet->getColumnDimension('C')->setWidth(24);
         $sheet->getColumnDimension('D')->setWidth(16);
         $sheet->getColumnDimension('E')->setWidth(35);
         $sheet->getColumnDimension('F')->setWidth(35);
@@ -266,7 +253,7 @@ class ProjectsModelTodos extends ListModel
     }
 
     /* Сортировка по умолчанию */
-    protected function populateState($ordering = null, $direction = null)
+    protected function populateState($ordering = 't.dat', $direction = 'desc')
     {
         $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
         $this->setState('filter.state', $published);
@@ -280,7 +267,7 @@ class ProjectsModelTodos extends ListModel
         $this->setState('filter.manager', $manager);
         $dat = $this->getUserStateFromRequest($this->context . '.filter.dat', 'filter_dat', '', 'string');
         $this->setState('filter.dat', $dat);
-        parent::populateState('`t`.`dat`', 'desc');
+        parent::populateState($ordering, $direction);
     }
 
     protected function getStoreId($id = '')
@@ -292,22 +279,5 @@ class ProjectsModelTodos extends ListModel
         $id .= ':' . $this->getState('filter.manager');
         $id .= ':' . $this->getState('filter.dat');
         return parent::getStoreId($id);
-    }
-
-    /**
-     * Просрочено ли задание
-     * @param string $dat Дата, в которую должно быть выполнено задание
-     * @param int $state Состояние задания
-     * @return bool
-     * @throws
-     * @since 1.2.6
-     */
-    private function isExpired(string $dat, int $state): bool
-    {
-        $date_item = new DateTime();
-        $date_item->setDate(date("Y", strtotime($dat)), date("m", strtotime($dat)), date("d", strtotime($dat)));
-        $date_item->setTime(23,59,59);
-        $date_now = new DateTime();
-        return ($date_now > $date_item && $state == '0') ? true : false;
     }
 }
