@@ -167,6 +167,7 @@ class ProjectsModelStand extends AdminModel {
     {
         if ($standID == 0) return;
         $data = $_POST['jform']['price'];
+        if (empty($data)) return;
         $db =& $this->getDbo();
         $values = array();
         $for_del = array(); //Массив с ID элементов для удаления
@@ -182,7 +183,7 @@ class ProjectsModelStand extends AdminModel {
         $values = implode(', ', $values);
         $query = "INSERT INTO `#__prj_stands_advanced` (`standID`, `itemID`, `value`) VALUES {$values}";
         $query .= "ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)";
-        $db->setQuery($query)->execute();
+        if (!empty($values)) $db->setQuery($query)->execute();
         if (empty($for_del)) return;
         $am = AdminModel::getInstance('Standadv', 'ProjectsModel');
         foreach ($for_del as $item) {
