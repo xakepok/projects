@@ -28,6 +28,14 @@ class ProjectsControllerTodo extends FormController {
         return parent::add();
     }
 
+    public function save($key = null, $urlVar = null)
+    {
+        $cid = $_POST['jform']['contractID'];
+        $return = base64_encode("index.php?option=com_projects&view=todos&contractID={$cid}");
+        $this->input->set('return', $return);
+        parent::save($key, $urlVar);
+    }
+
     public function cancel($key = null)
     {
         $layout = JFactory::getApplication()->input->getCmd('layout', 'default');
