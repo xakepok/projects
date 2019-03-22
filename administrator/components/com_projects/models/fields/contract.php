@@ -38,7 +38,7 @@ class JFormFieldContract extends JFormFieldList
         }
         if ($view == 'score')
         {
-            $query->where("`c`.`status` = 1");
+            $query->where("`c`.`status` IN (1,10)");
         }
         if ($view == 'contract')
         {

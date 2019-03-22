@@ -82,21 +82,13 @@
         </field>
         <field
                 name="status"
-                type="list"
+                type="Contractstatus"
                 label="COM_PROJECTS_HEAD_CONTRACT_STATUS"
                 description="COM_PROJECTS_HEAD_CONTRACT_STATUS_DESC"
                 autocomplete="off"
                 required="true"
                 default=""
                 class="x2">
-            <option value="2">COM_PROJECTS_HEAD_CONTRACT_STATUS_2</option>
-            <option value="3">COM_PROJECTS_HEAD_CONTRACT_STATUS_3</option>
-            <option value="4">COM_PROJECTS_HEAD_CONTRACT_STATUS_4</option>
-            <option value="1">COM_PROJECTS_HEAD_CONTRACT_STATUS_1</option>
-            <option value="0">COM_PROJECTS_HEAD_CONTRACT_STATUS_0</option>
-            <option value="7">COM_PROJECTS_HEAD_CONTRACT_STATUS_7</option>
-            <option value="8">COM_PROJECTS_HEAD_CONTRACT_STATUS_8</option>
-            <option value="9">COM_PROJECTS_HEAD_CONTRACT_STATUS_9</option>
         </field>
         <field
                 name="number"
