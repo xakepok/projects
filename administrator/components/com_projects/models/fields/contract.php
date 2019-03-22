@@ -23,7 +23,7 @@ class JFormFieldContract extends JFormFieldList
             ->leftJoin("`#__prj_contract_amounts` as `a` ON `a`.`contractID` = `c`.`id`")
             ->leftJoin("`#__prj_contract_payments` as `pm` ON `pm`.`contractID` = `c`.`id`")
             ->order("`c`.`id`");
-        if (!ProjectsHelper::canDo('projects.access.todos.full'))
+        if (!ProjectsHelper::canDo('projects.access.contracts.full'))
         {
             $userID = JFactory::getUser()->id;
             $query->where("`c`.`managerID` = {$userID}");
