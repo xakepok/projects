@@ -55,12 +55,6 @@ foreach ($this->items as $i => $item) :
             <td>
                 <?php echo $item['manager']; ?>
             </td>
-            <td class="resultTodoDat_<?php echo $item['id']; ?>">
-                <?php echo $item['dat_close']; ?>
-            </td>
         <?php endif; ?>
-        <td class="resultTodoState_<?php echo $item['id']; ?>">
-            <?php echo $item['state_text']; ?>
-        </td>
     </tr>
 <?php endforeach; ?>

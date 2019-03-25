@@ -11,6 +11,11 @@ class ProjectsControllerTodos extends AdminController
         return parent::getModel($name, $prefix, array('ignore_request' => true));
     }
 
+    public function display($cachable = false, $urlparams = array())
+    {
+        return parent::display($cachable, $urlparams);
+    }
+
     public function exportxls(): void
     {
         $model = ListModel::getInstance('Todos', 'ProjectsModel');

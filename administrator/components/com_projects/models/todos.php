@@ -121,6 +121,7 @@ class ProjectsModelTodos extends ListModel
     {
         $items = parent::getItems();
         $task = JFactory::getApplication()->input->getString('task', null);
+        $format = JFactory::getApplication()->input->getString('format', 'html');
         $cid = JFactory::getApplication()->input->getInt('contractID', 0);
         $ret_url = "index.php?option=com_projects&view=todos";
         $result_no_expire = array();
@@ -130,7 +131,7 @@ class ProjectsModelTodos extends ListModel
         $result = array();
         foreach ($items as $item) {
             $arr = array();
-            if ($task != 'exportxls') {
+            if ($task != 'exportxls' && $format != "raw") {
                 $arr['is_expire'] = $item->is_expire;
                 $arr['id'] = $item->id;
                 $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
@@ -178,7 +179,7 @@ class ProjectsModelTodos extends ListModel
                 $result[] = $arr;
             }
         }
-        return ($task != 'exportxls') ? array_merge($result_expire, $result_no_expire) : $result;
+        return ($task != 'exportxls' && $format != "raw") ? array_merge($result_expire, $result_no_expire) : $result;
     }
 
     public function exportToExcel()

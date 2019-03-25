@@ -51,10 +51,10 @@ function updateTodo(id) {
         .then(function (text) {
             var td = document.querySelector('.resultTodo_' + id);
             td.textContent = result;
-            td = document.querySelector('.resultTodoDat_' + id);
+            /*td = document.querySelector('.resultTodoDat_' + id);
             td.textContent = text.data.dat;
             td = document.querySelector('.resultTodoState_' + id);
-            td.textContent = 'Выполнена';
+            td.textContent = 'Выполнена';*/
         })
         .catch(function (error) {
             console.log('Request failed', error);

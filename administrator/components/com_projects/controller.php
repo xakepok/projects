@@ -36,6 +36,13 @@ class ProjectsController extends BaseController
                 $session->clear('createTodoFor');
             }
         }
+        if ($view == 'todos') {
+            $view = $this->getView('todos', 'html');
+            $format = $this->input->getString('format', 'html');
+            $layout = ($format != 'html') ? 'print' : 'default';
+            $this->input->set('layout', $layout);
+            $view->setLayout($layout);
+        }
         return parent::display($cachable, $urlparams);
     }
 }

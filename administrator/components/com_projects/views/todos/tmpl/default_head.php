@@ -39,11 +39,5 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         <th>
             <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_MANAGER', 'manager', $listDirn, $listOrder); ?>
         </th>
-        <th>
-            <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_DATE_CLOSE', 't.dat_close', $listDirn, $listOrder); ?>
-        </th>
     <?php endif; ?>
-    <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TODO_STATE', 'state', $listDirn, $listOrder); ?>
-    </th>
 </tr>
