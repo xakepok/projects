@@ -18,7 +18,7 @@ class JFormFieldScore extends JFormFieldList
             ->from("`#__prj_scores` as `s`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
-            ->where("`c`.`status` = 1")
+            ->where("`c`.`status` IN (1,10)")
             ->order("`c`.`number` DESC");
         $session = JFactory::getSession();
         $view = JFactory::getApplication()->input->getString('view', '');
