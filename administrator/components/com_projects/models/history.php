@@ -51,10 +51,14 @@ class ProjectsModelHistory extends AdminModel {
         $return = base64_encode("index.php?option=com_projects&task=exhibitor.edit&id={$exhibitorID}");
         foreach ($items as $item) {
             $arr = array();
+            $link_todos = array();
             $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$item->projectID}&amp;return={$return}");
             $arr['project'] = (ProjectsHelper::canDo('core.general')) ? JHtml::link($url, $item->project) : $item->project;
             $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$item->contractID}");
-            $arr['todos'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_BLANK_TODOS'));
+            $link_todos[] = JHtml::link($url, JText::sprintf('COM_PROJECTS_BLANK_TODOS'));
+            $url = JRoute::_("index.php?option=com_projects&amp;task=todo.add&amp;contractID={$item->contractID}&amp;return={$return}");
+            $link_todos[] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_TODO_CREATE'));
+            $arr['todos'] = implode(" / ", $link_todos);
             $arr['manager'] = $item->manager;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
             if ($item->status == '1' && !empty($item->number)) $arr['status'] .= " №{$item->number}";

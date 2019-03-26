@@ -41,7 +41,7 @@ if ($return != null) {
             <div class="tab-content">
                 <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::sprintf('COM_PROJECTS_BLANK_CONTRACTOR')); ?>
                 <div class="row-fluid">
-                    <div class="span6">
+                    <div class="span4">
                         <div>
                             <?php echo $this->loadTemplate('general'); ?>
                         </div>
@@ -49,8 +49,13 @@ if ($return != null) {
                             <?php echo $this->loadTemplate('similar'); ?>
                         </div>
                     </div>
-                    <div class="span6">
-                        <?php echo $this->loadTemplate('contacts'); ?>
+                    <div class="span8">
+                        <div>
+                            <?php echo $this->loadTemplate('contacts'); ?>
+                        </div>
+                        <div>
+                            <?php echo $this->loadTemplate('history_active'); ?>
+                        </div>
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>
