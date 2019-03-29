@@ -5,4 +5,19 @@
             <![CDATA[COM_PROJECTS_MENU_EXHIBITORS_DESC]]>
 		</message>
     </layout>
+    <fieldset name="request">
+        <fields name="request">
+            <field
+                    name="status"
+                    label="COM_PROJECTS_HEAD_EXP_TYPE"
+                    description="COM_PROJECTS_HEAD_EXP_TYPE"
+                    type="list"
+                    default="">
+                <option value="">COM_PROJECTS_HEAD_EXP_TYPE_0</option>
+                <option value="0">COM_PROJECTS_HEAD_EXP_TYPE_0</option>
+                <option value="1">COM_PROJECTS_HEAD_EXP_TYPE_1</option>
+                <option value="2">COM_PROJECTS_HEAD_EXP_TYPE_2</option>
+            </field>
+        </fields>
+    </fieldset>
 </metadata>

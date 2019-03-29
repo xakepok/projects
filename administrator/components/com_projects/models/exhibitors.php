@@ -59,10 +59,30 @@ class ProjectsModelExhibitors extends ListModel
         if (is_numeric($city) && $format != 'html') {
             $query->where('`e`.`regID` = ' . (int)$city);
         }
-        // Фильтруем по статусу (подрядчик или нет).
+        // Фильтруем по статусу (подрядчик / ндп).
         $status = $this->getState('filter.status');
-        if (is_numeric($status)) {
-            $query->where('`e`.`is_contractor` = ' . (int) $status);
+        $status_url = JFactory::getApplication()->input->getInt('status', 0);
+        if (is_numeric($status) || is_numeric($status_url)) {
+            if (is_numeric($status_url)) $status = $status_url;
+            switch ($status)
+            {
+                case 0:
+                    {
+                        $query->where("`e`.`is_contractor` = 0");
+                        $query->where("`e`.`is_ndp` = 0");
+                        break;
+                    }
+                case 1:
+                    {
+                        $query->where("`e`.`is_contractor` = 1");
+                        break;
+                    }
+                case 2:
+                    {
+                        $query->where("`e`.`is_ndp` = 1");
+                        break;
+                    }
+            }
         }
         // Фильтруем проектам, в которых экспонент не учавствует
         $projectinactive = $this->getState('filter.projectinactive');
