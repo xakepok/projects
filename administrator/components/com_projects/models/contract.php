@@ -57,6 +57,7 @@ class ProjectsModelContract extends AdminModel {
         if ($item->id != null)
         {
             $item->files = $this->loadFiles();
+            $item->file_list = $this->loadFiles(true);
             $item->stands = $this->getStands();
             $item->finanses = $this->getFinanses();
             $item->coExps = $this->getCoExps();
@@ -601,11 +602,12 @@ class ProjectsModelContract extends AdminModel {
 
     /**
      * Возвращает список файлов в указанной сделке
+     * @param bool $dates Отображать ли даты загруженных файлов
      * @return array
      * @throws Exception
      * @since 1.3.0.0
      */
-    private function loadFiles(): array
+    private function loadFiles(bool $dates = false): array
     {
         $contractID = JFactory::getApplication()->input->getInt('id', 0);
         if ($contractID == 0) return array();
@@ -615,7 +617,12 @@ class ProjectsModelContract extends AdminModel {
             ->select("`path`")
             ->from("`#__prj_contract_files`")
             ->where("`contractID` = {$contractID}");
-        return $db->setQuery($query)->loadColumn();
+        if ($dates) {
+            $query
+                ->select("date_format(`dat`,'%d.%m.%Y') as `date`")
+                ->order("`dat` desc");
+        }
+        return (!$dates) ? $db->setQuery($query)->loadColumn() : $db->setQuery($query)->loadAssocList();
     }
 
     /**
@@ -639,9 +646,9 @@ class ProjectsModelContract extends AdminModel {
             $data = array(
                 'contractID' => $contractID,
                 'path' => $path,
-                'dat' => date("Y-m-d H:i:s"),
                 'id' => ($row->id != null) ? $row->id : NULL
             );
+            if ($row->id == null) $data['dat'] = date("Y-m-d H:i:s");
             $s = $model->save($data);
             foreach ($alreadyFiles as $i => $file)
             {

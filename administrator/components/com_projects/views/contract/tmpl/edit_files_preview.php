@@ -3,10 +3,10 @@ defined('_JEXEC') or die;
 ?>
 <ul>
     <?php
-    foreach ($this->item->files as $file) :
+    foreach ($this->item->file_list as $file) :
         ?>
         <li>
-            <?php echo JHtml::link("/images/contracts/{$this->item->id}/{$file}", $file, array('target' => '_blank')); ?>
+            <?php echo JHtml::link("/images/contracts/{$this->item->id}/{$file['path']}", sprintf("%s: %s", $file['date'] , $file['path']), array('target' => '_blank')); ?>
         </li>
     <?php
     endforeach; ?>
