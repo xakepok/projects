@@ -587,7 +587,7 @@ class ProjectsModelContract extends AdminModel {
                     $sts[] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;contractID={$stand->contractID}&amp;task=stand.edit&amp;id={$stand->id}&amp;return={$return}"), $title);
                 }
                 $arr['stand'] = implode(" / ", $sts);
-                if (empty($arr['stand'])) $arr['value'] = 0;
+                if (empty($arr['stand']) && $item->is_sq) $arr['value'] = 0;
                 $arr['stands_count'] = count($stands);
             }
             $arr['sum'] = $values[$item->id]['price'];
