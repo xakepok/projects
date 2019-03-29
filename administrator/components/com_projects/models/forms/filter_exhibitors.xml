@@ -51,6 +51,7 @@
             description="COM_PROJECTS_FILTER_SELECT_COMPANY_STATUS"
             onchange="this.form.submit();"
             >
+            <option value="">COM_PROJECTS_HEAD_EXP_TYPE_ALL</option>
             <option value="0">COM_PROJECTS_HEAD_EXP_COMPANY</option>
             <option value="1">COM_PROJECTS_HEAD_EXP_CONTRACTOR</option>
             <option value="2">COM_PROJECTS_HEAD_EXP_NDP</option>

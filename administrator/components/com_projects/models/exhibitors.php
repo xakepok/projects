@@ -60,10 +60,8 @@ class ProjectsModelExhibitors extends ListModel
             $query->where('`e`.`regID` = ' . (int)$city);
         }
         // Фильтруем по статусу (подрядчик / ндп).
-        $status = $this->getState('filter.status');
-        $status_url = JFactory::getApplication()->input->getInt('status', 0);
-        if (is_numeric($status) || is_numeric($status_url)) {
-            if (is_numeric($status_url)) $status = $status_url;
+        $status = JFactory::getApplication()->input->getInt('status', null) ?? $this->getState('filter.status');
+        if (is_numeric($status)) {
             switch ($status)
             {
                 case 0:
