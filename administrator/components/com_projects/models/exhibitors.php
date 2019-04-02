@@ -42,22 +42,22 @@ class ProjectsModelExhibitors extends ListModel
         $text = JFactory::getApplication()->input->getString('text', '');
         if ($text != '')
         {
-            $text = $db->quote('%' . $db->escape($text, true) . '%', false);
-            $query->where('(`title_ru_full` LIKE ' . $text . ' OR `title_ru_short` LIKE ' . $text . ' OR `title_en` LIKE ' . $text . ')');
+            $text = $db->q($text);
+            $query->where("(`title_ru_full` LIKE {$text} OR `title_ru_short` LIKE {$text} OR `title_en` LIKE {$text} OR `b`.`inn` LIKE {$text})");
         }
         else
         {
             /* Фильтр */
             $search = $this->getState('filter.search');
             if (!empty($search)) {
-                $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-                $query->where('(`title_ru_full` LIKE ' . $search . 'OR `title_ru_short` LIKE ' . $search . 'OR `title_en` LIKE ' . $search . ' OR `e`.`comment` LIKE ' . $search . ')');
+                $search = $db->q($search);
+                $query->where("(`title_ru_full` LIKE {$search} OR `title_ru_short` LIKE {$search} OR `title_en` LIKE {$search} OR `b`.`inn` LIKE {$search})");
             }
         }
         // Фильтруем по городу.
         $city = $this->getState('filter.city');
         if (is_numeric($city) && $format != 'html') {
-            $query->where('`e`.`regID` = ' . (int)$city);
+            $query->where('`e`.`regID` = ' . (int) $city);
         }
         // Фильтруем по статусу (подрядчик / ндп).
         $status = JFactory::getApplication()->input->getInt('status', null) ?? $this->getState('filter.status');
