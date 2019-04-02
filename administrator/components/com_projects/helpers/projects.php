@@ -23,7 +23,7 @@ class ProjectsHelper
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CONTRACTS'), 'index.php?option=com_projects&amp;view=contracts', $vName == 'contracts');
         }
         if (self::canDo('projects.access.exhibitors.standart')) {
-            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_EXHIBITORS'), 'index.php?option=com_projects&amp;view=exhibitors', $vName == 'exhibitors');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_COMPANIES'), 'index.php?option=com_projects&amp;view=exhibitors', $vName == 'exhibitors');
         }
         if (self::canDo('projects.access.todos.standart')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_TODOS'), 'index.php?option=com_projects&amp;view=todos', $vName == 'todos');

@@ -11,14 +11,6 @@
                 class="js-stools-search-string"
         />
         <field
-                name="city"
-                type="Region"
-                label="COM_PROJECTS_FILTER_SELECT_CITY"
-                onchange="this.form.submit();"
-        >
-            <option value="">COM_PROJECTS_FILTER_SELECT_CITY</option>
-        </field>
-        <field
                 name="activity"
                 type="Activity"
                 label="COM_PROJECTS_FILTER_SELECT_ACTIVITY"
