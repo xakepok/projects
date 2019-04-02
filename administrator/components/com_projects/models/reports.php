@@ -311,7 +311,9 @@ class ProjectsModelReports extends ListModel
                     $arr['site'] = $item->site;
                     $arr['manager'] = $item->manager;
                     $arr['contacts'] = implode("; ", $this->getContacts($item->exhibitorID));
-                    $result[] = $arr;
+                    $result['info'][] = $arr;
+                    if (!isset($result['items'][$item->itemID])) $result['items'][$item->itemID] = $item->item;
+                    if (!isset($result['squares'][$item->number][$item->itemID])) $result['squares'][$item->number][$item->itemID] = $item->value ?? 0;
                 }
             }
         }
@@ -532,11 +534,12 @@ class ProjectsModelReports extends ListModel
             $filename = sprintf("%s.xls", $filename);
         }
         if ($this->type == 'pass') {
+            $data = $items['info'];
             $indexes = array();
             $fields = array('number', 'stands', 'exhibitor', 'manager', 'site', 'contacts', 'squares');
             $sheet->setTitle(JText::sprintf('COM_PROJECTS_REPORT_TYPE_PASS'));
-            for ($i = 1; $i < count($data) + 7; $i++) {
-                for ($j = 0; $j < count($data) + 7; $j++) {
+            for ($i = 1; $i < count($data) + 1; $i++) {
+                for ($j = 0; $j < count($data) + 1; $j++) {
                     $index = 1;
                     if ($i == 1) {
                         if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_NUMBER_SHORT'));
@@ -572,6 +575,13 @@ class ProjectsModelReports extends ListModel
                                 $index++;
                             }
                         }
+                        foreach ($items['items'] as $itemID => $item) {
+                            $sheet->setCellValueByColumnAndRow($index, $i, $item);
+                            if (!in_array($itemID, $indexes)) {
+                                $indexes[$itemID] = $index;
+                                $index++;
+                            }
+                        }
                     }
                     if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['number']);
                     if (is_array($fields)) {
@@ -595,6 +605,9 @@ class ProjectsModelReports extends ListModel
                         {
                             $sheet->setCellValueByColumnAndRow($indexes['site'], $i + 1, $data[$i - 1]['site']);
                         }
+                    }
+                    foreach ($items['items'] as $itemID => $item) {
+                        $sheet->setCellValueByColumnAndRow($indexes[$itemID], $i + 1, $items['squares'][$data[$i - 1]['number']][$itemID]);
                     }
                 }
             }
