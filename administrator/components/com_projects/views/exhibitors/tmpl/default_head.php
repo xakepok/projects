@@ -11,7 +11,7 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         №
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TITLE', '`title_ru_short`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_TITLE', 'title', $listDirn, $listOrder); ?>
     </th>
     <?php
     $projectinactive = $this->state->get('filter.projectinactive');
@@ -28,6 +28,9 @@ $listDirn    = $this->escape($this->state->get('list.direction'));
         </th>
     <?php endif;?>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CITY', '`city`', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CITY', 'city', $listDirn, $listOrder); ?>
+    </th>
+    <th>
+        <?php echo JHtml::_('grid.sort', 'ID', 'e.id', $listDirn, $listOrder); ?>
     </th>
 </tr>

@@ -10,11 +10,8 @@ class ProjectsModelExhibitors extends ListModel
     {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                '`id`', '`e`.`id`',
-                '`title_ru_short`', '`title_ru_short`',
-                '`title_ru_full`', '`title_ru_full`',
-                '`title_en`', '`title_en`',
-                '`city`', '`city`',
+                'e.id',
+                'title',
                 'projectinactive',
                 'projectactive',
                 'search',
@@ -32,7 +29,8 @@ class ProjectsModelExhibitors extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select('`e`.`id`, `e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`is_contractor`')
+            ->select('`e`.`id`, `e`.`is_contractor`')
+            ->select('IFNULL(`e`.`title_ru_short`,IFNULL(`e`.`title_ru_full`,`e`.`title_en`)) as `title`')
             ->select("`r`.`name` as `city`")
             ->from("`#__prj_exp` as `e`")
             ->leftJoin("`#__prj_exp_bank` as `b` ON `b`.`exbID` = `e`.`id`")
@@ -118,7 +116,7 @@ class ProjectsModelExhibitors extends ListModel
         }
 
         /* Сортировка */
-        $orderCol = $this->state->get('list.ordering', '`title_ru_short`');
+        $orderCol = $this->state->get('list.ordering', 'title');
         $orderDirn = $this->state->get('list.direction', 'asc');
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
@@ -139,7 +137,7 @@ class ProjectsModelExhibitors extends ListModel
             $project = $model->getItem($projectinactive);
         }
         foreach ($items as $item) {
-            $title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+            $title = $item->title;
             $arr['id'] = $item->id;
             $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->id}");
             $params = array('class' => 'jutooltip', 'title' => $item->title_ru_full ?? JText::sprintf('COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_NOT_EXISTS'));
@@ -162,7 +160,7 @@ class ProjectsModelExhibitors extends ListModel
     }
 
     /* Сортировка по умолчанию */
-    protected function populateState($ordering = '`title_ru_short`', $direction = 'asc')
+    protected function populateState($ordering = 'title', $direction = 'asc')
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $this->setState('filter.search', $search);
@@ -176,7 +174,7 @@ class ProjectsModelExhibitors extends ListModel
         $this->setState('filter.projectactive', $projectactive);
         $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status', '', 'string');
         $this->setState('filter.status', $status);
-        parent::populateState('`title_ru_short`', 'asc');
+        parent::populateState($ordering, $direction);
     }
 
     protected function getStoreId($id = '')
