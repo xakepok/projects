@@ -70,6 +70,32 @@ class ProjectsHelper
         }
     }
 
+    /**
+     * Возвращает URL для обработки формы
+     * @return string
+     * @since 1.1.8.7
+     * @throws
+     */
+    public static function getActionUrl(): string
+    {
+        $uri = JUri::getInstance();
+        $query = $uri->getQuery();
+        $client = (!JFactory::getApplication()->isClient('administrator')) ? 'site' : 'administrator';
+        return JRoute::link($client, "index.php?{$query}");
+    }
+
+    /**
+     * Возвращает URL для возврата (текущий адрес страницы)
+     * @return string
+     * @since 1.1.8.7
+     */
+    public static function getReturnUrl(): string
+    {
+        $uri = JUri::getInstance();
+        $query = $uri->getQuery();
+        return base64_encode("index.php?{$query}");
+    }
+
     public static function searchExhibitor(int $id, string $text): string
     {
         $db =& JFactory::getDbo();

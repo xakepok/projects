@@ -34,7 +34,7 @@ foreach ($this->items['items'] as $i => $item) :
         </td>
         <?php if (ProjectsHelper::canDo('projects.access.contracts.full')): ?>
             <td>
-                <span class="<?php echo $item['manager']['class']; ?>"><?php echo $item['manager']['title']; ?></span>
+                <?php echo $item['manager']; ?>
             </td>
         <?php endif; ?>
         <td>

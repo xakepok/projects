@@ -41,9 +41,9 @@ class ProjectsModelContracts extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`c`.`id`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, IFNULL(`c`.`number_free`,`c`.`number`) as `number`, `c`.`status`, `c`.`currency`")
+            ->select("`c`.`id`, `c`.`dat`, IFNULL(`c`.`number_free`,`c`.`number`) as `number`, `c`.`status`, `c`.`currency`")
             ->select("`p`.`title_ru` as `project`, `p`.`id` as `projectID`")
-            ->select("`e`.`title_ru_full`, `e`.`title_ru_short`, `e`.`title_en`, `e`.`id` as `exponentID`")
+            ->select('IFNULL(`e`.`title_ru_short`,IFNULL(`e`.`title_ru_full`,`e`.`title_en`)) as `exhibitor`, `e`.`id` as `exhibitorID`')
             ->select("`u`.`name` as `manager`, (SELECT MIN(`dat`) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan_dat`")
             ->select("(SELECT COUNT(*) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0 AND `is_notify` = 0) as `plan`")
             ->select("`a`.`price` as `amount`")
@@ -173,32 +173,27 @@ class ProjectsModelContracts extends ListModel
         $result = array('items' => array(), 'amount' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'debt' => array('rub' => 0, 'usd' => 0, 'eur' => 0), 'payments' => array('rub' => 0, 'usd' => 0, 'eur' => 0));
         $ids = array();
         $format = JFactory::getApplication()->input->getString('format', 'html');
-        $return = base64_encode("index.php?option=com_projects&view=contracts");
+        $return = ProjectsHelper::getReturnUrl();
         $prefixes = ProjectsHelper::getProjectsPrefix();
         foreach ($items as $item) {
             $ids[] = $item->id;
             $arr['id'] = $item->id;
-            $arr['dat'] = $item->dat;
+            $arr['dat'] = ($item->dat != null) ? JDate::getInstance($item->dat)->format("d.m.Y") : '';
             $url = JRoute::_("index.php?option=com_projects&amp;view=project&amp;layout=edit&amp;id={$item->projectID}&amp;return={$return}");
-            $arr['project'] = ($format != 'html' || ProjectsHelper::canDo('projects.access.projects') || $this->isExcel()) ? $item->project : JHtml::link($url, $item->project);
+            $arr['project'] = ($format != 'html' || !ProjectsHelper::canDo('projects.access.projects') || $this->isExcel()) ? $item->project : JHtml::link($url, $item->project);
             $arr['currency'] = $item->currency;
             $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->id}");
             if ($format == 'html') {
-                $arr['edit_link'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_GO'));
+                $arr['edit_link'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_GO'), array('title' => "ID: {$item->id}"));
             }
             $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$item->id}");
             $link = JHtml::link($url, $item->plan);
             if ($format == 'html') $arr['todo'] = $link;
-            $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->exponentID}&amp;return={$return}");
-            $exponentName = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
-            $params = array('class' => 'jutooltip', 'title' => $item->title_ru_full ?? JText::sprintf('COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_NOT_EXISTS'));
-            $exponentUrl = JHtml::link($url, $exponentName, $params);
-            $arr['exponent'] = ($format != 'html' || $this->isExcel()) ? $exponentName : $exponentUrl;
+            $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->exhibitorID}&amp;return={$return}");
+            $exponentUrl = JHtml::link($url, $item->exhibitor, array('title' => "ID: {$item->exhibitorID}"));
+            $arr['exponent'] = ($format != 'html' || $this->isExcel()) ? $item->exhibitor : $exponentUrl;
             $arr['number'] = ($item->number != null) ? $prefixes[$item->projectID]['contract_prefix'].$item->number : '';
-            $arr['manager']['title'] = $item->manager ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MANAGER_UNDEFINED');
-            $arr['manager']['class'] = (!empty($item->manager)) ? '' : 'no-data';
-            $arr['group']['title'] = $item->group ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_UNDEFINED');
-            $arr['group']['class'] = (!empty($item->group)) ? '' : 'no-data';
+            $arr['manager'] = $item->manager ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MANAGER_UNDEFINED');
             if ($format == 'html') $arr['plan'] = $link;
             $arr['status'] = ProjectsHelper::getExpStatus($item->status);
             $arr['stand'] = implode(" ", $this->getStandsForContract($item->id));
@@ -268,7 +263,7 @@ class ProjectsModelContracts extends ListModel
                 if ($j == 2) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['stand']);
                 if ($j == 3) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['project']);
                 if ($j == 4) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['exponent']);
-                if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['manager']['title']);
+                if ($j == 5) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['manager']);
                 if ($j == 6) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['status']);
                 if ($j == 7) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['currency']);
                 if ($j == 8) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data['items'][$i - 1]['amount'] ?? '');
