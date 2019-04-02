@@ -206,7 +206,7 @@ class ProjectsModelReports extends ListModel
                 ->leftJoin("`#__prj_exp_contacts` as `ec` on `ec`.`exbID` = `e`.`id`")
                 ->leftJoin('`#__users` as `u` ON `u`.`id` = `c`.`managerID`')
                 ->where("`c`.`number` is not null")
-                ->where("`i`.`in_pass` = 1");
+                ->where("(`i`.`in_pass` = 1 or `i`.`is_sq` = 1)");
 
             // Фильтруем по проекту.
             $project = $this->getState('filter.project');
