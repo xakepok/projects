@@ -191,6 +191,37 @@ class ProjectsModelReports extends ListModel
 
         }
 
+        if ($this->type == 'pass') {
+            $query
+                ->select("`c`.`number`, `c`.`id` as `contractID`, `u`.`name` as `manager`")
+                ->select('IFNULL(`e`.`title_ru_short`,IFNULL(`e`.`title_ru_full`,`e`.`title_en`)) as `exhibitor`')
+                ->select("`ec`.`site`")
+                ->select("`e`.`id` as `exhibitorID`")
+                ->select("`i`.`title_ru` as `item`, `i`.`unit`")
+                ->select("`v`.*")
+                ->from("`#__prj_contract_item_values` as `v`")
+                ->leftJoin("`#__prc_items` as `i` on `i`.`id` = `v`.`itemID`")
+                ->leftJoin("`#__prj_contracts` as `c` on `c`.`id` = `v`.`contractID`")
+                ->leftJoin("`#__prj_exp` as `e` on `e`.`id` = `c`.`expID`")
+                ->leftJoin("`#__prj_exp_contacts` as `ec` on `ec`.`exbID` = `e`.`id`")
+                ->leftJoin('`#__users` as `u` ON `u`.`id` = `c`.`managerID`')
+                ->where("`c`.`number` is not null")
+                ->where("`i`.`in_pass` = 1");
+
+            // Фильтруем по проекту.
+            $project = $this->getState('filter.project');
+            if (empty($project)) $project = ProjectsHelper::getActiveProject();
+            if (is_numeric($project)) {
+                $query->where('`c`.`prjID` = ' . (int) $project);
+            }
+
+            /* Сортировка */
+            $orderCol = $this->state->get('list.ordering', 'c.number');
+            $orderDirn = $this->state->get('list.direction', 'asc');
+            $query->order($db->escape($orderCol . ' ' . $orderDirn));
+
+        }
+
         return $query;
     }
 
@@ -246,6 +277,23 @@ class ProjectsModelReports extends ListModel
                 $arr['exhibitor'] = $item->exhibitor;
                 $arr['amount'] = $item->amount;
                 $arr['currency'] = $item->currency;
+                if (!isset($result['contracts'][$item->contractID])) {
+                    $result['contracts'][$item->contractID]['info'] = $arr;
+                }
+                $sq = array();
+                $sq['item'] = $item->item;
+                $sq['value'] = sprintf("%s %s", $item->value, ProjectsHelper::getUnit($item->unit));
+                $result['contracts'][$item->contractID]['squares'][$item->itemID] = $sq;
+                if (!isset($result['items'][$item->itemID])) $result['items'][$item->itemID] = $item->item;
+            }
+            if ($this->type == 'pass') {
+                $arr = array();
+                $arr['number'] = $item->number;
+                $arr['stands'] = implode("; ", $this->getStands($item->contractID));
+                $arr['exhibitor'] = $item->exhibitor;
+                $arr['site'] = $item->site;
+                $arr['manager'] = $item->manager;
+                $arr['contacts'] = implode("; ", $this->getContacts($item->exhibitorID));
                 if (!isset($result['contracts'][$item->contractID])) {
                     $result['contracts'][$item->contractID]['info'] = $arr;
                 }
@@ -417,6 +465,93 @@ class ProjectsModelReports extends ListModel
                             {
                                 $indexes['rubrics'] = $index;
                                 $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_THEMATIC_RUBRICS'));
+                                $index++;
+                            }
+                        }
+                    }
+                    if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['exhibitor']);
+                    if (is_array($fields)) {
+                        if (in_array('status', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['status'], $i + 1, $data[$i - 1]['status']);
+                            $sheet->setCellValueByColumnAndRow($indexes['number'], $i + 1, $data[$i - 1]['number']);
+                            $sheet->setCellValueByColumnAndRow($indexes['dat'], $i + 1, $data[$i - 1]['dat']);
+                        }
+                        if (in_array('amount', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['amount'], $i + 1, $data[$i - 1]['amount']);
+                        }
+                        if (in_array('stands', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['stands'], $i + 1, $data[$i - 1]['stands']);
+                        }
+                        if (in_array('manager', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['manager'], $i + 1, $data[$i - 1]['manager']);
+                        }
+                        if (in_array('director_name', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['director_name'], $i + 1, $data[$i - 1]['director_name']);
+                        }
+                        if (in_array('director_post', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['director_post'], $i + 1, $data[$i - 1]['director_post']);
+                        }
+                        if (in_array('address_legal', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['address_legal'], $i + 1, $data[$i - 1]['address_legal']);
+                        }
+                        if (in_array('contacts', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['sites'], $i + 1, $data[$i - 1]['sites']);
+                            $sheet->setCellValueByColumnAndRow($indexes['contacts'], $i + 1, $data[$i - 1]['contacts']);
+                        }
+                        if (in_array('acts', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['acts'], $i + 1, $data[$i - 1]['acts']);
+                        }
+                        if (in_array('rubrics', $fields))
+                        {
+                            $sheet->setCellValueByColumnAndRow($indexes['rubrics'], $i + 1, $data[$i - 1]['rubrics']);
+                        }
+                    }
+                }
+            }
+            $filename = "Report {$this->type}";
+            $filename = sprintf("%s.xls", $filename);
+        }
+        if ($this->type == 'pass') {
+            $indexes = array();
+            $fields = array('number', 'stands', 'exhibitor', 'manager', 'site', 'contacts', 'squares');
+            $sheet->setTitle(JText::sprintf('COM_PROJECTS_REPORT_TYPE_PASS'));
+            for ($i = 1; $i < count($data) + 7; $i++) {
+                for ($j = 0; $j < count($data) + 7; $j++) {
+                    $index = 1;
+                    if ($i == 1) {
+                        if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_NUMBER_SHORT'));
+                        if (is_array($fields)) {
+                            if (in_array('stands', $fields))
+                            {
+                                $indexes['stands'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_SHORT'));
+                                $index++;
+                            }
+                            if (in_array('manager', $fields))
+                            {
+                                $indexes['manager'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_MANAGER'));
+                                $index++;
+                            }
+                            if (in_array('contacts', $fields))
+                            {
+                                $indexes['contacts'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_NAME'));
+                                $index++;
+                            }
+                            if (in_array('sites', $fields))
+                            {
+                                $indexes['sites'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_EXP_CONTACT_SITES'));
                                 $index++;
                             }
                         }

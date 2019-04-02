@@ -187,6 +187,17 @@
             <option value="1">JYES</option>
         </field>
         <field
+                name="in_pass"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                default="1"
+                label="COM_PROJECTS_HEAD_ITEM_IN_PASS"
+                description="COM_PROJECTS_HEAD_ITEM_IN_PASS_DESC"
+        >
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+        <field
             name="is_factor"
             type="list"
             label="COM_PROJECTS_HEAD_CONTRACT_FACTOR"

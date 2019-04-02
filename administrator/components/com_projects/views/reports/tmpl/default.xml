@@ -16,6 +16,7 @@
                 <option value="managers">COM_PROJECTS_REPORT_TYPE_BY_MANAGERS</option>
                 <option value="todos_by_dates">COM_PROJECTS_REPORT_TYPE_BY_SALES</option>
                 <option value="squares">COM_PROJECTS_REPORT_TYPE_BY_SQUARES</option>
+                <option value="pass">COM_PROJECTS_REPORT_TYPE_BY_PASS</option>
             </field>
         </fields>
     </fieldset>

@@ -29,11 +29,11 @@ class JFormFieldExhibitor extends JFormFieldList
                 $query->where("`e`.`id` = {$exbID}");
                 $session->clear('exbID');
             }
-            if ($view == 'contract' && $id > 0) {
+            /*if ($view == 'contract' && $id > 0) {
                 $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
                 $contract = $cm->getItem($id);
                 $query->where("`e`.`id` = {$contract->expID}");
-            }
+            }*/
         }
         if ($view == 'exhibitor' && $id > 0) {
             $query->where("`e`.`id` != {$id}");
