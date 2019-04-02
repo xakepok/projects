@@ -37,7 +37,7 @@ class ProjectsViewExhibitors extends HtmlView
 
 	private function toolbar()
 	{
-		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_EXHIBITORS'), '');
+		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_COMPANIES'), '');
 
         if ((ProjectsHelper::canDo('core.create') && !ProjectsHelper::canDo('core.accountant')) || ProjectsHelper::canDo('core.general'))
         {
