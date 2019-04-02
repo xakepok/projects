@@ -2,7 +2,6 @@
 defined('_JEXEC') or die;
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
-var_dump($this->items);
 ?>
 <tr>
     <th width="1%">
