@@ -42,7 +42,7 @@ class ProjectsModelExhibitors extends ListModel
         $text = JFactory::getApplication()->input->getString('text', '');
         if ($text != '')
         {
-            $text = $db->q($text);
+            $text = $db->q("%{$text}%");
             $query->where("(`title_ru_full` LIKE {$text} OR `title_ru_short` LIKE {$text} OR `title_en` LIKE {$text} OR `b`.`inn` LIKE {$text})");
         }
         else
@@ -50,7 +50,7 @@ class ProjectsModelExhibitors extends ListModel
             /* Фильтр */
             $search = $this->getState('filter.search');
             if (!empty($search)) {
-                $search = $db->q($search);
+                $search = $db->q("%{$search}%");
                 $query->where("(`title_ru_full` LIKE {$search} OR `title_ru_short` LIKE {$search} OR `title_en` LIKE {$search} OR `b`.`inn` LIKE {$search})");
             }
         }

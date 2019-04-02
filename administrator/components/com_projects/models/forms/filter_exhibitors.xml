@@ -4,9 +4,9 @@
         <field
                 name="search"
                 type="text"
-                label="COM_PROJECTS_FILTER_EXHIBITOR"
-                description="COM_PROJECTS_FILTER_EXHIBITOR"
-                hint="COM_PROJECTS_FILTER_EXHIBITOR"
+                label="COM_PROJECTS_FILTER_COMPANY_INN"
+                description="COM_PROJECTS_FILTER_COMPANY_INN"
+                hint="COM_PROJECTS_FILTER_COMPANY_INN"
                 autocomplete="off"
                 class="js-stools-search-string"
         />
