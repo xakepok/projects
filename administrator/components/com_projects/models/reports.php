@@ -539,9 +539,8 @@ class ProjectsModelReports extends ListModel
         if ($this->type == 'pass') {
             $data = $items['info'];
             $indexes = array();
-            $rows = array();
             $already = array();
-            $fields = array('number', 'stands', 'exhibitor', 'manager', 'site', 'contacts', 'squares');
+            $fields = array('number', 'stands', 'exhibitor', 'title_ru_full', 'manager', 'site', 'contacts', 'squares');
             $sheet->setTitle(JText::sprintf('COM_PROJECTS_REPORT_TYPE_PASS'));
             for ($i = 1; $i < count($data) + 1; $i++) {
                 for ($j = 0; $j < count($data) + 1; $j++) {
@@ -559,6 +558,12 @@ class ProjectsModelReports extends ListModel
                             {
                                 $indexes['exhibitor'] = $index;
                                 $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_FILTER_EXHIBITOR'));
+                                $index++;
+                            }
+                            if (in_array('title_ru_full', $fields))
+                            {
+                                $indexes['title_ru_full'] = $index;
+                                $sheet->setCellValueByColumnAndRow($index, $i, JText::sprintf('COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_DESC'));
                                 $index++;
                             }
                             if (in_array('manager', $fields))
@@ -588,32 +593,32 @@ class ProjectsModelReports extends ListModel
                             }
                         }
                     }
-                    if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['number']);
-                    if (!in_array($rows[$data[$i - 1]['number']], $already)) $rows[$data[$i - 1]['number']] = $i + 1;
-                    if (is_array($fields)) {
-                        if (in_array('stands', $fields))
-                        {
-                            $sheet->setCellValueByColumnAndRow($indexes['stands'], $i + 1, $data[$i - 1]['stands']);
+                    if (!isset($already[$data[$i - 1]['number']])) {
+                        if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['number']);
+                        if (is_array($fields)) {
+                            if (in_array('stands', $fields)) {
+                                $sheet->setCellValueByColumnAndRow($indexes['stands'], $i + 1, $data[$i - 1]['stands']);
+                            }
+                            if (in_array('exhibitor', $fields)) {
+                                $sheet->setCellValueByColumnAndRow($indexes['exhibitor'], $i + 1, $data[$i - 1]['exhibitor']);
+                            }
+                            if (in_array('title_ru_full', $fields)) {
+                                $sheet->setCellValueByColumnAndRow($indexes['title_ru_full'], $i + 1, $data[$i - 1]['title_ru_full']);
+                            }
+                            if (in_array('manager', $fields)) {
+                                $sheet->setCellValueByColumnAndRow($indexes['manager'], $i + 1, $data[$i - 1]['manager']);
+                            }
+                            if (in_array('contacts', $fields)) {
+                                $sheet->setCellValueByColumnAndRow($indexes['contacts'], $i + 1, $data[$i - 1]['contacts']);
+                            }
+                            if (in_array('site', $fields)) {
+                                $sheet->setCellValueByColumnAndRow($indexes['site'], $i + 1, $data[$i - 1]['site']);
+                            }
                         }
-                        if (in_array('exhibitor', $fields))
-                        {
-                            $sheet->setCellValueByColumnAndRow($indexes['exhibitor'], $i + 1, $data[$i - 1]['exhibitor']);
+                        foreach ($items['items'] as $itemID => $item) {
+                            $sheet->setCellValueByColumnAndRow($indexes[$itemID], $i + 1, $items['squares'][$data[$i - 1]['number']][$itemID]);
                         }
-                        if (in_array('manager', $fields))
-                        {
-                            $sheet->setCellValueByColumnAndRow($indexes['manager'], $i + 1, $data[$i - 1]['manager']);
-                        }
-                        if (in_array('contacts', $fields))
-                        {
-                            $sheet->setCellValueByColumnAndRow($indexes['contacts'], $i + 1, $data[$i - 1]['contacts']);
-                        }
-                        if (in_array('site', $fields))
-                        {
-                            $sheet->setCellValueByColumnAndRow($indexes['site'], $i + 1, $data[$i - 1]['site']);
-                        }
-                    }
-                    foreach ($items['items'] as $itemID => $item) {
-                        $sheet->setCellValueByColumnAndRow($indexes[$itemID], $rows[$data[$i - 1]['number']], $items['squares'][$data[$i - 1]['number']][$itemID]);
+                        $already[$data[$i - 1]['number']] =  1;
                     }
                 }
             }
