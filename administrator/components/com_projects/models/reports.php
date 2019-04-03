@@ -401,6 +401,7 @@ class ProjectsModelReports extends ListModel
         $xls = new PHPExcel();
         $xls->setActiveSheetIndex(0);
         $sheet = $xls->getActiveSheet();
+        //exit(var_dump($items));
         if ($this->type == 'exhibitors') {
             $indexes = array();
             $fields = $this->state->get('filter.fields');
@@ -536,6 +537,8 @@ class ProjectsModelReports extends ListModel
         if ($this->type == 'pass') {
             $data = $items['info'];
             $indexes = array();
+            $rows = array();
+            $already = array();
             $fields = array('number', 'stands', 'exhibitor', 'manager', 'site', 'contacts', 'squares');
             $sheet->setTitle(JText::sprintf('COM_PROJECTS_REPORT_TYPE_PASS'));
             for ($i = 1; $i < count($data) + 1; $i++) {
@@ -584,6 +587,7 @@ class ProjectsModelReports extends ListModel
                         }
                     }
                     if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['number']);
+                    if (!in_array($rows[$data[$i - 1]['number']], $already)) $rows[$data[$i - 1]['number']] = $i + 1;
                     if (is_array($fields)) {
                         if (in_array('stands', $fields))
                         {
@@ -606,12 +610,8 @@ class ProjectsModelReports extends ListModel
                             $sheet->setCellValueByColumnAndRow($indexes['site'], $i + 1, $data[$i - 1]['site']);
                         }
                     }
-                    $already = array();
                     foreach ($items['items'] as $itemID => $item) {
-                        if (!in_array($i - 1, $already)) {
-                            $sheet->setCellValueByColumnAndRow($indexes[$itemID], $i + 1, $items['squares'][$data[$i - 1]['number']][$itemID]);
-                            $already[] = $i - 1;
-                        }
+                        $sheet->setCellValueByColumnAndRow($indexes[$itemID], $rows[$data[$i - 1]['number']], $items['squares'][$data[$i - 1]['number']][$itemID]);
                     }
                 }
             }
