@@ -683,6 +683,7 @@ class ProjectsModelContract extends AdminModel {
         $model = AdminModel::getInstance('Ctritem', 'ProjectsModel');
         $table = $model->getTable();
         $columnID = ProjectsHelper::getActivePriceColumn($contractID);
+        $notifies = array();
 
         foreach ($post as $itemID => $values) {
             $pks = array('contractID' => $contractID, 'columnID' => $columnID, 'itemID' => $itemID);
@@ -701,6 +702,7 @@ class ProjectsModelContract extends AdminModel {
             if (!isset($arr['markup'])) $arr['markup'] = NULL;
             if (!isset($arr['value2'])) $arr['value2'] = NULL;
             if (!isset($arr['factor'])) $arr['factor'] = NULL;
+            $notifies[] = array_merge($arr, array('old_value' => $row->value ?? 0));
             if (!isset($arr['value'])) continue;
             if ($arr['value'] == 0)
             {
@@ -718,7 +720,71 @@ class ProjectsModelContract extends AdminModel {
             }
             unset($arr);
         }
+        if (!empty($notifies)) $this->sendNotifies($notifies);
         return true;
+    }
+
+    private function sendNotifies(array $data): void
+    {
+        if (empty($data)) return;
+        $users = $this->getNotifyList();
+        if (empty($users)) return;
+        $db =& $this->getDbo();
+        $cid = 0; //ID сделки
+        $iid = array(); //Массив с ID пунктов прайса
+        foreach ($data as $notify) {
+            if (!isset($users[$notify['itemID']])) continue;
+            if (!in_array($notify['itemID'], $iid)) $iid[] = $notify['itemID'];
+            $cid = $notify['contractID'];
+        }
+        if (empty($cid)) return;
+        $iid = implode(", ", $iid);
+        $query = $db->getQuery(true);
+        $query
+            ->select("`id`, `title_ru`")
+            ->from("`#__prc_items`")
+            ->where("`id` in ({$iid})");
+        $items = $db->setQuery($query)->loadAssocList('id');
+        if (empty($items)) return;
+        $query = $db->getQuery(true);
+        $query
+            ->select("`c`.`id` as `contractID`")
+            ->select('IFNULL(`e`.`title_ru_short`,IFNULL(`e`.`title_ru_full`,`e`.`title_en`)) as `exhibitor`')
+            ->select("`p`.`title_ru` as `project`")
+            ->from("`#__prj_contracts` as `c`")
+            ->leftJoin("`#__prj_exp` as `e` on `e`.`id` = `c`.`expID`")
+            ->leftJoin("`#__prj_projects` as `p` on `p`.`id` = `c`.`prjID`")
+            ->where("`c`.`id` = {$cid}");
+        $contract = $db->setQuery($query, 0, 1)->loadAssoc();
+        //exit(var_dump($data, $items, $values, $users, $contract));
+        $tm = AdminModel::getInstance('Todo', 'ProjectsModel');
+        foreach ($data as $item) {
+            if (!isset($users[$item['itemID']])|| (float) $item['old_value'] == (float) $item['value']) continue;
+            $arr = array();
+            $text = JText::sprintf('COM_PROJECT_TASK_VALUE_EDIT', $contract['exhibitor'], $contract['project'], $items[$item['itemID']]['title_ru'], $item['old_value'] ?? 0, (float) $item['value'] ?? 0);
+            $arr['id'] = null;
+            $arr['task'] = $text;
+            $arr['contractID'] = $contract['contractID'];
+            $arr['managerID'] = $users[$item['itemID']]['managerID'];
+            $arr['is_notify'] = 1;
+            $arr['state'] = 0;
+            $tm->save($arr);
+        }
+    }
+
+    /**
+     * Возвращаем ассоциативный массив получателей уведомлений по изменениям в пунктах прайс-листа
+     * @return array
+     * @since 1.1.9.0
+     */
+    private function getNotifyList(): array
+    {
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`itemID`, `managerID`")
+            ->from("`#__prc_item_notifies`");
+        return $db->setQuery($query)->loadAssocList("itemID") ?? array();
     }
 
 }

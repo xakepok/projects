@@ -105,7 +105,7 @@ class ProjectsModelTodo extends AdminModel {
             $data['userClose'] = JFactory::getUser()->id;
             $data['dat_close'] = date("Y-m-d H:i:s");
         }
-        if ($data['id'] != 0) {
+        if ($data['id'] != 0 && ($data['is_notify'] == 0) || !isset($data['is_notify'])) {
             $this->saveContractStatus($data['contractID'], $data['contract_status']);
         }
         return parent::save($data);
