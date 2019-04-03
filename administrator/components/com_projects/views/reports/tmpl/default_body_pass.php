@@ -18,6 +18,9 @@ foreach ($this->items['contracts'] as $contractID => $item) :
             <?php echo $item['info']['exhibitor']; ?>
         </td>
         <td class="small">
+            <?php echo $item['info']['title_ru_full']; ?>
+        </td>
+        <td class="small">
             <?php echo $item['info']['manager']; ?>
         </td>
         <td class="small">

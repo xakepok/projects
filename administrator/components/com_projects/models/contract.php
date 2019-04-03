@@ -681,6 +681,7 @@ class ProjectsModelContract extends AdminModel {
         $post = $_POST['jform']['price'];
         if (empty($post)) return true;
         $model = AdminModel::getInstance('Ctritem', 'ProjectsModel');
+        $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
         $table = $model->getTable();
         $columnID = ProjectsHelper::getActivePriceColumn($contractID);
         $notifies = array();
@@ -720,7 +721,8 @@ class ProjectsModelContract extends AdminModel {
             }
             unset($arr);
         }
-        if (!empty($notifies)) $this->sendNotifies($notifies);
+        $contract = $cm->getItem($contractID);
+        if (!empty($notifies) && ($contract->status == 1 || $contract->status == 10)) $this->sendNotifies($notifies);
         return true;
     }
 

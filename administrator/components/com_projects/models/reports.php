@@ -194,7 +194,7 @@ class ProjectsModelReports extends ListModel
         if ($this->type == 'pass') {
             $query
                 ->select("`c`.`number`, `c`.`id` as `contractID`, `u`.`name` as `manager`")
-                ->select('IFNULL(`e`.`title_ru_short`,IFNULL(`e`.`title_ru_full`,`e`.`title_en`)) as `exhibitor`')
+                ->select('IFNULL(`e`.`title_ru_short`,IFNULL(`e`.`title_ru_full`,`e`.`title_en`)) as `exhibitor`, `e`.`title_ru_full`')
                 ->select("`ec`.`site`")
                 ->select("`e`.`id` as `exhibitorID`")
                 ->select("`i`.`title_ru` as `item`, `i`.`unit`")
@@ -294,6 +294,7 @@ class ProjectsModelReports extends ListModel
                     $arr['exhibitor'] = $item->exhibitor;
                     $arr['site'] = $item->site;
                     $arr['manager'] = $item->manager;
+                    $arr['title_ru_full'] = $item->title_ru_full;
                     $arr['contacts'] = implode("; ", $this->getContacts($item->exhibitorID));
                     if (!isset($result['contracts'][$item->contractID])) {
                         $result['contracts'][$item->contractID]['info'] = $arr;
@@ -310,6 +311,7 @@ class ProjectsModelReports extends ListModel
                     $arr['exhibitor'] = $item->exhibitor;
                     $arr['site'] = $item->site;
                     $arr['manager'] = $item->manager;
+                    $arr['title_ru_full'] = $item->title_ru_full;
                     $arr['contacts'] = implode("; ", $this->getContacts($item->exhibitorID));
                     $result['info'][] = $arr;
                     if (!isset($result['items'][$item->itemID])) $result['items'][$item->itemID] = $item->item;
