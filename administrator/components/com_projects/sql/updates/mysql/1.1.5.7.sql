@@ -1,4 +1,4 @@
-create view `#__prj_rep_todos_by_dates` as
+create or replace view `#__prj_rep_todos_by_dates` as
 select `c`.`prjID`                             AS `projectID`,
        `p`.`title_ru`                          AS `project`,
        `t`.`managerID`                         AS `managerID`,
