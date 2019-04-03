@@ -606,8 +606,12 @@ class ProjectsModelReports extends ListModel
                             $sheet->setCellValueByColumnAndRow($indexes['site'], $i + 1, $data[$i - 1]['site']);
                         }
                     }
+                    $already = array();
                     foreach ($items['items'] as $itemID => $item) {
-                        $sheet->setCellValueByColumnAndRow($indexes[$itemID], $i + 1, $items['squares'][$data[$i - 1]['number']][$itemID]);
+                        if (!in_array($i - 1, $already)) {
+                            $sheet->setCellValueByColumnAndRow($indexes[$itemID], $i + 1, $items['squares'][$data[$i - 1]['number']][$itemID]);
+                            $already[] = $i - 1;
+                        }
                     }
                 }
             }
