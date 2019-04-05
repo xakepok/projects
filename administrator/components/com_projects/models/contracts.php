@@ -20,7 +20,7 @@ class ProjectsModelContracts extends ListModel
                 'plan',
                 'plan_dat',
                 'currency',
-                'number',
+                'number', 'dog_number',
                 'amount_rub',
                 'amount_usd',
                 'amount_eur',
@@ -41,7 +41,7 @@ class ProjectsModelContracts extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`c`.`id`, `c`.`dat`, IFNULL(`c`.`number_free`,`c`.`number`) as `number`, `c`.`status`, `c`.`currency`")
+            ->select("`c`.`id`, `c`.`dat`, IFNULL(`c`.`number_free`,ifnull(`c`.`number`,'')) as `number`, IFNULL(`c`.`number_free`,ifnull(`c`.`number`,'0')) as `dog_number`, `c`.`status`, `c`.`currency`")
             ->select("`p`.`title_ru` as `project`, `p`.`id` as `projectID`")
             ->select('IFNULL(`e`.`title_ru_short`,IFNULL(`e`.`title_ru_full`,`e`.`title_en`)) as `exhibitor`, `e`.`id` as `exhibitorID`')
             ->select("`u`.`name` as `manager`, (SELECT MIN(`dat`) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan_dat`")
@@ -158,9 +158,9 @@ class ProjectsModelContracts extends ListModel
         /* Сортировка */
         $orderCol  = $this->state->get('list.ordering', 'plan_dat');
         $orderDirn = $this->state->get('list.direction', 'asc');
-        if ($orderCol == 'number') {
-            if ($orderDirn == 'asc') $orderCol = 'LENGTH(number), number';
-            if ($orderDirn == 'desc') $orderCol = 'LENGTH(number) desc, number';
+        if ($orderCol == 'dog_number') {
+            if ($orderDirn == 'asc') $orderCol = 'LENGTH(dog_number), dog_number';
+            if ($orderDirn == 'desc') $orderCol = 'LENGTH(dog_number) desc, dog_number';
         }
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
