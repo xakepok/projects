@@ -122,10 +122,11 @@ class ProjectsHelper
 
     /**
      * Возвращает массив с количеством просроченных заданий менеджеров
+     * @param int $projectID ID проекта. Если 0 - по всем
      * @return array
      * @since 1.1.6.0
      */
-    public static function getExpiredTodosByManager(): array
+    public static function getExpiredTodosByManager(int $projectID = 0): array
     {
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
@@ -137,6 +138,11 @@ class ProjectsHelper
             ->where("`t`.`state` = 0")
             ->where("`t`.`is_notify` = 0")
             ->group("`t`.`managerID`");
+        if ($projectID > 0) {
+            $query
+                ->leftJoin("`#__prj_contracts` as `c` on `c`.`id` = `t`.`contractID`")
+                ->where("`c`.`prjID` = {$projectID}");
+        }
         $items = $db->setQuery($query)->loadObjectList();
         $result = array();
         if (empty($items)) return $result;

@@ -20,15 +20,6 @@
             <option value="">COM_PROJECTS_FILTER_SELECT_PROJECT</option>
         </field>
         <field
-            name="exhibitor"
-            type="Exhibitor"
-            label="COM_PROJECTS_FILTER_SELECT_EXHIBITOR"
-            description="COM_PROJECTS_FILTER_SELECT_EXHIBITOR"
-            onchange="this.form.submit();"
-            >
-            <option value="">COM_PROJECTS_FILTER_SELECT_EXHIBITOR</option>
-        </field>
-        <field
                 name="currency"
                 type="list"
                 label="COM_PROJECTS_FILTER_SELECT_CURRENCY"

@@ -27,7 +27,10 @@ foreach ($this->items['future'] as $dat => $arr) :
         $futures[$manager] += $cnt;
     endforeach;
 endforeach;
-$expires = ProjectsHelper::getExpiredTodosByManager();
+$projectID = $this->state->get('filter.project');
+if (empty($projectID)) $projectID = ProjectsHelper::getActiveProject();
+if (!is_numeric($projectID)) $projectID = 0;
+$expires = ProjectsHelper::getExpiredTodosByManager($projectID);
 foreach ($managers as $manager) :
     ?>
 <tr>

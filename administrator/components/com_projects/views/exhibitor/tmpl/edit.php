@@ -18,14 +18,14 @@ if ($return != null) {
     $action .= "&amp;return={$return}";
 }
 ?>
-<?php if ($this->item->id != null) :?>
+<?php if ($this->item->id != null) : ?>
     <script type="text/javascript">
         window.onload = function () {
             searchCity('citytest', 'regID', <?php echo $this->item->regID;?>);
             searchCity('citytestfact', 'regID_fact', <?php echo $this->item->regID_fact;?>);
         }
     </script>
-<?php endif;?>
+<?php endif; ?>
 <script type="text/javascript">
     Joomla.submitbutton = function (task) {
         if (task === 'exhibitor.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {*/
@@ -39,7 +39,7 @@ if ($return != null) {
         <div class="span12 form-horizontal">
             <?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
             <div class="tab-content">
-                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR')); ?>
+                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::sprintf('COM_PROJECTS_BLANK_COMPANY')); ?>
                 <div class="row-fluid">
                     <div class="span4">
                         <div>
@@ -69,13 +69,15 @@ if ($return != null) {
                     </div>
                     <?php echo JHtml::_('bootstrap.endTab'); ?>
                 <?php endif; ?>
-                <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'contact', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_CONTACTS')); ?>
-                <div class="row-fluid">
-                    <div class="span12">
-                        <?php echo $this->loadTemplate('contacts'); ?>
+                <?php if ($this->item->id != null): ?>
+                    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'contact', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_CONTACTS')); ?>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <?php echo $this->loadTemplate('contacts'); ?>
+                        </div>
                     </div>
-                </div>
-                <?php echo JHtml::_('bootstrap.endTab'); ?>
+                    <?php echo JHtml::_('bootstrap.endTab'); ?>
+                <?php endif; ?>
                 <?php if ($this->item->id != null): ?>
                     <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'history', JText::sprintf('COM_PROJECTS_BLANK_EXHIBITOR_HISTORY')); ?>
                     <div class="row-fluid">
