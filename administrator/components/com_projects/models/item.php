@@ -23,7 +23,7 @@ class ProjectsModelItem extends AdminModel {
         $data['column_1'] = (float) (100 + $data['column_1']) / 100;
         $data['column_2'] = (float) (100 + $data['column_2']) / 100;
         $data['column_3'] = (float) (100 + $data['column_3']) / 100;
-        if ($data['id'] != null) $this->saveObservers($data['id'], $data['observers']);
+        if ($data['id'] != null) $this->saveObservers($data['id'], $data['observers'] ?? array());
         return parent::save($data);
     }
 
