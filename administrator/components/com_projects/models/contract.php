@@ -729,7 +729,7 @@ class ProjectsModelContract extends AdminModel {
     private function sendNotifies(array $data): void
     {
         if (empty($data)) return;
-        $users = $this->getNotifyList();
+        $users = ProjectsHelper::getNotifyList();
         if (empty($users)) return;
         $db =& $this->getDbo();
         $cid = 0; //ID сделки
@@ -772,21 +772,6 @@ class ProjectsModelContract extends AdminModel {
             $arr['state'] = 0;
             $tm->save($arr);
         }
-    }
-
-    /**
-     * Возвращаем ассоциативный массив получателей уведомлений по изменениям в пунктах прайс-листа
-     * @return array
-     * @since 1.1.9.0
-     */
-    private function getNotifyList(): array
-    {
-        $db =& $this->getDbo();
-        $query = $db->getQuery(true);
-        $query
-            ->select("`itemID`, `managerID`")
-            ->from("`#__prc_item_notifies`");
-        return $db->setQuery($query)->loadAssocList("itemID") ?? array();
     }
 
 }

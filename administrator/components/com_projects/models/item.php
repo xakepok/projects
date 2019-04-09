@@ -14,6 +14,7 @@ class ProjectsModelItem extends AdminModel {
         $item->column_1 = (int) ($item->column_1 * 100 - 100);
         $item->column_2 = (int) ($item->column_2 * 100 - 100);
         $item->column_3 = (int) ($item->column_3 * 100 - 100);
+        if ($item->id !== null) $item->observers = ProjectsHelper::getNotifyList($item->id);
         return $item;
     }
 
@@ -22,7 +23,38 @@ class ProjectsModelItem extends AdminModel {
         $data['column_1'] = (float) (100 + $data['column_1']) / 100;
         $data['column_2'] = (float) (100 + $data['column_2']) / 100;
         $data['column_3'] = (float) (100 + $data['column_3']) / 100;
+        if ($data['id'] != null) $this->saveObservers($data['id'], $data['observers']);
         return parent::save($data);
+    }
+
+    /**
+     * Сохраняет список наблюдателей
+     * @param int $itemID ID пункта прайса
+     * @param array $users массив с ID наблюдателей
+     * @since 1.9.9.5
+     */
+    public function saveObservers(int $itemID = 0, array $users = array()): void
+    {
+        if ($itemID == 0) return;
+        $already = ProjectsHelper::getNotifyList($itemID);
+        $unm = AdminModel::getInstance('Prcobserver', 'ProjectsModel');
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                $item = $unm->getItem(array('itemID' => $itemID, 'managerID' => $user));
+                $arr = array();
+                $arr['id'] = $item->id;
+                $arr['itemID'] = $itemID;
+                $arr['managerID'] = $user;
+                if (in_array($user, $already)) {
+                    if (($key = array_search($user, $already)) !== false) unset($already[$key]);
+                }
+                $unm->save($arr);
+            }
+        }
+        foreach ($already as $user) {
+            $item = $unm->getItem(array('itemID' => $itemID, 'managerID' => $user));
+            if ($item->id != null) $unm->delete($item->id);
+        }
     }
 
     /**

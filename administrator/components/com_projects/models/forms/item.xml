@@ -99,6 +99,104 @@
             <option value="zvqm">COM_PROJECTS_HEAD_ITEM_UNIT_ZVQM</option>
         </field>
         <field
+            name="is_factor"
+            type="list"
+            label="COM_PROJECTS_HEAD_CONTRACT_FACTOR"
+            description="COM_PROJECTS_HEAD_CONTRACT_FACTOR_DESC"
+            class="inputbox"
+            default="0">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+        <field
+            name="is_markup"
+            type="list"
+            label="COM_PROJECTS_HEAD_ITEM_IS_MARKUP"
+            description="COM_PROJECTS_HEAD_ITEM_IS_MARKUP_DESC"
+            class="inputbox"
+            default="0">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+        <field
+            name="observers"
+            type="manager"
+            multiple="true"
+            label="COM_PROJECTS_HEAD_ITEM_OBSERVERS"
+            description="COM_PROJECTS_HEAD_ITEM_OBSERVERS_DESC"
+            />
+    </fieldset>
+    <fieldset name="amounts">
+        <field
+            name="lbl_price"
+            type="spacer"
+            label="COM_PROJECTS_HEAD_ITEM_LABEL_PRICE"
+            />
+        <field
+                name="price_rub"
+                type="text"
+                label="COM_PROJECTS_HEAD_ITEM_PRICE_RUB"
+                description="COM_PROJECTS_HEAD_ITEM_PRICE_RUB_DESC"
+                hint="COM_PROJECTS_HEAD_ITEM_PRICE_RUB_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="price_usd"
+                type="text"
+                label="COM_PROJECTS_HEAD_ITEM_PRICE_USD"
+                description="COM_PROJECTS_HEAD_ITEM_PRICE_USD_DESC"
+                hint="COM_PROJECTS_HEAD_ITEM_PRICE_USD_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="price_eur"
+                type="text"
+                label="COM_PROJECTS_HEAD_ITEM_PRICE_EUR"
+                description="COM_PROJECTS_HEAD_ITEM_PRICE_EUR_DESC"
+                hint="COM_PROJECTS_HEAD_ITEM_PRICE_EUR_HINT"
+                autocomplete="off"
+                class="input-xlarge"
+        />
+        <field
+                name="lbl_columns"
+                type="spacer"
+                label="COM_PROJECTS_HEAD_ITEM_LABEL_COLUMNS"
+        />
+        <field
+                name="column_1"
+                type="integer"
+                label="COM_PROJECTS_HEAD_ITEM_COLUMN_1"
+                description="COM_PROJECTS_HEAD_ITEM_COLUMN_1_DESC"
+                default="0"
+                step="5"
+                first="0"
+                last="100"
+        />
+        <field
+                name="column_2"
+                type="integer"
+                label="COM_PROJECTS_HEAD_ITEM_COLUMN_2"
+                description="COM_PROJECTS_HEAD_ITEM_COLUMN_2_DESC"
+                default="50"
+                step="5"
+                first="0"
+                last="100"
+        />
+        <field
+                name="column_3"
+                type="integer"
+                label="COM_PROJECTS_HEAD_ITEM_COLUMN_3"
+                description="COM_PROJECTS_HEAD_ITEM_COLUMN_3_DESC"
+                default="100"
+                step="5"
+                first="0"
+                last="100"
+        />
+    </fieldset>
+    <fieldset name="params">
+        <field
                 name="need_period"
                 type="radio"
                 class="btn-group btn-group-yesno"
@@ -197,86 +295,5 @@
             <option value="0">JNO</option>
             <option value="1">JYES</option>
         </field>
-        <field
-            name="is_factor"
-            type="list"
-            label="COM_PROJECTS_HEAD_CONTRACT_FACTOR"
-            description="COM_PROJECTS_HEAD_CONTRACT_FACTOR_DESC"
-            class="inputbox"
-            default="0">
-            <option value="0">JNO</option>
-            <option value="1">JYES</option>
-        </field>
-        <field
-            name="is_markup"
-            type="list"
-            label="COM_PROJECTS_HEAD_ITEM_IS_MARKUP"
-            description="COM_PROJECTS_HEAD_ITEM_IS_MARKUP_DESC"
-            class="inputbox"
-            default="0">
-            <option value="0">JNO</option>
-            <option value="1">JYES</option>
-        </field>
-    </fieldset>
-    <fieldset name="amounts">
-        <field
-                name="price_rub"
-                type="text"
-                label="COM_PROJECTS_HEAD_ITEM_PRICE_RUB"
-                description="COM_PROJECTS_HEAD_ITEM_PRICE_RUB_DESC"
-                hint="COM_PROJECTS_HEAD_ITEM_PRICE_RUB_HINT"
-                autocomplete="off"
-                class="input-xlarge"
-        />
-        <field
-                name="price_usd"
-                type="text"
-                label="COM_PROJECTS_HEAD_ITEM_PRICE_USD"
-                description="COM_PROJECTS_HEAD_ITEM_PRICE_USD_DESC"
-                hint="COM_PROJECTS_HEAD_ITEM_PRICE_USD_HINT"
-                autocomplete="off"
-                class="input-xlarge"
-        />
-        <field
-                name="price_eur"
-                type="text"
-                label="COM_PROJECTS_HEAD_ITEM_PRICE_EUR"
-                description="COM_PROJECTS_HEAD_ITEM_PRICE_EUR_DESC"
-                hint="COM_PROJECTS_HEAD_ITEM_PRICE_EUR_HINT"
-                autocomplete="off"
-                class="input-xlarge"
-        />
-    </fieldset>
-    <fieldset name="columns" label="COM_PROJECTS_HEAD_ITEM_COLUMN1_LABEL">
-        <field
-                name="column_1"
-                type="integer"
-                label="COM_PROJECTS_HEAD_ITEM_COLUMN_1"
-                description="COM_PROJECTS_HEAD_ITEM_COLUMN_1_DESC"
-                default="0"
-                step="5"
-                first="0"
-                last="100"
-        />
-        <field
-                name="column_2"
-                type="integer"
-                label="COM_PROJECTS_HEAD_ITEM_COLUMN_2"
-                description="COM_PROJECTS_HEAD_ITEM_COLUMN_2_DESC"
-                default="50"
-                step="5"
-                first="0"
-                last="100"
-        />
-        <field
-                name="column_3"
-                type="integer"
-                label="COM_PROJECTS_HEAD_ITEM_COLUMN_3"
-                description="COM_PROJECTS_HEAD_ITEM_COLUMN_3_DESC"
-                default="100"
-                step="5"
-                first="0"
-                last="100"
-        />
     </fieldset>
 </form>

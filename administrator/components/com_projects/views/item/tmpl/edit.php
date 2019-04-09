@@ -33,7 +33,7 @@ if ($return != null) {
                         <?php echo $this->loadTemplate('amounts'); ?>
                     </div>
                     <div class="span4">
-                        <?php echo $this->loadTemplate('columns'); ?>
+                        <?php echo $this->loadTemplate('params'); ?>
                     </div>
                 </div>
                 <?php echo JHtml::_('bootstrap.endTab'); ?>

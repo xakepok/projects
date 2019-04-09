@@ -71,6 +71,31 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращаем ассоциативный массив получателей уведомлений по изменениям в пунктах прайс-листа, если пункт прайс-листа == 0
+     * Иначе возвращаем массив с ID юзеров
+     * @param int $itemID ID пункта прайс-листа
+     * @return array
+     * @since 1.1.9.0
+     */
+    public static function getNotifyList(int $itemID = 0): array
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`managerID`")
+            ->from("`#__prc_item_notifies`");
+        if ($itemID == 0) {
+            $query->select("`itemID`");
+            return $db->setQuery($query)->loadAssocList("itemID") ?? array();
+        }
+        else {
+            $query->where("`itemID` = {$itemID}");
+            $result = $db->setQuery($query)->loadColumn() ?? array();
+            return $result;
+        }
+    }
+
+    /**
      * Возвращает URL для обработки формы
      * @return string
      * @since 1.1.8.7
