@@ -19,6 +19,12 @@ class TableProjectsItems extends Table
     var $column_3 = null;
     var $is_factor = null;
     var $is_markup = null;
+    var $is_water = null;
+    var $is_electric = null;
+    var $is_cleaning = null;
+    var $is_internet = null;
+    var $is_multimedia = null;
+    var $badge = null;
     var $is_sq = null;
     var $in_stat = null;
     var $need_period = null;

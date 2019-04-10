@@ -530,7 +530,6 @@ class ProjectsModelContract extends AdminModel {
         $contractID = $item->id;
         $db =& $this->getDbo();
         $activeColumn = ProjectsHelper::getActivePriceColumn($item->id);
-        $squares = ProjectsHelper::getStandsSquare($item->id);
         $stands = ProjectsHelper::getContractStands($item->id);
         $counts = $this->getPriceCounts($item->id);
         $result = array();
@@ -539,7 +538,7 @@ class ProjectsModelContract extends AdminModel {
             ->select("`i`.`id`, `i`.`unit`, `unit_2` as `isUnit2`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `i`.`is_factor`, `i`.`is_markup`, `i`.`sectionID`")
             ->select("IFNULL(`i`.`title_ru`,`i`.`title_en`) as `title`")
             ->select("`i`.`price_{$currency}` as `price`")
-            ->select("`i`.`column_1`, `i`.`column_2`, `i`.`column_3`, `i`.`application`, IFNULL(`i`.`is_sq`,0) as `is_sq`, `i`.`is_internet`, `i`.`is_electric`, `i`.`is_multimedia`, `i`.`is_water`, `i`.`is_cleaning`")
+            ->select("`i`.`column_1`, `i`.`column_2`, `i`.`column_3`, `i`.`application`, IFNULL(`i`.`is_sq`,0) as `is_sq`, `i`.`is_internet`, `i`.`is_electric`, `i`.`is_multimedia`, `i`.`is_water`, `i`.`is_cleaning`, `i`.`badge`")
             ->select("`s`.`title` as `section`")
             ->from("`#__prc_items` as `i`")
             ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
@@ -590,6 +589,15 @@ class ProjectsModelContract extends AdminModel {
                 $arr['stand'] = implode(" / ", $sts);
                 if (empty($arr['stand']) && $item->is_sq) $arr['value'] = 0;
                 $arr['stands_count'] = count($stands);
+            }
+            //Автозаполнение знечения пропусков
+            if ($item->badge == '1' && $arr['value'] == 0) {
+                $a = (float) $counts[21]['value'] + (float) $counts[22]['value'] + (float) $counts[263]['value'] + (float) $counts[264]['value'] + (float) $counts[24]['value'] + (float) $counts[25]['value'];
+                $b = (float) $counts[23]['value'] + (float) $counts[26]['value'];
+                $c = round($b / 2);
+                $arr['value'] = $a + $c;
+                $dc = (float) $counts[1273]['value'] + (float) $counts[1274]['value'] + (float) $counts[30]['value']; //Кол-во демо-центров
+                $arr['value'] = round($dc * 100) + $arr['value'];
             }
             $arr['sum'] = $values[$item->id]['price'];
             $arr['sum_showed'] = number_format($arr['sum'], 2, ',', ' ');

@@ -295,5 +295,18 @@
             <option value="0">JNO</option>
             <option value="1">JYES</option>
         </field>
+        <field
+                name="badge"
+                type="list"
+                label="COM_PROJECTS_HEAD_BADGE_TYPE"
+                description="COM_PROJECTS_HEAD_BADGE_TYPE_DESC"
+                class="input-xlarge">
+            <option value="">COM_PROJECTS_HEAD_BADGE_TYPE_0</option>
+            <option value="1">COM_PROJECTS_HEAD_BADGE_TYPE_1</option>
+            <option value="2">COM_PROJECTS_HEAD_BADGE_TYPE_2</option>
+            <option value="3">COM_PROJECTS_HEAD_BADGE_TYPE_3</option>
+            <option value="4">COM_PROJECTS_HEAD_BADGE_TYPE_4</option>
+            <option value="5">COM_PROJECTS_HEAD_BADGE_TYPE_5</option>
+        </field>
     </fieldset>
 </form>
