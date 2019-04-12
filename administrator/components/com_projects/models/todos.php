@@ -155,6 +155,8 @@ class ProjectsModelTodos extends ListModel
                 $arr['open'] = $item->open;
                 $arr['manager'] = $item->manager;
                 $arr['state'] = $item->state;
+                $url = JRoute::_("index.php?option=com_projects&amp;task=todo.add&amp;contractID={$item->contractID}");
+                $arr['start'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_TODO_CREATE'));
                 if ($item->is_notify) {
                     $arr['close_notify'] = JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=todos.publish&amp;id={$item->id}"), JText::sprintf('COM_PROJECTS_ACTION_CLOSE_AND_READ'));
                 }

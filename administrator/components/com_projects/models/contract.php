@@ -598,6 +598,7 @@ class ProjectsModelContract extends AdminModel {
                 $arr['value'] = $a + $c;
                 $dc = (float) $counts[1273]['value'] + (float) $counts[1274]['value'] + (float) $counts[30]['value']; //Кол-во демо-центров
                 $arr['value'] = round($dc * 100) + $arr['value'];
+                $arr['title'] = "AUTO: ".$arr['title'];
             }
             $arr['sum'] = $values[$item->id]['price'];
             $arr['sum_showed'] = number_format($arr['sum'], 2, ',', ' ');
@@ -766,19 +767,20 @@ class ProjectsModelContract extends AdminModel {
             ->leftJoin("`#__prj_projects` as `p` on `p`.`id` = `c`.`prjID`")
             ->where("`c`.`id` = {$cid}");
         $contract = $db->setQuery($query, 0, 1)->loadAssoc();
-        //exit(var_dump($data, $items, $values, $users, $contract));
         $tm = AdminModel::getInstance('Todo', 'ProjectsModel');
         foreach ($data as $item) {
             if (!isset($users[$item['itemID']])|| (float) $item['old_value'] == (float) $item['value']) continue;
-            $arr = array();
-            $text = JText::sprintf('COM_PROJECT_TASK_VALUE_EDIT', $contract['exhibitor'], $contract['project'], $items[$item['itemID']]['title_ru'], $item['old_value'] ?? 0, (float) $item['value'] ?? 0);
-            $arr['id'] = null;
-            $arr['task'] = $text;
-            $arr['contractID'] = $contract['contractID'];
-            $arr['managerID'] = $users[$item['itemID']]['managerID'];
-            $arr['is_notify'] = 1;
-            $arr['state'] = 0;
-            $tm->save($arr);
+            foreach ($users[$item['itemID']] as $user) {
+                $arr = array();
+                $text = JText::sprintf('COM_PROJECT_TASK_VALUE_EDIT', $contract['exhibitor'], $contract['project'], $items[$item['itemID']]['title_ru'], $item['old_value'] ?? 0, (float) $item['value'] ?? 0);
+                $arr['id'] = null;
+                $arr['task'] = $text;
+                $arr['contractID'] = $contract['contractID'];
+                $arr['managerID'] = $user;
+                $arr['is_notify'] = 1;
+                $arr['state'] = 0;
+                $tm->save($arr);
+            }
         }
     }
 

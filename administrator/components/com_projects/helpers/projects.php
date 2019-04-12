@@ -86,7 +86,13 @@ class ProjectsHelper
             ->from("`#__prc_item_notifies`");
         if ($itemID == 0) {
             $query->select("`itemID`");
-            return $db->setQuery($query)->loadAssocList("itemID") ?? array();
+            $items = $db->setQuery($query)->loadAssocList() ?? array();
+            $result = array();
+            foreach ($items as $item) {
+                if (!isset($result[$item['itemID']])) $result[$item['itemID']] = array();
+                $result[$item['itemID']][] = $item['managerID'];
+            }
+            return $result;
         }
         else {
             $query->where("`itemID` = {$itemID}");
