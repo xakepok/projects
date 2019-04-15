@@ -47,10 +47,10 @@ class ProjectsViewExhibitors extends HtmlView
         {
             JToolbarHelper::editList('exhibitor.edit');
         }
-        if (ProjectsHelper::canDo('core.general'))
+        /*if (ProjectsHelper::canDo('core.general'))
         {
             JToolbarHelper::deleteList('COM_PROJECT_QUEST_REMOVE_EXHIBITOR', 'exhibitors.delete');
-        }
+        }*/
 		if (ProjectsHelper::canDo('core.admin'))
 		{
 			JToolBarHelper::preferences('com_projects');

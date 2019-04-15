@@ -137,14 +137,27 @@ class ProjectsModelTodo extends AdminModel {
         $data['dat_close'] = date("Y-m-d H:i:s");
         $data['result'] = (!$notify) ? JFactory::getDbo()->escape(JFactory::getApplication()->input->getString('result')) : NULL;
         $data['id'] = JFactory::getDbo()->escape(JFactory::getApplication()->input->getInt('id', 0));
+        $item = $this->getItem($data['id']);
+        $group = $item->notify_group;
         $data['state'] = '1';
         if ($data['id'] == 0) return false;
-        return parent::save($data);
+        $s = parent::save($data);
+        if ($group != null) {
+            $db =& $this->getDbo();
+            $query = $db->getQuery(true);
+            $query
+                ->update("`#__prj_todos`")
+                ->set("`state` = 1")
+                ->where("`is_notify` = 1")
+                ->where("`notify_group` = {$group}");
+            $db->setQuery($query)->execute();
+        }
+        return $s;
     }
 
     protected function prepareTable($table)
     {
-    	$nulls = array('userClose', 'result', 'dat_close'); //Поля, которые NULL
+    	$nulls = array('userClose', 'result', 'dat_close', 'notify_group'); //Поля, которые NULL
 	    foreach ($nulls as $field)
 	    {
 		    if (!strlen($table->$field)) $table->$field = NULL;

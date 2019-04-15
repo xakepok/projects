@@ -770,6 +770,7 @@ class ProjectsModelContract extends AdminModel {
         $tm = AdminModel::getInstance('Todo', 'ProjectsModel');
         foreach ($data as $item) {
             if (!isset($users[$item['itemID']])|| (float) $item['old_value'] == (float) $item['value']) continue;
+            $group = ProjectsHelper::getNotifyGroup();
             foreach ($users[$item['itemID']] as $user) {
                 $arr = array();
                 $text = JText::sprintf('COM_PROJECT_TASK_VALUE_EDIT', $contract['exhibitor'], $contract['project'], $items[$item['itemID']]['title_ru'], $item['old_value'] ?? 0, (float) $item['value'] ?? 0);
@@ -777,8 +778,11 @@ class ProjectsModelContract extends AdminModel {
                 $arr['task'] = $text;
                 $arr['contractID'] = $contract['contractID'];
                 $arr['managerID'] = $user;
+                $arr['dat'] = JDate::getInstance()->format("Y-m-d");
                 $arr['is_notify'] = 1;
                 $arr['state'] = 0;
+                $arr['notify_group'] = $group;
+                $arr['result'] = null;
                 $tm->save($arr);
             }
         }

@@ -71,6 +71,23 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает следующий идентификатор группы уведомлений
+     * @return int
+     * @since 1.2.0.2
+     */
+    public static function getNotifyGroup(): int
+    {
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("IFNULL(MAX(`notify_group`),0)+1")
+            ->from("`#__prj_todos`")
+            ->where("`is_notify` = 1")
+            ->where("`notify_group` is not null");
+        return $db->setQuery($query)->loadResult() ?? 1;
+    }
+
+    /**
      * Возвращаем ассоциативный массив получателей уведомлений по изменениям в пунктах прайс-листа, если пункт прайс-листа == 0
      * Иначе возвращаем массив с ID юзеров
      * @param int $itemID ID пункта прайс-листа

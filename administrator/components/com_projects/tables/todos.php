@@ -22,6 +22,7 @@ class TableProjectsTodos extends Table
     var $userOpen = null;
     var $userClose = null;
     var $state = null;
+    var $notify_group = null;
 
     public function __construct(JDatabaseDriver $db)
     {

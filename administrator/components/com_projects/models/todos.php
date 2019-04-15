@@ -123,15 +123,16 @@ class ProjectsModelTodos extends ListModel
         $task = JFactory::getApplication()->input->getString('task', null);
         $format = JFactory::getApplication()->input->getString('format', 'html');
         $cid = JFactory::getApplication()->input->getInt('contractID', 0);
-        $ret_url = "index.php?option=com_projects&view=todos";
         $result_no_expire = array();
         $result_expire = array();
-        if ($cid > 0) $ret_url .= "&amp;contractID={$cid}";
-        $return = base64_encode($ret_url);
-        $result = array();
         foreach ($items as $item) {
             $arr = array();
             if ($task != 'exportxls' && $format != "raw") {
+                $ret_url = "index.php?option=com_projects&view=todos";
+                if ($cid > 0) $ret_url .= "&amp;contractID={$cid}";
+                if ($item->is_notify == '1') $ret_url .= "&notify=1";
+                $return = base64_encode($ret_url);
+                $result = array();
                 $arr['is_expire'] = $item->is_expire;
                 $arr['id'] = $item->id;
                 $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
