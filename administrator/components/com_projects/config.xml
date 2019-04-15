@@ -9,4 +9,15 @@
 			   section="component">
 		</field>
 	</fieldset>
+	<fieldset name="keys" label="COM_PROJECTS_SETTINGS_KEYS">
+		<field name="aes_key"
+			   type="integer"
+			   fiest="0"
+			   last="2048"
+			   step="1"
+			   label="COM_PROJECTS_SETTINGS_KEYS_AES"
+			   description="COM_PROJECTS_SETTINGS_KEYS_AES_DESC"
+			   require="true"
+			   />
+	</fieldset>
 </config>
