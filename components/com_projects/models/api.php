@@ -19,13 +19,8 @@ class ProjectsModelApi extends BaseDatabaseModel
      */
     public function getSalt(): int
     {
-        $db =& JFactory::getDbo();
-        $query = $db->getQuery(true);
-        $query
-            ->select("cast(json_extract(params,'$.aes_key') as signed)")
-            ->from("`#__extensions`")
-            ->where("`element` like 'com_projects'");
-        return $db->setQuery($query)->loadResult() ?? 0;
+        $config = JComponentHelper::getParams('com_projects');
+        return $config->get('aes_key', 0);
     }
 
     /**
@@ -54,7 +49,7 @@ class ProjectsModelApi extends BaseDatabaseModel
         $email = JFactory::getApplication()->input->getString('email', '');
         if ($email == '' || $id == 0) return 0;
         $data['username'] = $email;
-        $data['name'] = $email;
+        $data['name'] = $this->getCompanyName($id);
         $data['email'] = $email;
         $data['password'] = $this->getPasswordFromUrl();
         $data['groups'] = array(2);
@@ -64,6 +59,25 @@ class ProjectsModelApi extends BaseDatabaseModel
         $uid = $user->id;
         $this->updateExhibitorUserId($id, $uid);
         return $uid;
+    }
+
+    /**
+     * Возвращает название компании
+     * @param int $exhibitorID ID компании
+     * @return string Название компании
+     * @since 1.2.0.1
+     */
+    private function getCompanyName(int $exhibitorID = 0): string
+    {
+        if ($exhibitorID == 0) return '';
+        $db =& JFactory::getDbo();
+        $id = $db->q($exhibitorID);
+        $query = $db->getQuery(true);
+        $query
+            ->select("IFNULL(`title_ru_short`,ifnull(`title_ru_full`,ifnull(`title_en`,'Компания без названия')))")
+            ->from("`#__prj_exp`")
+            ->where("`id` = {$id}");
+        return $db->setQuery($query)->loadResult() ?? 'Компания без имени';
     }
 
     /**
@@ -94,11 +108,12 @@ class ProjectsModelApi extends BaseDatabaseModel
     {
         $password = JFactory::getApplication()->input->getString('password', '');
         if ($password == '') return '';
+        $aes = $this->getSalt();
         $db =& JFactory::getDbo();
-        $password = $db->q($password);
+        $password = $db->q(base64_decode($password));
         $query = $db->getQuery(true);
         $query
-            ->select("decode(FROM_BASE64({$password}), cast(json_extract(params,'$.aes_key') as signed))")
+            ->select("decode({$password}, {$aes})")
             ->from("`#__extensions`")
             ->where("`element` like 'com_projects'");
         return $db->setQuery($query)->loadResult() ?? '';
