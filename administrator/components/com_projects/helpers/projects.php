@@ -16,7 +16,7 @@ class ProjectsHelper
         if ($notify > 0) {
             JHtmlSidebar::addEntry(Text::sprintf('COM_PROJECTS_MENU_NOTIFY', $notify), 'index.php?option=com_projects&amp;view=todos&amp;notify=1', $vName == 'notify');
         }
-        if (in_array($view, array('reports', 'contracts', 'todos', 'building', 'stat', 'scores', 'payments', 'catalogs', 'cattitles', 'exhibitors', 'prices', 'sections', 'items'))) {
+        if (in_array($view, array('reports', 'contracts', 'todos', 'building', 'stat', 'scores', 'payments', 'catalogs', 'cattitles', 'prices', 'sections', 'items'))) {
             JHtmlSidebar::addFilter(JText::_('COM_PROJECTS_FILTER_SELECT_ACTIVE_PROJECT'), 'set_active_project', JHtml::_('select.options', ProjectsHtmlFilters::projectOptions(), 'value', 'text', self::getActiveProject()));
         }
         if (self::canDo('projects.access.contracts.standart')) {
@@ -133,6 +133,19 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает текущий URL
+     * @return string
+     * @since 1.2.0.3
+     * @throws
+     */
+    public static function getCurrentUrl(): string
+    {
+        $uri = JUri::getInstance();
+        $query = $uri->getQuery();
+        return "index.php?{$query}";
+    }
+
+    /**
      * Возвращает URL для возврата (текущий адрес страницы)
      * @return string
      * @since 1.1.8.7
@@ -142,6 +155,29 @@ class ProjectsHelper
         $uri = JUri::getInstance();
         $query = $uri->getQuery();
         return base64_encode("index.php?{$query}");
+    }
+
+    /**
+     * Возвращает URL для обработки формы левой панели
+     * @return string
+     * @since 1.2.0.3
+     */
+    public static function getSidebarAction():string
+    {
+        $return = self::getReturnUrl();
+        return JRoute::_("index.php?return={$return}");
+    }
+
+    /**
+     * Проверка необходимости обновить страницу
+     * @since 1.2.0.3
+     */
+    public static function checkUpdate(): void
+    {
+        if (!empty($_POST)) {
+            $location = self::getCurrentUrl();
+            header("Location: {$location}");
+        }
     }
 
     public static function searchExhibitor(int $id, string $text): string

@@ -18,11 +18,6 @@ class ProjectsViewExhibitors extends HtmlView
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
 
-        if (!ProjectsHelper::canDo('projects.access.contractors')) {
-            $this->filterForm->removeField('status', 'filter');
-        }
-
-
         // Show the toolbar
 		$this->toolbar();
 
@@ -30,6 +25,8 @@ class ProjectsViewExhibitors extends HtmlView
 		$this->helper = new ProjectsHelper();
 		$this->helper->addSubmenu('exhibitors');
 		$this->sidebar = JHtmlSidebar::render();
+
+		$this->removeFilters();
 
 		// Display it all
 		return parent::display($tpl);
@@ -56,4 +53,21 @@ class ProjectsViewExhibitors extends HtmlView
 			JToolBarHelper::preferences('com_projects');
 		}
 	}
+
+    /**
+     * Удаляем ненужные фильтры
+     * @since 1.2.0.3
+     */
+	private function removeFilters(): void
+    {
+        if (isset($this->activeFilters['projectactive'])) {
+            $this->filterForm->removeField('projectinactive', 'filter');
+        }
+        if (isset($this->activeFilters['projectinactive'])) {
+            $this->filterForm->removeField('projectactive', 'filter');
+        }
+        if (!ProjectsHelper::canDo('projects.access.contractors')) {
+            $this->filterForm->removeField('status', 'filter');
+        }
+    }
 }

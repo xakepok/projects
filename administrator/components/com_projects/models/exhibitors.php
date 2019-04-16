@@ -25,32 +25,51 @@ class ProjectsModelExhibitors extends ListModel
 
     protected function _getListQuery()
     {
-        $format = JFactory::getApplication()->input->getString('format', 'html');
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
+        // Фильтруем проектам, в которых экспонент не учавствует
+        $projectinactive = $this->getState('filter.projectinactive');
+        // Фильтруем проектам, в которых экспонент учавствует
+        $projectactive = $this->getState('filter.projectactive');
+
+        $format = JFactory::getApplication()->input->getString('format', 'html');
+
+        if (!is_numeric($projectactive) && !is_numeric($projectinactive)) {
+            $query->select("`e`.`id`, `e`.`is_contractor`");
+        }
+        else {
+            $query->select("DISTINCT `e`.`id`, `e`.`is_contractor`");
+        }
+
         $query
-            ->select('`e`.`id`, `e`.`is_contractor`')
-            ->select('IFNULL(`e`.`title_ru_short`,IFNULL(`e`.`title_ru_full`,`e`.`title_en`)) as `title`')
+            ->select('trim(IFNULL(`e`.`title_ru_short`,IFNULL(`e`.`title_ru_full`,`e`.`title_en`))) as `title`')
             ->select("`r`.`name` as `city`")
             ->from("`#__prj_exp` as `e`")
             ->leftJoin("`#__prj_exp_bank` as `b` ON `b`.`exbID` = `e`.`id`")
             ->leftJoin("`#__grph_cities` as `r` ON `r`.`id` = `e`.`regID`");
 
-        // Фильтруем по названию (для поиска синонимов)
+        // Фильтруем проектам, в которых экспонент не учавствует
+        if (is_numeric($projectinactive)) {
+            $query
+                ->leftJoin("`#__prj_contracts` as `c` on `c`.`expID` = `e`.`id` and `c`.`prjID` = {$projectinactive}")
+                ->where("`c`.`id` is null");
+        }
+        // Фильтруем проектам, в которых экспонент учавствует
+        if (is_numeric($projectactive)) {
+            $query
+                ->leftJoin("`#__prj_contracts` as `c` on `c`.`expID` = `e`.`id`")
+                ->where("`c`.`id` is not null")
+                ->where("`c`.`prjID` = {$projectactive}");
+        }
+
+        // Фильтруем по названию
         $text = JFactory::getApplication()->input->getString('text', '');
+        $search = $this->getState('filter.search');
+        if (!empty($search) && $text == '') $text = $search;
         if ($text != '')
         {
             $text = $db->q("%{$text}%");
             $query->where("(`title_ru_full` LIKE {$text} OR `title_ru_short` LIKE {$text} OR `title_en` LIKE {$text} OR `b`.`inn` LIKE {$text})");
-        }
-        else
-        {
-            /* Фильтр */
-            $search = $this->getState('filter.search');
-            if (!empty($search)) {
-                $search = $db->q("%{$search}%");
-                $query->where("(`title_ru_full` LIKE {$search} OR `title_ru_short` LIKE {$search} OR `title_en` LIKE {$search} OR `b`.`inn` LIKE {$search})");
-            }
         }
         // Фильтруем по городу.
         $city = $this->getState('filter.city');
@@ -80,21 +99,11 @@ class ProjectsModelExhibitors extends ListModel
                     }
             }
         }
-        // Фильтруем проектам, в которых экспонент не учавствует
-        $projectinactive = $this->getState('filter.projectinactive');
-        if (is_numeric($projectinactive)) {
-            $query->where("`e`.`id` NOT IN (SELECT DISTINCT `expID` FROM `#__prj_contracts` WHERE `prjID` = {$projectinactive})");
-        }
-        // Фильтруем проектам, в которых экспонент учавствует
-        $projectactive = $this->getState('filter.projectactive');
-        if (is_numeric($projectactive)) {
-            $query->where("`e`.`id` IN (SELECT DISTINCT `expID` FROM `#__prj_contracts` WHERE `prjID` = {$projectactive})");
-        }
         //Фильтр по глобальному проекту
-        $project = ProjectsHelper::getActiveProject();
+        /*$project = ProjectsHelper::getActiveProject();
         if (is_numeric($project)) {
             $query->where("`e`.`id` IN (SELECT DISTINCT `expID` FROM `#__prj_contracts` WHERE `prjID` = {$project})");
-        }
+        }*/
         // Фильтруем по видам деятельности.
         $act = $this->getState('filter.activity');
         if (is_numeric($act)) {
@@ -116,8 +125,8 @@ class ProjectsModelExhibitors extends ListModel
         }
 
         /* Сортировка */
-        $orderCol = $this->state->get('list.ordering', 'title');
-        $orderDirn = $this->state->get('list.direction', 'asc');
+        $orderCol = $this->state->get('list.ordering');
+        $orderDirn = $this->state->get('list.direction');
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
         return $query;
@@ -140,8 +149,7 @@ class ProjectsModelExhibitors extends ListModel
             $title = $item->title;
             $arr['id'] = $item->id;
             $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->id}");
-            $params = array('class' => 'jutooltip', 'title' => $item->title_ru_full ?? JText::sprintf('COM_PROJECTS_HEAD_EXP_TITLE_RU_FULL_NOT_EXISTS'));
-            $link = JHtml::link($url, $title, $params);
+            $link = JHtml::link($url, $title);
             $arr['region'] = $item->city;
             $arr['title'] = ($format != 'html') ? $title : $link;
             if (is_numeric($projectinactive))
@@ -170,7 +178,7 @@ class ProjectsModelExhibitors extends ListModel
         $this->setState('filter.city', $city);
         $projectinactive = $this->getUserStateFromRequest($this->context . '.filter.projectinactive', 'filter_projectinactive', '', 'string');
         $this->setState('filter.projectinactive', $projectinactive);
-        $projectactive = $this->getUserStateFromRequest($this->context . '.filter.projectactive', 'filter_$projectactive', '', 'string');
+        $projectactive = $this->getUserStateFromRequest($this->context . '.filter.projectactive', 'filter_projectactive', '', 'string');
         $this->setState('filter.projectactive', $projectactive);
         $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status', '', 'string');
         $this->setState('filter.status', $status);
