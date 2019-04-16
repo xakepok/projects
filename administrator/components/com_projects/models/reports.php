@@ -589,8 +589,8 @@ class ProjectsModelReports extends ListModel
                             $sheet->setCellValueByColumnAndRow($index, $i, $item);
                             if (!in_array($itemID, $indexes)) {
                                 $indexes[$itemID] = $index;
-                                $index++;
                             }
+                            $index++;
                         }
                     }
                     if (!isset($already[$data[$i - 1]['number']])) {
@@ -622,6 +622,7 @@ class ProjectsModelReports extends ListModel
                     }
                 }
             }
+            //exit(var_dump($indexes));
             $filename = "Report {$this->type}";
             $filename = sprintf("%s.xls", $filename);
         }

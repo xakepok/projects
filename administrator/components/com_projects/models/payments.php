@@ -151,6 +151,7 @@ class ProjectsModelPayments extends ListModel
         $return = base64_encode("index.php?option=com_projects&view=payments");
         $contracts = ListModel::getInstance('Contracts', 'ProjectsModel');
         foreach ($items as $item) {
+            if ($item->currency == null) exit(var_dump($item));
             $exponentName = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
             $arr = array();
             $arr['id'] = $item->id;
