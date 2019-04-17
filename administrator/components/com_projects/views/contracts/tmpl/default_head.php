@@ -48,7 +48,7 @@ $listDirn = $this->escape($this->state->get('list.direction'));
     <th width="9%">
         <?php
         $currency = $this->state->get('filter.currency');
-        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_AMOUNT', "amount_{$currency}", $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_AMOUNT');
+        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_AMOUNT', "amount", $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_AMOUNT');
         ?>
     </th>
     <th width="9%">
