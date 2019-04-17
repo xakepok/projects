@@ -71,6 +71,38 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает массив с ID пользователей, входящих в указанную группу
+     * @param int $groupID ID группы пользователей
+     * @return array
+     * @since 1.2.0.7
+     */
+    public static function getUsersFromGroup(int $groupID = 0): array
+    {
+        if (empty($groupID)) return array();
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`user_id`")
+            ->from("`#__user_usergroup_map`")
+            ->where("`group_id` = {$groupID}");
+        return $db->setQuery($query)->loadColumn() ?? array();
+    }
+
+    /**
+     * Возвращает значение параметра из настроек текущего компонента
+     * @param string $param Название параметра
+     * @param string|null $default Значение по умолчанию
+     * @param string $option Название компонента
+     * @return mixed
+     * @since 1.2.0.7
+     */
+    public static function getParam(string $param, string $default = null, string $option = 'com_projects')
+    {
+        $config = JComponentHelper::getParams($option);
+        return $config->get($param, $default);
+    }
+
+    /**
      * Возвращает следующий идентификатор группы уведомлений
      * @return int
      * @since 1.2.0.2

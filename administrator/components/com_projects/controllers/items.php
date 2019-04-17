@@ -40,7 +40,8 @@ class ProjectsControllerItems extends AdminController
             $ids[] = $id;
         }
         $model->setStandardColumns($ids);
-        $this->setRedirect('index.php?option=com_projects&view=items', JText::sprintf('COM_PROJECTS_MESSAGE_SET_STANDARD_VALUES'));
+        $this->setMessage(JText::sprintf('COM_PROJECTS_MESSAGE_SET_STANDARD_VALUES'), 'success');
+        $this->setRedirect('index.php?option=com_projects&view=items');
         $this->redirect();
         jexit();
     }

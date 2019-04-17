@@ -9,6 +9,15 @@
 			   section="component">
 		</field>
 	</fieldset>
+	<fieldset name="notifies" label="COM_PROJECTS_SETTINGS_NOTIFIES">
+		<field
+			name="notify_change_contract_status"
+			type="usergroup"
+			label="COM_PROJECTS_SETTINGS_NOTIFIES_CHANGE_CONTRACT_STATUS"
+			description="COM_PROJECTS_SETTINGS_NOTIFIES_CHANGE_CONTRACT_STATUS_DESC"
+			require="true"
+			/>
+	</fieldset>
 	<fieldset name="keys" label="COM_PROJECTS_SETTINGS_KEYS">
 		<field name="aes_key"
 			   type="integer"

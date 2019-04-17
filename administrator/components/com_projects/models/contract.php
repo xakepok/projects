@@ -330,6 +330,7 @@ class ProjectsModelContract extends AdminModel {
     {
         if ($data['id'] != null) $old = parent::getItem($data['id']);
         if ($data['id'] == null && !ProjectsHelper::canDo('core.general')) $data['managerID'] = JFactory::getUser()->id;
+
         if ($data['dat'] != null)
         {
             $dat = JDate::getInstance($data['dat']);
@@ -340,6 +341,9 @@ class ProjectsModelContract extends AdminModel {
             $data['dat'] = date("Y-m-d");
         }
         $s1 = parent::save($data);
+        if ($data['id'] != null && ($old->status == '1' || $old->status == '10') && $old->status != $data['status']) {
+            $this->notifyNewStatus(array('contractID' => $data['id'], 'status_old' => $old->status, 'status_new' => $data['status']));
+        }
         $action = 'edit';
         if ($data['id'] == null) {
             $data['id'] = $this->_db->insertid();
@@ -375,6 +379,40 @@ class ProjectsModelContract extends AdminModel {
         }
 
         return $s1 && $s2 && $s3;
+    }
+
+    private function notifyNewStatus(array $params): void
+    {
+        $group = (int) ProjectsHelper::getParam('notify_change_contract_status', 0);
+        if ($group === 0) return;
+        $users = ProjectsHelper::getUsersFromGroup($group);
+        if (empty($users)) return;
+        $status_old = JText::sprintf("COM_PROJECTS_HEAD_CONTRACT_STATUS_{$params['status_old']}");
+        $status_new = JText::sprintf("COM_PROJECTS_HEAD_CONTRACT_STATUS_{$params['status_new']}");
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("IFNULL(`e`.`title_ru_short`,IFNULL(`e`.`title_ru_full`,IFNULL(`e`.`title_en`,' '))) as `exhibitor`")
+            ->select("IFNULL(`p`.`title_ru`,IFNULL(`e`.`title_en`,' ')) as `project`")
+            ->from("`#__prj_contracts` as `c`")
+            ->leftJoin("`#__prj_exp` as `e` on `e`.`id` = `c`.`expID`")
+            ->leftJoin("`#__prj_projects` as `p` on `p`.`id` = `c`.`prjID`")
+            ->where("`c`.`id` = {$params['contractID']}");
+        $info = $db->setQuery($query, 0, 1)->loadObject();
+        $tm = AdminModel::getInstance('Todo', 'ProjectsModel');
+
+        foreach ($users as $user) {
+            $arr = array();
+            $arr['id'] = null;
+            $arr['is_notify'] = 1;
+            $arr['dat'] = JDate::getInstance()->format("Y-m-d");
+            $arr['contractID'] = $params['contractID'];
+            $arr['managerID'] = $user;
+            $arr['result'] = null;
+            $arr['state'] = 0;
+            $arr['task'] = JText::sprintf('COM_PROJECT_TASK_CHANGE_CONTRACT_STATUS', $info->exhibitor, $info->project, $status_old, $status_new);
+            $tm->save($arr);
+        }
     }
 
     /**
