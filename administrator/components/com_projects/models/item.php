@@ -11,6 +11,11 @@ class ProjectsModelItem extends AdminModel {
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
+        if ($item->id === null) {
+            $item->column_1 = 1;
+            $item->column_2 = 1.5;
+            $item->column_3 = 2;
+        }
         $item->column_1 = (int) ($item->column_1 * 100 - 100);
         $item->column_2 = (int) ($item->column_2 * 100 - 100);
         $item->column_3 = (int) ($item->column_3 * 100 - 100);
@@ -131,11 +136,12 @@ class ProjectsModelItem extends AdminModel {
 
 
     /**
-     * Устанавливает стандартные значения наценки для выбранных пкнутов прайса
+     * Устанавливает значения наценки для выбранных пкнутов прайса
      * @param array $ids массив с ID пунктов прайса
+     * @param array $columns ассоциативный массив Колонка - Наценка
      * @since 1.2.0.7
      */
-    public function setStandardColumns(array $ids): void
+    public function setColumnsValues(array $ids, array $columns): void
     {
         if (empty($ids)) return;
         $ids = implode(", ", $ids);
@@ -143,7 +149,7 @@ class ProjectsModelItem extends AdminModel {
         $query = $db->getQuery(true);
         $query
             ->update("`#__prc_items`")
-            ->set("`column_1` = 1.0, `column_2` = 1.5, `column_3` = 2.0")
+            ->set("`column_1` = {$columns[1]}, `column_2` = {$columns[2]}, `column_3` = {$columns[3]}")
             ->where("`id` IN ({$ids})");
         $db->setQuery($query)->execute();
     }

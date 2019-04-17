@@ -30,17 +30,35 @@ class ProjectsControllerItems extends AdminController
         jexit();
     }
 
-    public function standard()
+    public function standard_columns()
     {
         $model = $this->getModel();
         $cid = $this->input->get('cid');
+        $columns = array(1 => 1.0, 2 => 1.5, 3 => 2);
         $ids = array();
         foreach ($cid as $id)
         {
             $ids[] = $id;
         }
-        $model->setStandardColumns($ids);
-        $this->setMessage(JText::sprintf('COM_PROJECTS_MESSAGE_SET_STANDARD_VALUES'), 'success');
+        $model->setColumnsValues($ids, $columns);
+        $this->setMessage(JText::sprintf('COM_PROJECTS_MESSAGE_SET_STANDARD_VALUES'));
+        $this->setRedirect('index.php?option=com_projects&view=items');
+        $this->redirect();
+        jexit();
+    }
+
+    public function reset_columns()
+    {
+        $model = $this->getModel();
+        $cid = $this->input->get('cid');
+        $columns = array(1 => 1, 2 => 1, 3 => 1);
+        $ids = array();
+        foreach ($cid as $id)
+        {
+            $ids[] = $id;
+        }
+        $model->setColumnsValues($ids, $columns);
+        $this->setMessage(JText::sprintf('COM_PROJECTS_MESSAGE_RESET_VALUES'));
         $this->setRedirect('index.php?option=com_projects&view=items');
         $this->redirect();
         jexit();
