@@ -40,6 +40,7 @@ class ProjectsViewItems extends HtmlView
             JToolbarHelper::editList('item.edit');
             JToolbarHelper::deleteList('', 'items.delete');
         }
+        JToolbarHelper::custom('items.standard', '', '', 'COM_PROJECTS_ACTION_SET_STANDARD_COLUMNS');
 		if (ProjectsHelper::canDo('core.admin', 'com_projects'))
 		{
 			JToolBarHelper::preferences('com_projects');

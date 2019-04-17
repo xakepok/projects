@@ -29,4 +29,19 @@ class ProjectsControllerItems extends AdminController
         $this->redirect();
         jexit();
     }
+
+    public function standard()
+    {
+        $model = $this->getModel();
+        $cid = $this->input->get('cid');
+        $ids = array();
+        foreach ($cid as $id)
+        {
+            $ids[] = $id;
+        }
+        $model->setStandardColumns($ids);
+        $this->setRedirect('index.php?option=com_projects&view=items', JText::sprintf('COM_PROJECTS_MESSAGE_SET_STANDARD_VALUES'));
+        $this->redirect();
+        jexit();
+    }
 }

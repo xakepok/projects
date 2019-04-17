@@ -129,6 +129,26 @@ class ProjectsModelItem extends AdminModel {
         }
     }
 
+
+    /**
+     * Устанавливает стандартные значения наценки для выбранных пкнутов прайса
+     * @param array $ids массив с ID пунктов прайса
+     * @since 1.2.0.7
+     */
+    public function setStandardColumns(array $ids): void
+    {
+        if (empty($ids)) return;
+        $ids = implode(", ", $ids);
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->update("`#__prc_items`")
+            ->set("`column_1` = 1.0, `column_2` = 1.5, `column_3` = 2.0")
+            ->where("`id` IN ({$ids})");
+        $db->setQuery($query)->execute();
+    }
+
+
     public function getScript()
     {
         return 'administrator/components/' . $this->option . '/models/forms/item.js';
