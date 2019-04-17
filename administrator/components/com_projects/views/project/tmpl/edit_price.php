@@ -14,6 +14,12 @@ echo JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_ADD_ITEM'));
         <th>
             <?php echo JText::sprintf('COM_PROJECTS_HEAD_TITLE'); ?>
         </th>
+        <th width="15%">
+            <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEM'); ?>
+        </th>
+        <th width="15%">
+            <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_COLUMNS'); ?>
+        </th>
         <th>
             <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_SECTION'); ?>
         </th>
@@ -28,19 +34,25 @@ echo JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_ADD_ITEM'));
     <tbody>
     <?php foreach ($this->priceItems as $item):?>
         <tr>
-            <td>
+            <td class="small">
                 <?php echo ++$i; ?>
             </td>
-            <td>
+            <td class="small">
                 <?php echo $item['title']; ?>
             </td>
-            <td>
+            <td class="small">
+                <?php echo $item['price']; ?>
+            </td>
+            <td class="small">
+                <?php echo $item['columns']; ?>
+            </td>
+            <td class="small">
                 <?php echo $item['section']; ?>
             </td>
-            <td>
+            <td class="small">
                 <?php echo $item['unit']; ?>
             </td>
-            <td>
+            <td class="small">
                 <?php echo $item['delete']; ?>
             </td>
         </tr>

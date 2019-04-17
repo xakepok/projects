@@ -50,7 +50,9 @@ class ProjectsModelProject extends AdminModel {
             $url = JRoute::_("index.php?option=com_projects&amp;task=item.edit&amp;id={$punkt->id}&amp;return={$return}");
             $arr['title'] = JHtml::link($url, $punkt->title_ru);
             $arr['section'] = $punkt->section;
-            $arr['unit'] = $punkt->unit;
+            $arr['unit'] = ProjectsHelper::getUnit($punkt->unit);
+            $arr['price'] = sprintf("%s / %s / %s", ProjectsHelper::getCurrency((float) $punkt->price_rub, 'rub'), ProjectsHelper::getCurrency((float) $punkt->price_usd, 'usd'), ProjectsHelper::getCurrency((float) $punkt->price_eur, 'eur'));
+            $arr['columns'] = sprintf("%s&#37; / %s&#37; / %s&#37;", $punkt->column_1 * 100 - 100, $punkt->column_2 * 100 - 100, $punkt->column_3 * 100 - 100);
             $url = JRoute::_("index.php?option=com_projects&amp;task=items.removeItem&amp;id={$punkt->id}&amp;return={$return}");
             $arr['delete'] = JHtml::link($url, JText::sprintf('COM_PROJECTS_ACTION_DELETE'));
             $result[] = $arr;
