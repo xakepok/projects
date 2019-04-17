@@ -14,6 +14,12 @@ class ProjectsModelItems extends ListModel
                 'section',
                 'price',
                 'search',
+                'price_rub',
+                'price_usd',
+                'price_eur',
+                'column_1',
+                'column_2',
+                'column_3',
             );
         }
         parent::__construct($config);
@@ -31,6 +37,8 @@ class ProjectsModelItems extends ListModel
         $query
             ->select("`i`.`id`, `i`.`title_ru`, `i`.`title_en`, `i`.`unit`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `i`.`state`")
             ->select("`p`.`title` as `price`, `s`.`title` as `section`")
+            ->select("`i`.`price_rub`, `i`.`price_usd`, `i`.`price_eur`")
+            ->select("`i`.`column_1`, `i`.`column_2`, `i`.`column_3`")
             ->from('`#__prc_items` as `i`')
             ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
             ->leftJoin("`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`");
@@ -81,7 +89,12 @@ class ProjectsModelItems extends ListModel
             $arr['section'] = $item->section;
             $arr['title'] = $link;
             $arr['unit'] = ProjectsHelper::getUnit($item->unit);
-            $arr['unit_2'] = ProjectsHelper::getUnit($item->unit_2);
+            $arr['price_rub'] = ProjectsHelper::getCurrency((float) $item->price_rub, 'rub');
+            $arr['price_usd'] = ProjectsHelper::getCurrency((float) $item->price_usd, 'usd');
+            $arr['price_eur'] = ProjectsHelper::getCurrency((float) $item->price_eur, 'eur');
+            $arr['column_1'] = sprintf("%s&#37;", $item->column_1 * 100 - 100);
+            $arr['column_2'] = sprintf("%s&#37;", $item->column_2 * 100 - 100);
+            $arr['column_3'] = sprintf("%s&#37;", $item->column_3 * 100 - 100);
             $arr['state'] = $item->state;
             $result[] = $arr;
         }
