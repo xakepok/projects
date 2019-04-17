@@ -229,6 +229,7 @@ class ProjectsModelReports extends ListModel
     {
         $items = parent::getItems();
         $result = array();
+        $itog = array();
         foreach ($items as $item) {
             if ($this->type == 'exhibitors') {
                 $arr = array();
@@ -304,6 +305,8 @@ class ProjectsModelReports extends ListModel
                     $sq['value'] = sprintf("%s %s", $item->value, ProjectsHelper::getUnit($item->unit));
                     $result['contracts'][$item->contractID]['squares'][$item->itemID] = $sq;
                     if (!isset($result['items'][$item->itemID])) $result['items'][$item->itemID] = $item->item;
+                    if (!isset($result['sum'][$item->itemID])) $result['sum'][$item->itemID] = 0;
+                    $result['sum'][$item->itemID] += $item->value;
                 }
                 else {
                     $arr['number'] = $item->number;
