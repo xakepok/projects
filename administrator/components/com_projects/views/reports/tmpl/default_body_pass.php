@@ -2,7 +2,9 @@
 // Запрет прямого доступа.
 defined('_JEXEC') or die;
 $ii = JFactory::getApplication()->input->getInt('limitstart', 0);
-foreach ($this->items['contracts'] as $contractID => $item) :
+?>
+<?php echo $this->loadTemplate("body_pass_amount"); ?>
+<?php foreach ($this->items['contracts'] as $contractID => $item) :
     ?>
     <tr>
         <td class="small">
@@ -36,13 +38,4 @@ foreach ($this->items['contracts'] as $contractID => $item) :
         <?php endforeach;?>
     </tr>
 <?php endforeach; ?>
-    <tr>
-        <td colspan="8" style="text-align: right; font-style: italic;">
-            <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_SUM');?>
-        </td>
-        <?php foreach ($this->items['items'] as $item_id => $item_title) :?>
-            <td class="small">
-                <?php echo $this->items['sum'][$item_id] ?? 0; ?>
-            </td>
-        <?php endforeach;?>
-    </tr>
+<?php echo $this->loadTemplate("body_pass_amount"); ?>
