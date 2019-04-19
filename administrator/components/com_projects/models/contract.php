@@ -608,9 +608,9 @@ class ProjectsModelContract extends AdminModel {
             $arr['markup'] = $values[$item->id]['markup'];
             $arr['is_factor'] = $item->is_factor;
             $arr['factor'] = $values[$item->id]['factor'];
-            $arr['fixed'] = ($activeColumn != $values[$item->id]['columnID'] && !empty($values[$item->id]['columnID']) && !ProjectsHelper::canDo('core.admin')) ? true : false;
+            $arr['fixed'] = ($activeColumn != $values[$item->id]['columnID'] && !empty($values[$item->id]['columnID'])) ? true : false;
             $arr['is_sq'] = $item->is_sq;
-            $arr['block'] = ($item->is_sq != 0 || $item->is_electric != 0 || $item->is_internet != 0 || $item->is_multimedia != 0 || $item->is_water != 0 || $item->is_cleaning != 0 || ($item->stop != 0 && !ProjectsHelper::canDo('core.general'))) ? true : false;
+            $arr['block'] = ($item->is_sq != 0 || $item->is_electric != 0 || $item->is_internet != 0 || $item->is_multimedia != 0 || $item->is_water != 0 || $item->is_cleaning != 0 || ($item->stop != 0 && !ProjectsHelper::canDo('core.admin'))) ? true : false;
             if ($item->is_sq || $tip != 0)
             {
                 $sts = array();

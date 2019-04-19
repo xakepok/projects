@@ -289,7 +289,8 @@ class ProjectsHelper
             ->from('`#__prc_items` as `i`')
             ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
             ->leftJoin("`#__prc_prices` as `p` ON `p`.`id` = `s`.`priceID`")
-            ->where("`s`.`priceID` = {$priceID}");
+            ->where("`s`.`priceID` = {$priceID}")
+            ->order("`i`.`title_ru`");
         return $db->setQuery($query)->loadObjectList() ?? array();
     }
 
