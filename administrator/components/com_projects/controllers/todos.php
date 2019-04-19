@@ -74,4 +74,20 @@ class ProjectsControllerTodos extends AdminController
         $this->redirect();
         jexit();
     }
+
+    public function read()
+    {
+        $cid = $this->input->get('cid');
+        $ids = array();
+        foreach ($cid as $id)
+        {
+            $ids[] = $id;
+        }
+        $model = $this->getModel();
+        $model->read($ids);
+        $this->setMessage(JText::sprintf('COM_PROJECTS_MESSAGE_NOTIFIES_WROTE'));
+        $this->setRedirect("index.php?option=com_projects&view=todos&notify=1");
+        $this->redirect();
+        jexit();
+    }
 }

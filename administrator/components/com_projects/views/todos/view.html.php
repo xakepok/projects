@@ -39,25 +39,26 @@ class ProjectsViewTodos extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_TODOS'), '');
 
-        if (ProjectsHelper::canDo('core.create'))
-        {
-            JToolbarHelper::addNew('todo.add');
+		if (!$this->isNotify) {
+            if (ProjectsHelper::canDo('core.create')) {
+                JToolbarHelper::addNew('todo.add');
+            }
+            if (ProjectsHelper::canDo('core.edit')) {
+                JToolbarHelper::editList('todo.edit');
+            }
+            if (ProjectsHelper::canDo('projects.todos.delete')) {
+                JToolbarHelper::deleteList('COM_PROJECT_QUEST_REMOVE_TODOS', 'todos.delete');
+            }
+            if (ProjectsHelper::canDo('core.edit.state')) {
+                JToolbarHelper::divider();
+                JToolbarHelper::publish('todos.publish', 'COM_PROJECTS_ACTION_TASK_DOES', true);
+                JToolbarHelper::unpublish('todos.unpublish', 'COM_PROJECTS_ACTION_TASK_DOSE_DOES', true);
+            }
+            JToolbarHelper::custom('todos.toweek', '', '', 'COM_PROJECTS_ACTION_TO_WEEK');
         }
-        if (ProjectsHelper::canDo('core.edit'))
-        {
-            JToolbarHelper::editList('todo.edit');
+		else {
+            JToolbarHelper::custom('todos.read', '', '', 'COM_PROJECTS_ACTION_TO_DO_WROTE');
         }
-        if (ProjectsHelper::canDo('projects.todos.delete'))
-        {
-            JToolbarHelper::deleteList('COM_PROJECT_QUEST_REMOVE_TODOS', 'todos.delete');
-        }
-        if (ProjectsHelper::canDo('core.edit.state'))
-        {
-            JToolbarHelper::divider();
-            JToolbarHelper::publish('todos.publish', 'COM_PROJECTS_ACTION_TASK_DOES', true);
-            JToolbarHelper::unpublish('todos.unpublish', 'COM_PROJECTS_ACTION_TASK_DOSE_DOES', true);
-        }
-        JToolbarHelper::custom('todos.toweek', '', '', 'COM_PROJECTS_ACTION_TO_WEEK');
 		if (ProjectsHelper::canDo('core.admin'))
 		{
 			JToolBarHelper::preferences('com_projects');

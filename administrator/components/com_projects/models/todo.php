@@ -198,6 +198,24 @@ class ProjectsModelTodo extends AdminModel {
         $db->setQuery($query)->execute();
     }
 
+    /**
+     * Отмечает уведомления прочитанными
+     * @param array $ids массив с ID задач
+     * @since 1.2.0.8
+     */
+    public function read(array $ids): void
+    {
+        if (empty($ids)) return;
+        $ids = implode(', ', $ids);
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->update("`#__prj_todos`")
+            ->set("`state` = 1")
+            ->where("`id` IN ({$ids})");
+        $db->setQuery($query)->execute();
+    }
+
     public function getScript()
     {
         return 'administrator/components/' . $this->option . '/models/forms/todo.js';
