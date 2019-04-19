@@ -576,7 +576,7 @@ class ProjectsModelContract extends AdminModel {
             ->select("`i`.`id`, `i`.`unit`, `unit_2` as `isUnit2`, IFNULL(`i`.`unit_2`,'TWO_NOT_USE') as `unit_2`, `i`.`is_factor`, `i`.`is_markup`, `i`.`sectionID`")
             ->select("IFNULL(`i`.`title_ru`,`i`.`title_en`) as `title`")
             ->select("`i`.`price_{$currency}` as `price`")
-            ->select("`i`.`column_1`, `i`.`column_2`, `i`.`column_3`, `i`.`application`, IFNULL(`i`.`is_sq`,0) as `is_sq`, `i`.`is_internet`, `i`.`is_electric`, `i`.`is_multimedia`, `i`.`is_water`, `i`.`is_cleaning`, `i`.`badge`")
+            ->select("`i`.`column_1`, `i`.`column_2`, `i`.`column_3`, `i`.`application`, IFNULL(`i`.`is_sq`,0) as `is_sq`, `i`.`is_internet`, `i`.`is_electric`, `i`.`is_multimedia`, `i`.`is_water`, `i`.`is_cleaning`, `i`.`badge`, `i`.`stop`")
             ->select("`s`.`title` as `section`")
             ->from("`#__prc_items` as `i`")
             ->leftJoin("`#__prc_sections` as `s` ON `s`.`id` = `i`.`sectionID`")
@@ -610,7 +610,7 @@ class ProjectsModelContract extends AdminModel {
             $arr['factor'] = $values[$item->id]['factor'];
             $arr['fixed'] = ($activeColumn != $values[$item->id]['columnID'] && !empty($values[$item->id]['columnID']) && !ProjectsHelper::canDo('core.admin')) ? true : false;
             $arr['is_sq'] = $item->is_sq;
-            $arr['block'] = ($item->is_sq != 0 || $item->is_electric != 0 || $item->is_internet != 0 || $item->is_multimedia != 0 || $item->is_water != 0 || $item->is_cleaning != 0) ? true : false;
+            $arr['block'] = ($item->is_sq != 0 || $item->is_electric != 0 || $item->is_internet != 0 || $item->is_multimedia != 0 || $item->is_water != 0 || $item->is_cleaning != 0 || ($item->stop != 0 && !ProjectsHelper::canDo('core.general'))) ? true : false;
             if ($item->is_sq || $tip != 0)
             {
                 $sts = array();

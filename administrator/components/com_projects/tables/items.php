@@ -29,6 +29,7 @@ class TableProjectsItems extends Table
     var $in_stat = null;
     var $need_period = null;
     var $state = null;
+    var $stop = null;
 
     public function __construct(JDatabaseDriver $db)
     {
