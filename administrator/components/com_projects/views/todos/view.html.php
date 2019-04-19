@@ -57,6 +57,7 @@ class ProjectsViewTodos extends HtmlView
             JToolbarHelper::publish('todos.publish', 'COM_PROJECTS_ACTION_TASK_DOES', true);
             JToolbarHelper::unpublish('todos.unpublish', 'COM_PROJECTS_ACTION_TASK_DOSE_DOES', true);
         }
+        JToolbarHelper::custom('todos.toweek', '', '', 'COM_PROJECTS_ACTION_TO_WEEK');
 		if (ProjectsHelper::canDo('core.admin'))
 		{
 			JToolBarHelper::preferences('com_projects');

@@ -47,16 +47,22 @@ class ProjectsModelTodos extends ListModel
         if ($notify == 0) {
             // Фильтруем по состоянию.
             $published = $this->getState('filter.state');
-            if (is_numeric($published)) {
+            if (is_numeric($published) && $published < 5) {
                 $query->where('`t`.`state` = ' . (int) $published);
+                if ($published == 0) $query->where("`is_expire` = 0");
             } elseif ($published === '') {
                 $query->where('(`t`.`state` IN (0, 1))');
+            }
+            //Просроченные
+            if ($published == 5) {
+                $query->where("`is_expire` = 1");
             }
         }
         else
         {
             $query->where("`t`.`state` = 0");
         }
+
         // Фильтруем по менеджеру.
         $manager = $this->getState('filter.manager');
         if (is_numeric($manager)) {
@@ -110,8 +116,8 @@ class ProjectsModelTodos extends ListModel
         }
 
         /* Сортировка */
-        $orderCol  = $this->state->get('list.ordering','t.dat');
-        $orderDirn = $this->state->get('list.direction', 'desc');
+        $orderCol  = $this->state->get('list.ordering','is_expire, t.dat');
+        $orderDirn = $this->state->get('list.direction', 'desc, asc');
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
         return $query;
@@ -122,16 +128,12 @@ class ProjectsModelTodos extends ListModel
         $items = parent::getItems();
         $task = JFactory::getApplication()->input->getString('task', null);
         $format = JFactory::getApplication()->input->getString('format', 'html');
-        $cid = JFactory::getApplication()->input->getInt('contractID', 0);
         $result_no_expire = array();
         $result_expire = array();
+        $return = ProjectsHelper::getReturnUrl();
         foreach ($items as $item) {
             $arr = array();
             if ($task != 'exportxls' && $format != "raw") {
-                $ret_url = "index.php?option=com_projects&view=todos";
-                if ($cid > 0) $ret_url .= "&amp;contractID={$cid}";
-                if ($item->is_notify == '1') $ret_url .= "&notify=1";
-                $return = base64_encode($ret_url);
                 $result = array();
                 $arr['is_expire'] = $item->is_expire;
                 $arr['id'] = $item->id;
@@ -257,7 +259,7 @@ class ProjectsModelTodos extends ListModel
     }
 
     /* Сортировка по умолчанию */
-    protected function populateState($ordering = 't.dat', $direction = 'desc')
+    protected function populateState($ordering = 'is_expire desc, t.dat', $direction = 'asc')
     {
         $published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
         $this->setState('filter.state', $published);

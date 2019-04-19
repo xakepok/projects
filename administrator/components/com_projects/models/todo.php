@@ -179,6 +179,25 @@ class ProjectsModelTodo extends AdminModel {
         }
     }
 
+    /**
+     * Перенос задач на определённый период ВПЕРЁД
+     * @param array $ids массив с ID задач
+     * @param string $period период
+     * @since 1.2.0.8
+     */
+    public function toWeek(array $ids, string $period = "1 week"): void
+    {
+        if (empty($ids)) return;
+        $ids = implode(', ', $ids);
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->update("`#__prj_todos`")
+            ->set("`dat` = `dat` + INTERVAL {$period}")
+            ->where("`id` IN ({$ids})");
+        $db->setQuery($query)->execute();
+    }
+
     public function getScript()
     {
         return 'administrator/components/' . $this->option . '/models/forms/todo.js';

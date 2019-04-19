@@ -58,4 +58,20 @@ class ProjectsControllerTodos extends AdminController
         echo new JsonResponse(array('result' => 'ok'));
         jexit();
     }
+
+    public function toweek()
+    {
+        $cid = $this->input->get('cid');
+        $ids = array();
+        foreach ($cid as $id)
+        {
+            $ids[] = $id;
+        }
+        $model = $this->getModel();
+        $model->toWeek($ids, "1 week");
+        $this->setMessage(JText::sprintf('COM_PROJECTS_MESSAGE_TODOS_WEEK_SUCCESS'));
+        $this->setRedirect('index.php?option=com_projects&view=todos');
+        $this->redirect();
+        jexit();
+    }
 }
