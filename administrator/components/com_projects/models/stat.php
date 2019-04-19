@@ -84,7 +84,7 @@ class ProjectsModelStat extends ListModel
                 else
                 {
                     $this->state->set('filter.status', '');
-                    $query->where("`c`.`status` != 0");
+                    $query->where("`c`.`status` = 0");
                 }
             }
         }
