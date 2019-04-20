@@ -124,6 +124,11 @@ class ProjectsModelStand extends AdminModel {
                 $form->removeField('delegate');
             }
             $form->setValue('delegate', null, $this->loadDelegates());
+            $columnID = ProjectsHelper::getActivePriceColumn($contractID);
+            $item = parent::getItem();
+            if ($columnID != $item->columnID) {
+                $form->setFieldAttribute('itemID', 'disabled', true);
+            }
         }
 
         return $form;
@@ -156,14 +161,14 @@ class ProjectsModelStand extends AdminModel {
                 $arr = array();
                 $arr['title'] = $item->title_ru;
                 $arr['id'] = $item->id;
-                $arr['value'] = $data[$item->id] ?? 0;
+                $arr['value'] = $data[$item->id];
                 $result[$tip][] = $arr;
             }
         }
         return $result;
     }
 
-    private function savePrice(int $standID = 0): void
+    private function savePrice(int $standID = 0, int $columnID = 1): void
     {
         if ($standID == 0) return;
         $data = $_POST['jform']['price'];
@@ -178,17 +183,20 @@ class ProjectsModelStand extends AdminModel {
             }
             $value = $db->q($value);
             $itemID = $db->q($itemID);
-            $values[] = "({$standID}, {$itemID}, {$value})";
+            $colID = $db->q($columnID);
+            $values[] = "({$standID}, {$itemID}, {$colID}, {$value})";
         }
         $values = implode(', ', $values);
-        $query = "INSERT INTO `#__prj_stands_advanced` (`standID`, `itemID`, `value`) VALUES {$values}";
+        $query = "INSERT INTO `#__prj_stands_advanced` (`standID`, `itemID`, `columnID`, `value`) VALUES {$values}";
         $query .= "ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)";
         if (!empty($values)) $db->setQuery($query)->execute();
         if (empty($for_del)) return;
         $am = AdminModel::getInstance('Standadv', 'ProjectsModel');
         foreach ($for_del as $item) {
-            $row = $am->getItem(array('standID' => $standID, 'itemID' => $item));
-            if ($row->id != null) $am->delete($row->id);
+            $row = $am->getItem(array('standID' => $standID, 'itemID' => $item, 'columnID' => $columnID));
+            if ($row->id != null) {
+                $am->delete($row->id);
+            }
         }
     }
 
@@ -200,13 +208,14 @@ class ProjectsModelStand extends AdminModel {
         $query = $db->getQuery(true);
         $result = array();
         $query
-            ->select("`itemID`, `value`")
+            ->select("`itemID`, `columnID`, `value`")
             ->from("`#__prj_stands_advanced`")
             ->where("`itemID` IN ({$ids}) AND `standID` = {$standID}");
         $items = $db->setQuery($query)->loadObjectList();
         if (empty($items)) return $result;
         foreach ($items as $item) {
-            $result[$item->itemID] = $item->value;
+            if (!isset($result[$item->itemID][$item->columnID])) $result[$item->itemID][$item->columnID] = array();
+            $result[$item->itemID][$item->columnID] = $item->value;
         }
         return $result;
     }
@@ -256,6 +265,7 @@ class ProjectsModelStand extends AdminModel {
             //$items->save($nv);
             $action = 'add';
             $old = null;
+            $columnID = ProjectsHelper::getActivePriceColumn($data['contractID']);
         }
         if ($data['id'] != null) {
             $item = parent::getItem($data['id']);
@@ -319,6 +329,7 @@ class ProjectsModelStand extends AdminModel {
             }
             $action = 'edit';
             $itemID = $data['id'];
+            $columnID = $item->columnID;
         }
         if ($data['scheme'] == '-1') $data['scheme'] = NULL;
         if ($data['status'] == '3')
@@ -333,12 +344,13 @@ class ProjectsModelStand extends AdminModel {
             $dat = JDate::getInstance($data['department']);
             $data['department'] = $dat->format("Y-m-d");
         }
+        $data['columnID'] = $columnID;
         $s = parent::save($data);
         if ($action == 'add') {
             $itemID = parent::getDbo()->insertid();
             $data['id'] = $itemID;
         }
-        $this->savePrice($itemID);
+        $this->savePrice($itemID, ProjectsHelper::getActivePriceColumn($data['contractID']));
         ProjectsHelper::addEvent(array('action' => $action, 'section' => 'stand', 'itemID' => $itemID, 'params' => $data, 'old_data' => $old));
         $this->saveDelegates($itemID, $data['delegate'] ?? array());
         return $s;

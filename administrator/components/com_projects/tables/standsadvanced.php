@@ -13,6 +13,7 @@ class TableProjectsStandsadvanced extends Table
     var $id = null;
     var $standID = null;
     var $itemID = null;
+    var $columnID = null;
     var $value = null;
 
     public function __construct(JDatabaseDriver $db)

@@ -3,7 +3,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\View\HtmlView;
 
 class ProjectsViewStand extends HtmlView {
-    protected $item, $form, $script, $id, $isAdmin, $names, $price;
+    protected $item, $form, $script, $id, $isAdmin, $names, $price, $active_column;
 
     public function display($tmp = null) {
         $this->form = $this->get('Form');
@@ -11,6 +11,7 @@ class ProjectsViewStand extends HtmlView {
         $this->script = $this->get('Script');
         $this->names = $this->get('Names');
         $this->price = $this->get('Price');
+        $this->active_column = ProjectsHelper::getActivePriceColumn($this->item->contractID);
         $this->isAdmin = ProjectsHelper::canDo('projects.exec.edit');
 
         $this->addToolbar();
