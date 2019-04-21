@@ -126,7 +126,7 @@ class ProjectsModelStand extends AdminModel {
             $form->setValue('delegate', null, $this->loadDelegates());
             $columnID = ProjectsHelper::getActivePriceColumn($contractID);
             $item = parent::getItem();
-            if ($columnID != $item->columnID) {
+            if ($columnID != $item->columnID && $item->columnID !== null) {
                 $form->setFieldAttribute('itemID', 'disabled', true);
             }
         }

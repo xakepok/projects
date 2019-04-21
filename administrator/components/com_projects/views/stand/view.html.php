@@ -6,12 +6,12 @@ class ProjectsViewStand extends HtmlView {
     protected $item, $form, $script, $id, $isAdmin, $names, $price, $active_column;
 
     public function display($tmp = null) {
+        $this->active_column = ProjectsHelper::getActivePriceColumn($this->item->contractID ?? JFactory::getSession()->get('contractID'));
         $this->form = $this->get('Form');
         $this->item = $this->get('Item');
         $this->script = $this->get('Script');
         $this->names = $this->get('Names');
         $this->price = $this->get('Price');
-        $this->active_column = ProjectsHelper::getActivePriceColumn($this->item->contractID);
         $this->isAdmin = ProjectsHelper::canDo('projects.exec.edit');
 
         $this->addToolbar();
