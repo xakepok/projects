@@ -13,8 +13,8 @@ $sum = 0;
             <th style="width: 10%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER'); ?>
             </th>
-            <th style="width: 3%">
-                <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT'); ?>
+            <th style="width: 8%">
+                <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT_SHORT'); ?>
             </th>
             <th style="width: 8%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEM'); ?>
@@ -45,25 +45,25 @@ $sum = 0;
                     $currency = $item['currency'];
                     $subsum += (float) $item['sum']; ?>
                     <tr id="summary_<?php echo $item['id']; ?>" class="app_<?php echo $application;?> <?php echo $dsp; ?>" data-app="<?php echo $application;?>">
-                        <td>
+                        <td class="small">
                             <?php echo $item['title']; ?>
                         </td>
                         <td class="price_cost">
                             <?php echo $item['stand']; ?>
                         </td>
-                        <td>
-                            <span id="sum_cnt_<?php echo $item['id']; ?>"><?php echo $item['value']; ?></span>&nbsp;<?php echo $item['unit']; ?>
+                        <td class="small">
+                            <span id="sum_cnt_<?php echo $item['id']; ?>"><?php echo $item['total']; ?></span>&nbsp;<?php echo $item['unit']; ?>
                         </td>
-                        <td>
+                        <td class="small">
                             <?php echo $item['cost']; ?>
                         </td>
-                        <td>
-                            <span id="sum_factor_<?php echo $item['id']; ?>"><?php echo $item['factor']; ?></span>%
+                        <td class="small">
+                            <span id="sum_factor_<?php echo $item['id']; ?>"><?php echo $item['factor'] ?? 0; ?></span>%
                         </td>
-                        <td>
-                            <span id="sum_markup_<?php echo $item['id']; ?>"><?php echo $item['markup']; ?></span>%
+                        <td class="small">
+                            <span id="sum_markup_<?php echo $item['id']; ?>"><?php echo $item['markup'] ?? 0; ?></span>%
                         </td>
-                        <td>
+                        <td class="small">
                             <span id="sumS_<?php echo $item['id']; ?>" style="display: none;"><?php echo $item['sum']; ?></span>
                             <span id="sumSV_<?php echo $item['id']; ?>"><?php echo $item['sum_showed']; ?></span>
                             <span id="currencyS_<?php echo $item['id']; ?>"><?php echo $currency; ?></span>
@@ -74,8 +74,8 @@ $sum = 0;
             endforeach; ?>
             <tr>
                 <td colspan="6"
-                    style="text-align: right; font-weight: bold;"><?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_SUBSUM'); ?></td>
-                <td>
+                    style="text-align: right; font-weight: bold;" class="small"><?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_SUBSUM'); ?></td>
+                <td class="small">
                     <span id="subsumapp_<?php echo $application;?>" style="display: none;"><?php echo $subsum; ?></span>
                     <span id="subsumappV_<?php echo $application;?>"><?php echo number_format($subsum, 2, ',', ' '); ?></span>
                     <?php echo $currency; ?>

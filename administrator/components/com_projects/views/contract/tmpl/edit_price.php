@@ -10,25 +10,31 @@ $sum = 0;
             <th>
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_TITLE_RU'); ?>
             </th>
-            <th style="width: 10%">
+            <th width="10%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEM'); ?>
             </th>
-            <th style="width: 10%">
+            <th width="5%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_NUMBER'); ?>
             </th>
-            <th style="width: 10%">
-                <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT'); ?>
+            <th width="5%">
+                <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT_SHORT_1'); ?>
             </th>
-            <th style="width: 10%">
+            <th width="5%">
+                <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT_SHORT_2'); ?>
+            </th>
+            <th width="5%">
+                <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_PRICE_ITEMS_COUNT_SHORT_3'); ?>
+            </th>
+            <th width="5%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_UNIT_TWO'); ?>
             </th>
-            <th style="width: 5%">
+            <th width="5%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_DISCOUNT'); ?>
             </th>
-            <th style="width: 5%">
+            <th width="5%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_ITEM_IS_MARKUP'); ?>
             </th>
-            <th style="width: 8%">
+            <th width="8%">
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_SCORE_AMOUNT'); ?>
             </th>
         </tr>
@@ -36,68 +42,61 @@ $sum = 0;
         <tbody>
         <?php foreach ($this->price as $application => $sec) : ?>
             <tr>
-                <td colspan="8" class="center"
+                <td colspan="10" class="center"
                     style="font-weight: bold;"><?php echo ProjectsHelper::getApplication($application); ?></td>
             </tr>
             <?php foreach ($sec as $section => $arr) :
                 $subsum = 0;
                 ?>
                 <tr>
-                    <td colspan="8" class="center" style="font-weight: bold;"><?php echo $section; ?></td>
+                    <td colspan="10" class="center" style="font-weight: bold;"><?php echo $section; ?></td>
                 </tr>
                 <?php foreach ($arr as $i => $item) :
-                if ($this->tip == 1 && $item['value'] == 0 && $item['is_sq']) continue;
+                if ($this->tip == 1 && $item['value'][1] == 0 && $item['is_sq']) continue;
                 $sum += $item['sum'];
                 $subsum += $item['sum'];
                 ?>
                 <tr id="item_<?php echo $item['id']; ?>" class="section_<?php echo $item['section_id']; ?>"
                     data-section="<?php echo $item['section_id']; ?>" data-app="<?php echo $application; ?>">
-                    <td>
+                    <td class="small">
                         <span data-section="<?php echo $section; ?>"
                               id="label_<?php echo $item['id']; ?>"><?php echo $item['title']; ?></span>
                     </td>
-                    <td class="price_cost" style="width: 10%">
+                    <td class="price_cost small">
                         <?php echo $item['cost']; ?>
                     </td>
-                    <td class="price_cost" style="width: 10%">
+                    <td class="price_cost">
                         <?php echo $item['stand']; ?>
                     </td>
-                    <td>
-                        <?php if (!$item['block']): ?>
-                            <input
-                                    type="text"
-                                    name="jform[price][<?php echo $item['id']; ?>][value]"
-                                    id="price_<?php echo $item['id']; ?>"
-                                    value="<?php echo ($this->tip != 0 && $item['sq']) ? $item['stands_count'] : $item['value']; ?>"
-                                    data-cost="<?php echo $item['cost_clean']; ?>"
-                                    class="input"
-                                    placeholder=""
-                                    autocomplete="off"
-                                    onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
-                                <?php if ($item['fixed']) echo "disabled "; ?>
-                                    style="width: 50px;"
-                                    aria-invalid="false"/>&nbsp;
-                            <span><?php echo $item['unit']; ?></span>
-                        <?php endif; ?>
-                        <?php if ($item['block']): ?>
-                            <input
+                    <?php for ($j = 1; $j <= 3; $j++): ?>
+                        <td>
+                            <?php if (!$item['block'] && !$item['fixed'][$j]): ?>
+                                <input
+                                        type="text"
+                                        name="jform[price][<?php echo $item['id']; ?>][value]"
+                                        id="price_<?php echo $item['id']; ?>"
+                                        value="<?php echo ($this->tip != 0 && $item['sq']) ? $item['stands_count'] : $item['value'][$j]; ?>"
+                                        data-cost="<?php echo $item['cost_clean']; ?>"
+                                        class="input"
+                                        placeholder=""
+                                        autocomplete="off"
+                                        style="width: 25px;"
+                                        aria-invalid="false"/>&nbsp;
+                            <?php endif; ?>
+                            <?php if ($item['block'] || $item['fixed'][$j]): ?>
+                                <?php if (!$item['fixed'][$j]): ?>
+                                    <input
                                     type="hidden"
                                     name="jform[price][<?php echo $item['id']; ?>][value]"
-                                    id="price_<?php echo $item['id']; ?>"
-                                    value="<?php echo $item['value']; ?>"
-                                    data-cost="<?php echo $item['cost_clean']; ?>"
-                                    class="input"
-                                    placeholder=""
-                                    autocomplete="off"
-                                    onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
-                                <?php if ($item['fixed']) echo "disabled "; ?>
-                                    style="width: 50px;"
-                                    aria-invalid="false"/>
-                            <span><?php echo $item['value'] ?? 0; ?></span>
-                            <span><?php echo $item['unit']; ?></span>
-                        <?php endif; ?>
-                    </td>
-                    <td class="center" style="width: 10%">
+                                    value="<?php echo ($this->tip != 0 && $item['sq']) ? $item['stands_count'] : $item['value'][$j]; ?>"
+                                    />
+                                <?php endif;?>
+                                <span><?php if ($item['fixed']) echo $item['value'][$j] ?? 0; ?></span>
+                            <?php endif; ?>
+                            <span><?php if ($item['value'][$j] != null && $item['value'][$j] != 0) echo $item['unit']; ?></span>
+                        </td>
+                    <?php endfor;?>
+                    <td class="center">
                         <?php if ($item['isUnit2']): ?>
                             <?php if (!$item['is_sq']): ?>
                                 <input
@@ -109,8 +108,6 @@ $sum = 0;
                                         placeholder=""
                                         autocomplete="off"
                                         onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
-                                        onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
-                                    <?php if ($item['fixed']) echo "disabled "; ?>
                                         style="width: 50px;"
                                         aria-invalid="false"/>&nbsp;
                                 <span><?php echo $item['unit2']; ?></span>
@@ -125,8 +122,6 @@ $sum = 0;
                                         placeholder=""
                                         autocomplete="off"
                                         onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
-                                        onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
-                                    <?php if ($item['fixed']) echo "disabled "; ?>
                                         style="width: 50px;"
                                         aria-invalid="false"/>&nbsp;
                                 <span><?php echo $item['value2']; ?></span>
@@ -134,7 +129,7 @@ $sum = 0;
                             <?php endif; ?>
                         <?php endif; ?>
                     </td>
-                    <td class="center" style="width: 5%">
+                    <td class="center">
                         <?php if ($item['is_factor']): ?>
                             <input
                                     type="number"
@@ -146,12 +141,11 @@ $sum = 0;
                                     placeholder="1.0"
                                     autocomplete="off"
                                     onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
-                                <?php if ($item['fixed']) echo "disabled "; ?>
                                     style="width: 40px;"
                                     aria-invalid="false"/>&nbsp;%
                         <?php endif; ?>
                     </td>
-                    <td class="center" style="width: 5%">
+                    <td class="center">
                         <?php if ($item['is_markup']): ?>
                         <select
                                 name="jform[price][<?php echo $item['id']; ?>][markup]"
@@ -159,7 +153,6 @@ $sum = 0;
                                 autocomplete="off"
                                 style="width: 100px;"
                                 onchange="getSum2(<?php echo $item['id']; ?>, '<?php echo $item['currency']; ?>')"
-                            <?php if ($item['fixed']) echo "disabled "; ?>
                                 aria-invalid="false">
                             <option value="0" <?php if ($item['markup'] == 0 || $item['markup'] == null) echo 'selected'; ?>><?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MARKUP_0'); ?></option>
                             <option value="10" <?php if (round($item['markup']) == 10) echo 'selected'; ?>><?php echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MARKUP_10'); ?>
@@ -173,7 +166,7 @@ $sum = 0;
                             </option>
                             <?php endif; ?>
                     </td>
-                    <td style="width: 8%">
+                    <td class="small">
                         <span class="amounts" id="sum_<?php echo $item['id']; ?>"
                               style="display: none;"><?php echo $item['sum']; ?></span>&nbsp
                         <span class="amounts"

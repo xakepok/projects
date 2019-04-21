@@ -381,6 +381,11 @@ class ProjectsModelContract extends AdminModel {
         return $s1 && $s2 && $s3;
     }
 
+    /**
+     * Отправляет уведомления об изменении статуса договора
+     * @param array $params массив с параметрами уведомления
+     * @since 1.2.0.1
+     */
     private function notifyNewStatus(array $params): void
     {
         $group = (int) ProjectsHelper::getParam('notify_change_contract_status', 0);
@@ -549,8 +554,37 @@ class ProjectsModelContract extends AdminModel {
             ->select("*")
             ->from("`#__prj_contract_item_values`")
             ->where("`contractID` = {$contractID}");
-        $items = $db->setQuery($query)->loadAssocList('itemID');
-        return $items;
+        $items = $db->setQuery($query)->loadObjectList();
+        $result = array();
+        foreach ($items as $item) {
+            $result[$item->itemID][$item->columnID] = $item->value;
+        }
+        return $result;
+    }
+
+    /**
+     * Возвращает массив со стоимостями пунктов прайса в уазанной сделке (с учётом колонок)
+     * @param int $contractID ID сделки
+     * @return array
+     * @since 1.2.1.2
+     */
+    private function getPriceItemsValues(int $contractID = 0): array
+    {
+        if ($contractID == 0) return array();
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`itemID`, `price`, `value`")
+            ->from("`#__prj_stat_items_values`")
+            ->where("`contractID` = {$contractID}");
+        $items = $db->setQuery($query)->loadAssocList() ?? array();
+        if (empty($items)) return array();
+        $result = array();
+        foreach ($items as $item) {
+            $result[$item['itemID']]['price'] = $item['price'];
+            $result[$item['itemID']]['value'] = $item['value'];
+        }
+        return $result;
     }
 
     /**
@@ -570,6 +604,8 @@ class ProjectsModelContract extends AdminModel {
         $activeColumn = ProjectsHelper::getActivePriceColumn($item->id);
         $stands = ProjectsHelper::getContractStands($item->id);
         $counts = $this->getPriceCounts($item->id);
+        $amounts = $this->getPriceItemsValues($contractID);
+        //exit(var_dump($counts));
         $result = array();
         $query = $db->getQuery(true);
         $query
@@ -601,14 +637,16 @@ class ProjectsModelContract extends AdminModel {
             $arr['unit'] = ProjectsHelper::getUnit($item->unit);
             $arr['unit2'] = ProjectsHelper::getUnit($item->unit_2);
             $arr['isUnit2'] = $item->isUnit2;
-
-            $arr['value'] = $counts[$item->id]['value'];
+            $arr['amount'] = $amounts[$item->id]['price'];
+            $arr['value'] = $counts[$item->id];
             $arr['value2'] = $values[$item->id]['value2'];
             $arr['is_markup'] = $item->is_markup;
             $arr['markup'] = $values[$item->id]['markup'];
             $arr['is_factor'] = $item->is_factor;
             $arr['factor'] = $values[$item->id]['factor'];
-            $arr['fixed'] = ($activeColumn != $values[$item->id]['columnID'] && !empty($values[$item->id]['columnID'])) ? true : false;
+            $arr['fixed'][1] = ($activeColumn != 1) ? true : false;
+            $arr['fixed'][2] = ($activeColumn != 2) ? true : false;
+            $arr['fixed'][3] = ($activeColumn != 3) ? true : false;
             $arr['is_sq'] = $item->is_sq;
             $arr['block'] = ($item->is_sq != 0 || $item->is_electric != 0 || $item->is_internet != 0 || $item->is_multimedia != 0 || $item->is_water != 0 || $item->is_cleaning != 0 || ($item->stop != 0 && !ProjectsHelper::canDo('core.admin'))) ? true : false;
             if ($item->is_sq || $tip != 0)
@@ -630,15 +668,16 @@ class ProjectsModelContract extends AdminModel {
             }
             //Автозаполнение знечения пропусков
             if ($item->badge == '1' && $arr['value'] == 0) {
-                $a = (float) $counts[21]['value'] + (float) $counts[22]['value'] + (float) $counts[263]['value'] + (float) $counts[264]['value'] + (float) $counts[24]['value'] + (float) $counts[25]['value'];
-                $b = (float) $counts[23]['value'] + (float) $counts[26]['value'];
+                $a = (float) $amounts[21]['value'] + (float) $amounts[22]['value'] + (float) $amounts[263]['value'] + (float) $amounts[264]['value'] + (float) $amounts[24]['value'] + (float) $amounts[25]['value'];
+                $b = (float) $amounts[23]['value'] + (float) $amounts[26]['value'];
                 $c = round($b / 2);
                 $arr['value'] = $a + $c;
-                $dc = (float) $counts[1273]['value'] + (float) $counts[1274]['value'] + (float) $counts[30]['value']; //Кол-во демо-центров
+                $dc = (float) $amounts[1273]['value'] + (float) $amounts[1274]['value'] + (float) $amounts[30]['value']; //Кол-во демо-центров
                 $arr['value'] = round($dc * 100) + $arr['value'];
                 $arr['title'] = "AUTO: ".$arr['title'];
             }
-            $arr['sum'] = $values[$item->id]['price'];
+            $arr['sum'] = $amounts[$item->id]['price'];
+            $arr['total'] = $amounts[$item->id]['value'];
             $arr['sum_showed'] = number_format($arr['sum'], 2, ',', ' ');
             if (!isset($result[$item->application][$item->section])) $result[$item->application][$item->section] = array();
             $result[$item->application][$item->section][$item->id] = $arr;
@@ -732,7 +771,6 @@ class ProjectsModelContract extends AdminModel {
         $table = $model->getTable();
         $columnID = ProjectsHelper::getActivePriceColumn($contractID);
         $notifies = array();
-
         foreach ($post as $itemID => $values) {
             $pks = array('contractID' => $contractID, 'columnID' => $columnID, 'itemID' => $itemID);
             $row = $model->getItem($pks);
@@ -740,10 +778,9 @@ class ProjectsModelContract extends AdminModel {
             $arr['contractID'] = $contractID;
             $arr['itemID'] = $itemID;
             $arr['columnID'] = $columnID;
-            foreach ($values as $field => $value)
-            {
-                if ($field == 'factor' && $value != null) $arr['factor'] = (float) (100 - $value) / 100;
-                if ($field == 'markup' && $value != null) $arr['markup'] = (float) (100 + $value) / 100;
+            foreach ($values as $field => $value) {
+                if ($field == 'factor' && $value != null) $arr['factor'] = (float)(100 - $value) / 100;
+                if ($field == 'markup' && $value != null) $arr['markup'] = (float)(100 + $value) / 100;
                 if ($field == 'value' && $value != null) $arr['value'] = $value;
                 if ($field == 'value2' && $value != null) $arr['value2'] = $value;
             }
@@ -752,18 +789,15 @@ class ProjectsModelContract extends AdminModel {
             if (!isset($arr['factor'])) $arr['factor'] = NULL;
             $notifies[] = array_merge($arr, array('old_value' => $row->value ?? 0));
             if (!isset($arr['value'])) continue;
-            if ($arr['value'] == 0)
-            {
+            if ($arr['value'] == 0) {
                 if ($row->id != null) $model->delete($row->id);
                 if ($row->id == null) continue;
             }
 
-            if (!$table->bind($arr))
-            {
+            if (!$table->bind($arr)) {
                 exit(var_dump($arr));
             }
-            if (!$model->save($arr))
-            {
+            if (!$model->save($arr)) {
                 exit(var_dump($model->getErrors()));
             }
             unset($arr);
