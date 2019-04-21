@@ -1,17 +1,17 @@
-alter table `s7vi9_prj_stands_advanced`
+alter table `#__prj_stands_advanced`
     add columnID tinyint default 1 not null comment 'Номер колонки';
 
-alter table `s7vi9_prj_stands_advanced` modify columnID tinyint default 1 not null comment 'Номер колонки' after itemID;
+alter table `#__prj_stands_advanced` modify columnID tinyint default 1 not null comment 'Номер колонки' after itemID;
 
-create unique index `s7vi9_prj_stands_advanced_standID_itemID_columnID_uindex`
-    on `s7vi9_prj_stands_advanced` (standID, itemID, columnID);
+create unique index `#__prj_stands_advanced_standID_itemID_columnID_uindex`
+    on `#__prj_stands_advanced` (standID, itemID, columnID);
 
-drop index `s7vi9_prj_stands_advanced_standID_itemID_uindex` on `s7vi9_prj_stands_advanced`;
+drop index `#__prj_stands_advanced_standID_itemID_uindex` on `#__prj_stands_advanced`;
 
-alter table `s7vi9_prj_stands`
+alter table `#__prj_stands`
     add columnID tinyint default 1 not null comment 'ID колонки' after itemID;
 
-create or replace view `s7vi9_prj_contract_item_values` as
+create or replace view `#__prj_contract_item_values` as
     select `s`.`itemID`                                                AS `itemID`,
            `s`.columnID as `columnID`,
            `s`.`contractID`                                            AS `contractID`,
@@ -19,8 +19,8 @@ create or replace view `s7vi9_prj_contract_item_values` as
            if((`inf`.`tip` = 1),
               sum((to_days(`s`.`department`) - to_days(`s`.`arrival`))),
               NULL)                                                    AS `value2`
-    from ((((`s7vi9_prj_stands` `s` left join `s7vi9_prj_contracts` `c` on ((`c`.`id` = `s`.`contractID`))) left join `s7vi9_prj_contract_info` `inf` on ((`inf`.`contractID` = `s`.`contractID`))) left join `s7vi9_prj_catalog` `cat` on ((`cat`.`id` = `s`.`catalogID`)))
-             left join `s7vi9_prc_items` `pi` FORCE INDEX (PRIMARY)
+    from ((((`#__prj_stands` `s` left join `#__prj_contracts` `c` on ((`c`.`id` = `s`.`contractID`))) left join `#__prj_contract_info` `inf` on ((`inf`.`contractID` = `s`.`contractID`))) left join `#__prj_catalog` `cat` on ((`cat`.`id` = `s`.`catalogID`)))
+             left join `#__prc_items` `pi` FORCE INDEX (PRIMARY)
                        on ((`pi`.`id` = `s`.`itemID`)))
     where ((`pi`.`is_sq` = 1) and (`c`.`id` is not null))
     group by `s`.`itemID`, `columnID`, `s`.`contractID`
@@ -30,8 +30,8 @@ create or replace view `s7vi9_prj_contract_item_values` as
            `ci`.`contractID` AS `contractID`,
            `ci`.`value`      AS `value`,
            `ci`.`value2`     AS `value2`
-    from ((`s7vi9_prj_contract_items` `ci` left join `s7vi9_prj_contracts` `c` on ((`c`.`id` = `ci`.`contractID`)))
-             left join `s7vi9_prc_items` `pi` FORCE INDEX (PRIMARY)
+    from ((`#__prj_contract_items` `ci` left join `#__prj_contracts` `c` on ((`c`.`id` = `ci`.`contractID`)))
+             left join `#__prc_items` `pi` FORCE INDEX (PRIMARY)
                        on ((`pi`.`id` = `ci`.`itemID`)))
     where ((`pi`.`is_sq` = 0) and
            (`pi`.`is_electric` = 0) and
@@ -46,11 +46,11 @@ create or replace view `s7vi9_prj_contract_item_values` as
            `s`.`contractID` AS `contractID`,
            sum(`a`.`value`) AS `value`,
            NULL             AS `value2`
-    from (`s7vi9_prj_stands_advanced` `a`
-             left join `s7vi9_prj_stands` `s` on ((`s`.`id` = `a`.`standID`)))
+    from (`#__prj_stands_advanced` `a`
+             left join `#__prj_stands` `s` on ((`s`.`id` = `a`.`standID`)))
     group by `a`.`itemID`, `columnID`, `s`.`contractID`;
 
-create or replace view `s7vi9_prj_stat` as
+create or replace view `#__prj_stat` as
 select `i`.`itemID`                                                                                                 AS `itemID`,
        `v`.`columnID` as `columnID`,
        `i`.`contractID`                                                                                             AS `contractID`,
@@ -96,17 +96,24 @@ select `i`.`itemID`                                                             
                                                                                                                            then `p`.`column_3` end)) *
                                            if(isnull(`i`.`factor`), 1, (1 - `i`.`factor`)))),
              2)                                                                                                     AS `price`
-from ((((`s7vi9_prj_contract_item_values` `v` left join `s7vi9_prj_contract_items` `i` on ((
+from ((((`#__prj_contract_item_values` `v` left join `#__prj_contract_items` `i` on ((
         (`v`.`contractID` = `i`.`contractID`) and
-        (`v`.`itemID` = `i`.`itemID`) and (`v`.`columnID` = `i`.`columnID`)))) left join `s7vi9_prc_items` `p` on ((`p`.`id` = `i`.`itemID`))) left join `s7vi9_prj_contracts` `c` on ((`c`.`id` = `i`.`contractID`)))
-         left join `s7vi9_prj_contract_info` `inf` on ((`inf`.`contractID` = `i`.`contractID`)))
+        (`v`.`itemID` = `i`.`itemID`) and (`v`.`columnID` = `i`.`columnID`)))) left join `#__prc_items` `p` on ((`p`.`id` = `i`.`itemID`))) left join `#__prj_contracts` `c` on ((`c`.`id` = `i`.`contractID`)))
+         left join `#__prj_contract_info` `inf` on ((`inf`.`contractID` = `i`.`contractID`)))
 where (`c`.`id` is not null);
 
-create or replace view `s7vi9_prj_stat_items_values` as
-select `itemID`, `contractID`, sum(`value`) as `value`, sum(`price`) as `price`
-from s7vi9_prj_stat
+create or replace view `#__prj_stat_items_values` as
+select `itemID`, `contractID`, sum(`value`) as `value`, sum(`price`) as `price`, `currency`
+from `#__prj_stat`
 group by `itemID`, `contractID`;
 
-create unique index `s7vi9_prj_contract_items_itemID_columnID_contractID_uindex`
-    on `s7vi9_prj_contract_items` (itemID, columnID, contractID);
+create unique index `#__prj_contract_items_itemID_columnID_contractID_uindex`
+    on `#__prj_contract_items` (itemID, columnID, contractID);
+
+create or replace view `#__prj_contract_amounts` as
+select `contractID` AS `contractID`,
+       sum(`price`) AS `price`,
+       `currency`   AS `currency`
+from `#__prj_stat_items_values`
+group by `contractID`;
 
