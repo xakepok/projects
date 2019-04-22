@@ -246,6 +246,7 @@ class ProjectsModelReports extends ListModel
         $items = parent::getItems();
         $result = array();
         $itog = array();
+        $in_info = array();
         foreach ($items as $item) {
             if ($this->type == 'exhibitors') {
                 $arr = array();
@@ -332,7 +333,10 @@ class ProjectsModelReports extends ListModel
                     $arr['manager'] = $item->manager;
                     $arr['title_ru_full'] = $item->title_ru_full;
                     $arr['contacts'] = implode("; ", $this->getContacts($item->exhibitorID));
-                    $result['info'][] = $arr;
+                    if (!in_array($item->number, $in_info)) {
+                        $result['info'][] = $arr;
+                        $in_info[] = $item->number;
+                    }
                     if (!isset($result['items'][$item->itemID])) $result['items'][$item->itemID] = $item->item;
                     if (!isset($result['squares'][$item->number][$item->itemID])) $result['squares'][$item->number][$item->itemID] = $item->value ?? 0;
                 }
@@ -425,7 +429,7 @@ class ProjectsModelReports extends ListModel
         $xls = new PHPExcel();
         $xls->setActiveSheetIndex(0);
         $sheet = $xls->getActiveSheet();
-        //exit(var_dump($items));
+        exit(var_dump($items));
         if ($this->type == 'exhibitors') {
             $indexes = array();
             $fields = $this->state->get('filter.fields');
