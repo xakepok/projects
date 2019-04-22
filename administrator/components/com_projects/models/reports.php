@@ -429,7 +429,7 @@ class ProjectsModelReports extends ListModel
         $xls = new PHPExcel();
         $xls->setActiveSheetIndex(0);
         $sheet = $xls->getActiveSheet();
-        exit(var_dump($items));
+        //exit(var_dump($items));
         if ($this->type == 'exhibitors') {
             $indexes = array();
             $fields = $this->state->get('filter.fields');
