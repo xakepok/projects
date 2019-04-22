@@ -169,7 +169,7 @@ class ProjectsModelReports extends ListModel
                 ->select("`i`.`title_ru` as `item`, `i`.`id` as `itemID`, `i`.`unit`")
                 ->select("`v`.*")
                 ->select("`a`.`price` as `amount`")
-                ->from("`#__prj_contract_item_values` as `v`")
+                ->from("`#__prj_stat_items_values` as `v`")
                 ->leftJoin("`#__prj_contract_amounts` as `a` on `a`.`contractID` = `v`.`contractID`")
                 ->leftJoin("`#__prc_items` as `i` on `i`.`id` = `v`.`itemID`")
                 ->leftJoin("`#__prj_contracts` as `c` on `c`.`id` = `v`.`contractID`")
@@ -199,7 +199,7 @@ class ProjectsModelReports extends ListModel
                 ->select("`e`.`id` as `exhibitorID`")
                 ->select("`i`.`title_ru` as `item`, `i`.`unit`")
                 ->select("`v`.*")
-                ->from("`#__prj_contract_item_values` as `v`")
+                ->from("`#__prj_stat_items_values` as `v`")
                 ->leftJoin("`#__prc_items` as `i` on `i`.`id` = `v`.`itemID`")
                 ->leftJoin("`#__prj_contracts` as `c` on `c`.`id` = `v`.`contractID`")
                 ->leftJoin("`#__prj_exp` as `e` on `e`.`id` = `c`.`expID`")
@@ -343,6 +343,9 @@ class ProjectsModelReports extends ListModel
         }
         if ($this->type == 'squares') {
             $result = array('status', 'rubric', 'fields', 'manager');
+        }
+        if ($this->type == 'pass') {
+            $result = array('rubric', 'fields', 'manager');
         }
         return $result;
     }
