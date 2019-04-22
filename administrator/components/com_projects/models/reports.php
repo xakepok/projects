@@ -215,6 +215,22 @@ class ProjectsModelReports extends ListModel
                 $query->where('`c`.`prjID` = ' . (int) $project);
             }
 
+            // Фильтруем по статусу.
+            $status = $this->getState('filter.status');
+            if (is_array($status)) {
+                if (!empty($status)) {
+                    $statuses = implode(', ', $status);
+                    $query->where("`c`.`status` IN ({$statuses})");
+                    if (in_array('5', $status)) {
+                        $query->orWhere("`c`.`isCoExp` = 1");
+                    }
+                }
+                else
+                {
+                    $query->where("`c`.`status` IS NOT NULL");
+                }
+            }
+
             /* Сортировка */
             $orderCol = $this->state->get('list.ordering', 'c.number');
             $orderDirn = $this->state->get('list.direction', 'asc');
@@ -628,7 +644,6 @@ class ProjectsModelReports extends ListModel
                     }
                 }
             }
-            //exit(var_dump($indexes));
             $filename = "Report {$this->type}";
             $filename = sprintf("%s.xls", $filename);
         }
