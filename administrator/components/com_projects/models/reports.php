@@ -337,8 +337,8 @@ class ProjectsModelReports extends ListModel
                         $result['info'][] = $arr;
                         $in_info[] = $item->number;
                     }
-                    if (!isset($result['items'][$item->itemID])) $result['items'][$item->itemID] = $item->item;
-                    if (!isset($result['squares'][$item->number][$item->itemID])) $result['squares'][$item->number][$item->itemID] = $item->value ?? 0;
+                    if (!isset($result['items'][$item->itemID]) && $item->itemID != null) $result['items'][$item->itemID] = $item->item;
+                    if (!isset($result['squares'][$item->number][$item->itemID]) && $item->itemID != null) $result['squares'][$item->number][$item->itemID] = $item->value ?? 0;
                 }
             }
         }
@@ -613,14 +613,16 @@ class ProjectsModelReports extends ListModel
                         }
                         foreach ($items['items'] as $itemID => $item) {
                             $sheet->setCellValueByColumnAndRow($index, $i, $item);
-                            if (!in_array($itemID, $indexes)) {
-                                $indexes[$itemID] = $index;
+                            if (!isset($indexes[$itemID])) {
+                                $indexes[(int) $itemID] = $index;
                             }
                             $index++;
                         }
                     }
                     if (!isset($already[$data[$i - 1]['number']])) {
-                        if ($j == 0) $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['number']);
+                        if ($j == 0) {
+                            $sheet->setCellValueByColumnAndRow($j, $i + 1, $data[$i - 1]['number']);
+                        }
                         if (is_array($fields)) {
                             if (in_array('stands', $fields)) {
                                 $sheet->setCellValueByColumnAndRow($indexes['stands'], $i + 1, $data[$i - 1]['stands']);
@@ -642,7 +644,9 @@ class ProjectsModelReports extends ListModel
                             }
                         }
                         foreach ($items['items'] as $itemID => $item) {
-                            $sheet->setCellValueByColumnAndRow($indexes[$itemID], $i + 1, $items['squares'][$data[$i - 1]['number']][$itemID]);
+                            if ($indexes[$itemID] != 0) {
+                                $sheet->setCellValueByColumnAndRow($indexes[$itemID], $i + 1, $items['squares'][$data[$i - 1]['number']][$itemID]);
+                            }
                         }
                         $already[$data[$i - 1]['number']] =  1;
                     }
