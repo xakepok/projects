@@ -628,8 +628,7 @@ class ProjectsModelContract extends AdminModel {
             $arr['id'] = $item->id;
             $arr['section_id'] = $item->sectionID;
             $arr['title'] = $item->title;
-            $pc = ($activeColumn != $values[$item->id]['columnID'] && !empty($values[$item->id]['columnID'])) ? $values[$item->id]['columnID'] : $activeColumn;
-            $pc = "column_{$pc}";
+            $pc = "column_{$activeColumn}";
             $cost = $item->price * $item->$pc;
             $arr['cost'] = sprintf("%s %s", number_format($cost, 2, ',', " "), $currency);
             $arr['currency'] = $currency;
