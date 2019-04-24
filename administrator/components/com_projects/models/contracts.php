@@ -57,8 +57,15 @@ class ProjectsModelContracts extends ListModel
         $search = $this->getState('filter.search');
         if (!empty($search))
         {
-            $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-            $query->where('(`e`.`title_ru_full` LIKE ' . $search . ' OR `e`.`title_ru_short` LIKE ' . $search . ' OR `e`.`title_en` LIKE ' . $search . ' OR `p`.`title_ru` LIKE ' . $search . ' OR `e`.`comment` LIKE ' . $search . ')');
+            if (strpos($search, '№') !== false) {
+                $search = str_ireplace("№", '', $search);
+                $search = $db->q($search);
+                $query->where('(`c`.`number` LIKE ' . $search . ')');
+            }
+            else {
+                $search = $db->quote('%' . $db->escape($search, true) . '%', false);
+                $query->where('(`e`.`title_ru_full` LIKE ' . $search . ' OR `e`.`title_ru_short` LIKE ' . $search . ' OR `e`.`title_en` LIKE ' . $search . ' OR `p`.`title_ru` LIKE ' . $search . ' OR `e`.`comment` LIKE ' . $search . ' OR `c`.`number` LIKE ' . $search . ')');
+            }
         }
         // Фильтруем по видам деятельности.
         $act = $this->getState('filter.activity');
