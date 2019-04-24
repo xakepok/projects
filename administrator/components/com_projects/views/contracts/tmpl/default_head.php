@@ -5,17 +5,16 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 ?>
 <tr>
     <th width="1%" class="hidden-phone">
-        <input type="checkbox" name="checkall-toggle" value=""
-               title="<?php echo JText::sprintf('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
+        <?php echo JHtml::_('grid.checkall'); ?>
     </th>
     <th>
         №
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_NUMBER_SHORT', 'dog_number', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_NUMBER_SHORT', 'dog_number', $listDirn, $listOrder); ?>
     </th>
-    <th width="4$">
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_DATE_DOG', 'c.dat', $listDirn, $listOrder); ?>
+    <th width="4%">
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_DATE_DOG', 'c.dat', $listDirn, $listOrder); ?>
     </th>
     <th width="4%">
         <?php
@@ -29,38 +28,29 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         <?php echo JText::sprintf('COM_PROJECTS_ACTION_GO'); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_PROJECT', 'project', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_PROJECT', 'project', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_EXPONENT', 'title_ru_short', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_EXPONENT', 'title_ru_short', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_ACTIVE_TODOS', 'plan', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_ACTIVE_TODOS', 'plan', $listDirn, $listOrder); ?>
     </th>
     <?php if (ProjectsHelper::canDo('projects.access.contracts.full')): ?>
         <th>
-            <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_MANAGER', 'manager', $listDirn, $listOrder); ?>
+            <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_MANAGER', 'manager', $listDirn, $listOrder); ?>
         </th>
     <?php endif; ?>
     <th>
-        <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_STATUS', 'status', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_STATUS', 'status', $listDirn, $listOrder); ?>
     </th>
     <th width="9%">
-        <?php
-        $currency = $this->state->get('filter.currency');
-        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_AMOUNT', "amount", $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_AMOUNT');
-        ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_AMOUNT', "amount", $listDirn, $listOrder); ?>
     </th>
     <th width="9%">
-        <?php
-        $currency = $this->state->get('filter.currency');
-        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_SCORE_PAYMENT', "payments", $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_SCORE_PAYMENT');
-        ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_SCORE_PAYMENT', "payments", $listDirn, $listOrder); ?>
     </th>
     <th width="9%">
-        <?php
-        $currency = $this->state->get('filter.currency');
-        echo (!empty($currency)) ? JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_DEBT', "debt_{$currency}", $listDirn, $listOrder) : JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_DEBT');
-        ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_DEBT', "debt", $listDirn, $listOrder); ?>
     </th>
 </tr>

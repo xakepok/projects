@@ -70,6 +70,16 @@
     </fields>
     <fields name="list">
         <field
+                name="fullordering"
+                type="list"
+                label="COM_PROJECTS_FILTER_SELECT_FULL_ORDERING"
+                description="COM_PROJECTS_FILTER_SELECT_FULL_ORDERING_DESC"
+                onchange="this.form.submit();"
+                default="title asc"
+        >
+            <option value="">JGLOBAL_SORT_BY</option>
+        </field>
+        <field
                 name="limit"
                 type="limitbox"
                 class="input-mini"

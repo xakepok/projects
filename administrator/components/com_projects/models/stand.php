@@ -291,7 +291,7 @@ class ProjectsModelStand extends AdminModel {
                     $arr['task'] = JText::sprintf('COM_PROJECT_TASK_STAND_SD_EDITED', $contract->id, $stand_old->number, $stand_new->number);
                 }
                 $arr['managerID'] = 400;
-                $this->_createTodo($arr, true);
+                //$this->_createTodo($arr, true);
             }
             //Обноялвем поля в таблице заказанных услуг
             $nv = array();

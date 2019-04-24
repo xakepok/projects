@@ -22,9 +22,7 @@ class ProjectsModelContracts extends ListModel
                 'currency',
                 'number', 'dog_number',
                 'amount',
-                'debt_rub',
-                'debt_usd',
-                'debt_eur',
+                'debt',
                 'payments',
                 'stand',
                 'activity',
@@ -45,6 +43,7 @@ class ProjectsModelContracts extends ListModel
             ->select("`u`.`name` as `manager`, (SELECT MIN(`dat`) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan_dat`")
             ->select("(SELECT COUNT(*) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0 AND `is_notify` = 0) as `plan`")
             ->select("`a`.`price` as `amount`")
+            ->select("IF(`c`.`currency`='rub',0,IF(`c`.`currency`='usd',1,2)) as `sort_amount`")
             ->select("`pay`.`payments`")
             ->select("IFNULL(`a`.`price`,0)-IFNULL(`pay`.`payments`,0) as `debt`")
             ->from("`#__prj_contracts` as `c`")
@@ -60,11 +59,11 @@ class ProjectsModelContracts extends ListModel
             if (strpos($search, '№') !== false) {
                 $search = str_ireplace("№", '', $search);
                 $search = $db->q($search);
-                $query->where('(`c`.`number` LIKE ' . $search . ')');
+                $query->where("(`c`.`number` LIKE {$search})");
             }
             else {
-                $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-                $query->where('(`e`.`title_ru_full` LIKE ' . $search . ' OR `e`.`title_ru_short` LIKE ' . $search . ' OR `e`.`title_en` LIKE ' . $search . ' OR `p`.`title_ru` LIKE ' . $search . ' OR `e`.`comment` LIKE ' . $search . ' OR `c`.`number` LIKE ' . $search . ')');
+                $search = $db->q("%{$search}%");
+                $query->where("(`e`.`title_ru_short` LIKE {$search} OR `e`.`title_ru_full` LIKE {$search} OR `e`.`title_en` LIKE {$search} OR `e`.`comment` LIKE {$search})");
             }
         }
         // Фильтруем по видам деятельности.
@@ -166,6 +165,9 @@ class ProjectsModelContracts extends ListModel
         if ($orderCol == 'dog_number') {
             if ($orderDirn == 'asc') $orderCol = 'LENGTH(dog_number), dog_number';
             if ($orderDirn == 'desc') $orderCol = 'LENGTH(dog_number) desc, dog_number';
+        }
+        if ($orderCol == 'amount' || $orderCol == 'payments' || $orderCol == 'debt') {
+            $orderCol = "sort_amount, {$orderCol}";
         }
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
