@@ -28,6 +28,9 @@ foreach ($this->items as $i => $item) :
                 <?php echo $item['contracts'];?>
             </td>
         <?php endif;?>
+        <td style="<?php echo $item['style'];?>">
+            <?php echo $item['manager'];?>
+        </td>
         <td>
             <?php echo $item['region'];?>
         </td>

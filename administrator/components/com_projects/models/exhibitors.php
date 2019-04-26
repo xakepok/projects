@@ -18,6 +18,7 @@ class ProjectsModelExhibitors extends ListModel
                 'activity',
                 'city',
                 'status',
+                'manager',
             );
         }
         parent::__construct($config);
@@ -42,9 +43,11 @@ class ProjectsModelExhibitors extends ListModel
         }
 
         $query
-            ->select('trim(IFNULL(`e`.`title_ru_short`,IFNULL(`e`.`title_ru_full`,`e`.`title_en`))) as `title`')
+            ->select('trim(IFNULL(`e`.`title_ru_short`,IFNULL(`e`.`title_ru_full`,`e`.`title_en`))) as `title`, u.name as manager')
             ->select("`r`.`name` as `city`")
             ->from("`#__prj_exp` as `e`")
+            ->leftJoin("`#__prj_user_action_log` l on e.id = l.itemID and l.action = 'add' and l.section = 'exhibitor'")
+            ->leftJoin("`#__users` u on u.id = l.userID")
             ->leftJoin("`#__prj_exp_bank` as `b` ON `b`.`exbID` = `e`.`id`")
             ->leftJoin("`#__grph_cities` as `r` ON `r`.`id` = `e`.`regID`");
 
@@ -75,6 +78,11 @@ class ProjectsModelExhibitors extends ListModel
         $city = $this->getState('filter.city');
         if (is_numeric($city) && $format != 'html') {
             $query->where('`e`.`regID` = ' . (int) $city);
+        }
+        // Фильтруем по менеджеру.
+        $manager = $this->getState('filter.manager');
+        if (is_numeric($manager)) {
+            $query->where('`u`.`id` = ' . (int) $manager);
         }
         // Фильтруем по статусу (подрядчик / ндп).
         $status = JFactory::getApplication()->input->getInt('status', null) ?? $this->getState('filter.status');
@@ -151,6 +159,8 @@ class ProjectsModelExhibitors extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->id}");
             $link = JHtml::link($url, $title);
             $arr['region'] = $item->city;
+            $arr['manager'] = $item->manager ?? JText::sprintf('COM_PROJECTS_HEAD_MANAGER_UNKNOWN');
+            $arr['style'] = ($item->manager != null) ? '' : "font-style: italic; font-size: 0.8em;";
             $arr['title'] = ($format != 'html') ? $title : $link;
             if (is_numeric($projectinactive))
             {
@@ -182,6 +192,8 @@ class ProjectsModelExhibitors extends ListModel
         $this->setState('filter.projectactive', $projectactive);
         $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status', '', 'string');
         $this->setState('filter.status', $status);
+        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager', '', 'string');
+        $this->setState('filter.manager', $manager);
         parent::populateState($ordering, $direction);
     }
 
@@ -193,6 +205,7 @@ class ProjectsModelExhibitors extends ListModel
         $id .= ':' . $this->getState('filter.projectinactive');
         $id .= ':' . $this->getState('filter.projectactive');
         $id .= ':' . $this->getState('filter.status');
+        $id .= ':' . $this->getState('filter.manager');
         return parent::getStoreId($id);
     }
 }

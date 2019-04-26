@@ -48,6 +48,16 @@
             <option value="1">COM_PROJECTS_HEAD_EXP_CONTRACTOR</option>
             <option value="2">COM_PROJECTS_HEAD_EXP_NDP</option>
         </field>
+        <field
+                name="manager"
+                type="manager"
+                label="COM_PROJECTS_FILTER_SELECT_AUTHOR"
+                description="COM_PROJECTS_FILTER_SELECT_AUTHOR"
+                hint="COM_PROJECTS_FILTER_SELECT_AUTHOR"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_AUTHOR</option>
+        </field>
     </fields>
     <fields name="list">
         <field
