@@ -433,6 +433,7 @@ class ProjectsModelContract extends AdminModel {
         $info = $db->setQuery($query, 0, 1)->loadObject();
         $tm = AdminModel::getInstance('Todo', 'ProjectsModel');
 
+        $group = ProjectsHelper::getNotifyGroup();
         foreach ($users as $user) {
             $arr = array();
             $arr['id'] = null;
@@ -441,6 +442,7 @@ class ProjectsModelContract extends AdminModel {
             $arr['contractID'] = $params['contractID'];
             $arr['managerID'] = $user;
             $arr['result'] = null;
+            $arr['notify_group'] = $group;
             $arr['state'] = 0;
             $arr['task'] = JText::sprintf('COM_PROJECT_TASK_CHANGE_CONTRACT_STATUS', $info->exhibitor, $info->project, $status_old, $status_new);
             $tm->save($arr);
