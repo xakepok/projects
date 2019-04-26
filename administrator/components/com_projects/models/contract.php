@@ -64,6 +64,7 @@ class ProjectsModelContract extends AdminModel {
             $item->amount = ProjectsHelper::getContractAmount($item->id);
             $item->children = $this->loadCoExp($item->expID, $item->prjID);
             $item->rubrics = ProjectsHelper::getContractRubrics($item->id);
+            $item->activecolumn = ProjectsHelper::getActivePriceColumn($item->id);
         }
         return $item;
     }
@@ -344,6 +345,12 @@ class ProjectsModelContract extends AdminModel {
         if ($data['id'] != null && ($old->status == '1' || $old->status == '10') && $old->status != $data['status']) {
             $this->notifyNewStatus(array('contractID' => $data['id'], 'status_old' => $old->status, 'status_new' => $data['status']));
         }
+        if ($data['id'] != null) {
+            $column = ProjectsHelper::getActivePriceColumn($data['id']);
+            if ($column != $data['activecolumn']) {
+                $this->setActivePriceColumn($data['prjID'] ?? 0, $data['activecolumn'] ?? 0);
+            }
+        }
         $action = 'edit';
         if ($data['id'] == null) {
             $data['id'] = $this->_db->insertid();
@@ -379,6 +386,26 @@ class ProjectsModelContract extends AdminModel {
         }
 
         return $s1 && $s2 && $s3;
+    }
+
+    /**
+     * Устанавливает новое значение активной ценовой колонки для проекта
+     * @param int $projectID ID проекта
+     * @param int $column номер колонки
+     * @since 1.2.1.6
+     */
+    private function setActivePriceColumn(int $projectID, int $column): void
+    {
+        if ($projectID == 0 || $column == 0) return;
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $projectID = $db->q($projectID);
+        $column = $db->q($column);
+        $query
+            ->update("`#__prj_projects`")
+            ->set("`columnID` = {$column}")
+            ->where("`id` = {$projectID}");
+        $db->setQuery($query, 0, 1)->execute();
     }
 
     /**

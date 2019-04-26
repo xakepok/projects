@@ -134,4 +134,16 @@
                 default=""
         />
     </fieldset>
+    <fieldset name="settings">
+        <field
+                name="activecolumn"
+                type="list"
+                label="COM_PROJECTS_FILTER_COLUMN"
+                description="COM_PROJECTS_FILTER_COLUMN_DESC"
+                >
+            <option value="1">COM_PROJECTS_HEAD_ITEM_COLUMN1_LABEL</option>
+            <option value="2">COM_PROJECTS_HEAD_ITEM_COLUMN2_LABEL</option>
+            <option value="3">COM_PROJECTS_HEAD_ITEM_COLUMN3_LABEL</option>
+        </field>
+    </fieldset>
 </form>
