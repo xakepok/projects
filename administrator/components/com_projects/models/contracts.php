@@ -21,9 +21,9 @@ class ProjectsModelContracts extends ListModel
                 'plan_dat',
                 'currency',
                 'number', 'dog_number',
-                'amount',
-                'debt',
-                'payments',
+                'sort_amount, amount',
+                'sort_amount, debt',
+                'sort_amount, payments',
                 'stand',
                 'activity',
                 'rubric',
@@ -163,11 +163,8 @@ class ProjectsModelContracts extends ListModel
         $orderCol  = $this->state->get('list.ordering', 'plan_dat');
         $orderDirn = $this->state->get('list.direction', 'asc');
         if ($orderCol == 'dog_number') {
-            if ($orderDirn == 'asc') $orderCol = 'LENGTH(dog_number), dog_number';
-            if ($orderDirn == 'desc') $orderCol = 'LENGTH(dog_number) desc, dog_number';
-        }
-        if ($orderCol == 'amount' || $orderCol == 'payments' || $orderCol == 'debt') {
-            $orderCol = "sort_amount, {$orderCol}";
+            if ($orderDirn == 'ASC') $orderCol = 'LENGTH(dog_number), dog_number';
+            if ($orderDirn == 'DESC') $orderCol = 'LENGTH(dog_number) desc, dog_number';
         }
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 

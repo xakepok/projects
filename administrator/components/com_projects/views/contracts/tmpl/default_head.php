@@ -45,12 +45,12 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_STATUS', 'status', $listDirn, $listOrder); ?>
     </th>
     <th width="9%">
-        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_AMOUNT', "amount", $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_AMOUNT', "sort_amount, amount", $listDirn, $listOrder); ?>
     </th>
     <th width="9%">
-        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_SCORE_PAYMENT', "payments", $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_SCORE_PAYMENT', "sort_amount, payments", $listDirn, $listOrder); ?>
     </th>
     <th width="9%">
-        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_DEBT', "debt", $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_DEBT', "sort_amount, debt", $listDirn, $listOrder); ?>
     </th>
 </tr>
