@@ -9,7 +9,7 @@ if (!empty($this->item->coExps)):
         <thead>
         <tr>
             <th>
-                <?php echo JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_COMPANY'); ?>
+                <?php echo JText::sprintf('COM_PROJECTS_HEAD_PAYMENT_EXP_DESC'); ?>
             </th>
             <th>
                 <?php echo JText::sprintf('COM_PROJECTS_HEAD_SECTION_EVENT_CONTRACT'); ?>

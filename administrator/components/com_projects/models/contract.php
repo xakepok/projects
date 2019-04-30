@@ -9,6 +9,62 @@ class ProjectsModelContract extends AdminModel {
         return JTable::getInstance($name, $prefix, $options);
     }
 
+    public function getItem($pk = null)
+    {
+        $item = parent::getItem($pk);
+        if ($item->id != null)
+        {
+            $item->files = $this->loadFiles();
+            $item->file_list = $this->loadFiles(true);
+            $item->stands = $this->getStands();
+            $item->finanses = $this->getFinanses();
+            $item->coExps = $this->getCoExps();
+            $item->amount = ProjectsHelper::getContractAmount($item->id);
+            $item->children = $this->loadCoExp($item->expID, $item->prjID);
+            $item->rubrics = ProjectsHelper::getContractRubrics($item->id);
+            $item->activecolumn = ProjectsHelper::getActivePriceColumn($item->id);
+        }
+        return $item;
+    }
+
+    public function getForm($data = array(), $loadData = true)
+    {
+        $form = $this->loadForm(
+            $this->option.'.contract', 'contract', array('control' => 'jform', 'load_data' => $loadData)
+        );
+        if (empty($form))
+        {
+            return false;
+        }
+        $id = JFactory::getApplication()->input->get('id', 0);
+        if ($id == 0)
+        {
+            if (!ProjectsHelper::canDo('core.general'))
+            {
+                $form->removeField('managerID');
+            }
+            if (!ProjectsHelper::canDo('projects.contract.allow') || $form->getValue('number') == null)
+            {
+                $form->removeField('number');
+            }
+            $form->setFieldAttribute('managerID', 'default', JFactory::getUser()->id);
+            $form->removeField('dat');
+            $form->removeField('children');
+            $form->removeField('rubrics');
+            $session = JFactory::getSession();
+            $activeProject = $session->get('active_project');
+            if (is_numeric($activeProject)) {
+                $form->setFieldAttribute('prjID', 'default', $activeProject);
+            }
+        }
+        if ($id != 0)
+        {
+            $dir = JPATH_ROOT."/images/contracts/{$id}";
+            $form->setFieldAttribute('files', 'directory', (JFolder::exists($dir)) ? $dir : 'images/contracts');
+        }
+        return $form;
+    }
+
     /**
      * Возвращает код типа сделки
      * @return int идентификатор типа сделки. 0 - для стендов, 1 - для делегаций
@@ -49,24 +105,6 @@ class ProjectsModelContract extends AdminModel {
                 }
         }
         return (!$ok) ? false : parent::delete($ids);
-    }
-
-    public function getItem($pk = null)
-    {
-        $item = parent::getItem($pk);
-        if ($item->id != null)
-        {
-            $item->files = $this->loadFiles();
-            $item->file_list = $this->loadFiles(true);
-            $item->stands = $this->getStands();
-            $item->finanses = $this->getFinanses();
-            $item->coExps = $this->getCoExps();
-            $item->amount = ProjectsHelper::getContractAmount($item->id);
-            $item->children = $this->loadCoExp($item->expID, $item->prjID);
-            $item->rubrics = ProjectsHelper::getContractRubrics($item->id);
-            $item->activecolumn = ProjectsHelper::getActivePriceColumn($item->id);
-        }
-        return $item;
     }
 
     /**
@@ -259,44 +297,6 @@ class ProjectsModelContract extends AdminModel {
             ->where("`c`.`id` = {$item->id}");
         $title = $db->setQuery($query, 0, 1)->loadObject();
         return ($title->status =='1') ? JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_ACCEPT', $title->number, $title->exponent, $title->project) : JText::sprintf('COM_PROJECTS_TITLE_CONTRACT', $title->exponent, $title->project);
-    }
-
-    public function getForm($data = array(), $loadData = true)
-    {
-        $form = $this->loadForm(
-            $this->option.'.contract', 'contract', array('control' => 'jform', 'load_data' => $loadData)
-        );
-        if (empty($form))
-        {
-            return false;
-        }
-        $id = JFactory::getApplication()->input->get('id', 0);
-        if ($id == 0)
-        {
-            if (!ProjectsHelper::canDo('core.general'))
-            {
-                $form->removeField('managerID');
-            }
-            if (!ProjectsHelper::canDo('projects.contract.allow') || $form->getValue('number') == null)
-            {
-                $form->removeField('number');
-            }
-            $form->setFieldAttribute('managerID', 'default', JFactory::getUser()->id);
-            $form->removeField('dat');
-            $form->removeField('children');
-            $form->removeField('rubrics');
-            $session = JFactory::getSession();
-            $activeProject = $session->get('active_project');
-            if (is_numeric($activeProject)) {
-                $form->setFieldAttribute('prjID', 'default', $activeProject);
-            }
-        }
-        if ($id != 0)
-        {
-            $dir = JPATH_ROOT."/images/contracts/{$id}";
-            $form->setFieldAttribute('files', 'directory', (JFolder::exists($dir)) ? $dir : 'images/contracts');
-        }
-        return $form;
     }
 
     /**
