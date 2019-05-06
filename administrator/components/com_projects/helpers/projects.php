@@ -311,7 +311,7 @@ class ProjectsHelper
         $query = $db->getQuery(true);
 
         $query
-            ->select("`cat`.`id`, `cat`.`number`, `cat`.`square`")
+            ->select("`cat`.`id`, IFNULL(IFNULL(`cat`.`number`,`cat`.`title`),`cat`.`gos_number`) as `number`, `cat`.`square`")
             ->select("`e`.`id` as `exhibitorID`, `e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
             ->from("`#__prj_catalog` as `cat`")
             ->leftJoin("`#__prj_stands` as `s` on `s`.`catalogID` = `cat`.`id`")
