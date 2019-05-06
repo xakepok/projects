@@ -8,15 +8,14 @@ use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto', 'relative' => true));
 HTMLHelper::_('script', 'com_projects/script.js', array('version' => 'auto', 'relative' => true));
-$return = base64_encode("index.php?option=com_projects&view=catalogs");
 ?>
 <div id="j-sidebar-container" class="span2">
-    <form action="<?php echo JRoute::_("index.php?return={$return}"); ?>" method="post">
+    <form action="<?php echo $this->helper->getSidebarAction(); ?>" method="post">
         <?php echo $this->sidebar; ?>
     </form>
 </div>
 <div id="j-main-container" class="span10 j-toggle-main">
-    <form action="<?php echo JRoute::_('index.php?option=com_projects&amp;view=catalogs'); ?>" method="post"
+    <form action="<?php echo $this->helper->getActionUrl(); ?>" method="post"
           name="adminForm" id="adminForm">
         <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
         <table class="table table-striped">

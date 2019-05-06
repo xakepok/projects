@@ -50,4 +50,16 @@
                 class="x2"
         />
     </fieldset>
+    <fieldset name="transport">
+        <field
+            name="gos_number"
+            type="text"
+            label="COM_PROJECTS_HEAD_NUMBER_GOS_NUMBER"
+            description="COM_PROJECTS_HEAD_NUMBER_GOS_NUMBER_DESC"
+            hint="COM_PROJECTS_HEAD_NUMBER_GOS_NUMBER_HINT"
+            filter="alnum"
+            validate="Gosnum"
+            maxlength="10"
+            />
+    </fieldset>
 </form>

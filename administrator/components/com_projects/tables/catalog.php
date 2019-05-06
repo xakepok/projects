@@ -16,6 +16,7 @@ class TableProjectsCatalog extends Table
     var $square = null;
     var $categoryID = null;
     var $title = null;
+    var $gos_number = null;
 
     public function __construct(JDatabaseDriver $db)
     {

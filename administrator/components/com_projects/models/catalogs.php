@@ -32,7 +32,7 @@ class ProjectsModelCatalogs extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`cat`.`id`, IFNULL(`cat`.`number`,`cat`.`title`) as `number`, `cat`.`square`")
+            ->select("`cat`.`id`, IFNULL(IFNULL(`cat`.`number`,`cat`.`title`),`cat`.`gos_number`) as `number`, `cat`.`square`")
             ->select("`t`.`title` as `catalog`, `t`.`id` as `catalogID`")
             ->select("`n`.`title_ru` as `category`")
             ->select("`h`.`title_ru` as `hotel`")
@@ -45,8 +45,8 @@ class ProjectsModelCatalogs extends ListModel
         $search = $this->getState('filter.search');
         if (!empty($search))
         {
-            $search = $db->quote('%' . $db->escape($search, true) . '%', false);
-            $query->where('`cat`.`number` LIKE ' . $search);
+            $search = $db->q("%{$search}%");
+            $query->where("(`cat`.`number` LIKE {$search} OR `cat`.`gos_number` LIKE  {$search})");
         }
         // Фильтруем по каталогу стендов.
         $cattitle = $this->getState('filter.cattitle');
@@ -61,7 +61,7 @@ class ProjectsModelCatalogs extends ListModel
         }
 
         /* Сортировка */
-        $orderCol  = $this->state->get('list.ordering', '`cat`.`number`');
+        $orderCol  = $this->state->get('list.ordering', 'number');
         $orderDirn = $this->state->get('list.direction', 'asc');
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
@@ -77,7 +77,8 @@ class ProjectsModelCatalogs extends ListModel
             $arr = array();
             $arr['id'] = $item->id;
             $url = JRoute::_("index.php?option=com_projects&amp;task=catalog.edit&amp;&id={$item->id}");
-            $link = JHtml::link($url, $item->number);
+            $text = $item->number;
+            $link = JHtml::link($url, $text);
             $arr['number'] = (!ProjectsHelper::canDo('projects.access.catalogs')) ? $item->price : $link;
             $url = JRoute::_("index.php?option=com_projects&amp;task=cattitle.edit&amp;&id={$item->catalogID}&amp;return={$return}");
             $link = JHtml::link($url, $item->catalog);
@@ -100,7 +101,7 @@ class ProjectsModelCatalogs extends ListModel
         $this->setState('filter.search', $search);
         $cattitle = $this->getUserStateFromRequest($this->context . '.filter.cattitle', 'filter_cattitle');
         $this->setState('filter.cattitle', $cattitle);
-        parent::populateState('`cat`.`number`', 'asc');
+        parent::populateState('number', 'asc');
     }
 
     protected function getStoreId($id = '')

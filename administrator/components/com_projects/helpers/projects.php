@@ -464,7 +464,7 @@ class ProjectsHelper
     /**
      * Возвращает тип проекта - для стендов, делегаций и т.п.
      * @param int $projectID - ID проекта
-     * @return int тип проекта. 0 - стенды, 1 - делегации
+     * @return int тип проекта. 0 - стенды, 1 - делегации, 2 - транспорт
      * @since 1.1.3.6
      */
     public static function getProjectType(int $projectID = 0): int
@@ -473,10 +473,44 @@ class ProjectsHelper
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`tip`")
-            ->from("`#__prj_contract_info`")
-            ->where("`projectID` = {$projectID}");
-        return $db->setQuery($query)->loadResult();
+            ->select("`t`.`tip`")
+            ->from("`#__prj_catalog_titles` as `t`")
+            ->leftJoin("`#__prj_projects` as `p` on `p`.`catalogID` = `t`.`id`")
+            ->where("`p`.`id` = {$projectID}");
+        return $db->setQuery($query)->loadResult() ?? -1;
+    }
+
+    /**
+     * Возвращает текстовое представление типа шаблона проекта
+     * @param int $code числовой код типа проекта
+     * @return string
+     * @since 1.2.2.1
+     */
+    public static function getProjectTypeName(int $code = 0): string
+    {
+        switch ($code)
+        {
+            case 0:
+                {
+                    return 'stand';
+                    break;
+                }
+            case 1:
+                {
+                    return 'number';
+                    break;
+                }
+            case 2:
+                {
+                    return 'transport';
+                    break;
+                }
+            default:
+                {
+                    return 'default';
+                    break;
+                }
+        }
     }
 
     /**

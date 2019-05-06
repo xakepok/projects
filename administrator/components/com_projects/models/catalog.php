@@ -23,7 +23,7 @@ class ProjectsModelCatalog extends AdminModel {
         $item = parent::getItem();
         $ctm = AdminModel::getInstance('Cattitle', 'ProjectsModel');
         $ct = $ctm->getItem($item->titleID);
-        return ($ct->tip != 0) ? 'number' : 'stand';
+        return ProjectsHelper::getProjectTypeName($ct->tip);
     }
 
     public function getTable($name = 'Catalog', $prefix = 'TableProjects', $options = array())
@@ -166,7 +166,7 @@ class ProjectsModelCatalog extends AdminModel {
 
     protected function prepareTable($table)
     {
-        $nulls = array('number', 'categoryID', 'title'); //Поля, которые NULL
+        $nulls = array('number', 'categoryID', 'title', 'gos_number'); //Поля, которые NULL
         foreach ($nulls as $field)
         {
             if (!strlen($table->$field)) $table->$field = NULL;

@@ -1,23 +1,8 @@
 <?php
-/**
- * @package    projects
- *
- * @author     asharikov <your@email.com>
- * @copyright  A copyright
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
- * @link       http://your.url.com
- */
-
 use Joomla\CMS\MVC\Controller\BaseController;
 
 defined('_JEXEC') or die;
 
-/**
- * Projects Controller.
- *
- * @package  projects
- * @since    1.0
- */
 class ProjectsController extends BaseController
 {
     public function display($cachable = false, $urlparams = array())
@@ -37,11 +22,21 @@ class ProjectsController extends BaseController
             }
         }
         if ($view == 'todos') {
-            $view = $this->getView('todos', 'html');
+            $v = $this->getView('todos', 'html');
             $format = $this->input->getString('format', 'html');
             $layout = ($format != 'html') ? 'print' : 'default';
             $this->input->set('layout', $layout);
-            $view->setLayout($layout);
+            $v->setLayout($layout);
+        }
+        if ($view == 'catalogs') {
+            $activeProject = ProjectsHelper::getActiveProject('');
+            if ($activeProject != '') {
+                $tip = ProjectsHelper::getProjectType($activeProject);
+                $layout = ProjectsHelper::getProjectTypeName($tip);
+                $this->input->set('layout', $layout);
+                $v = $this->getView('catalogs', 'html');
+                $v->setLayout($layout);
+            }
         }
         return parent::display($cachable, $urlparams);
     }
