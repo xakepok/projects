@@ -49,6 +49,7 @@
                 description="COM_PROJECTS_HEAD_CONTRACT_PROJECT_GROUP_DESC"
                 autocomplete="off"
                 class="input-xlarge"
+                required="true"
         />
         <field
                 name="columnID"
@@ -66,7 +67,7 @@
                 type="Price"
                 label="COM_PROJECTS_FILTER_PRICE"
                 description="COM_PROJECTS_FILTER_PRICE"
-                default=""
+                required="true"
                 class="input-xlarge"
         />
         <field
@@ -75,6 +76,7 @@
                 label="COM_PROJECTS_BLANK_CATTITLE"
                 description="COM_PROJECTS_BLANK_CATTITLE"
                 class="input-xlarge"
+                required="true"
         />
         <field
                 name="rubrics"
