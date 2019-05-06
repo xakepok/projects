@@ -27,6 +27,7 @@ class ProjectsModelCtritem extends AdminModel {
             if ($data['id'] != null) $this->delete($data['id']);
             return true;
         }
+        $data['managerID'] = JFactory::getUser()->id;
         return parent::save($data);
     }
 
