@@ -58,7 +58,6 @@
             description="COM_PROJECTS_HEAD_NUMBER_GOS_NUMBER_DESC"
             hint="COM_PROJECTS_HEAD_NUMBER_GOS_NUMBER_HINT"
             filter="alnum"
-            validate="Gosnum"
             maxlength="10"
             />
     </fieldset>
