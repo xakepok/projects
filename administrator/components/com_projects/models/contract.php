@@ -822,12 +822,7 @@ class ProjectsModelContract extends AdminModel {
                 if ($row->id == null) continue;
             }
 
-            if (!$table->bind($arr)) {
-                exit(var_dump($arr));
-            }
-            if (!$model->save($arr)) {
-                exit(var_dump($model->getErrors()));
-            }
+            $model->save($arr);
             unset($arr);
         }
         $contract = $cm->getItem($contractID);
