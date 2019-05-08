@@ -59,6 +59,11 @@ class ProjectsModelStat extends ListModel
             $query->group("`s`.`itemID`");
         }
 
+        if (!ProjectsHelper::canDo('projects.access.stat.full')) {
+            $uid = JFactory::getUser()->id;
+            $query->where("`c`.`managerID` = {$uid}");
+        }
+
         /* Фильтр */
         $search = $this->getState('filter.search');
         if (!empty($search)) {

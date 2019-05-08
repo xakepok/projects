@@ -21,6 +21,8 @@
 		<action name="projects.access.finanses.standart" title="COM_PROJECTS_ACCESS_FINANSES_STANDART" description="COM_PROJECTS_ACCESS_FINANSES_STANDART_DESC" />
 		<action name="projects.access.finanses.full" title="COM_PROJECTS_ACCESS_FINANSES_FULL" description="COM_PROJECTS_ACCESS_FINANSES_FULL_DESC" />
 		<action name="projects.access.reports" title="COM_PROJECTS_ACCESS_REPORTS" description="COM_PROJECTS_ACCESS_REPORTS_DESC" />
+		<action name="projects.access.stat" title="COM_PROJECTS_ACCESS_STAT" description="COM_PROJECTS_ACCESS_STAT_DESC" />
+		<action name="projects.access.stat.full" title="COM_PROJECTS_ACCESS_STAT_FULL" description="COM_PROJECTS_ACCESS_STAT_FULL_DESC" />
 		<action name="projects.access.prices" title="COM_PROJECTS_ACCESS_PRICES" description="COM_PROJECTS_ACCESS_PRICES_DESC" />
 		<action name="projects.access.acts" title="COM_PROJECTS_ACCESS_ACTS" description="COM_PROJECTS_ACCESS_ACTS_DESC" />
 		<action name="projects.access.rubrics" title="COM_PROJECTS_ACCESS_RUBRICS" description="COM_PROJECTS_ACCESS_RUBRICS_DESC" />
