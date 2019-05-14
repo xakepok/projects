@@ -33,7 +33,7 @@ if ($return != null) {
             <div class="tab-content">
                 <div class="tab-pane active" id="general">
                     <div class="row-fluid">
-                        <div class="span6">
+                        <div class="span12">
                             <fieldset class="adminform">
                                 <div class="control-group form-inline">
                                     <?php foreach ($this->form->getFieldset('names') as $field) : ?>
@@ -47,19 +47,6 @@ if ($return != null) {
                                                                                      target="_blank"><?php echo JText::sprintf('COM_PROJECTS_ACTION_GOTO_TODOS'); ?></a>
                                                 </div>
                                             <?php endif; ?>
-                                            <?php echo $field->input; ?>
-                                        </div>
-                                        <br>
-                                    <?php endforeach; ?>
-                                </div>
-                            </fieldset>
-                        </div>
-                        <div class="span6">
-                            <fieldset class="adminform">
-                                <div class="control-group form-inline">
-                                    <?php foreach ($this->form->getFieldset('contract_data') as $field) : ?>
-                                        <div class="control-label"><?php echo $field->label; ?></div>
-                                        <div class="controls">
                                             <?php echo $field->input; ?>
                                         </div>
                                         <br>

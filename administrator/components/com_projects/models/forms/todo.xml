@@ -88,16 +88,4 @@
                 class="x2"
         />
     </fieldset>
-    <fieldset name="contract_data">
-        <field
-                name="contract_status"
-                type="Contractstatus"
-                label="COM_PROJECTS_HEAD_CONTRACT_STATUS"
-                description="COM_PROJECTS_HEAD_CONTRACT_STATUS_DESC"
-                autocomplete="off"
-                required="true"
-                default=""
-                class="x2">
-        </field>
-    </fieldset>
 </form>

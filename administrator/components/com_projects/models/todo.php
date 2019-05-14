@@ -58,12 +58,6 @@ class ProjectsModelTodo extends AdminModel {
         {
             $form->setValue('managerID', JFactory::getUser()->id);
         }
-        if ($id == 0) {
-            $form->removeField('contract_status');
-        }
-        if ($id != 0) {
-            $form->setValue('contract_status',null, $this->getContractStatus($form->getValue('contractID') ?? 0));
-        }
 
         return $form;
     }
@@ -79,20 +73,6 @@ class ProjectsModelTodo extends AdminModel {
         return $data;
     }
 
-    /**
-     * Возвращает ID статуса сделки
-     * @param int $contractID ID сделки
-     * @return int
-     * @since 1.1.7.4
-     */
-    public function getContractStatus(int $contractID): int
-    {
-        if ($contractID == 0) return 0;
-        $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
-        $contract = $cm->getItem($contractID);
-        return $contract->status ?? 0;
-    }
-
     public function save($data)
     {
         if ($data['id'] == 0)
@@ -105,23 +85,7 @@ class ProjectsModelTodo extends AdminModel {
             $data['userClose'] = JFactory::getUser()->id;
             $data['dat_close'] = date("Y-m-d H:i:s");
         }
-        if ($data['id'] != 0 && isset($data['contract_status']) && $data['contract_status'] != null) {
-            $this->saveContractStatus($data['contractID'], $data['contract_status']);
-        }
         return parent::save($data);
-    }
-
-    /**
-     * Записывает новый статус сделки
-     * @param int $contractID ID сделки
-     * @param int $status ID ID статуса
-     * @since 1.1.7.4
-     */
-    public function saveContractStatus(int $contractID, int $status): void
-    {
-        $cm = AdminModel::getInstance('Contract', 'ProjectsModel');
-        $arr = array('id' => $contractID, 'status' => $status);
-        $cm->save($arr);
     }
 
     /**
