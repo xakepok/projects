@@ -3,7 +3,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\View\HtmlView;
 
 class ProjectsViewContract extends HtmlView {
-    protected $item, $form, $script, $id, $price, $todos, $exhibitor, $tip;
+    protected $item, $form, $script, $id, $price, $todos, $exhibitor, $tip, $return;
 
     public function display($tmp = null) {
         $this->form = $this->get('Form');
@@ -13,6 +13,7 @@ class ProjectsViewContract extends HtmlView {
         $this->exhibitor = $this->get('Exhibitor');
         if ($this->item->id != null) $this->todos = $this->get('Todos');
         if ($this->item->id != null) $this->tip = $this->get('Tip');
+        $this->return = ProjectsHelper::getReturnUrl();
 
         $this->addToolbar();
         $this->setDocument();

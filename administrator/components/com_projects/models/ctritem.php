@@ -10,7 +10,22 @@ class ProjectsModelCtritem extends AdminModel {
 
     public function getItem($pk = null)
     {
-        return parent::getItem($pk);
+        $item = parent::getItem($pk);
+        if ($item->id == null) {
+            $contractID = JFactory::getApplication()->getUserStateFromRequest('com_projects.contractID', 'contractID', 0);
+            if ($contractID > 0) $item->contractID = $contractID;
+            $itemID = JFactory::getApplication()->getUserStateFromRequest('com_projects.itemID', 'itemID', 0);
+            if ($itemID > 0) $item->itemID = $itemID;
+            $columnID = JFactory::getApplication()->getUserStateFromRequest('com_projects.columnID', 'columnID', 0);
+            if ($columnID > 0) $item->columnID = $columnID;
+        }
+        else
+        {
+            $itemID = $item->itemID;
+            $contractID = $item->contractID;
+        }
+        $item->title = sprintf("%s - %s", $this->getPriceItemTitle($itemID), $this->getContractNumber($contractID));
+        return $item;
     }
 
     public function delete(&$pks)
@@ -25,6 +40,7 @@ class ProjectsModelCtritem extends AdminModel {
         if ($data['value'] <= 0)
         {
             if ($data['id'] != null) $this->delete($data['id']);
+            if ($data['value2'] == 0) $data['value2'] = null;
             return true;
         }
         $data['managerID'] = JFactory::getUser()->id;
@@ -32,19 +48,58 @@ class ProjectsModelCtritem extends AdminModel {
         return parent::save($data);
     }
 
+    /**
+     * Возвращает название пункта прайса
+     * @param int $itemID ID пункта прайса
+     * @return string
+     * @since 1.2.2.8
+     */
+    private function getPriceItemTitle(int $itemID = 0): string
+    {
+        $im = AdminModel::getInstance('Item', 'ProjectsModel');
+        $item = $im->getItem($itemID);
+        return $item->title_ru;
+    }
+
+    /**
+     * Возвращает номер договора
+     * @param int $contractID ID сделки
+     * @return string
+     * @since 1.2.2.8
+     */
+    private function getContractNumber(int $contractID = 0): string
+    {
+        $im = AdminModel::getInstance('Contract', 'ProjectsModel');
+        $item = $im->getItem($contractID);
+        return ($item->number != null) ? JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITH_NUMBER', $item->number) : JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
+    }
+
     public function getForm($data = array(), $loadData = true)
     {
-
+        $form = $this->loadForm(
+            $this->option.'.ctritem', 'ctritem', array('control' => 'jform', 'load_data' => $loadData)
+        );
+        if (empty($form))
+        {
+            return false;
+        }
+        return $form;
     }
 
     protected function loadFormData()
     {
+        $data = JFactory::getApplication()->getUserState($this->option.'.edit.ctritem.data', array());
+        if (empty($data))
+        {
+            $data = $this->getItem();
+        }
 
+        return $data;
     }
 
     protected function prepareTable($table)
     {
-    	$nulls = array('markup', 'value2', 'fixed'); //Поля, которые NULL
+    	$nulls = array('markup', 'value2', 'fixed', 'arrival'); //Поля, которые NULL
 
 	    foreach ($nulls as $field)
 	    {

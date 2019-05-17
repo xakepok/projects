@@ -676,6 +676,7 @@ class ProjectsModelContract extends AdminModel {
             $arr['fixed'][2] = ($activeColumn != 2) ? true : false;
             $arr['fixed'][3] = ($activeColumn != 3) ? true : false;
             $arr['is_sq'] = $item->is_sq;
+            $arr['ctrItemID'] = $values[$item->id]['ctrItemID'];
             $arr['block'] = ($item->is_sq != 0 || $item->is_electric != 0 || $item->is_internet != 0 || $item->is_multimedia != 0 || $item->is_water != 0 || $item->is_cleaning != 0 || ($item->stop != 0 && !ProjectsHelper::canDo('core.admin'))) ? true : false;
             if ($item->is_sq || $tip != 0)
             {

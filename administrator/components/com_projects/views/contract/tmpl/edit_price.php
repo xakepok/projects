@@ -91,7 +91,14 @@ $sum = 0;
                                     value="<?php echo ($this->tip != 0 && $item['sq']) ? $item['stands_count'] : $item['value'][$j]; ?>"
                                     />
                                 <?php endif;?>
-                                <span><?php if ($item['fixed']) echo $item['value'][$j] ?? 0; ?></span>
+                                <?php if ($item['fixed'] && $item['ctrItemID'] != null) {
+                                    if (ProjectsHelper::canDo('projects.access.contracts.columns')) echo JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=ctritem.edit&amp;id={$item['ctrItemID']}&amp;return={$this->return}"), $item['value'][$j] ?? 0);
+                                    if (!ProjectsHelper::canDo('projects.access.contracts.columns')) echo $item['value'][$j] ?? 0;
+                                } ?>
+                                <?php if ($item['fixed'] && $item['ctrItemID'] == null) {
+                                    if (ProjectsHelper::canDo('projects.access.contracts.columns')) echo JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=ctritem.add&amp;contractID={$this->item->id}&amp;itemID={$item['id']}&amp;columnID={$j}&amp;return={$this->return}"), '0');
+                                    if (!ProjectsHelper::canDo('projects.access.contracts.columns')) echo '0';
+                                } ?>
                             <?php endif; ?>
                             <span><?php if ($item['value'][$j] != null && $item['value'][$j] != 0) echo $item['unit']; ?></span>
                         </td>

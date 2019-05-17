@@ -18,7 +18,10 @@ class TableProjectsCtritems extends Table
     var $markup = null;
     var $value = null;
     var $value2 = null;
+    var $arrival = null;
     var $fixed = null;
+    var $managerID = null;
+    var $updated = null;
 
     public function __construct(JDatabaseDriver $db)
     {

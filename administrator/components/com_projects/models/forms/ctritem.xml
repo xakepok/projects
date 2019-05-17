@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fieldset name="names">
+        <field
+                name="columnID"
+                label="COM_PROJECTS_HEAD_ITEM_LABEL_COLUMNS"
+                description="COM_PROJECTS_HEAD_ITEM_LABEL_COLUMNS"
+                type="list"
+                class="x2"
+                required="true"
+                default="0">
+            <option value="1">COM_PROJECTS_HEAD_ITEM_COLUMN1_LABEL</option>
+            <option value="2">COM_PROJECTS_HEAD_ITEM_COLUMN2_LABEL</option>
+            <option value="3">COM_PROJECTS_HEAD_ITEM_COLUMN3_LABEL</option>
+        </field>
+        <field
+                name="factor"
+                type="text"
+                label="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT_VAL"
+                description="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT_VAL_DESC"
+                default="1.0"
+                autocomplete="off"
+                class="x2"
+        />
+        <field
+                name="markup"
+                type="text"
+                label="COM_PROJECTS_HEAD_CONTRACT_MARKUP_VAL"
+                description="COM_PROJECTS_HEAD_CONTRACT_MARKUP_VAL_DESC"
+                autocomplete="off"
+                default="1.0"
+                class="x2"
+        />
+        <field
+                name="value"
+                type="text"
+                label="COM_PROJECTS_HEAD_CONTRACT_VALUE"
+                description="COM_PROJECTS_HEAD_CONTRACT_VALUE_DESC"
+                autocomplete="off"
+                required="true"
+                default="0"
+                class="x2"
+        />
+        <field
+                name="value2"
+                type="text"
+                label="COM_PROJECTS_HEAD_CONTRACT_VALUE2"
+                description="COM_PROJECTS_HEAD_CONTRACT_VALUE2_DESC"
+                autocomplete="off"
+                default=""
+                class="x2"
+        />
+        <field
+                name="id"
+                type="hidden"
+        />
+        <field
+                name="contractID"
+                type="hidden"
+        />
+        <field
+                name="itemID"
+                type="hidden"
+        />
+    </fieldset>
+</form>
