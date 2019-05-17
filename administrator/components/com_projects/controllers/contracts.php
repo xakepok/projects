@@ -78,4 +78,46 @@ class ProjectsControllerContracts extends AdminController
         $app->redirect('index.php?option=com_projects&view=contracts');
         jexit();
     }
+
+    public function setcolumn1()
+    {
+        $app = JFactory::getApplication();
+        $ids = $this->input->get('cid');
+        $model = $this->getModel();
+        foreach ($ids as $id)
+        {
+            $model->setColumn($id, 1);
+        }
+        $app->enqueueMessage(JText::sprintf('COM_PROJECT_TASK_COLUMN_EDITED'), 'success');
+        $app->redirect('index.php?option=com_projects&view=contracts');
+        jexit();
+    }
+
+    public function setcolumn2()
+    {
+        $app = JFactory::getApplication();
+        $ids = $this->input->get('cid');
+        $model = $this->getModel();
+        foreach ($ids as $id)
+        {
+            $model->setColumn($id, 2);
+        }
+        $app->enqueueMessage(JText::sprintf('COM_PROJECT_TASK_COLUMN_EDITED'), 'success');
+        $app->redirect('index.php?option=com_projects&view=contracts');
+        jexit();
+    }
+
+    public function setcolumn3()
+    {
+        $app = JFactory::getApplication();
+        $ids = $this->input->get('cid');
+        $model = $this->getModel();
+        foreach ($ids as $id)
+        {
+            $model->setColumn($id, 3);
+        }
+        $app->enqueueMessage(JText::sprintf('COM_PROJECT_TASK_COLUMN_EDITED'), 'success');
+        $app->redirect('index.php?option=com_projects&view=contracts');
+        jexit();
+    }
 }

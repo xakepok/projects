@@ -56,6 +56,7 @@ class ProjectsModelCtritem extends AdminModel {
      */
     private function getPriceItemTitle(int $itemID = 0): string
     {
+        if ($itemID == 0) return '';
         $im = AdminModel::getInstance('Item', 'ProjectsModel');
         $item = $im->getItem($itemID);
         return $item->title_ru;

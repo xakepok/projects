@@ -108,6 +108,44 @@ class ProjectsModelContract extends AdminModel {
     }
 
     /**
+     * Изменяет значение колонок во всех пунктах прайса в текущем договоре
+     * @param int $id ID сделки
+     * @param int $columnID ID колонки
+     * @since 1.2.2.9
+     */
+    public function setColumn(int $id = 0, int $columnID = 1): void
+    {
+        if ($id == null) return;
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`id`")
+            ->from("`#__prj_stands`")
+            ->where("`contractID` = {$id}");
+        $stands = $db->setQuery($query)->loadColumn();
+        $query = $db->getQuery(true);
+        $query
+            ->update("`#__prj_contract_items`")
+            ->set("`columnID` = {$columnID}")
+            ->where("`contractID` = {$id}");
+        $db->setQuery($query)->execute();
+        $query = $db->getQuery(true);
+        $ids = implode(", ", $stands);
+        $query
+            ->update("`#__prj_stands_advanced`")
+            ->set("`columnID` = {$columnID}")
+            ->where("`standID` IN ({$ids})");
+        $db->setQuery($query)->execute();
+        $query = $db->getQuery(true);
+        $query
+            ->update("`#__prj_stands`")
+            ->set("`columnID` = {$columnID}")
+            ->where("`id` IN ({$ids})");
+        $db->setQuery($query)->execute();
+        return;
+    }
+
+    /**
      * Сохраняет привязки рубрик к сделки
      * @param int $contractID ID сделки
      * @param array $rubrics массив с ID рубрик
