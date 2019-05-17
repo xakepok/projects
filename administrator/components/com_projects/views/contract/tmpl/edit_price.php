@@ -71,6 +71,12 @@ $sum = 0;
                     <?php for ($j = 1; $j <= 3; $j++): ?>
                         <td>
                             <?php if (!$item['block'] && !$item['fixed'][$j]): ?>
+                                <?php if (ProjectsHelper::canDo('projects.access.contracts.columns')) {
+                                    if (($j == 2 || $j == 3) && $item['value'] > 0) {
+                                        $url = JRoute::_("index.php?option=com_projects&amp;task=ctritem.changeColumn&amp;id={$item['id']}&amp;column=1&amp;return={$this->return}");
+                                        echo JHtml::link($url, "&lt;");
+                                    }
+                                }?>
                                 <input
                                         type="text"
                                         name="jform[price][<?php echo $item['id']; ?>][value]"
