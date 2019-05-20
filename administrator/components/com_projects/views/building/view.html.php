@@ -8,7 +8,7 @@ class ProjectsViewBuilding extends HtmlView
 {
 	protected $helper;
 	protected $sidebar = '';
-	public $items, $pagination, $uid, $state, $links, $filterForm, $activeFilters, $_layout;
+	public $items, $pagination, $uid, $state, $links, $filterForm, $activeFilters, $_layout, $advanced_items, $advanced_values;
 
 	public function display($tpl = null)
 	{
@@ -28,6 +28,7 @@ class ProjectsViewBuilding extends HtmlView
             $this->filterForm->removeField('hotel', 'filter');
             $this->filterForm->removeField('arrival', 'filter');
             $this->filterForm->removeField('department', 'filter');
+            $this->advanced_items = array_keys($this->items['advanced']);
         }
 
 		// Show the toolbar

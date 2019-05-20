@@ -156,7 +156,10 @@ class ProjectsModelBuilding extends ListModel
         $stands = array(); //Массив контракт - массив стендов
         $itog = array(); //Итоговый массив
         $return = base64_encode("index.php?option=com_projects&view=building");
+        $ids = array();
         foreach ($items as $item) {
+            if ($item->standID == null) continue;
+            $ids[] = $item->standID;
             $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->exponentID}&amp;return={$return}");
             $exhibitor = ($item->exponentID != null) ? ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en) : '';
             $link = JHtml::link($url, $exhibitor);
@@ -188,10 +191,41 @@ class ProjectsModelBuilding extends ListModel
                 $arr['arrival'] = $item->arrival;
                 $arr['department'] = $item->department;
             }
-            $results[] = $arr;
+            $arr['standID'] = $item->standID;
+            $results['stands'][$item->standID] = $arr;
         }
-
+        $results['advanced'] = $this->getAdvanced($ids);
+        ksort($results['advanced']);
         return $results;
+    }
+
+    /**
+     * Возвращает информацию о дополнительных услугах на стендах
+     * @param array $ids массив с ID стендов
+     * @return array
+     * @since 1.2.3.3
+     */
+    public function getAdvanced(array $ids = array()): array
+    {
+        if (empty($ids)) return array();
+        $ids = implode(', ', $ids);
+        $db =& $this->getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("`sa`.`standID`, `sa`.`itemID`, SUM(`sa`.`value`) as `value`")
+            ->select("`i`.`title_ru` as `item`")
+            ->from("`#__prj_stands_advanced` as `sa`")
+            ->leftJoin("`#__prc_items` as `i` on `i`.`id` = `sa`.`itemID`")
+            ->where("`sa`.`standID` IN ({$ids})")
+            ->group("`sa`.`standID`, `sa`.`itemID`");
+        $items = $db->setQuery($query)->loadObjectList();
+        $result = array();
+        if (empty($items)) return array();
+        foreach ($items as $item) {
+            if(!isset($result[$item->item])) $result[$item->item] = array();
+            $result[$item->item][$item->standID] = $item->value;
+        }
+        return $result;
     }
 
     /* Сортировка по умолчанию */
