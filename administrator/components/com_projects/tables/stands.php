@@ -7,6 +7,7 @@ class TableProjectsStands extends Table
     var $id = null;
     var $catalogID = null;
     var $contractID = null;
+    var $columnID = null;
     var $itemID = null;
     var $sq = null;
     var $number = null;

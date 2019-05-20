@@ -112,6 +112,10 @@
                 default=""
                 onchange="setImg()"
         />
+        <field
+                name="columnID"
+                type="hidden"
+        />
     </fieldset>
     <fieldset name="room">
         <field

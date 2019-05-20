@@ -100,6 +100,11 @@ class ProjectsModelStand extends AdminModel {
     {
         $item = parent::getItem($pk);
         $item->title = $this->getStandTitle($item->contractID ?? 0);
+        if ($item->id == null) {
+            $session = JFactory::getSession();
+            $contractID = $session->get('contractID');
+            $item->columnID = ProjectsHelper::getActivePriceColumn($contractID);
+        }
         return $item;
     }
 
