@@ -13,6 +13,7 @@ class TableProjectsContracts extends Table
     var $currency = null;
     var $isCoExp = null;
     var $status = null;
+    var $doc_status = null;
     var $number = null;
     var $number_free = null;
 

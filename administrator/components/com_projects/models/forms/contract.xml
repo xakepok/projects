@@ -118,6 +118,18 @@
     </fieldset>
     <fieldset name="files">
         <field
+                name="doc_status"
+                type="list"
+                label="COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS"
+                description="COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS_DESC"
+                class="x2"
+                default="0"
+                >
+            <option value="0">COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS_0</option>
+            <option value="2">COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS_2</option>
+            <option value="1">COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS_1</option>
+        </field>
+        <field
                 name="upload"
                 type="file"
                 label="COM_PROJECTS_ACTION_UPLOAD"

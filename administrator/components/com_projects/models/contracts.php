@@ -25,6 +25,7 @@ class ProjectsModelContracts extends ListModel
                 'sort_amount, debt',
                 'sort_amount, payments',
                 'stand',
+                'doc_status',
                 'activity',
                 'rubric',
             );
@@ -37,7 +38,7 @@ class ProjectsModelContracts extends ListModel
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
         $query
-            ->select("`c`.`id`, `c`.`dat`, IFNULL(`c`.`number_free`,ifnull(`c`.`number`,'')) as `number`, IFNULL(`c`.`number_free`,ifnull(`c`.`number`,'0')) as `dog_number`, `c`.`status`, `c`.`currency`")
+            ->select("`c`.`id`, `c`.`dat`, `c`.`doc_status`, IFNULL(`c`.`number_free`,ifnull(`c`.`number`,'')) as `number`, IFNULL(`c`.`number_free`,ifnull(`c`.`number`,'0')) as `dog_number`, `c`.`status`, `c`.`currency`")
             ->select("`p`.`title_ru` as `project`, `p`.`id` as `projectID`")
             ->select('IFNULL(`e`.`title_ru_short`,IFNULL(`e`.`title_ru_full`,`e`.`title_en`)) as `exhibitor`, `e`.`id` as `exhibitorID`')
             ->select("`u`.`name` as `manager`, (SELECT MIN(`dat`) FROM `#__prj_todos` WHERE `contractID`=`c`.`id` AND `state`=0) as `plan_dat`")
@@ -121,6 +122,11 @@ class ProjectsModelContracts extends ListModel
         $manager = $this->getState('filter.manager');
         if (is_numeric($manager)) {
             $query->where('`c`.`managerID` = ' . (int)$manager);
+        }
+        // Фильтруем по статусу присланного договора.
+        $doc_status = $this->getState('filter.doc_status');
+        if (is_numeric($doc_status)) {
+            $query->where('`c`.`doc_status` = ' . (int)$doc_status);
         }
         // Фильтруем по валюте.
         $currency = $this->getState('filter.currency');
@@ -211,6 +217,7 @@ class ProjectsModelContracts extends ListModel
             $arr['debt'] = ($format != 'html' || $this->isExcel()) ? $debt : ProjectsHelper::getCurrency((float) $debt, (string) $item->currency);
             $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$item->id}&amp;return={$return}");
             $color = ($debt != 0) ? 'red' : 'green';
+            $arr['doc_status'] = JText::sprintf("COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS_{$item->doc_status}");
             $arr['color'] = $color;
             if (ProjectsHelper::canDo('projects.access.finanses.full') && $debt != 0 && ($item->status == '1' || $item->status == '10') && !$this->isExcel()) $arr['debt'] = JHtml::link($url, $arr['debt'], array('title' => JText::sprintf('COM_PROJECTS_ACTION_ADD_SCORE'), 'style' => "color: {$color}"));
             if ($format != 'html') $arr['debt'] = $debt;
@@ -327,6 +334,8 @@ class ProjectsModelContracts extends ListModel
         $this->setState('filter.state', $activity);
         $rubric = $this->getUserStateFromRequest($this->context . '.filter.rubric', 'filter_rubric', '', 'string');
         $this->setState('filter.rubric', $rubric);
+        $doc_status = $this->getUserStateFromRequest($this->context . '.filter.doc_status', 'filter_doc_status');
+        $this->setState('filter.doc_status', $doc_status);
         parent::populateState('plan_dat', 'asc');
     }
 
@@ -340,6 +349,7 @@ class ProjectsModelContracts extends ListModel
         $id .= ':' . $this->getState('filter.currency');
         $id .= ':' . $this->getState('filter.activity');
         $id .= ':' . $this->getState('filter.rubric');
+        $id .= ':' . $this->getState('filter.doc_status');
         return parent::getStoreId($id);
     }
 
