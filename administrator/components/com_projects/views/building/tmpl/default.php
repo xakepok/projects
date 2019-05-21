@@ -12,7 +12,7 @@ HTMLHelper::_('stylesheet', 'https://cdn.datatables.net/1.10.19/css/jquery.dataT
 HTMLHelper::_('stylesheet', 'https://cdn.datatables.net/fixedcolumns/3.2.6/css/fixedColumns.dataTables.min.css', array('version' => 'auto', 'relative' => true));
 HTMLHelper::_('script', 'com_projects/jquery.dataTables.min.js', array('version' => 'auto', 'relative' => true));
 HTMLHelper::_('script', 'com_projects/dataTables.fixedColumns.min.js', array('version' => 'auto', 'relative' => true));
-HTMLHelper::_('script', 'com_projects/script.js', array('version' => 'auto', 'relative' => true));
+HTMLHelper::_('script', 'com_projects/tdata.js', array('version' => 'auto', 'relative' => true));
 $return = base64_encode("index.php?option=com_projects&view=building");
 ?>
 <div class="row-fluid">
