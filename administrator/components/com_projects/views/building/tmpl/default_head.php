@@ -9,7 +9,7 @@ $j = 0;
     <th width="1%">
         №
     </th>
-    <th>
+    <th width="5%">
         <?php echo JHtml::_('grid.sort', '№', 'stand', $listDirn, $listOrder); ?>
     </th>
     <th>
@@ -42,7 +42,7 @@ $j = 0;
         <?php echo JHtml::_('grid.sort', 'COM_PROJECTS_HEAD_CONTRACT_STAND_FREEZE', 'freeze', $listDirn, $listOrder); ?>
     </th>
     <?php foreach ($this->advanced_items as $advanced_item) :?>
-        <th>
+        <th width="50px">
             <?php
             echo $advanced_item;
             $indexes[$advanced_item] = $j;

@@ -7,6 +7,11 @@ JHtml::_('searchtools.form');
 use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::_('stylesheet', 'com_projects/style.css', array('version' => 'auto', 'relative' => true));
+HTMLHelper::_('stylesheet', 'com_projects/no-wrap.css', array('version' => 'auto', 'relative' => true));
+HTMLHelper::_('stylesheet', 'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css', array('version' => 'auto', 'relative' => true));
+HTMLHelper::_('stylesheet', 'https://cdn.datatables.net/fixedcolumns/3.2.6/css/fixedColumns.dataTables.min.css', array('version' => 'auto', 'relative' => true));
+HTMLHelper::_('script', 'com_projects/jquery.dataTables.min.js', array('version' => 'auto', 'relative' => true));
+HTMLHelper::_('script', 'com_projects/dataTables.fixedColumns.min.js', array('version' => 'auto', 'relative' => true));
 HTMLHelper::_('script', 'com_projects/script.js', array('version' => 'auto', 'relative' => true));
 $return = base64_encode("index.php?option=com_projects&view=building");
 ?>
@@ -20,7 +25,7 @@ $return = base64_encode("index.php?option=com_projects&view=building");
         <form action="<?php echo JRoute::_('index.php?option=com_projects&amp;view=building'); ?>" method="post"
               name="adminForm" id="adminForm">
             <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
-            <table class="table table-striped">
+            <table class="stripe row-border order-column" id="bigtable">
                 <thead><?php echo $this->loadTemplate('head'); ?></thead>
                 <tbody><?php echo $this->loadTemplate('body'); ?></tbody>
                 <tfoot><?php echo $this->loadTemplate('foot'); ?></tfoot>
