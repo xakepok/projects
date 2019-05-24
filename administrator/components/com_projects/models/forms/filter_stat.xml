@@ -11,13 +11,14 @@
                 class="js-stools-search-string"
         />
         <field
-                name="project"
-                type="Project"
-                label="COM_PROJECTS_FILTER_SELECT_PROJECT"
-                description="COM_PROJECTS_FILTER_SELECT_PROJECT"
+                name="manager"
+                type="manager"
+                label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
+                description="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
+                hint="COM_PROJECTS_FILTER_SELECT_MANAGER"
                 onchange="this.form.submit();"
         >
-            <option value="">COM_PROJECTS_FILTER_SELECT_PROJECT</option>
+            <option value="">COM_PROJECTS_FILTER_SELECT_MANAGER</option>
         </field>
         <field
                 name="currency"

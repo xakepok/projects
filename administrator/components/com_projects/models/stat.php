@@ -26,6 +26,7 @@ class ProjectsModelStat extends ListModel
                 'amount_eur',
                 'value',
                 'item',
+                'manager',
                 'status'
             );
         }
@@ -54,6 +55,11 @@ class ProjectsModelStat extends ListModel
                 ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
                 ->where("`s`.`itemID` = {$this->itemID}")
                 ->group("`c`.`expID`");
+        }
+        // Фильтруем по менеджеру.
+        $manager = $this->getState('filter.manager');
+        if (is_numeric($manager)) {
+            $query->where('`c`.`managerID` = ' . (int)$manager);
         }
         if ($this->itemID == 0) {
             $query->group("`s`.`itemID`");
@@ -324,6 +330,8 @@ class ProjectsModelStat extends ListModel
         $this->setState('filter.project', $project);
         $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status');
         $this->setState('filter.status', $status);
+        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
+        $this->setState('filter.manager', $manager);
         parent::populateState('`i`.`title_ru`', 'asc');
     }
 
@@ -332,6 +340,7 @@ class ProjectsModelStat extends ListModel
         $id .= ':' . $this->getState('filter.search');
         $id .= ':' . $this->getState('filter.project');
         $id .= ':' . $this->getState('filter.status');
+        $id .= ':' . $this->getState('filter.manager');
         return parent::getStoreId($id);
     }
 }
