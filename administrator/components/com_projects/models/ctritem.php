@@ -37,6 +37,14 @@ class ProjectsModelCtritem extends AdminModel {
 
     public function save($data)
     {
+        if ($data['need_check'] == 1 && !ProjectsHelper::canDo('projects.access.contracts.columns')) {
+            $arr = array();
+            $arr['ctrItemId'] = $data['id'] ?? null;
+            $arr['columnID'] = $data['columnID'];
+            $arr['value'] = $data['value'];
+            $arr['factor'] = $data['factor'];
+            $arr['markup'] = $data['markup'];
+        }
         if ($data['value'] <= 0)
         {
             if ($data['id'] != null) $this->delete($data['id']);

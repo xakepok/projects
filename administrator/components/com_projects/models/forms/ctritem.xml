@@ -62,5 +62,10 @@
                 name="itemID"
                 type="hidden"
         />
+        <field
+                name="need_check"
+                type="hidden"
+                value="1"
+        />
     </fieldset>
 </form>
