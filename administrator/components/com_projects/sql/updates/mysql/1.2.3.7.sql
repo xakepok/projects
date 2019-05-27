@@ -25,3 +25,5 @@ alter table `#__prj_ctr_items_check`
 alter table `#__prj_ctr_items_check`
     add is_new boolean default 0 not null;
 
+alter table `#__prj_ctr_items_check` alter column markup set default null;
+

@@ -14,7 +14,15 @@ class ProjectsControllerCtritem extends FormController {
         JFactory::getApplication()->setUserState("{$this->option}.contractID", $input->getInt('contractID', 0));
         JFactory::getApplication()->setUserState("{$this->option}.itemID", $input->getInt('itemID', 0));
         JFactory::getApplication()->setUserState("{$this->option}.columnID", $input->getInt('columnID', 0));
+        JFactory::getApplication()->setUserState("{$this->option}.need_check", $input->getInt('need_check', 0));
         return parent::add();
+    }
+
+    public function edit($key = null, $urlVar = null)
+    {
+        $input = $this->input;
+        JFactory::getApplication()->setUserState("{$this->option}.need_check", $input->getInt('need_check', 0));
+        return parent::edit($key, $urlVar);
     }
 
     public function changeColumn()
@@ -24,7 +32,7 @@ class ProjectsControllerCtritem extends FormController {
         $column = $this->input->getInt('column', 1);
         $item = $model->getItem($id);
         if ($id != null) {
-            $data = array('id' => $id, 'column' => $column);
+            $data = array('id' => $item->id, 'columnID' => $column, 'contractID' => $item->contractID, 'itemID' => $item->itemID, 'factor' => $item->factor, 'value' => $item->value, 'value2' => $item->value2, 'arrival' => $item->arrival, 'fixed' => $item->fixed, 'need_check' => 1);
             if (!$model->save($data)) {
                 $msg = JText::sprintf('COM_PROJECTS_ERROR_UNKNOWN_NOT_TRANSFER');
                 $type = 'error';

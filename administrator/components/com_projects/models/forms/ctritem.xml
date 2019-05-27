@@ -15,22 +15,28 @@
         </field>
         <field
                 name="factor"
-                type="text"
-                label="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT_VAL"
-                description="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT_VAL_DESC"
-                default="1.0"
+                type="number"
+                label="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT"
+                description="COM_PROJECTS_HEAD_CONTRACT_DISCOUNT_VAL"
                 autocomplete="off"
                 class="x2"
+                default="0"
+                min="0"
+                max="100"
+                step="1"
         />
         <field
                 name="markup"
-                type="text"
-                label="COM_PROJECTS_HEAD_CONTRACT_MARKUP_VAL"
-                description="COM_PROJECTS_HEAD_CONTRACT_MARKUP_VAL_DESC"
-                autocomplete="off"
-                default="1.0"
-                class="x2"
-        />
+                type="list"
+                label="COM_PROJECTS_HEAD_CONTRACT_MARKUP"
+                description="COM_PROJECTS_HEAD_CONTRACT_MARKUP_DESC"
+                default="0"
+                >
+            <option value="">COM_PROJECTS_HEAD_CONTRACT_MARKUP_0</option>
+            <option value="1.10">COM_PROJECTS_HEAD_CONTRACT_MARKUP_10</option>
+            <option value="1.15">COM_PROJECTS_HEAD_CONTRACT_MARKUP_15</option>
+            <option value="1.20">COM_PROJECTS_HEAD_CONTRACT_MARKUP_20</option>
+        </field>
         <field
                 name="value"
                 type="text"
@@ -66,6 +72,7 @@
                 name="need_check"
                 type="hidden"
                 value="1"
+                default="1"
         />
     </fieldset>
 </form>

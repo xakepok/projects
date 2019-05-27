@@ -72,8 +72,8 @@ $sum = 0;
                         <td>
                             <?php if (!$item['block'] && !$item['fixed'][$j]): ?>
                                 <?php if (ProjectsHelper::canDo('projects.access.contracts.columns')) {
-                                    if (($j == 2 || $j == 3) && $item['value'] > 0) {
-                                        $url = JRoute::_("index.php?option=com_projects&amp;task=ctritem.changeColumn&amp;id={$item['id']}&amp;column=1&amp;return={$this->return}");
+                                    if (($j == 2 || $j == 3) && $item['value'][$j] > 0) {
+                                        $url = JRoute::_("index.php?option=com_projects&amp;task=ctritem.changeColumn&amp;id={$item['ctrItemID']}&amp;column=1&amp;return={$this->return}");
                                         echo JHtml::link($url, "&lt;");
                                     }
                                 }?>

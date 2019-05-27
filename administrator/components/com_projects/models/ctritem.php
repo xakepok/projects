@@ -25,6 +25,7 @@ class ProjectsModelCtritem extends AdminModel {
             $contractID = $item->contractID;
         }
         $item->title = sprintf("%s - %s", $this->getPriceItemTitle($itemID), $this->getContractNumber($contractID));
+        $item->factor = 100 - ($item->factor * 100);
         return $item;
     }
 
@@ -37,13 +38,16 @@ class ProjectsModelCtritem extends AdminModel {
 
     public function save($data)
     {
-        if ($data['need_check'] == 1 && !ProjectsHelper::canDo('projects.access.contracts.columns')) {
+        if ($data['need_check'] == 1) {
             $arr = array();
             $arr['ctrItemId'] = $data['id'] ?? null;
             $arr['columnID'] = $data['columnID'];
             $arr['value'] = $data['value'];
-            $arr['factor'] = $data['factor'];
-            $arr['markup'] = $data['markup'];
+            $arr['factor'] = 1 - $data['factor'] ?? 0 / 100;
+            $arr['managerID'] = JFactory::getUser()->id;
+            $arr['is_new'] = ($data['id'] != null) ? 0 : 1;
+            $data['factor'] = 1 - $data['factor'] ?? 0 / 100;
+
         }
         if ($data['value'] <= 0)
         {
