@@ -25,7 +25,7 @@ class ProjectsModelCtritem extends AdminModel {
             $contractID = $item->contractID;
         }
         $item->title = sprintf("%s - %s", $this->getPriceItemTitle($itemID), $this->getContractNumber($contractID));
-        $item->factor = 100 - ($item->factor * 100);
+        $item->factor = ($item->id != null) ? 100 - ($item->factor * 100) : 0;
         return $item;
     }
 
@@ -47,7 +47,7 @@ class ProjectsModelCtritem extends AdminModel {
             $arr['managerID'] = JFactory::getUser()->id;
             $arr['is_new'] = ($data['id'] != null) ? 0 : 1;
             $data['factor'] = 1 - $data['factor'] ?? 0 / 100;
-
+            $data['markup'] = ((float) $data['markup'] <= 0) ? null : $data['markup'];
         }
         if ($data['value'] <= 0)
         {
