@@ -130,6 +130,7 @@ class ProjectsModelContract extends AdminModel {
             ->where("`contractID` = {$id}");
         $db->setQuery($query)->execute();
         $query = $db->getQuery(true);
+        if (empty($stands)) return;
         $ids = implode(", ", $stands);
         $query
             ->update("`#__prj_stands_advanced`")
