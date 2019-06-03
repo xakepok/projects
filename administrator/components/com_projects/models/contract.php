@@ -115,6 +115,7 @@ class ProjectsModelContract extends AdminModel {
      */
     public function setColumn(int $id = 0, int $columnID = 1): void
     {
+        //Получем ID стендов
         if ($id == null) return;
         $db =& $this->getDbo();
         $query = $db->getQuery(true);
@@ -123,23 +124,41 @@ class ProjectsModelContract extends AdminModel {
             ->from("`#__prj_stands`")
             ->where("`contractID` = {$id}");
         $stands = $db->setQuery($query)->loadColumn();
+
+        if (!empty($stands)) {
+            $ids = implode(", ", $stands);
+
+            //Обновляем колонку у стендов
+            $query = $db->getQuery(true);
+            $query
+                ->update("`#__prj_stands`")
+                ->set("`columnID` = {$columnID}")
+                ->where("`id` IN ({$ids})");
+            $db->setQuery($query)->execute();
+
+            //Обновляем колонку у пунктов прайса стендов
+            $query = $db->getQuery(true);
+            $query
+                ->update("`#__prj_stands_advanced`")
+                ->set("`columnID` = {$columnID}")
+                ->where("`standID` IN ({$ids})");
+            $db->setQuery($query)->execute();
+        }
+
+        //Обновляем пункты прайса, которые не касаются стендов
+        $query = $db->getQuery(true);
+        $query
+            ->select("`id`")
+            ->from("`#__prc_item_types`")
+            ->where("`contractID` = {$id}")
+            ->where("`tip`='standard'");
+        $items = $db->setQuery($query)->loadColumn();
+        if (empty($items)) return;
+        $ids = implode(", ", $items);
+
         $query = $db->getQuery(true);
         $query
             ->update("`#__prj_contract_items`")
-            ->set("`columnID` = {$columnID}")
-            ->where("`contractID` = {$id}");
-        $db->setQuery($query)->execute();
-        $query = $db->getQuery(true);
-        if (empty($stands)) return;
-        $ids = implode(", ", $stands);
-        $query
-            ->update("`#__prj_stands_advanced`")
-            ->set("`columnID` = {$columnID}")
-            ->where("`standID` IN ({$ids})");
-        $db->setQuery($query)->execute();
-        $query = $db->getQuery(true);
-        $query
-            ->update("`#__prj_stands`")
             ->set("`columnID` = {$columnID}")
             ->where("`id` IN ({$ids})");
         $db->setQuery($query)->execute();
