@@ -740,7 +740,7 @@ class ProjectsHelper
      * @return array массив с 3 валютами
      * @since 1.0.4.3
      */
-    public static function getProjectAmount(int $projectID, array $statuses = array(1, 2, 3, 4)): array
+    public static function getProjectAmount(int $projectID, array $statuses = array(1, 2, 3, 4, 10)): array
     {
         $statuses = implode(', ', $statuses);
         $db =& JFactory::getDbo();
@@ -771,7 +771,7 @@ class ProjectsHelper
      * @return array сумма всех платежей в трёх валютах
      * @since 1.0.4.3
      */
-    public static function getProjectPayments(int $projectID, array $statuses = array(1, 2, 3, 4)): array
+    public static function getProjectPayments(int $projectID, array $statuses = array(1, 2, 3, 4, 10)): array
     {
         $statuses = implode(', ', $statuses);
         $db =& JFactory::getDbo();
