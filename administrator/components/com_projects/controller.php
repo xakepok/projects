@@ -28,6 +28,13 @@ class ProjectsController extends BaseController
             $this->input->set('layout', $layout);
             $v->setLayout($layout);
         }
+        if ($view == 'statv2') {
+            $itemID = $this->input->getInt('itemID', 0);
+            $v = $this->getView('statv2', 'html');
+            $layout = ($itemID > 0) ? 'item' : 'default';
+            $this->input->set('layout', $layout);
+            $v->setLayout($layout);
+        }
         if ($view == 'catalogs') {
             $activeProject = ProjectsHelper::getActiveProject('');
             if ($activeProject != '') {

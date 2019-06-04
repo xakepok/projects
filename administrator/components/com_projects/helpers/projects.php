@@ -52,7 +52,7 @@ class ProjectsHelper
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_PAYMENTS'), 'index.php?option=com_projects&amp;view=payments', $vName == 'payments');
         }
         if (self::canDo('projects.access.stat')) {
-            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_STAT'), 'index.php?option=com_projects&amp;view=stat', $vName == 'stat');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_STAT'), 'index.php?option=com_projects&amp;view=statv2', $vName == 'statv2');
         }
         if (self::canDo('projects.access.reports')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_REPORTS'), 'index.php?option=com_projects&amp;view=reports', $vName == 'reports');

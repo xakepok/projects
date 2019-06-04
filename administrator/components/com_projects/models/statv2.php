@@ -2,6 +2,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\AdminModel;
 
 class ProjectsModelStatv2 extends ListModel
 {
@@ -29,19 +30,21 @@ class ProjectsModelStatv2 extends ListModel
         $query = $db->getQuery(true);
         $query
             ->select("s.itemID, s.currency, sum(s.value) as `val`, sum(s.price) as `price`")
-            ->select("i.title_ru as `item`")
+            ->select("i.title_ru as `item`, i.unit")
             ->from("`#__prj_stat_v2` s")
             ->leftJoin("`s7vi9_prc_items` i on i.id = s.itemID");
 
         if ($this->itemID != 0) {
             $query
-                ->select("s.contractID, s.managerID, e.exhibitor")
+                ->select("s.contractID, s.managerID, e.exhibitor, c.number as `contract`")
+                ->leftJoin("`#__prj_contracts` c on c.id = s.contractID")
                 ->leftJoin("`#__prj_exhibitors_all` e on e.id = s.expID")
+                ->where("s.itemID = {$this->itemID}")
                 ->group("s.currency, s.contractID");
         }
         else {
             $query
-                ->select("i.application, i.unit")
+                ->select("i.application")
                 ->group("s.itemID, s.currency");
         }
         // Фильтруем по менеджеру.
@@ -60,7 +63,7 @@ class ProjectsModelStatv2 extends ListModel
         $project = $this->getState('filter.project');
         if (empty($project)) $project = ProjectsHelper::getActiveProject();
         if (is_numeric($project)) {
-            $query->where('prjID = ' . (int) $project);
+            $query->where('s.prjID = ' . (int) $project);
             $session = JFactory::getSession();
             $session->set('projectID', $project);
         }
@@ -100,36 +103,44 @@ class ProjectsModelStatv2 extends ListModel
         if ($this->itemID != 0) $result['cnt'] = 0;
         $result['items'] = array();
         $xls = (JFactory::getApplication()->input->getString('task') == 'exportxls');
-        if ($this->itemID != 0) $item_title = $this->getExhibitorTitle();
         foreach ($items as $item) {
-            $arr = array();
             if ($this->itemID != 0) {
                 $return = ProjectsHelper::getReturnUrl();
+                if (!isset($result['items'][$item->contractID])) $result['items'][$item->contractID] = array();
                 $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->expID}&amp;return={$return}");
-                $title = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_rn);
-                $arr['title'] = (!$xls) ? JHtml::link($url, $title) : $title;
+                $result['items'][$item->contractID]['exhibitor'] = (!$xls) ? JHtml::link($url, $item->exhibitor) : $item->exhibitor;
                 $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$item->contractID}&amp;return={$return}");
                 $title = ($item->contract != null) ? JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITH_NUMBER', $item->contract) : JText::sprintf('COM_PROJECTS_TITLE_CONTRACT_WITHOUT_NUMBER');
-                $arr['contract'] = (!$xls) ? JHtml::link($url, $title) : $title;
+                $result['items'][$item->contractID]['contract'] = (!$xls) ? JHtml::link($url, $title) : $title;
                 $stands = $this->getStands($item->contractID);
-                $arr['stands'] = implode(' ', $stands);
-                $arr['item_title'] = $item_title;
-                $result['cnt'] += $item->value;
+                $result['items'][$item->contractID]['stands'] = implode(' ', $stands);
+                if (!isset($result['items'][$item->contractID]['value'])) $result['items'][$item->contractID]['value'] = 0;
+                $result['items'][$item->contractID]['value'] += $item->val ?? 0;
+                $result['items'][$item->contractID]['unit'] = ProjectsHelper::getUnit($item->unit);
+                $result['items'][$item->contractID]['price'][$item->currency] = ProjectsHelper::getCurrency((float) $item->price ?? 0, $item->currency);
             } else {
                 if (!isset($result['items'][$item->itemID])) $result['items'][$item->itemID] = array();
                 $url = JRoute::_("index.php?option=com_projects&amp;view=statv2&amp;itemID={$item->itemID}");
                 $options = array('class' => 'small');
                 $result['items'][$item->itemID]['title'] = (!$xls) ? JHtml::link($url, $item->item, $options) : $item->item;
+                $result['items'][$item->itemID]['application'] = ProjectsHelper::getApplication($item->application);
+                $result['items'][$item->itemID]['unit'] = ProjectsHelper::getUnit($item->unit);
+                if(!isset($result['items'][$item->itemID]['value'])) $result['items'][$item->itemID]['value'] = (float) 0;
+                $result['items'][$item->itemID]['value'] += $item->val ?? 0;
+                $result['items'][$item->itemID]['price'][$item->currency] = ProjectsHelper::getCurrency((float) $item->price ?? 0, $item->currency);
+                if(!isset($result['sum'][$item->currency])) $result['sum'][$item->currency] = 0;
             }
-            $result['items'][$item->itemID]['application'] = ProjectsHelper::getApplication($item->application);
-            $result['items'][$item->itemID]['unit'] = ProjectsHelper::getUnit($item->unit);
-            if(!isset($result['items'][$item->itemID]['value'])) $result['items'][$item->itemID]['value'] = (float) 0;
-            $result['items'][$item->itemID]['value'] += $item->val ?? 0;
-            $result['items'][$item->itemID]['price'][$item->currency] = ProjectsHelper::getCurrency((float) $item->price ?? 0, $item->currency);
-            if(!isset($result['sum'][$item->currency])) $result['sum'][$item->currency] = 0;
             $result['sum'][$item->currency] += $item->price ?? 0;
         }
         return $result;
+    }
+
+    public function getPriceItem(): string
+    {
+        if ($this->itemID == 0) return '';
+        $im = AdminModel::getInstance('Item', 'ProjectsModel');
+        $item = $im->getItem($this->itemID);
+        return $item->title_ru ?? '';
     }
 
     private function getStands(int $contractID): array

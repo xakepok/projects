@@ -8,11 +8,13 @@ class ProjectsViewStatv2 extends HtmlView
 {
 	protected $helper;
 	protected $sidebar = '';
-	public $items, $pagination, $uid, $state, $links, $filterForm, $activeFilters, $return, $action;
+	public $items, $pagination, $uid, $state, $links, $filterForm, $activeFilters, $return, $action, $itemID, $priceItem;
 
 	public function display($tpl = null)
 	{
 	    $this->items = $this->get('Items');
+	    $this->itemID = $this->get('ItemID');
+	    $this->priceItem = $this->get('PriceItem');
 	    $this->return = ProjectsHelper::getReturnUrl();
 	    $this->action = ProjectsHelper::getActionUrl();
 	    $this->pagination = $this->get('Pagination');
@@ -37,7 +39,10 @@ class ProjectsViewStatv2 extends HtmlView
 
 	private function toolbar()
 	{
-		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_STAT_DESC'), '');
+		JToolBarHelper::title(($this->itemID > 0) ? $this->priceItem : Text::_('COM_PROJECTS_MENU_STAT_DESC'), '');
+		if ($this->itemID > 0) {
+            JToolbarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_projects&view=statv2');
+        }
 
 		if (ProjectsHelper::canDo('core.admin'))
 		{
