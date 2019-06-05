@@ -71,6 +71,12 @@ class ProjectsModelReports extends ListModel
                 $query->where('(`e`.`title_ru_short` LIKE ' . $search . ' OR `e`.`title_ru_full` LIKE ' . $search . ' OR `e`.`title_en` LIKE ' . $search . ')');
             }
 
+            if (!ProjectsHelper::canDo('projects.access.contracts.full')) {
+                $uid = JFactory::getUser()->id;
+                $query
+                    ->where("`c`.`managerID` = {$uid}");
+            }
+
             //Фильтруем по тематикам разделов
             $rubric = $this->getState('filter.rubric');
             if (is_numeric($rubric)) {
