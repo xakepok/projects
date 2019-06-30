@@ -13,6 +13,8 @@ use Joomla\CMS\MVC\Controller\BaseController;
 
 defined('_JEXEC') or die;
 
+require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/projects.php';
+
 $controller = BaseController::getInstance('projects');
 $controller->execute(Factory::getApplication()->input->get('task'));
 $controller->redirect();

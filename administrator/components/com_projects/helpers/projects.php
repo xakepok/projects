@@ -73,6 +73,51 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает массив с ID сделок, к которым привязан пользователь
+     * @return array массив с ID сделок
+     * @since 1.2.5.0
+     */
+    public static function getUserContracts(): array
+    {
+        $id = JFactory::getUser()->id;
+        $db =& JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query
+            ->select("id")
+            ->from("`#__prj_contracts`")
+            ->where("`userID` = {$id}");
+        return $db->setQuery($query)->loadColumn() ?? array();
+    }
+
+    /**
+     * Возвращает ID сделки, к которому привязан юзер
+     * @return int ID сделки
+     * @since 1.2.5.0
+     */
+    public static function getContractID(): int
+    {
+        $session = JFactory::getSession();
+        $id = $session->get('contractID', 0);
+        if ($id > 0) return (int) $id;
+        $ids = self::getUserContracts();
+        if (empty($ids)) return 0;
+        if (count($ids) == 0) {
+            self::setUserContract($ids[0]);
+        }
+    }
+
+    /**
+     * Устанавливает ID сделки, к которому привязан юзер
+     * @param int $id ID сделки
+     * @since 1.2.5.0
+     */
+    public static function setUserContract(int $id): void
+    {
+        $session = JFactory::getSession();
+        $session->set('contractID', $id);
+    }
+
+    /**
      * Возвращает массив с ID пользователей, входящих в указанную группу
      * @param int $groupID ID группы пользователей
      * @return array
