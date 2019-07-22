@@ -120,11 +120,14 @@ class ProjectsModelSection extends AdminModel
         $query = $db->getQuery(true);
         $query
             ->insert("#__prc_items")
-            ->columns(array('sectionID', 'unit', 'unit_2', 'title_ru', 'title_en', 'price_rub', 'price_usd', 'price_eur', 'column_1', 'column_2', 'column_3', 'is_factor', 'is_markup', 'in_stat', 'is_sq', 'state'));
+            ->columns(array('sectionID', 'application', 'unit', 'unit_2', 'title_ru', 'title_en', 'price_rub', 'price_usd', 'price_eur',
+                'column_1', 'column_2', 'column_3', 'is_factor', 'is_markup', 'is_cleaning', 'is_sq', 'is_water',
+                'badge', 'in_stat', 'is_electric', 'is_internet', 'is_multimedia', 'state', 'need_period', 'stop'));
         foreach ($items as $item) {
             if (empty($item)) continue;
             $arr = array(
                 $db->quote($ids[$item->sectionID]),
+                $db->quote($item->application),
                 $db->quote($item->unit),
                 $db->quote($item->unit_2),
                 ($item->title_ru != null) ? $db->quote($item->title_ru) : 'NULL',
@@ -137,9 +140,17 @@ class ProjectsModelSection extends AdminModel
                 $db->quote($item->column_3),
                 $db->quote($item->is_factor),
                 $db->quote($item->is_markup),
-                $db->quote($item->in_stat),
+                $db->quote($item->is_cleaning),
                 $db->quote($item->is_sq),
+                $db->quote($item->is_water),
+                $db->quote($item->badge),
+                $db->quote($item->in_stat),
+                $db->quote($item->is_electric),
+                $db->quote($item->is_internet),
+                $db->quote($item->is_multimedia),
                 $db->quote($item->state),
+                $db->quote($item->need_period),
+                $db->quote($item->stop),
             );
             $values = implode(', ', $arr);
             $query->values($values);
