@@ -31,7 +31,7 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_PROJECT', 'project', $listDirn, $listOrder); ?>
     </th>
     <th>
-        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_EXPONENT', 'title_ru_short', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_EXPONENT', 'exhibitor', $listDirn, $listOrder); ?>
     </th>
     <th>
         <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_ACTIVE_TODOS', 'plan', $listDirn, $listOrder); ?>

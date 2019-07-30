@@ -1,11 +1,13 @@
 <?php
 defined('_JEXEC') or die;
-$return = base64_encode("index.php?option=com_projects&view=contract&layout=edit&id={$this->item->id}");
+$return = ProjectsHelper::getReturnUrl();
 $addUrl = JRoute::_("index.php?option=com_projects&amp;task=todo.add&amp;contractID={$this->item->id}&amp;return={$return}");
 $addLink = JHtml::link($addUrl, JText::sprintf('COM_PROJECTS_TITLE_NEW_TODO'));
+$printUrl = JRoute::_("https://mkv.xakepok.com/administrator/index.php?option=com_projects&amp;view=todos&amp;format=raw&amp;contractID={$this->item->id}");
+$printLink = JHtml::link($printUrl, JText::sprintf('COM_PROJECTS_ACTION_PRINT'), array('target' => '_blank'));
 ?>
 <div>
-    <?php echo $addLink; ?>
+    <?php echo $addLink, " / ", $printLink; ?>
 </div>
 <table class="table table-striped">
     <thead>
