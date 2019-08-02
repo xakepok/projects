@@ -15,9 +15,11 @@ class JFormFieldScore extends JFormFieldList
         $query
             ->select("`s`.`id`, `s`.`amount`, DATE_FORMAT(`s`.`dat`,'%d.%m.%Y') as `dat`, `c`.`number`, `c`.`currency`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
+            ->select("IFNULL(`e1`.`title_ru_short`,IFNULL(`e1`.`title_ru_full`,IFNULL(`e1`.`title_en`,''))) as `payer`")
             ->from("`#__prj_scores` as `s`")
             ->leftJoin("`#__prj_contracts` as `c` ON `c`.`id` = `s`.`contractID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
+            ->leftJoin("`#__prj_exp` as `e1` ON `e1`.`id` = `c`.`payerID`")
             ->where("`c`.`status` IN (1,10)")
             ->order("`c`.`number` DESC");
         $session = JFactory::getSession();
@@ -34,6 +36,9 @@ class JFormFieldScore extends JFormFieldList
 
         foreach ($result as $item) {
             $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+            if ($item->payer !== '') {
+                $exp .= sprintf(" (%s %s)", JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PAYER'), $item->payer);
+            }
             $title = JText::sprintf('COM_PROJECTS_HEAD_SCORE_NUM_FROM', $item->id, $item->amount, $item->currency, $item->dat, $item->number, $exp);
             $options[] = JHtml::_('select.option', $item->id, $title);
         }
