@@ -108,6 +108,16 @@
                 class="x2"
         />
         <field
+                name="payerID"
+                type="exhibitor"
+                label="COM_PROJECTS_HEAD_CONTRACT_PAYER"
+                description="COM_PROJECTS_HEAD_CONTRACT_PAYER_DESC"
+                default=""
+                class="x2"
+        >
+                <option value="">COM_PROJECTS_HEAD_CONTRACT_PAYER_HINT</option>
+        </field>
+        <field
                 name="rubrics"
                 type="Rubric"
                 label="COM_PROJECTS_HEAD_CONTRACT_RUBRICS"

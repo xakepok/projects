@@ -16,10 +16,12 @@ class JFormFieldContract extends JFormFieldList
             ->select("`c`.`id`, IFNULL(`c`.`number_free`,`c`.`number`) as `number`, DATE_FORMAT(`c`.`dat`,'%d.%m.%Y') as `dat`, `c`.`status`")
             ->select("IFNULL(`p`.`title_ru`,`p`.`title_en`) as `project`")
             ->select("`e`.`title_ru_short`, `e`.`title_ru_full`, `e`.`title_en`")
+            ->select("IFNULL(`e1`.`title_ru_short`,IFNULL(`e1`.`title_ru_full`,IFNULL(`e1`.`title_en`,''))) as `payer`")
             ->select("IFNULL((IFNULL(`a`.`price`,0)-IFNULL(`pm`.`payments`,0)),0) as `amount`")
             ->from('`#__prj_contracts` as `c`')
             ->leftJoin("`#__prj_projects` as `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `c`.`expID`")
+            ->leftJoin("`#__prj_exp` as `e1` ON `e1`.`id` = `c`.`payerID`")
             ->leftJoin("`#__prj_contract_amounts` as `a` ON `a`.`contractID` = `c`.`id`")
             ->leftJoin("`#__prj_contract_payments` as `pm` ON `pm`.`contractID` = `c`.`id`")
             ->order("`c`.`id`");
@@ -52,6 +54,9 @@ class JFormFieldContract extends JFormFieldList
             $arr = array('data-amount' => $item->amount);
             $params = array('attr' => $arr, 'option.attr' => 'optionattr');
             $exp = ProjectsHelper::getExpTitle($item->title_ru_short, $item->title_ru_full, $item->title_en);
+            if ($item->payer !== '') {
+                $exp .= sprintf(" (%s %s)", JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PAYER'), $item->payer);
+            }
             $name = ProjectsHelper::getContractFieldTitle($item->status ?? 0, $item->number ?? 0, $item->dat ?? '', $exp, $item->project);
             $options[] = JHtml::_('select.option', $item->id, $name, $params);
         }

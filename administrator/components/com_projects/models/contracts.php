@@ -47,9 +47,11 @@ class ProjectsModelContracts extends ListModel
             ->select("IF(`c`.`currency`='rub',0,IF(`c`.`currency`='usd',1,2)) as `sort_amount`")
             ->select("`pay`.`payments`")
             ->select("IFNULL(`a`.`price`,0)-IFNULL(`pay`.`payments`,0) as `debt`")
+            ->select("IFNULL(`e1`.`title_ru_short`,IFNULL(`e1`.`title_ru_full`,IFNULL(`e1`.`title_en`,''))) as `payer`, `c`.`payerID`")
             ->from("`#__prj_contracts` as `c`")
             ->leftJoin("`#__prj_projects` AS `p` ON `p`.`id` = `c`.`prjID`")
             ->leftJoin("`#__prj_exp` as `e` ON `e`.`id` = `expID`")
+            ->leftJoin("`#__prj_exp` as `e1` ON `e1`.`id` = `c`.`payerID`")
             ->leftJoin("`#__users` as `u` ON `u`.`id` = `c`.`managerID`")
             ->leftJoin("`#__prj_contract_amounts` as `a` ON `a`.`contractID` = `c`.`id`")
             ->leftJoin("`#__prj_contract_payments` as `pay` ON `pay`.`contractID` = `c`.`id`");
@@ -57,14 +59,14 @@ class ProjectsModelContracts extends ListModel
         $search = $this->getState('filter.search');
         if (!empty($search))
         {
-            if (strpos($search, '№') !== false) {
-                $search = str_ireplace("№", '', $search);
+            if (strpos($search, '№') !== false || strpos($search, '#') !== false) {
+                $search = str_ireplace(array("№",'#'), '', $search);
                 $search = $db->q($search);
                 $query->where("(`c`.`number` LIKE {$search})");
             }
             else {
                 $search = $db->q("%{$search}%");
-                $query->where("(`e`.`title_ru_short` LIKE {$search} OR `e`.`title_ru_full` LIKE {$search} OR `e`.`title_en` LIKE {$search} OR `e`.`comment` LIKE {$search})");
+                $query->where("(`e1`.`title_ru_short` LIKE {$search} OR `e1`.`title_ru_full` LIKE {$search} OR `e1`.`title_en` LIKE {$search} OR `e`.`title_ru_short` LIKE {$search} OR `e`.`title_ru_full` LIKE {$search} OR `e`.`title_en` LIKE {$search} OR `e`.`comment` LIKE {$search})");
             }
         }
         // Фильтруем по видам деятельности.
@@ -202,6 +204,10 @@ class ProjectsModelContracts extends ListModel
             $url = JRoute::_("index.php?option=com_projects&amp;view=exhibitor&amp;layout=edit&amp;id={$item->exhibitorID}&amp;return={$return}");
             $exponentUrl = JHtml::link($url, $item->exhibitor, array('title' => "ID: {$item->exhibitorID}"));
             $arr['exponent'] = ($format != 'html' || $this->isExcel()) ? $item->exhibitor : $exponentUrl;
+            if ($item->payer !== '') {
+                $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$item->payerID}&amp;return={$return}");
+                $arr['exponent'] .= sprintf(" (%s %s)", JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_PAYER'), JHtml::link($url, $item->payer));
+            }
             $arr['number'] = ($item->number != null) ? $prefixes[$item->projectID]['contract_prefix'].$item->number : '';
             $arr['manager'] = $item->manager ?? JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_MANAGER_UNDEFINED');
             if ($format == 'html') $arr['plan'] = $link;
