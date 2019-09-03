@@ -7,14 +7,18 @@ class ProjectsModelProfile extends ItemModel
 {
     public function __construct($config = array())
     {
-        $this->exhibitorID = 1;
+        $this->contractID = ProjectsHelper::getUserContractID();
         parent::__construct($config);
     }
 
     public function getItem(): array
     {
+        $contracts_table = $this->getTable('Contracts');
+        if ($this->contractID == 0) return array();
+        $contracts_table->load($this->contractID);
+        $exhibitorID = $contracts_table->expID;
         $table = $this->getTable();
-        $table->load($this->exhibitorID);
+        $table->load($exhibitorID);
         $result = array();
         $result['title'] = $table->title_ru_full;
         $result['inn'] = $table->inn;
@@ -32,5 +36,5 @@ class ProjectsModelProfile extends ItemModel
         return parent::getTable($name, $prefix, $options);
     }
 
-    private $exhibitorID;
+    private $contractID;
 }
