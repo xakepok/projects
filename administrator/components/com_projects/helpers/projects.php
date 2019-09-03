@@ -80,7 +80,7 @@ class ProjectsHelper
      */
     public static function getUserContracts(bool $advanced = true): array
     {
-        $id = JFactory::getUser()->id;
+        $id = (!JFactory::getUser()->guest) ? JFactory::getUser()->id : 0;
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
         (!$advanced) ? $query->select("id") : $query->select("id, number, status, IFNULL(dat,'') as dat");
