@@ -74,19 +74,19 @@ class ProjectsHelper
 
     /**
      * Возвращает массив с ID сделок, к которым привязан пользователь
+     * @param bool $advanced возвратить подробную информацию или нет
      * @return array массив с ID сделок
      * @since 1.2.5.0
      */
-    public static function getUserContracts(): array
+    public static function getUserContracts(bool $advanced = true): array
     {
         $id = JFactory::getUser()->id;
         $db =& JFactory::getDbo();
         $query = $db->getQuery(true);
-        $query
-            ->select("id")
-            ->from("`#__prj_contracts`")
+        (!$advanced) ? $query->select("id") : $query->select("id, number, status, IFNULL(dat,'') as dat");
+        $query->from("`#__prj_contracts`")
             ->where("`userID` = {$id}");
-        return $db->setQuery($query)->loadColumn() ?? array();
+        if (!$advanced) return $db->setQuery($query)->loadColumn() ?? array(); else return $db->setQuery($query)->loadAssocList() ?? array();
     }
 
     /**
@@ -94,15 +94,18 @@ class ProjectsHelper
      * @return int ID сделки
      * @since 1.2.5.0
      */
-    public static function getContractID(): int
+    public static function getUserContractID(): int
     {
         $session = JFactory::getSession();
         $id = $session->get('contractID', 0);
         if ($id > 0) return (int) $id;
-        $ids = self::getUserContracts();
-        if (empty($ids)) return 0;
-        if (count($ids) == 0) {
+        $ids = self::getUserContracts(false);
+        if (count($ids) > 0) {
             self::setUserContract($ids[0]);
+            return $ids[0];
+        }
+        else {
+            return 0;
         }
     }
 
