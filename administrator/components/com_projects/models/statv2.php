@@ -56,7 +56,7 @@ class ProjectsModelStatv2 extends ListModel
         /* Фильтр */
         $search = $this->getState('filter.search');
         if (!empty($search)) {
-            $search = $query->q($search);
+            $search = $query->q("%{$search}%");
             $query->where("i.title_ru LIKE {$search}");
         }
         // Фильтруем по проекту.
