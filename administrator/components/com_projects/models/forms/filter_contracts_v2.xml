@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_projects/models/rules">
+    <fields name="filter">
+        <field
+                name="search"
+                type="text"
+                label="COM_PROJECTS_FILTER_CONTRACT"
+                description="COM_PROJECTS_FILTER_CONTRACT"
+                hint="COM_PROJECTS_FILTER_CONTRACT"
+                autocomplete="off"
+                class="js-stools-search-string"
+        />
+        <field
+                name="doc_status"
+                type="list"
+                label="COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS"
+                description="COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS_DESC"
+                default=""
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_DOC_STATUS</option>
+            <option value="0">COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS_0</option>
+            <option value="2">COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS_2</option>
+            <option value="1">COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS_1</option>
+        </field>        <field
+                name="currency"
+                type="list"
+                label="COM_PROJECTS_FILTER_SELECT_CURRENCY"
+                description="COM_PROJECTS_FILTER_SELECT_CURRENCY"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_CURRENCY</option>
+            <option value="rub">COM_PROJECTS_HEAD_ITEM_PRICE_RUB</option>
+            <option value="usd">COM_PROJECTS_HEAD_ITEM_PRICE_USD</option>
+            <option value="eur">COM_PROJECTS_HEAD_ITEM_PRICE_EUR</option>
+        </field>
+        <field
+                name="manager"
+                type="manager"
+                label="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
+                description="COM_PROJECTS_HEAD_CONTRACT_MANAGER"
+                hint="COM_PROJECTS_FILTER_SELECT_MANAGER"
+                onchange="this.form.submit();"
+                >
+            <option value="">COM_PROJECTS_FILTER_SELECT_MANAGER</option>
+        </field>
+        <field
+                name="activity"
+                type="Activity"
+                label="COM_PROJECTS_FILTER_SELECT_ACTIVITY"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_ACTIVITY</option>
+        </field>
+        <field
+                name="rubric"
+                type="Rubric"
+                label="COM_PROJECTS_FILTER_SELECT_RUBRIC"
+                onchange="this.form.submit();"
+        >
+            <option value="">COM_PROJECTS_FILTER_SELECT_RUBRIC</option>
+            <option value="-1">COM_PROJECTS_FILTER_SELECT_RUBRIC_WITHOUT</option>
+        </field>
+        <field
+                name="status"
+                type="Contractstatus"
+                label="COM_PROJECTS_FILTER_SELECT_STATUS"
+                description="COM_PROJECTS_FILTER_SELECT_STATUS"
+                multiple="true"
+                onchange="this.form.submit();"
+        >
+        </field>
+    </fields>
+    <fields name="list">
+        <field
+                name="fullordering"
+                type="list"
+                label="COM_PROJECTS_FILTER_SELECT_FULL_ORDERING"
+                description="COM_PROJECTS_FILTER_SELECT_FULL_ORDERING_DESC"
+                onchange="this.form.submit();"
+                default="title asc"
+        >
+            <option value="">JGLOBAL_SORT_BY</option>
+        </field>
+        <field
+                name="limit"
+                type="limitbox"
+                class="input-mini"
+                default="0"
+                label="COM_PROJECTS_FILTER_SELECT_LIMIT"
+                description="COM_CONTENT_LIST_LIMIT_DESC"
+                onchange="this.form.submit();"
+        />
+    </fields>
+</form>
