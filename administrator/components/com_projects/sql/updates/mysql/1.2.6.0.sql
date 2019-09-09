@@ -11,12 +11,13 @@ where state = 0 and is_notify = 0
 group by contractID;
 
 create or replace view `s7vi9_prj_contracts_v2` as
-select c.id, ifnull(c.number,c.number_free) as num, c.dat, c.currency,
+select c.id, if(p.contract_prefix is null, ifnull(c.number,c.number_free), concat(p.contract_prefix, ifnull(c.number,c.number_free))) as num,
+       c.dat, c.currency,
        p.title_ru as project, p.id as projectID,
        ifnull(e.title_ru_short,ifnull(e.title_ru_full,e.title_en)) as exhibitor, e.id as exhibitorID,
        ifnull(tdc.cnt,0) as todos,
        u.name as manager,
-       s.title as status, s.weight as status_weight,
+       s.title as status, s.weight as status_weight, c.status as status_code,
        IF(`c`.`currency`='rub',0,IF(`c`.`currency`='usd',1,2)) as `sort_amount`,
        c.doc_status,
        ifnull(a.price,0) as amount,
