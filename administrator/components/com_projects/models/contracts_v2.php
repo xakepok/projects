@@ -9,7 +9,7 @@ class ProjectsModelContracts_v2 extends ListModel
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
                 'id', 'num', 'dat', 'project', 'exhibitor', 'todos', 'manager', 'status', 'status_weight', 'doc_status', 'amount', 'payment', 'debt',
-                'sort_amount, debt', 'sort_amount, payments', 'sort_amount, amount',
+                'sort_amount, debt', 'sort_amount, payments', 'sort_amount, amount', 'parent',
             );
         }
 
@@ -27,11 +27,28 @@ class ProjectsModelContracts_v2 extends ListModel
             ->select("*")
             ->from("`#__prj_contracts_v2`");
 
-        // Фильтруем по проекту.
-        $project = ProjectsHelper::getActiveProject();
-        if (is_numeric($project)) {
-            $project = (int) $project;
-            $query->where("`projectID` = {$project}");
+        $input = JFactory::getApplication()->input;
+
+        //Поиск по ID проекта (из URL)
+        $projectID = $input->getString('projectID', '');
+        if (is_numeric(($projectID))) {
+            $projectID = (int) $projectID;
+            $query->where("`projectID` = {$projectID}");
+        }
+        else {
+            // Фильтруем по проекту.
+            $project = ProjectsHelper::getActiveProject();
+            if (is_numeric($project)) {
+                $project = (int)$project;
+                $query->where("`projectID` = {$project}");
+            }
+        }
+
+        //Поиск по ID экспонента (из URL)
+        $exhibitorID = $input->getString('exhibitorID', '');
+        if (is_numeric(($exhibitorID))) {
+            $exhibitorID = (int) $exhibitorID;
+            $query->where("`exhibitorID` = {$exhibitorID}");
         }
 
         /* Сортировка */
@@ -61,6 +78,9 @@ class ProjectsModelContracts_v2 extends ListModel
             $arr['projectID'] = $item->projectID;
             $arr['exhibitor'] = $item->exhibitor;
             $arr['exhibitorID'] = $item->exhibitorID;
+            $arr['isCoExp'] = $item->isCoExp;
+            $arr['parentID'] = $item->parentID;
+            $arr['parent'] = $item->parent;
             $arr['todos'] = $item->todos;
             $arr['manager'] = $item->manager;
             $arr['status'] = JText::sprintf($item->status);
@@ -80,6 +100,12 @@ class ProjectsModelContracts_v2 extends ListModel
     private function prepare(array $arr): array
     {
         if ($this->task != 'xls') {
+            //Edit link
+            $id = $arr['id'];
+            $text = JText::sprintf('COM_PROJECTS_ACTION_GO');
+            $params = array('title' => "ID: {$id}", "style" => "font-size: 0.9em");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$id}&amp;return={$this->return}");
+            $arr['edit'] = JHtml::link($url, $text, $params);
             //Project link
             if (ProjectsHelper::canDo('projects.access.projects')) {
                 $id = $arr['projectID'];
@@ -102,6 +128,17 @@ class ProjectsModelContracts_v2 extends ListModel
             $arr['todos'] = JHtml::link($url, $text, $params);
             //Stands
             $arr['stands'] = implode(", ", $this->getStandsForContract($arr['id']));
+            //CoExp
+            if ($arr['isCoExp'] == 1 && !empty($arr['parent'])) {
+                $projectID = $arr['projectID'];
+                $parentID = $arr['parentID'];
+                $text = $arr['parent'];
+                $url = JRoute::_("index.php?option=com_projects&amp;view=contracts_v2&amp;exhibitorID={$parentID}&amp;projectID={$projectID}");
+                $arr['isCoExp'] = JHtml::link($url, $text, JText::sprintf('COM_PROJECTS_GO_FIND_PARENT'));
+            }
+            else {
+                $arr['isCoExp'] = '';
+            }
             //Currencies
             $arr['amount'] = ProjectsHelper::getCurrency((float) $arr['amount'], $arr['currency']);
             $arr['payments'] = ProjectsHelper::getCurrency((float) $arr['payments'], $arr['currency']);

@@ -34,6 +34,9 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_EXPONENT', 'exhibitor', $listDirn, $listOrder); ?>
     </th>
     <th>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_COEXP_BY', 'parent', $listDirn, $listOrder); ?>
+    </th>
+    <th>
         <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_ACTIVE_TODOS', 'todos', $listDirn, $listOrder); ?>
     </th>
     <?php if (ProjectsHelper::canDo('projects.access.contracts.full')): ?>

@@ -21,13 +21,16 @@ foreach ($this->items['items'] as $i => $item) :
             <?php echo $item['stands']; ?>
         </td>
         <td>
-            <?php echo $item['edit_link']; ?>
+            <?php echo $item['edit']; ?>
         </td>
         <td>
             <?php echo $item['project']; ?>
         </td>
         <td>
             <?php echo $item['exhibitor']; ?>
+        </td>
+        <td>
+            <?php echo $item['isCoExp']; ?>
         </td>
         <td>
             <?php echo $item['todos']; ?>
