@@ -42,7 +42,7 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         </th>
     <?php endif; ?>
     <th>
-        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_STATUS', 'status', $listDirn, $listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_STATUS', 'status_weight', $listDirn, $listOrder); ?>
     </th>
     <th>
         <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS_SHORT', 'doc_status', $listDirn, $listOrder); ?>

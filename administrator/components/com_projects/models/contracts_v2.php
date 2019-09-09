@@ -8,7 +8,8 @@ class ProjectsModelContracts_v2 extends ListModel
     {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                'id', 'num', 'dat', 'project', 'exhibitor', 'todos', 'manager', 'status', 'doc_status', 'amount', 'payment', 'debt',
+                'id', 'num', 'dat', 'project', 'exhibitor', 'todos', 'manager', 'status', 'status_weight', 'doc_status', 'amount', 'payment', 'debt',
+                'sort_amount, debt', 'sort_amount, payments', 'sort_amount, amount',
             );
         }
 
@@ -25,6 +26,22 @@ class ProjectsModelContracts_v2 extends ListModel
         $query
             ->select("*")
             ->from("`#__prj_contracts_v2`");
+
+        // Фильтруем по проекту.
+        $project = ProjectsHelper::getActiveProject();
+        if (is_numeric($project)) {
+            $project = (int) $project;
+            $query->where("`projectID` = {$project}");
+        }
+
+        /* Сортировка */
+        $orderCol  = $this->state->get('list.ordering', 'plan_dat');
+        $orderDirn = $this->state->get('list.direction', 'asc');
+        if ($orderCol == 'num') {
+            if ($orderDirn == 'ASC') $orderCol = 'LENGTH(num), num';
+            if ($orderDirn == 'DESC') $orderCol = 'LENGTH(num) desc, num';
+        }
+        $query->order($db->escape($orderCol . ' ' . $orderDirn));
 
         return $query;
     }
@@ -47,6 +64,7 @@ class ProjectsModelContracts_v2 extends ListModel
             $arr['todos'] = $item->todos;
             $arr['manager'] = $item->manager;
             $arr['status'] = JText::sprintf($item->status);
+            $arr['status_code'] = $item->status_code;
             $arr['doc_status'] = JText::sprintf(($item->doc_status == '1') ? 'JYES' : 'JNO');
             $arr['amount'] = (float) $item->amount;
             $arr['payments'] = (float) $item->payments;
@@ -84,6 +102,23 @@ class ProjectsModelContracts_v2 extends ListModel
             $arr['todos'] = JHtml::link($url, $text, $params);
             //Stands
             $arr['stands'] = implode(", ", $this->getStandsForContract($arr['id']));
+            //Currencies
+            $arr['amount'] = ProjectsHelper::getCurrency((float) $arr['amount'], $arr['currency']);
+            $arr['payments'] = ProjectsHelper::getCurrency((float) $arr['payments'], $arr['currency']);
+            //Debt
+            $debt = (float) $arr['debt'];
+            $color = ""; //Цвет текста с долгом
+            if ($debt == 0) $color = 'green';
+            elseif ($debt < 0) $color = 'red';
+            $text = ProjectsHelper::getCurrency((float) $arr['debt'], $arr['currency']);
+            $arr['debt'] = "<span style='color: {$color}'>{$text}</span>";
+            //For Accountants
+            if (ProjectsHelper::canDo('projects.access.finanses.full')) {
+                if ($debt > 0 && ($arr['status_code'] == '1' || $arr['status_code'] == '10')) {
+                    $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$arr['id']}&amp;return={$this->return}");
+                    $arr['debt'] = JHtml::link($url, $text, array("style" => "color: {$color}"));
+                }
+            }
         }
         return $arr;
     }
