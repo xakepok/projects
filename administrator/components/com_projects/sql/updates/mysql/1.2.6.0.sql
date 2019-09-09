@@ -13,8 +13,10 @@ group by contractID;
 create or replace view `s7vi9_prj_contracts_v2` as
 select c.id, if(p.contract_prefix is null, ifnull(c.number,c.number_free), concat(p.contract_prefix, ifnull(c.number,c.number_free))) as num,
        c.dat, c.currency,
+       c.isCoExp, c.parentID,
        p.title_ru as project, p.id as projectID,
        ifnull(e.title_ru_short,ifnull(e.title_ru_full,e.title_en)) as exhibitor, e.id as exhibitorID,
+       ifnull(coexp.title_ru_short,ifnull(coexp.title_ru_full,coexp.title_en)) as parent,
        ifnull(tdc.cnt,0) as todos,
        u.name as manager,
        s.title as status, s.weight as status_weight, c.status as status_code,
@@ -28,6 +30,7 @@ select c.id, if(p.contract_prefix is null, ifnull(c.number,c.number_free), conca
 from `s7vi9_prj_contracts` as `c`
          left join `s7vi9_prj_projects` `p` on c.prjID = `p`.id
          left join `s7vi9_prj_exp` `e` on c.expID = `e`.id
+         left join `s7vi9_prj_exp` `coexp` on coexp.id = `c`.parentID
          left join `s7vi9_prj_contract_todos_count` `tdc` on `tdc`.contractID = `c`.`id`
          left join `s7vi9_users` `u` on c.managerID = `u`.id
          left join `s7vi9_prj_statuses` `s` on `s`.`code` = `c`.`status`

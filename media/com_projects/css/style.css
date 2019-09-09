@@ -68,8 +68,11 @@
   width: 640px;
 }
 
-.fullfield {
-  width: 100%;
+.big-table tbody tr td {
+  font-size: 0.9em;
+}
+.big-table tbody tr td a {
+  font-size: 0.9em;
 }
 
 /*# sourceMappingURL=style.css.map */
