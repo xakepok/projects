@@ -60,13 +60,13 @@ class ProjectsControllerContracts extends AdminController
             if ($item->status != 1)
             {
                 $app->enqueueMessage(JText::sprintf('COM_PROJECTS_ERROR_CONTRACT_IS_NOT_DOGOVOR'), 'error');
-                $app->redirect('index.php?option=com_projects&view=contracts');
+                $app->redirect('index.php?option=com_projects&view=contracts_v2');
                 jexit();
             }
             if ($item->number != null)
             {
                 $app->enqueueMessage(JText::sprintf('COM_PROJECTS_ERROR_CONTRACT_ALREADY_HAVE_NUMBER', $item->number), 'error');
-                $app->redirect('index.php?option=com_projects&view=contracts');
+                $app->redirect('index.php?option=com_projects&view=contracts_v2');
                 jexit();
             }
             $data = array('number' => $number, 'id' => $item->id, 'status' => $item->status, 'managerID' => $item->managerID);
@@ -75,7 +75,7 @@ class ProjectsControllerContracts extends AdminController
             $model->save($data);
         }
         $app->enqueueMessage(JText::sprintf('COM_PROJECTS_MESSAGE_CONTRACT_HAVE_NUM', $number), 'success');
-        $app->redirect('index.php?option=com_projects&view=contracts');
+        $app->redirect('index.php?option=com_projects&view=contracts_v2');
         jexit();
     }
 
@@ -89,7 +89,7 @@ class ProjectsControllerContracts extends AdminController
             $model->setColumn($id, 1);
         }
         $app->enqueueMessage(JText::sprintf('COM_PROJECT_TASK_COLUMN_EDITED'), 'success');
-        $app->redirect('index.php?option=com_projects&view=contracts');
+        $app->redirect('index.php?option=com_projects&view=contracts_v2');
         jexit();
     }
 
@@ -103,7 +103,7 @@ class ProjectsControllerContracts extends AdminController
             $model->setColumn($id, 2);
         }
         $app->enqueueMessage(JText::sprintf('COM_PROJECT_TASK_COLUMN_EDITED'), 'success');
-        $app->redirect('index.php?option=com_projects&view=contracts');
+        $app->redirect('index.php?option=com_projects&view=contracts_v2');
         jexit();
     }
 
@@ -117,7 +117,7 @@ class ProjectsControllerContracts extends AdminController
             $model->setColumn($id, 3);
         }
         $app->enqueueMessage(JText::sprintf('COM_PROJECT_TASK_COLUMN_EDITED'), 'success');
-        $app->redirect('index.php?option=com_projects&view=contracts');
+        $app->redirect('index.php?option=com_projects&view=contracts_v2');
         jexit();
     }
 }
