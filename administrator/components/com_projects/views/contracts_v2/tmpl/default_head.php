@@ -18,10 +18,7 @@ $listDirn = $this->escape($this->state->get('list.direction'));
     </th>
     <th style="width: 4%;">
         <?php
-        if (!ProjectsHelper::canDo('projects.access.hotels.standart')) $head = 'COM_PROJECTS_HEAD_CONTRACT_STAND_SHORT';
-        if (ProjectsHelper::canDo('projects.access.hotels.standart')) $head = 'COM_PROJECTS_HEAD_CONTRACT_STANDS_ROOMS';
-        if (ProjectsHelper::canDo('projects.access.hotels.full') && ProjectsHelper::canDo('projects.access.contracts.full')) $head = 'COM_PROJECTS_HEAD_CONTRACT_STANDS_ROOMS_SHORT';
-        echo JText::sprintf($head);
+        echo JText::sprintf('COM_PROJECTS_HEAD_CONTRACT_STAND_SHORT');
         ?>
     </th>
     <th>
@@ -33,13 +30,15 @@ $listDirn = $this->escape($this->state->get('list.direction'));
     <th>
         <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_EXPONENT', 'exhibitor', $listDirn, $listOrder); ?>
     </th>
-    <th>
-        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_COEXP_BY', 'parent', $listDirn, $listOrder); ?>
-    </th>
+    <?php if ($this->userSettings['contracts_v2-column_parent']): ?>
+        <th>
+            <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_COEXP_BY', 'parent', $listDirn, $listOrder); ?>
+        </th>
+    <?php endif; ?>
     <th>
         <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_ACTIVE_TODOS', 'todos', $listDirn, $listOrder); ?>
     </th>
-    <?php if (ProjectsHelper::canDo('projects.access.contracts.full')): ?>
+    <?php if ($this->userSettings['contracts_v2-column_manager']): ?>
         <th>
             <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_MANAGER', 'manager', $listDirn, $listOrder); ?>
         </th>
@@ -47,9 +46,11 @@ $listDirn = $this->escape($this->state->get('list.direction'));
     <th>
         <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_STATUS', 'status_weight', $listDirn, $listOrder); ?>
     </th>
-    <th>
-        <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS_SHORT', 'doc_status', $listDirn, $listOrder); ?>
-    </th>
+    <?php if ($this->userSettings['contracts_v2-column_doc_status']): ?>
+        <th>
+            <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS_SHORT', 'doc_status', $listDirn, $listOrder); ?>
+        </th>
+    <?php endif; ?>
     <th style="width: 9%;">
         <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_AMOUNT', "sort_amount, amount", $listDirn, $listOrder); ?>
     </th>
@@ -59,4 +60,9 @@ $listDirn = $this->escape($this->state->get('list.direction'));
     <th style="width: 9%;">
         <?php echo JHtml::_('searchtools.sort', 'COM_PROJECTS_HEAD_CONTRACT_DEBT', "sort_amount, debt", $listDirn, $listOrder); ?>
     </th>
+    <?php if ($this->userSettings['contracts_v2-column_id']): ?>
+        <th style="width: 1%;">
+            <?php echo JHtml::_('searchtools.sort', 'ID', "id", $listDirn, $listOrder); ?>
+        </th>
+    <?php endif; ?>
 </tr>

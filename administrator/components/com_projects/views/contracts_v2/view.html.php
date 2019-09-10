@@ -8,7 +8,7 @@ class ProjectsViewContracts_v2 extends HtmlView
 {
 	protected $helper;
 	protected $sidebar = '';
-	public $items, $pagination, $uid, $state, $links, $filterForm, $activeFilters, $userSettings;
+	public $items, $pagination, $uid, $state, $links, $filterForm, $activeFilters, $userSettings, $columnsCount;
 
 	public function display($tpl = null)
 	{
@@ -17,6 +17,7 @@ class ProjectsViewContracts_v2 extends HtmlView
 	    $this->state = $this->get('State');
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
+        $this->columnsCount = $this->get('ColumnsCount');
         $this->userSettings = ProjectsHelper::getUserSettings();
         $this->removeFilters();
         $this->filterForm->setValue('limit', 'list', $this->state->get('list.limit'));

@@ -29,13 +29,15 @@ foreach ($this->items['items'] as $i => $item) :
         <td>
             <?php echo $item['exhibitor']; ?>
         </td>
-        <td>
-            <?php echo $item['isCoExp']; ?>
-        </td>
+        <?php if ($this->userSettings['contracts_v2-column_parent']): ?>
+            <td>
+                <?php echo $item['isCoExp']; ?>
+            </td>
+        <?php endif; ?>
         <td>
             <?php echo $item['todos']; ?>
         </td>
-        <?php if (ProjectsHelper::canDo('projects.access.contracts.full')): ?>
+        <?php if ($this->userSettings['contracts_v2-column_manager']): ?>
             <td>
                 <?php echo $item['manager']; ?>
             </td>
@@ -43,9 +45,11 @@ foreach ($this->items['items'] as $i => $item) :
         <td>
             <?php echo $item['status']; ?>
         </td>
-        <td>
-            <?php echo $item['doc_status']; ?>
-        </td>
+        <?php if ($this->userSettings['contracts_v2-column_doc_status']): ?>
+            <td>
+                <?php echo $item['doc_status']; ?>
+            </td>
+        <?php endif; ?>
         <td>
             <?php echo $item['amount']; ?>
         </td>
@@ -55,5 +59,10 @@ foreach ($this->items['items'] as $i => $item) :
         <td style="color: <?php echo $item['color'];?>">
             <?php echo $item['debt']; ?>
         </td>
+        <?php if ($this->userSettings['contracts_v2-column_id']): ?>
+            <td>
+                <?php echo $item['id']; ?>
+            </td>
+        <?php endif; ?>
     </tr>
 <?php endforeach; ?>

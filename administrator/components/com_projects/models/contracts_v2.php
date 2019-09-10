@@ -295,19 +295,18 @@ class ProjectsModelContracts_v2 extends ListModel
     }
 
     /**
-     * Возвращает полное ФИО или без отчества в соответствии с настройками
-     * @param string $fio полное ФИО
-     * @return string вариант ФИО из настроек
+     * Возвращает количество столбцов на странице
+     * @return int
      * @since 1.2.6.0
      */
-    private function prepareFio(string $fio): string
+    public function getColumnsCount(): int
     {
-        $result = $fio;
-        if (!$this->userSettings['contracts_v2-show_full_manager_fio']) {
-            $arr = explode(' ', $fio);
-            $result = sprintf("%s %s", $arr[0], $arr[1]);
+        $cnt = 13;
+        $columns = array('parent', 'manager', 'doc_status', 'id'); //Опциональные колонки
+        foreach ($columns as $column) {
+            if ($this->userSettings["contracts_v2-column_{$column}"]) $cnt++;
         }
-        return $result;
+        return $cnt;
     }
 
     /* Сортировка по умолчанию */
@@ -343,5 +342,21 @@ class ProjectsModelContracts_v2 extends ListModel
         return parent::getStoreId($id);
     }
 
-    private $task, $return, $options, $userSettings;
+    /**
+     * Возвращает полное ФИО или без отчества в соответствии с настройками
+     * @param string $fio полное ФИО
+     * @return string вариант ФИО из настроек
+     * @since 1.2.6.0
+     */
+    private function prepareFio(string $fio): string
+    {
+        $result = $fio;
+        if (!$this->userSettings['contracts_v2-show_full_manager_fio']) {
+            $arr = explode(' ', $fio);
+            $result = sprintf("%s %s", $arr[0], $arr[1]);
+        }
+        return $result;
+    }
+
+    private $task, $return, $userSettings;
 }

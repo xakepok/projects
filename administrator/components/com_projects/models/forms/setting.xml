@@ -98,4 +98,43 @@
                 <option value="1">JSHOW</option>
         </field>
     </fieldset>
+    <fieldset name="contracts_v2_columns">
+        <field
+                name="spacer_3"
+                type="spacer"
+                label="COM_PROJECTS_USER_SETTINGS_CONTRACTS_COLUMNS"
+        />
+        <field name="contracts_v2-column_parent"
+               type="radio"
+               class="btn-group btn-group-yesno"
+               label="COM_PROJECTS_USER_SETTINGS_CONTRACTS_COLUMNS_PARENT"
+               description="COM_PROJECTS_USER_SETTINGS_CONTRACTS_COLUMNS_PARENT_DESC">
+                <option value="0">JHIDE</option>
+                <option value="1">JSHOW</option>
+        </field>
+        <field name="contracts_v2-column_manager"
+               type="radio"
+               class="btn-group btn-group-yesno"
+               label="COM_PROJECTS_USER_SETTINGS_CONTRACTS_COLUMNS_MANAGER"
+               description="COM_PROJECTS_USER_SETTINGS_CONTRACTS_COLUMNS_MANAGER_DESC">
+                <option value="0">JHIDE</option>
+                <option value="1">JSHOW</option>
+        </field>
+        <field name="contracts_v2-column_doc_status"
+               type="radio"
+               class="btn-group btn-group-yesno"
+               label="COM_PROJECTS_USER_SETTINGS_CONTRACTS_COLUMNS_DOC_STATUS"
+               description="COM_PROJECTS_USER_SETTINGS_CONTRACTS_COLUMNS_DOC_STATUS_DESC">
+                <option value="0">JHIDE</option>
+                <option value="1">JSHOW</option>
+        </field>
+        <field name="contracts_v2-column_id"
+               type="radio"
+               class="btn-group btn-group-yesno"
+               label="COM_PROJECTS_USER_SETTINGS_CONTRACTS_COLUMNS_ID"
+               description="COM_PROJECTS_USER_SETTINGS_CONTRACTS_COLUMNS_ID_DESC">
+                <option value="0">JHIDE</option>
+                <option value="1">JSHOW</option>
+        </field>
+    </fieldset>
 </form>
