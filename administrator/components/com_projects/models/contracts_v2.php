@@ -145,6 +145,15 @@ class ProjectsModelContracts_v2 extends ListModel
             $query->where("`exhibitorID` = {$exhibitorID}");
         }
 
+        //Показываем только свои сделки, но если только неактивны фильтры по видам деятельности и тематической рубрике
+        if (!ProjectsHelper::canDo('projects.access.contracts.full'))
+        {
+            if (!is_numeric($act) && !is_numeric($rubric)) {
+                $userID = JFactory::getUser()->id;
+                $query->where("`managerID` = {$userID}");
+            }
+        }
+
         /* Сортировка */
         $orderCol  = $this->state->get('list.ordering', 'plan_dat');
         $orderDirn = $this->state->get('list.direction', 'asc');
