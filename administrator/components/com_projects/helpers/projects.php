@@ -21,6 +21,7 @@ class ProjectsHelper
         }
         if (self::canDo('projects.access.contracts.standart')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CONTRACTS'), 'index.php?option=com_projects&amp;view=contracts', $vName == 'contracts');
+            JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_CONTRACTS_V2'), 'index.php?option=com_projects&amp;view=contracts_v2', $vName == 'contracts_v2');
         }
         if (self::canDo('projects.access.exhibitors.standart')) {
             JHtmlSidebar::addEntry(Text::_('COM_PROJECTS_MENU_COMPANIES'), 'index.php?option=com_projects&amp;view=exhibitors', $vName == 'exhibitors');
