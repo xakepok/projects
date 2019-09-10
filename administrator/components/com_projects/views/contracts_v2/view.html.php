@@ -33,7 +33,8 @@ class ProjectsViewContracts_v2 extends HtmlView
 
 	private function toolbar()
 	{
-	    $bar = JToolbar::getInstance('toolbar');
+	    //$bar = JToolbar::getInstance('toolbar');
+
 		JToolBarHelper::title(Text::_('COM_PROJECTS_MENU_CONTRACTS_V2'), '');
 
         if (ProjectsHelper::canDo('projects.access.contracts.standart'))
@@ -54,13 +55,18 @@ class ProjectsViewContracts_v2 extends HtmlView
             JToolbarHelper::custom('contracts.setcolumn3', '', '', 'COM_PROJECTS_ACTION_CONTRACT_SET_COLUMN_3');
         }
 
-        $layout = new JLayoutFile('joomla.toolbar.batch');
-        $batchButtonHtml = $layout->render(array('title' => 'Settings'));
-        $bar->appendButton('Custom', $batchButtonHtml, 'batch', $listSelect = false);
+        /*
+            $layout = new JLayoutFile('joomla.toolbar.batch');
+            $batchButtonHtml = $layout->render(array('title' => 'Settings'));
+            $bar->appendButton('Custom', $batchButtonHtml, 'batch', $listSelect = false);
+         */
         if (ProjectsHelper::canDo('projects.access.contracts.standart'))
         {
             JToolbarHelper::custom('contracts.getNumber', '', '', 'COM_PROJECTS_ACTION_CONTRACT_SET_NUMBER');
         }
+
+        JToolbarHelper::custom('settings.contracts_v2', 'options', '', 'COM_PROJECTS_MENU_SETTING_VISIBILITY', false);
+
         if (ProjectsHelper::canDo('core.admin'))
 		{
 			JToolBarHelper::preferences('com_projects');

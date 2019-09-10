@@ -39,3 +39,19 @@ from `s7vi9_prj_contracts` as `c`
          left join `s7vi9_prj_exp` `e1` on `e1`.id = `c`.`payerID`
          left join `s7vi9_prj_contracts_min_dates` `cmd` on c.id = `cmd`.contractID;
 
+create table `s7vi9_prj_user_settings`
+(
+    id int auto_increment,
+    userID int not null,
+    params text default null null comment 'JSON настроек',
+    constraint `s7vi9_prj_user_settings_pk`
+        primary key (id),
+    constraint `s7vi9_prj_user_settings_s7vi9_users_id_fk`
+        foreign key (userID) references `s7vi9_users` (id)
+            on update cascade on delete cascade
+)
+    comment 'Настройки пользователей';
+
+create unique index `s7vi9_prj_user_settings_userID_uindex`
+    on `s7vi9_prj_user_settings` (userID);
+
