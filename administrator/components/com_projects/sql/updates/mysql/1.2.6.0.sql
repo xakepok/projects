@@ -18,7 +18,7 @@ select c.id, if(p.contract_prefix is null, ifnull(c.number,c.number_free), conca
        ifnull(e.title_ru_short,ifnull(e.title_ru_full,e.title_en)) as exhibitor, e.id as exhibitorID,
        ifnull(coexp.title_ru_short,ifnull(coexp.title_ru_full,coexp.title_en)) as parent,
        ifnull(tdc.cnt,0) as todos,
-       u.name as manager,
+       u.name as manager, c.managerID,
        s.title as status, s.weight as status_weight, c.status as status_code,
        IF(`c`.`currency`='rub',0,IF(`c`.`currency`='usd',1,2)) as `sort_amount`,
        c.doc_status,

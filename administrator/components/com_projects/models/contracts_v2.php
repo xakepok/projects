@@ -1,7 +1,6 @@
 <?php
 defined('_JEXEC') or die;
 use Joomla\CMS\MVC\Model\ListModel;
-use Joomla\CMS\MVC\Model\AdminModel;
 
 class ProjectsModelContracts_v2 extends ListModel
 {
@@ -9,9 +8,20 @@ class ProjectsModelContracts_v2 extends ListModel
     {
         if (empty($config['filter_fields'])) {
             $config['filter_fields'] = array(
-                'id', 'num', 'dat', 'project', 'exhibitor', 'todos', 'manager', 'status', 'status_weight', 'doc_status', 'amount', 'payment', 'debt',
-                'sort_amount, debt', 'sort_amount, payments', 'sort_amount, amount', 'parent',
-                'search', 'doc_status',
+                //Sorting                   //Filter        //Cross
+                'id',                       'search',       'manager',
+                'num',                      'currency',     'doc_status',
+                'sort_amount, debt',        'activity',
+                'dat',                      'rubric',
+                'exhibitor',                'status',
+                'todos',
+                'sort_amount, payments',
+                'sort_amount, amount',
+                'status_weight',
+                'amount',
+                'payment',
+                'debt',
+                'parent',
             );
         }
 
@@ -46,12 +56,73 @@ class ProjectsModelContracts_v2 extends ListModel
                 $query->where("(`exhibitor` LIKE {$search})");
             }
         }
+
         // Фильтруем по статусу присланного договора.
         $doc_status = $this->getState('filter.doc_status');
         if (is_numeric($doc_status)) {
             $doc_status = (int) $doc_status;
             $query->where("`doc_status` = {$doc_status}");
         }
+
+        // Фильтруем по валюте.
+        $currency = $this->getState('filter.currency');
+        if (!empty($currency))
+        {
+            $currency = $db->q($currency);
+            $query->where("`currency` LIKE {$currency}");
+        }
+
+        // Фильтруем по менеджеру.
+        $manager = $this->getState('filter.manager');
+        if (is_numeric($manager)) {
+            $manager = (int) $manager;
+            $query->where("`managerID` = {$manager}");
+        }
+
+        // Фильтруем по видам деятельности.
+        $act = $this->getState('filter.activity');
+        if (is_numeric($act)) {
+            $exponents = ProjectsHelper::getExponentsInActivities($act);
+            if (!empty($exponents)) {
+                $exponents = implode(', ', $exponents);
+                $query->where("`exhibitorID` IN ({$exponents})");
+            }
+        }
+
+        //Фильтруем по тематикам разделов
+        $rubric = $this->getState('filter.rubric');
+        if (is_numeric($rubric)) {
+            if ($rubric != -1) {
+                $ids = ProjectsHelper::getRubricContracts($rubric);
+                if (!empty($ids)) {
+                    $ids = implode(', ', $ids);
+                    $query->where("`id` IN ({$ids})");
+                } else {
+                    $query->where("`id` = 0");
+                }
+            }
+            else {
+                $ids = ProjectsHelper::getRubricContracts();
+                if (!empty($ids)) {
+                    $ids = implode(', ', $ids);
+                    $query->where("`id` NOT IN ({$ids})");
+                }
+            }
+        }
+
+        // Фильтруем по статусу.
+        $status = $this->getState('filter.status');
+        if (is_array($status)) {
+            if (!empty($status)) {
+                $statuses = implode(', ', $status);
+                $query->where("`status_code` IN ({$statuses})");
+            }
+            else
+            {
+                $query->where("`status_code` IS NOT NULL");
+            }
+        }
+
         //Поиск по ID проекта (из URL)
         $projectID = $input->getString('projectID', '');
         if (is_numeric(($projectID))) {
@@ -66,6 +137,7 @@ class ProjectsModelContracts_v2 extends ListModel
                 $query->where("`projectID` = {$project}");
             }
         }
+
         //Поиск по ID экспонента (из URL)
         $exhibitorID = $input->getString('exhibitorID', '');
         if (is_numeric(($exhibitorID))) {
@@ -232,17 +304,13 @@ class ProjectsModelContracts_v2 extends ListModel
     /* Сортировка по умолчанию */
     protected function populateState($ordering = null, $direction = null)
     {
-        $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
+        $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', '', 'string');
         $this->setState('filter.search', $search);
-        $project = $this->getUserStateFromRequest($this->context . '.filter.project', 'filter_project');
-        $this->setState('filter.project', $project);
-        $exhibitor = $this->getUserStateFromRequest($this->context . '.filter.exhibitor', 'filter_exhibitor');
-        $this->setState('filter.exhibitor', $exhibitor);
-        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager');
+        $manager = $this->getUserStateFromRequest($this->context . '.filter.manager', 'filter_manager', '', 'string');
         $this->setState('filter.manager', $manager);
-        $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status');
+        $status = $this->getUserStateFromRequest($this->context . '.filter.status', 'filter_status', '', 'string');
         $this->setState('filter.status', $status);
-        $currency = $this->getUserStateFromRequest($this->context . '.filter.currency', 'filter_currency');
+        $currency = $this->getUserStateFromRequest($this->context . '.filter.currency', 'filter_currency', '', 'string');
         $this->setState('filter.currency', $currency);
         $activity = $this->getUserStateFromRequest($this->context . '.filter.activity', 'filter_activity', '', 'string');
         $this->setState('filter.state', $activity);
@@ -257,8 +325,6 @@ class ProjectsModelContracts_v2 extends ListModel
     protected function getStoreId($id = '')
     {
         $id .= ':' . $this->getState('filter.search');
-        $id .= ':' . $this->getState('filter.project');
-        $id .= ':' . $this->getState('filter.exhibitor');
         $id .= ':' . $this->getState('filter.manager');
         $id .= ':' . $this->getState('filter.status');
         $id .= ':' . $this->getState('filter.currency');
