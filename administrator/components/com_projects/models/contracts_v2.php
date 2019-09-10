@@ -1,6 +1,7 @@
 <?php
 defined('_JEXEC') or die;
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\MVC\Model\AdminModel;
 
 class ProjectsModelContracts_v2 extends ListModel
 {
@@ -16,19 +17,7 @@ class ProjectsModelContracts_v2 extends ListModel
 
         $this->task = JFactory::getApplication()->input->getString('task', 'display');
         $this->return = ProjectsHelper::getReturnUrl();
-        $this->options = array(
-            'content' => array(
-                'full-manager-fio' => false,
-            ),
-            'filters' => array(
-                'doc_status' => false,
-                'currency' => true,
-                'manager' => true,
-                'activity' => true,
-                'rubric' => true,
-                'status' => true,
-            ),
-        );
+        $this->userSettings = ProjectsHelper::getUserSettings();
 
         parent::__construct($config);
     }
@@ -92,6 +81,19 @@ class ProjectsModelContracts_v2 extends ListModel
             if ($orderDirn == 'DESC') $orderCol = 'LENGTH(num) desc, num';
         }
         $query->order($db->escape($orderCol . ' ' . $orderDirn));
+
+        //Лимит
+        $limit = $this->userSettings['general_limit'];
+        if (is_numeric($limit)) {
+            $limit = (int) $limit;
+            $from_state = $this->getState('list.limit');
+            $this->setState('list.limit', $limit);
+            if ($limit != $from_state)
+            {
+                $this->setState('list.limit', $limit);
+                //JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_PROJECT_TASK_LIMIT_NOT_ENQ'), 'warning');
+            }
+        }
 
         return $query;
     }
@@ -220,7 +222,7 @@ class ProjectsModelContracts_v2 extends ListModel
     private function prepareFio(string $fio): string
     {
         $result = $fio;
-        if (!$this->options['content']['full-manager-fio']) {
+        if (!$this->userSettings['contracts_v2-show_full_manager_fio']) {
             $arr = explode(' ', $fio);
             $result = sprintf("%s %s", $arr[0], $arr[1]);
         }
@@ -248,6 +250,7 @@ class ProjectsModelContracts_v2 extends ListModel
         $this->setState('filter.rubric', $rubric);
         $doc_status = $this->getUserStateFromRequest($this->context . '.filter.doc_status', 'filter_doc_status');
         $this->setState('filter.doc_status', $doc_status);
+
         parent::populateState('plan_dat', 'asc');
     }
 
@@ -265,5 +268,5 @@ class ProjectsModelContracts_v2 extends ListModel
         return parent::getStoreId($id);
     }
 
-    private $task, $return, $options;
+    private $task, $return, $options, $userSettings;
 }

@@ -73,6 +73,18 @@ class ProjectsHelper
     }
 
     /**
+     * Возвращает массив настроек пользователя
+     * @return array массив с настройками пользователя
+     * @since 1.2.6.0
+     */
+    public static function getUserSettings(): array
+    {
+        $model = AdminModel::getInstance('Setting', 'ProjectsModel');
+        $item = $model->getItem(array('userID' => JFactory::getUser()->id));
+        return $item ?? array();
+    }
+
+    /**
      * Возвращает массив с ID сделок, к которым привязан пользователь
      * @param bool $advanced возвратить подробную информацию или нет
      * @return array массив с ID сделок

@@ -5,13 +5,29 @@
                 name="id"
                 type="hidden"
         />
+        <field
+                name="general_limit"
+                type="list"
+                label="COM_PROJECTS_USER_SETTINGS_CONTRACTS_CONTENT_LIST_LIMIT"
+                description="COM_PROJECTS_USER_SETTINGS_CONTRACTS_CONTENT_LIST_LIMIT_DESC"
+                >
+            <option value="">COM_PROJECTS_USER_SETTINGS_CONTRACTS_CONTENT_LIST_LIMIT_INDIVIDUAL</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="500">500</option>
+            <option value="0">JALL</option>
+        </field>
     </fieldset>
     <fieldset name="contracts_v2">
         <field
                 name="spacer_1"
                 type="spacer"
                 label="COM_PROJECTS_USER_SETTINGS_CONTRACTS_CONTENT"
-                class="strong"
         />
         <field
                 name="contracts_v2-show_full_manager_fio"
@@ -26,7 +42,6 @@
                 name="spacer_2"
                 type="spacer"
                 label="COM_PROJECTS_USER_SETTINGS_CONTRACTS_FILTERS"
-                class="font-weight-bold"
         />
         <field
                 name="contracts_v2-filter_doc_status"

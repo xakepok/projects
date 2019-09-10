@@ -8,7 +8,7 @@ class ProjectsViewContracts_v2 extends HtmlView
 {
 	protected $helper;
 	protected $sidebar = '';
-	public $items, $pagination, $uid, $state, $links, $filterForm, $activeFilters;
+	public $items, $pagination, $uid, $state, $links, $filterForm, $activeFilters, $userSettings;
 
 	public function display($tpl = null)
 	{
@@ -17,7 +17,9 @@ class ProjectsViewContracts_v2 extends HtmlView
 	    $this->state = $this->get('State');
         $this->filterForm = $this->get('FilterForm');
         $this->activeFilters = $this->get('ActiveFilters');
-        //$this->filterForm->removeField('activity', 'filter');
+        $this->userSettings = ProjectsHelper::getUserSettings();
+        $this->removeFilters();
+        $this->filterForm->setValue('limit', 'list', $this->state->get('list.limit'));
 
         // Show the toolbar
 		$this->toolbar();
@@ -72,4 +74,14 @@ class ProjectsViewContracts_v2 extends HtmlView
 			JToolBarHelper::preferences('com_projects');
 		}
 	}
+
+	private function removeFilters()
+    {
+        if (!$this->userSettings['contracts_v2-filter_doc_status']) $this->filterForm->removeField('doc_status', 'filter');
+        if (!$this->userSettings['contracts_v2-filter_currency']) $this->filterForm->removeField('currency', 'filter');
+        if (!$this->userSettings['contracts_v2-filter_manager']) $this->filterForm->removeField('manager', 'filter');
+        if (!$this->userSettings['contracts_v2-filter_activity']) $this->filterForm->removeField('activity', 'filter');
+        if (!$this->userSettings['contracts_v2-filter_rubric']) $this->filterForm->removeField('rubric', 'filter');
+        if (!$this->userSettings['contracts_v2-filter_status']) $this->filterForm->removeField('status', 'filter');
+    }
 }

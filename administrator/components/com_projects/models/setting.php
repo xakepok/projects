@@ -11,6 +11,7 @@ class ProjectsModelSetting extends AdminModel
 
         //Настройки по умолчанию
         $this->default = array(
+            'general_limit' => '',
             'contracts_v2-show_full_manager_fio' => 0,
             'contracts_v2-filter_doc_status' => 0,
             'contracts_v2-filter_currency' => 1,
