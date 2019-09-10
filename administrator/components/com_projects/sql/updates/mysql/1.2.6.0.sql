@@ -16,6 +16,7 @@ select c.id, if(p.contract_prefix is null, ifnull(c.number,c.number_free), conca
        c.isCoExp, c.parentID,
        p.title_ru as project, p.id as projectID,
        ifnull(e.title_ru_short,ifnull(e.title_ru_full,e.title_en)) as exhibitor, e.id as exhibitorID,
+       e.title_ru_short, e.title_ru_full, e.title_en,
        ifnull(coexp.title_ru_short,ifnull(coexp.title_ru_full,coexp.title_en)) as parent,
        ifnull(tdc.cnt,0) as todos,
        u.name as manager, c.managerID,

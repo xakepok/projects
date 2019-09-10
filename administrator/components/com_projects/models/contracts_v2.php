@@ -53,7 +53,7 @@ class ProjectsModelContracts_v2 extends ListModel
             }
             else {
                 $search = $db->q("%{$search}%");
-                $query->where("(`exhibitor` LIKE {$search})");
+                $query->where("(`title_ru_short` LIKE {$search} OR `title_ru_full` LIKE {$search} OR `title_en` LIKE {$search})");
             }
         }
 
@@ -133,7 +133,7 @@ class ProjectsModelContracts_v2 extends ListModel
             // Фильтруем по проекту.
             $project = ProjectsHelper::getActiveProject();
             if (is_numeric($project)) {
-                $project = (int)$project;
+                $project = (int) $project;
                 $query->where("`projectID` = {$project}");
             }
         }
