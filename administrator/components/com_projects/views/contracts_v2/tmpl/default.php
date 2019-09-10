@@ -22,7 +22,7 @@ $return = ProjectsHelper::getReturnUrl();
               name="adminForm" id="adminForm">
             <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
             <table class="table table-striped">
-                <div><?php echo JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=contracts_v2.exportxls"),JText::sprintf('COM_PROJECTS_ACTION_EXPORT_XLS')) ;?></div>
+                <div><?php //echo JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=contracts_v2.exportxls"),JText::sprintf('COM_PROJECTS_ACTION_EXPORT_XLS')) ;?></div>
                 <thead><?php echo $this->loadTemplate('head'); ?></thead>
                 <tbody><?php echo $this->loadTemplate('body'); ?></tbody>
                 <?php //echo $this->loadTemplate('amount'); ?>
