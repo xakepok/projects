@@ -19,11 +19,16 @@ class JFormFieldProject extends JFormFieldList
             ->order("`title`");
         if ($view != 'projects') {
             $groups = implode(', ', JFactory::getUser()->groups);
-            $query->where("`groupID` IN ({$groups})");
+            $query
+                ->where("`groupID` IN ({$groups})")
+                ->order("date_start desc");
         }
         if ($view == 'contract')
         {
-            $query->where("`priceID` IS NOT NULL");
+            $query
+                ->where("`priceID` IS NOT NULL")
+                ->where("date_end >= curdate()")
+                ->order("date_start");
         }
         $session = JFactory::getSession();
         if ($view == 'contract' && $session->get('projectID') != null)
