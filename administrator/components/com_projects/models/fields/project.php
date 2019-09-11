@@ -27,8 +27,12 @@ class JFormFieldProject extends JFormFieldList
         {
             $query
                 ->where("`priceID` IS NOT NULL")
-                ->where("date_end >= curdate()")
-                ->order("date_start");
+                ->order("date_start desc");
+            $id = JFactory::getApplication()->input->getInt('id', 0);
+            if ($id == 0)
+            {
+                $query->where("date_end >= curdate()");
+            }
         }
         $session = JFactory::getSession();
         if ($view == 'contract' && $session->get('projectID') != null)
