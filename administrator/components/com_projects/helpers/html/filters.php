@@ -249,8 +249,8 @@ abstract class ProjectsHtmlFilters
         $query
             ->select("`id`, `title_ru`")
             ->from('#__prj_projects')
-            ->order("`title`")
-            ->where("`groupID` IN ({$groups})");
+            ->where("`groupID` IN ({$groups})")
+            ->order("date_start desc");
 
         $result = $db->setQuery($query)->loadObjectList();
 
