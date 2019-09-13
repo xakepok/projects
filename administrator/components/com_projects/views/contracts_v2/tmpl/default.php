@@ -25,7 +25,7 @@ $return = ProjectsHelper::getReturnUrl();
                 <div><?php //echo JHtml::link(JRoute::_("index.php?option=com_projects&amp;task=contracts_v2.exportxls"),JText::sprintf('COM_PROJECTS_ACTION_EXPORT_XLS')) ;?></div>
                 <thead><?php echo $this->loadTemplate('head'); ?></thead>
                 <tbody><?php echo $this->loadTemplate('body'); ?></tbody>
-                <?php //echo $this->loadTemplate('amount'); ?>
+                <?php if (is_numeric(ProjectsHelper::getActiveProject())) echo $this->loadTemplate('amount'); ?>
                 <tfoot><?php echo $this->loadTemplate('foot'); ?></tfoot>
             </table>
             <?php // load the modal for displaying the batch options

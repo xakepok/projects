@@ -29,6 +29,8 @@ class ProjectsModelContracts_v2 extends ListModel
         $this->return = ProjectsHelper::getReturnUrl();
         $this->userSettings = ProjectsHelper::getUserSettings();
 
+        $this->statusesAcceptContracts = array(1, 2, 3, 4, 10); //Статусы для подсчёта итоговой суммы
+
         parent::__construct($config);
     }
 
@@ -116,6 +118,7 @@ class ProjectsModelContracts_v2 extends ListModel
             if (!empty($status)) {
                 $statuses = implode(', ', $status);
                 $query->where("`status_code` IN ({$statuses})");
+                $this->statusesAcceptContracts = $status;
             }
             else
             {
@@ -172,7 +175,6 @@ class ProjectsModelContracts_v2 extends ListModel
             if ($limit != $from_state)
             {
                 $this->setState('list.limit', $limit);
-                //JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_PROJECT_TASK_LIMIT_NOT_ENQ'), 'warning');
             }
         }
 
@@ -182,7 +184,7 @@ class ProjectsModelContracts_v2 extends ListModel
     public function getItems()
     {
         $items = parent::getItems();
-        $result = array('items' => array());
+        $result = array('items' => array(), 'total' => array());
 
         foreach ($items as $item) {
             $arr = array();
@@ -208,6 +210,27 @@ class ProjectsModelContracts_v2 extends ListModel
             $arr['payerID'] = (float) $item->payerID;
             $arr['payer'] = (float) $item->payer;
             $result['items'][] = $this->prepare($arr);
+        }
+        //Итоговые суммы
+        $projectID = ProjectsHelper::getActiveProject();
+
+        if (is_numeric($projectID)) {
+            $amounts = ProjectsHelper::getProjectAmount($projectID, $this->statusesAcceptContracts);
+            $payments = ProjectsHelper::getProjectPayments($projectID, $this->statusesAcceptContracts);
+            $debt = array();
+            foreach ($amounts as $currency => $amount) {
+                $debt[$currency] = $amount ?? 0;
+                $amounts[$currency] = ProjectsHelper::getCurrency((float) $amount, $currency);
+            }
+            if (!isset($amounts['usd'])) $amounts['usd'] = ProjectsHelper::getCurrency((float) 0, 'usd');
+            foreach ($payments as $currency => $payment) {
+                $debt[$currency] -= $payment ?? 0;
+                $payments[$currency] = ProjectsHelper::getCurrency((float) $payment, $currency);
+            }
+            foreach ($debt as $currency => $amount) $debt[$currency] = ProjectsHelper::getCurrency((float) $amount, $currency);
+            $result['total']['amounts'] = $amounts;
+            $result['total']['payments'] = $payments;
+            $result['total']['debt'] = $debt;
         }
 
         return $result;
@@ -358,5 +381,5 @@ class ProjectsModelContracts_v2 extends ListModel
         return $result;
     }
 
-    private $task, $return, $userSettings;
+    private $task, $return, $userSettings, $statusesAcceptContracts;
 }
