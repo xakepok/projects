@@ -39,6 +39,14 @@
             <option value="1">COM_PROJECTS_USER_SETTINGS_CONTRACTS_SHOW_FULL_FIO_1</option>
         </field>
         <field
+                name="contracts_v2-position_total"
+                type="list"
+                label="COM_PROJECTS_USER_SETTINGS_CONTRACTS_POSITION_TOTAL"
+                description="COM_PROJECTS_USER_SETTINGS_CONTRACTS_POSITION_TOTAL_DESC">
+            <option value="0">COM_PROJECTS_USER_SETTINGS_CONTRACTS_POSITION_TOTAL_0</option>
+            <option value="1">COM_PROJECTS_USER_SETTINGS_CONTRACTS_POSITION_TOTAL_1</option>
+        </field>
+        <field
                 name="spacer_2"
                 type="spacer"
                 label="COM_PROJECTS_USER_SETTINGS_CONTRACTS_FILTERS"

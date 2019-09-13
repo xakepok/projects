@@ -13,6 +13,7 @@ class ProjectsModelSetting extends AdminModel
         $this->default = array(
             'general_limit' => '',
             'contracts_v2-show_full_manager_fio' => 0,
+            'contracts_v2-position_total' => 1,
             'contracts_v2-filter_doc_status' => 0,
             'contracts_v2-filter_currency' => 1,
             'contracts_v2-filter_manager' => 1,
@@ -40,6 +41,10 @@ class ProjectsModelSetting extends AdminModel
             return array_merge(array('id' => null), $this->default);
         }
         $params = array_merge(array('id' => $item->id), $item->params);
+        //Автодополнение новых значений параметров (которые появляются по мере разработки и не заданы пользователем) из значений по умолчанию
+        foreach ($this->default as $param => $value) {
+            if (!isset($params[$param])) $params[$param] = $value;
+        }
 
         return $params;
     }
