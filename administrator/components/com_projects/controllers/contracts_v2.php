@@ -25,10 +25,10 @@ class ProjectsControllerContracts_v2 extends AdminController
         header("Content-Disposition: attachment; filename=Contracts.xls");
         $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
         if ($objWriter->save('php://output')) {
-            echo 'ok';
+            header('Set-Cookie: fileLoading=true');
+            $this->setRedirect("index.php?option=com_projects&view=contracts_v2");
+            $this->redirect();
         }
-        //$this->setRedirect("index.php?option=com_projects&view=contracts_v2");
-        //$this->redirect();
         jexit();
     }
 }
