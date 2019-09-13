@@ -61,6 +61,7 @@ class ProjectsViewContracts_v2 extends HtmlView
             JToolbarHelper::custom('contracts.getNumber', '', '', 'COM_PROJECTS_ACTION_CONTRACT_SET_NUMBER');
         }
 
+        JToolbarHelper::custom('contracts_v2.export', 'download', '', 'COM_PROJECTS_ACTION_EXPORT_XLS', false);
         JToolbarHelper::custom('settings.contracts_v2', 'options', '', 'COM_PROJECTS_MENU_SETTING_VISIBILITY', false);
 
         if (ProjectsHelper::canDo('core.admin'))

@@ -30,6 +30,21 @@ class ProjectsModelContracts_v2 extends ListModel
         $this->userSettings = ProjectsHelper::getUserSettings();
 
         $this->statusesAcceptContracts = array(1, 2, 3, 4, 10); //Статусы для подсчёта итоговой суммы
+        $this->titlesColumns = array( //Названия колонок для экспорта
+            'num' => 'COM_PROJECTS_HEAD_CONTRACT_NUMBER_SHORT',
+            'dat' => 'COM_PROJECTS_HEAD_CONTRACT_DATE_DOG',
+            'stands' => 'COM_PROJECTS_HEAD_CONTRACT_STAND_SHORT',
+            'project' => 'COM_PROJECTS_HEAD_CONTRACT_PROJECT',
+            'exhibitor' => 'COM_PROJECTS_HEAD_CONTRACT_EXPONENT',
+            'parent' => 'COM_PROJECTS_HEAD_CONTRACT_COEXP_BY',
+            'todos' => 'COM_PROJECTS_HEAD_CONTRACT_ACTIVE_TODOS',
+            'manager' => 'COM_PROJECTS_HEAD_CONTRACT_MANAGER',
+            'status' => 'COM_PROJECTS_HEAD_CONTRACT_STATUS',
+            'doc_status' => 'COM_PROJECTS_HEAD_CONTRACT_DOC_STATUS_SHORT',
+            'amount' => 'COM_PROJECTS_HEAD_CONTRACT_AMOUNT',
+            'payments' => 'COM_PROJECTS_HEAD_SCORE_PAYMENT',
+            'debt' => 'COM_PROJECTS_HEAD_CONTRACT_DEBT',
+        );
 
         parent::__construct($config);
     }
@@ -184,7 +199,7 @@ class ProjectsModelContracts_v2 extends ListModel
     public function getItems()
     {
         $items = parent::getItems();
-        $result = array('items' => array(), 'total' => array());
+        $result = array('items' => array(), 'total' => array(), 'head' => $this->titlesColumns);
 
         foreach ($items as $item) {
             $arr = array();
@@ -211,92 +226,83 @@ class ProjectsModelContracts_v2 extends ListModel
             $arr['payer'] = (float) $item->payer;
             $result['items'][] = $this->prepare($arr);
         }
-        //Итоговые суммы
-        $projectID = ProjectsHelper::getActiveProject();
 
-        if (is_numeric($projectID)) {
-            $amounts = ProjectsHelper::getProjectAmount($projectID, $this->statusesAcceptContracts);
-            $payments = ProjectsHelper::getProjectPayments($projectID, $this->statusesAcceptContracts);
-            $debt = array();
-            foreach ($amounts as $currency => $amount) {
-                $debt[$currency] = $amount ?? 0;
-                $amounts[$currency] = ProjectsHelper::getCurrency((float) $amount, $currency);
+        if ($this->task != 'export') {
+            //Итоговые суммы
+            $projectID = ProjectsHelper::getActiveProject();
+            if (is_numeric($projectID)) {
+                $amounts = ProjectsHelper::getProjectAmount($projectID, $this->statusesAcceptContracts);
+                $payments = ProjectsHelper::getProjectPayments($projectID, $this->statusesAcceptContracts);
+                $debt = array();
+                foreach ($amounts as $currency => $amount) {
+                    $debt[$currency] = $amount ?? 0;
+                    $amounts[$currency] = ProjectsHelper::getCurrency((float) $amount, $currency);
+                }
+                if (!isset($amounts['usd'])) $amounts['usd'] = ProjectsHelper::getCurrency((float) 0, 'usd');
+                foreach ($payments as $currency => $payment) {
+                    $debt[$currency] -= $payment ?? 0;
+                    $payments[$currency] = ProjectsHelper::getCurrency((float) $payment, $currency);
+                }
+                foreach ($debt as $currency => $amount) $debt[$currency] = ProjectsHelper::getCurrency((float) $amount, $currency);
+                $result['total']['amounts'] = $amounts;
+                $result['total']['payments'] = $payments;
+                $result['total']['debt'] = $debt;
             }
-            if (!isset($amounts['usd'])) $amounts['usd'] = ProjectsHelper::getCurrency((float) 0, 'usd');
-            foreach ($payments as $currency => $payment) {
-                $debt[$currency] -= $payment ?? 0;
-                $payments[$currency] = ProjectsHelper::getCurrency((float) $payment, $currency);
-            }
-            foreach ($debt as $currency => $amount) $debt[$currency] = ProjectsHelper::getCurrency((float) $amount, $currency);
-            $result['total']['amounts'] = $amounts;
-            $result['total']['payments'] = $payments;
-            $result['total']['debt'] = $debt;
         }
 
         return $result;
     }
 
-    private function prepare(array $arr): array
+    public function export($items)
     {
-        if ($this->task != 'xls') {
-            //Edit link
-            $id = $arr['id'];
-            $text = JText::sprintf('COM_PROJECTS_ACTION_GO');
-            $params = array('title' => "Contract ID: {$id}");
-            $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$id}&amp;return={$this->return}");
-            $arr['edit'] = JHtml::link($url, $text, $params);
-            //Project link
-            if (ProjectsHelper::canDo('projects.access.projects')) {
-                $id = $arr['projectID'];
-                $text = $arr['project'];
-                $params = array('title' => "Project ID: {$id}");
-                $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$id}&amp;return={$this->return}");
-                $arr['project'] = JHtml::link($url, $text, $params);
-            }
-            //Exhibitor link
-            $id = $arr['exhibitorID'];
-            $text = $arr['exhibitor'];
-            $params = array('title' => "Exhibitor ID: {$id}");
-            $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$id}&amp;return={$this->return}");
-            $arr['exhibitor'] = JHtml::link($url, $text, $params);
-            //Todos link
-            $id = $arr['id'];
-            $text = $arr['todos'];
-            $params = array("style" => "font-size: 0.9em");
-            $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$id}");
-            $arr['todos'] = JHtml::link($url, $text, $params);
-            //Stands
-            $arr['stands'] = implode(", ", $this->getStandsForContract($arr['id']));
-            //CoExp
-            if ($arr['isCoExp'] == 1 && !empty($arr['parent'])) {
-                $projectID = $arr['projectID'];
-                $parentID = $arr['parentID'];
-                $text = $arr['parent'];
-                $url = JRoute::_("index.php?option=com_projects&amp;view=contracts_v2&amp;exhibitorID={$parentID}&amp;projectID={$projectID}");
-                $arr['isCoExp'] = JHtml::link($url, $text, array('title' => "Parent's contract ID: {$parentID}"));
-            }
-            else {
-                $arr['isCoExp'] = '';
-            }
-            //Currencies
-            $arr['amount'] = ProjectsHelper::getCurrency((float) $arr['amount'], $arr['currency']);
-            $arr['payments'] = ProjectsHelper::getCurrency((float) $arr['payments'], $arr['currency']);
-            //Debt
-            $debt = (float) $arr['debt'];
-            $color = ""; //Цвет текста с долгом
-            if ($debt == 0) $color = 'green';
-            elseif ($debt < 0) $color = 'red';
-            $text = ProjectsHelper::getCurrency((float) $arr['debt'], $arr['currency']);
-            $arr['debt'] = "<span style='color: {$color}'>{$text}</span>";
-            //For Accountants
-            if (ProjectsHelper::canDo('projects.access.finanses.full')) {
-                if ($debt > 0 && ($arr['status_code'] == '1' || $arr['status_code'] == '10')) {
-                    $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$arr['id']}&amp;return={$this->return}");
-                    $arr['debt'] = JHtml::link($url, $text, array("style" => "color: {$color}"));
-                }
+        JLoader::discover('PHPExcel', JPATH_LIBRARIES);
+        JLoader::register('PHPExcel', JPATH_LIBRARIES . '/PHPExcel.php');
+        $xls = new PHPExcel();
+        $xls->setActiveSheetIndex(0);
+        $sheet = $xls->getActiveSheet();
+        $sheet->setTitle(JText::sprintf('COM_PROJECTS_MENU_CONTRACTS'));
+        $titles = array_values($this->titlesColumns);
+        $heads = array_keys($this->titlesColumns);
+        //Заголовки
+        for ($i = 0; $i < count($titles); $i++) {
+            $sheet->setCellValueByColumnAndRow($i, 1, JText::sprintf($titles[$i]));
+        }
+        //Данные
+        foreach ($items as $i => $item) {
+            $j = 0;
+            foreach ($heads as $head) {
+                $sheet->setCellValueByColumnAndRow($j, $i+2, $item[$head]);
+                $j++;
             }
         }
-        return $arr;
+        //Стилизация
+        $sheet->getColumnDimension('A')->setWidth(8);
+        $sheet->getColumnDimension('B')->setWidth(14);
+        $sheet->getColumnDimension('C')->setWidth(14);
+        $sheet->getColumnDimension('D')->setWidth(16);
+        $sheet->getColumnDimension('E')->setWidth(35);
+        $sheet->getColumnDimension('F')->setWidth(35);
+        $sheet->getColumnDimension('G')->setWidth(8);
+        $sheet->getColumnDimension('H')->setWidth(30);
+        $sheet->getColumnDimension('I')->setWidth(13);
+        $sheet->getColumnDimension('J')->setWidth(8);
+        $sheet->getColumnDimension('K')->setWidth(19);
+        $sheet->getColumnDimension('L')->setWidth(19);
+        $sheet->getColumnDimension('M')->setWidth(19);
+        $sheet->getStyle('A1')->getFont()->setBold(true);
+        $sheet->getStyle('B1')->getFont()->setBold(true);
+        $sheet->getStyle('C1')->getFont()->setBold(true);
+        $sheet->getStyle('D1')->getFont()->setBold(true);
+        $sheet->getStyle('E1')->getFont()->setBold(true);
+        $sheet->getStyle('F1')->getFont()->setBold(true);
+        $sheet->getStyle('G1')->getFont()->setBold(true);
+        $sheet->getStyle('H1')->getFont()->setBold(true);
+        $sheet->getStyle('I1')->getFont()->setBold(true);
+        $sheet->getStyle('J1')->getFont()->setBold(true);
+        $sheet->getStyle('K1')->getFont()->setBold(true);
+        $sheet->getStyle('L1')->getFont()->setBold(true);
+        $sheet->getStyle('M1')->getFont()->setBold(true);
+        return $xls;
     }
 
     /**
@@ -312,7 +318,12 @@ class ProjectsModelContracts_v2 extends ListModel
         $tip = ProjectsHelper::getContractType($contractID);
         foreach ($stands as $stand) {
             $url = JRoute::_("index.php?option=com_projects&amp;task=stand.edit&amp;id={$stand->id}&amp;contractID={$stand->contractID}&amp;return={$this->return}");
-            $result[] = ($contractID != $stand->contractID && $tip == 0) ? $stand->number : JHtml::link($url, ($tip == 0) ? $stand->number : $stand->title);
+            if ($this->task != 'export') {
+                $result[] = ($contractID != $stand->contractID && $tip == 0) ? $stand->number : JHtml::link($url, ($tip == 0) ? $stand->number : $stand->title);
+            }
+            else {
+                $result[] = $stand->number;
+            }
         }
         return $result;
     }
@@ -365,6 +376,69 @@ class ProjectsModelContracts_v2 extends ListModel
         return parent::getStoreId($id);
     }
 
+    private function prepare(array $arr): array
+    {
+        if ($this->task != 'export') {
+            //Edit link
+            $id = $arr['id'];
+            $text = JText::sprintf('COM_PROJECTS_ACTION_GO');
+            $params = array('title' => "Contract ID: {$id}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=contract.edit&amp;id={$id}&amp;return={$this->return}");
+            $arr['edit'] = JHtml::link($url, $text, $params);
+            //Project link
+            if (ProjectsHelper::canDo('projects.access.projects')) {
+                $id = $arr['projectID'];
+                $text = $arr['project'];
+                $params = array('title' => "Project ID: {$id}");
+                $url = JRoute::_("index.php?option=com_projects&amp;task=project.edit&amp;id={$id}&amp;return={$this->return}");
+                $arr['project'] = JHtml::link($url, $text, $params);
+            }
+            //Exhibitor link
+            $id = $arr['exhibitorID'];
+            $text = $arr['exhibitor'];
+            $params = array('title' => "Exhibitor ID: {$id}");
+            $url = JRoute::_("index.php?option=com_projects&amp;task=exhibitor.edit&amp;id={$id}&amp;return={$this->return}");
+            $arr['exhibitor'] = JHtml::link($url, $text, $params);
+            //Todos link
+            $id = $arr['id'];
+            $text = $arr['todos'];
+            $params = array("style" => "font-size: 0.9em");
+            $url = JRoute::_("index.php?option=com_projects&amp;view=todos&amp;contractID={$id}");
+            $arr['todos'] = JHtml::link($url, $text, $params);
+            //CoExp
+            if ($arr['isCoExp'] == 1 && !empty($arr['parent'])) {
+                $projectID = $arr['projectID'];
+                $parentID = $arr['parentID'];
+                $text = $arr['parent'];
+                $url = JRoute::_("index.php?option=com_projects&amp;view=contracts_v2&amp;exhibitorID={$parentID}&amp;projectID={$projectID}");
+                $arr['isCoExp'] = JHtml::link($url, $text, array('title' => "Parent's contract ID: {$parentID}"));
+            }
+            else {
+                $arr['isCoExp'] = '';
+            }
+            //Currencies
+            $arr['amount'] = ProjectsHelper::getCurrency((float) $arr['amount'], $arr['currency']);
+            $arr['payments'] = ProjectsHelper::getCurrency((float) $arr['payments'], $arr['currency']);
+            //Debt
+            $debt = (float) $arr['debt'];
+            $color = ""; //Цвет текста с долгом
+            if ($debt == 0) $color = 'green';
+            elseif ($debt < 0) $color = 'red';
+            $text = ProjectsHelper::getCurrency((float) $arr['debt'], $arr['currency']);
+            $arr['debt'] = "<span style='color: {$color}'>{$text}</span>";
+            //For Accountants
+            if (ProjectsHelper::canDo('projects.access.finanses.full')) {
+                if ($debt > 0 && ($arr['status_code'] == '1' || $arr['status_code'] == '10')) {
+                    $url = JRoute::_("index.php?option=com_projects&amp;task=score.add&amp;contractID={$arr['id']}&amp;return={$this->return}");
+                    $arr['debt'] = JHtml::link($url, $text, array("style" => "color: {$color}"));
+                }
+            }
+        }
+        //Stands
+        $arr['stands'] = implode(", ", $this->getStandsForContract($arr['id']));
+        return $arr;
+    }
+
     /**
      * Возвращает полное ФИО или без отчества в соответствии с настройками
      * @param string $fio полное ФИО
@@ -381,5 +455,5 @@ class ProjectsModelContracts_v2 extends ListModel
         return $result;
     }
 
-    private $task, $return, $userSettings, $statusesAcceptContracts;
+    private $task, $return, $userSettings, $statusesAcceptContracts, $titlesColumns;
 }
